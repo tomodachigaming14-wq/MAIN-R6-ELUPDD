@@ -2638,8 +2638,8 @@ label[for="lguSelect"] {
                             <button class="btn btn-primary" onclick="exportStatusToExcel()">📊 Export to Excel</button>
                         </div>
 
-                        <!-- Status Count Summary -->
-                        <div class="summary-stats" style="margin-bottom: 1rem">
+                        <!-- Status Count Summary - WITH RELEASED CARD ADDED -->
+                        <div class="summary-stats" style="margin-bottom: 1rem; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
                             <div>
                                 <div class="stat-number" id="pendingCount">0</div>
                                 <div>Pending</div>
@@ -2655,6 +2655,11 @@ label[for="lguSelect"] {
                             <div>
                                 <div class="stat-number" id="forReleaseCount">0</div>
                                 <div>For Release</div>
+                            </div>
+                            <!-- NEW RELEASED CARD -->
+                            <div style="background: #d4edda; border-radius: 12px; padding: 0.8rem; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <div class="stat-number" style="color: #155724;" id="releasedCountStatus">0</div>
+                                <div style="color: #155724;">✅ Released</div>
                             </div>
                         </div>
 
@@ -4795,6 +4800,7 @@ function checkIloiloCityConditional() {
         let itemsPerPage = 9999;
         let currentFilteredData = [];
 
+        // ===== UPDATED renderStatusTable with RELEASED count =====
         function renderStatusTable() {
     let search = document.getElementById("statusSearch")?.value.toLowerCase() || "";
     let statusFilter = document.getElementById("statusFilter")?.value || "";
@@ -4803,7 +4809,25 @@ function checkIloiloCityConditional() {
     const sortOrderSelect = document.getElementById("statusSortOrder");
     let sortOrder = sortOrderSelect ? sortOrderSelect.value : "asc";
     
-    let filtered = zoningCertifications.filter(
+    // Get ALL records for counting
+    const allRecords = zoningCertifications || [];
+    
+    // Count by status
+    const pendingCount = allRecords.filter(r => r.status === "Pending" || !r.status).length;
+    const forReviewCount = allRecords.filter(r => r.status === "For Review").length;
+    const forSignatureCount = allRecords.filter(r => r.status === "For RD Signature").length;
+    const forReleaseCount = allRecords.filter(r => r.status === "For Release").length;
+    const releasedCount = allRecords.filter(r => r.status === "Released").length;
+
+    // Update summary stats
+    document.getElementById("pendingCount").innerText = pendingCount;
+    document.getElementById("forReviewCount").innerText = forReviewCount;
+    document.getElementById("forSignatureCount").innerText = forSignatureCount;
+    document.getElementById("forReleaseCount").innerText = forReleaseCount;
+    document.getElementById("releasedCountStatus").innerText = releasedCount;
+
+    // Filter for table (exclude Released)
+    let filtered = allRecords.filter(
         (r) =>
             r.status !== "Released" &&
             (!search ||
@@ -4827,15 +4851,6 @@ function checkIloiloCityConditional() {
     
     currentFilteredData = filtered;
 
-    document.getElementById("pendingCount").innerText = filtered.length;
-    document.getElementById("forReviewCount").innerText = filtered.filter((r) => r.status === "For Review").length;
-    document.getElementById("forSignatureCount").innerText = filtered.filter(
-        (r) => r.status === "For RD Signature"
-    ).length;
-    document.getElementById("forReleaseCount").innerText = filtered.filter(
-        (r) => r.status === "For Release"
-    ).length;
-
     let tbody = document.getElementById("statusTableBody");
     if (!tbody) return;
 
@@ -4847,7 +4862,6 @@ function checkIloiloCityConditional() {
     tbody.innerHTML = filtered
         .map(
             (r) => {
-                // CRITICAL FIX: Store both ID and certification number
                 const recordId = r.id || r._id || r.certificationNo;
                 const certNo = r.certificationNo || "";
                 const safeId = String(recordId).replace(/'/g, "\\'");
