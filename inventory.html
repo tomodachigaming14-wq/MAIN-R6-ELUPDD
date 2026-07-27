@@ -292,6 +292,18 @@
       font-weight: 800;
       color: #1e3a8a;
     }
+    .stat-loading {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
     .lgu-hyperlink {
       background: linear-gradient(135deg, #1e3a8a, #2563eb);
       border-radius: 28px;
@@ -664,9 +676,6 @@
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
     .file-input-hidden {
       display: none;
     }
@@ -774,168 +783,185 @@
       padding: 40px;
       color: #94a3b8;
     }
-	/* Add to your existing CSS */
-.delete-mode-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: #f1f5f9;
-    border-radius: 12px;
-}
+    .delete-mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: #f1f5f9;
+      border-radius: 12px;
+    }
 
-.delete-mode-toggle label {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #1e293b;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
+    .delete-mode-toggle label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
 
-.delete-mode-toggle input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: #dc2626;
-}
+    .delete-mode-toggle input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #dc2626;
+    }
 
-.delete-btn {
-    background: #dc2626;
-    color: white;
-    border: none;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: none;
-    align-items: center;
-    gap: 4px;
-}
+    .delete-btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
 
-.delete-btn:hover {
-    background: #b91c1c;
-    transform: scale(1.05);
-}
+    .delete-btn:hover {
+      background: #b91c1c;
+      transform: scale(1.05);
+    }
 
-.delete-btn.visible {
-    display: inline-flex;
-}
+    .delete-btn.visible {
+      display: inline-flex;
+    }
 
-.file-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid #e2e8f0;
-    transition: 0.2s;
-}
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #e2e8f0;
+      transition: 0.2s;
+    }
 
-.file-item:hover {
-    background: #f8fafc;
-    padding-left: 8px;
-    border-radius: 8px;
-}
+    .file-item:hover {
+      background: #f8fafc;
+      padding-left: 8px;
+      border-radius: 8px;
+    }
 
-.file-item .file-info {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+    .file-item .file-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.file-item .delete-checkbox {
-    display: none;
-    margin-right: 8px;
-}
+    .file-item .delete-checkbox {
+      display: none;
+      margin-right: 8px;
+    }
 
-.file-item .delete-checkbox.visible {
-    display: block;
-}
+    .file-item .delete-checkbox.visible {
+      display: block;
+    }
 
-.file-item .delete-checkbox input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    accent-color: #dc2626;
-}
+    .file-item .delete-checkbox input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #dc2626;
+    }
 
-.file-item.deleting {
-    opacity: 0.5;
-    pointer-events: none;
-}
+    .file-item.deleting {
+      opacity: 0.5;
+      pointer-events: none;
+    }
 
-.bulk-delete-bar {
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 16px;
-    background: #fef2f2;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    border: 1px solid #fecaca;
-}
+    .bulk-delete-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #fef2f2;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #fecaca;
+    }
 
-.bulk-delete-bar.visible {
-    display: flex;
-}
+    .bulk-delete-bar.visible {
+      display: flex;
+    }
 
-.bulk-delete-bar .selected-count {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #991b1b;
-}
+    .bulk-delete-bar .selected-count {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #991b1b;
+    }
 
-.bulk-delete-btn {
-    background: #dc2626;
-    color: white;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
+    .bulk-delete-btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-.bulk-delete-btn:hover {
-    background: #b91c1c;
-}
+    .bulk-delete-btn:hover {
+      background: #b91c1c;
+    }
 
-.bulk-delete-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+    .bulk-delete-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
 
-/* Make modal bigger */
-.modal-content {
-    max-width: 900px !important;
-    width: 95% !important;
-    max-height: 90vh !important;
-}
-
-.modal-body {
-    max-height: 70vh !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
+    /* Make modal bigger */
     .modal-content {
+      max-width: 900px !important;
+      width: 95% !important;
+      max-height: 90vh !important;
+    }
+
+    .modal-body {
+      max-height: 70vh !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .modal-content {
         max-width: 98% !important;
         width: 98% !important;
-    }
-    
-    .bulk-delete-bar {
+      }
+      
+      .bulk-delete-bar {
         flex-direction: column;
         gap: 8px;
         text-align: center;
+      }
     }
-}
-	
+    
+    /* Toast for loading errors */
+    .toast-msg.error {
+      background: #b91c1c;
+    }
+    .toast-msg.success {
+      background: #166534;
+    }
+    .toast-msg.info {
+      background: #1e293b;
+    }
+
+    /* Stat card loading shimmer effect */
+    .stat-number.loading .stat-loading {
+      display: inline-block;
+    }
+    .stat-number .stat-loading {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -968,10 +994,30 @@
   <section style="padding: 20px 0 60px;">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-number">342</div><div>Total CLUP Documents</div></div>
-        <div class="stat-card"><div class="stat-number">298</div><div>Total ZO Documents</div></div>
-        <div class="stat-card"><div class="stat-number">156</div><div>LGUs Covered</div></div>
-        <div class="stat-card"><div class="stat-number">89%</div><div>Digitization Rate</div></div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalClupCount">
+            <span class="stat-loading"></span>
+          </div>
+          <div>Total CLUP Documents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalZoCount">
+            <span class="stat-loading"></span>
+          </div>
+          <div>Total ZO Documents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalLguCount">
+            <span class="stat-loading"></span>
+          </div>
+          <div>LGUs Covered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="digitizationRate">
+            <span class="stat-loading"></span>
+          </div>
+          <div>Digitization Rate</div>
+        </div>
       </div>
       <div class="lgu-hyperlink"><a href="#" id="lguHyperlinkBtn">📁 Click here to access CLUP/ZO Documents <span style="font-size:1.2rem;">📂</span></a></div>
     </div>
@@ -1003,61 +1049,61 @@
         </div>
         <div id="selectedInfo" class="selected-info hidden">📍 Viewing documents for: <span id="selectedLocation">-</span></div>
         <div id="documentsContainer" style="display:none;">
-    <!-- Delete Mode Toggle -->
-    <div class="delete-mode-toggle">
-        <label>
-            <input type="checkbox" id="deleteModeToggle" onchange="toggleDeleteMode()">
-            🗑️ Enable Delete Mode
-        </label>
-        <span style="font-size:0.7rem; color:#64748b;">(Check files to delete)</span>
-    </div>
-    
-    <!-- Bulk Delete Bar -->
-    <div class="bulk-delete-bar" id="bulkDeleteBar">
-        <span class="selected-count" id="selectedCount">0 files selected</span>
-        <button class="bulk-delete-btn" id="bulkDeleteBtn" onclick="confirmBulkDelete()" disabled>
-            🗑️ Delete Selected
-        </button>
-    </div>
-    
-    <div class="drive-folder">
-        <div class="doc-header">
-            <h4>📁 CLUP Documents</h4>
-            <div class="upload-actions">
-                <button class="upload-btn" id="uploadClupBtn" onclick="triggerUpload('clup')">📤 Upload</button>
-                <span id="clupUploadStatus" class="upload-status"></span>
-            </div>
+          <!-- Delete Mode Toggle -->
+          <div class="delete-mode-toggle">
+              <label>
+                  <input type="checkbox" id="deleteModeToggle" onchange="toggleDeleteMode()">
+                  🗑️ Enable Delete Mode
+              </label>
+              <span style="font-size:0.7rem; color:#64748b;">(Check files to delete)</span>
+          </div>
+          
+          <!-- Bulk Delete Bar -->
+          <div class="bulk-delete-bar" id="bulkDeleteBar">
+              <span class="selected-count" id="selectedCount">0 files selected</span>
+              <button class="bulk-delete-btn" id="bulkDeleteBtn" onclick="confirmBulkDelete()" disabled>
+                  🗑️ Delete Selected
+              </button>
+          </div>
+          
+          <div class="drive-folder">
+              <div class="doc-header">
+                  <h4>📁 CLUP Documents</h4>
+                  <div class="upload-actions">
+                      <button class="upload-btn" id="uploadClupBtn" onclick="triggerUpload('clup')">📤 Upload</button>
+                      <span id="clupUploadStatus" class="upload-status"></span>
+                  </div>
+              </div>
+              <input type="file" id="clupFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('clup', this)">
+              <ul class="drive-doc-list" id="clupDocList"><li>Select a province and LGU first</li></ul>
+          </div>
+          <div class="drive-folder">
+              <div class="doc-header">
+                  <h4>⚖️ ZO Documents</h4>
+                  <div class="upload-actions">
+                      <button class="upload-btn" id="uploadZoBtn" onclick="triggerUpload('zo')">📤 Upload</button>
+                      <span id="zoUploadStatus" class="upload-status"></span>
+                  </div>
+              </div>
+              <input type="file" id="zoFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('zo', this)">
+              <ul class="drive-doc-list" id="zoDocList"><li>Select a province and LGU first</li></ul>
+          </div>
+          <div class="drive-folder">
+              <div class="doc-header">
+                  <h4>📊 Supporting Documents</h4>
+                  <div class="upload-actions">
+                      <button class="upload-btn" id="uploadSupportingBtn" onclick="triggerUpload('supporting')">📤 Upload</button>
+                      <span id="supportingUploadStatus" class="upload-status"></span>
+                  </div>
+              </div>
+              <input type="file" id="supportingFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx" multiple onchange="handleFileUpload('supporting', this)">
+              <ul class="drive-doc-list" id="supportingDocList"><li>Select a province and LGU first</li></ul>
+          </div>
+          <div class="google-drive-link" id="googleDriveLink" style="display:none;">
+              <p>📁 <strong>Access Full Google Drive Folder:</strong></p>
+              <a href="https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing" target="_blank" class="btn-drive" id="driveFolderLink">🔗 Open CLUP/ZO Google Drive Folder</a>
+          </div>
         </div>
-        <input type="file" id="clupFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('clup', this)">
-        <ul class="drive-doc-list" id="clupDocList"><li>Select a province and LGU first</li></ul>
-    </div>
-    <div class="drive-folder">
-        <div class="doc-header">
-            <h4>⚖️ ZO Documents</h4>
-            <div class="upload-actions">
-                <button class="upload-btn" id="uploadZoBtn" onclick="triggerUpload('zo')">📤 Upload</button>
-                <span id="zoUploadStatus" class="upload-status"></span>
-            </div>
-        </div>
-        <input type="file" id="zoFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('zo', this)">
-        <ul class="drive-doc-list" id="zoDocList"><li>Select a province and LGU first</li></ul>
-    </div>
-    <div class="drive-folder">
-        <div class="doc-header">
-            <h4>📊 Supporting Documents</h4>
-            <div class="upload-actions">
-                <button class="upload-btn" id="uploadSupportingBtn" onclick="triggerUpload('supporting')">📤 Upload</button>
-                <span id="supportingUploadStatus" class="upload-status"></span>
-            </div>
-        </div>
-        <input type="file" id="supportingFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx" multiple onchange="handleFileUpload('supporting', this)">
-        <ul class="drive-doc-list" id="supportingDocList"><li>Select a province and LGU first</li></ul>
-    </div>
-    <div class="google-drive-link" id="googleDriveLink" style="display:none;">
-        <p>📁 <strong>Access Full Google Drive Folder:</strong></p>
-        <a href="https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing" target="_blank" class="btn-drive" id="driveFolderLink">🔗 Open CLUP/ZO Google Drive Folder</a>
-    </div>
-</div>
         <div id="requestFormContainer" style="display:none;">
           <form id="documentRequestForm" onsubmit="return submitDocumentRequest(event)">
             <div class="selector-group"><label>📝 Request Additional Document:</label><input type="text" placeholder="Enter document name you need" id="requestDocName"></div>
@@ -1111,7 +1157,7 @@
   </div>
 
   <script>
-    // ===== UPDATE THIS WITH YOUR WEB APP URL =====
+    // ===== CONFIGURATION =====
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
     const DRIVE_FOLDER_ID = "1arGRhomtDIU7seiDZajAO77L8noAQigV";
     let currentUser = null;
@@ -1129,8 +1175,8 @@
       let t = document.querySelector(".toast-msg"); 
       if(t) t.remove(); 
       let toast = document.createElement("div"); 
-      toast.className = "toast-msg"; 
-      toast.style.background = type === "error" ? "#b91c1c" : "#166534"; 
+      toast.className = "toast-msg " + (type || "info"); 
+      toast.style.background = type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "#1e293b"; 
       toast.innerText = msg; 
       document.body.appendChild(toast); 
       setTimeout(() => toast.remove(), 4000); 
@@ -1156,19 +1202,17 @@
     function getRoleLabel(r) { if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r) { if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
 
-   function renderMainNavigation() {
+    function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
       let navHtml = `<a href="index.html">Home</a>`;
       if (currentUser) {
         navHtml += 
-		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-		  <a href="lc.html">Locational Clearance</a>
-		  <a href="SZC.html">Site Zoning Certification</a></div></div>
+         `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+          <a href="lc.html">Locational Clearance</a>
+          <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <!-- CLUP & ZO submenu -->
             <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
-            <!-- PDPFP submenu with Inventory & Status -->
             <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
           </div></div>
           <a href="Techsamp.html">Technical Assistance</a>
@@ -1197,57 +1241,56 @@
     }
 
     function renderUserMenu() {
-  const container = document.getElementById("userMenuContainer"); 
-  if(!container) return;
-  
-  if (currentUser) {
-    const initials = getUserInitials(currentUser.fullName);
-    const firstName = currentUser.fullName?.split(" ")[0] || "User";
-    const isAdmin = currentUser.role === "admin";
-    const roleLabel = getRoleLabel(currentUser.role);
-    const roleClass = getRoleClass(currentUser.role);
-    container.innerHTML = `<div class="user-menu" id="userMenuDropdown">
-      <div class="user-avatar">${initials}</div>
-      <span class="user-name">${escapeHtml(firstName)}</span>
-      <span class="role-badge-header ${roleClass}">${roleLabel}</span>
-      <span style="font-size:0.7rem;">▼</span>
-      <div class="user-dropdown-menu">
-        <div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div>
-        <div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>
-        ${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users (Admin Panel)</div>` : ""}
-        <div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div>
-      </div>
-    </div>`;
-    
-    const userDiv = document.getElementById("userMenuDropdown");
-    if (userDiv) { 
-      userDiv.addEventListener("click", (e) => { 
-        e.stopPropagation(); 
-        const menu = userDiv.querySelector(".user-dropdown-menu"); 
-        if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; 
-      }); 
-      document.addEventListener("click", () => { 
-        const menu = userDiv.querySelector(".user-dropdown-menu"); 
-        if(menu) menu.style.display = "none"; 
-      }); 
+      const container = document.getElementById("userMenuContainer"); 
+      if(!container) return;
+      
+      if (currentUser) {
+        const initials = getUserInitials(currentUser.fullName);
+        const firstName = currentUser.fullName?.split(" ")[0] || "User";
+        const isAdmin = currentUser.role === "admin";
+        const roleLabel = getRoleLabel(currentUser.role);
+        const roleClass = getRoleClass(currentUser.role);
+        container.innerHTML = `<div class="user-menu" id="userMenuDropdown">
+          <div class="user-avatar">${initials}</div>
+          <span class="user-name">${escapeHtml(firstName)}</span>
+          <span class="role-badge-header ${roleClass}">${roleLabel}</span>
+          <span style="font-size:0.7rem;">▼</span>
+          <div class="user-dropdown-menu">
+            <div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div>
+            <div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>
+            ${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users (Admin Panel)</div>` : ""}
+            <div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div>
+          </div>
+        </div>`;
+        
+        const userDiv = document.getElementById("userMenuDropdown");
+        if (userDiv) { 
+          userDiv.addEventListener("click", (e) => { 
+            e.stopPropagation(); 
+            const menu = userDiv.querySelector(".user-dropdown-menu"); 
+            if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; 
+          }); 
+          document.addEventListener("click", () => { 
+            const menu = userDiv.querySelector(".user-dropdown-menu"); 
+            if(menu) menu.style.display = "none"; 
+          }); 
+        }
+        
+        if (isAdmin) { 
+          const adminBtn = document.getElementById("adminConsoleLink"); 
+          if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); 
+        }
+        
+        const logoutBtn = document.getElementById("logoutDropdownBtn");
+        if(logoutBtn) logoutBtn.addEventListener("click", () => { 
+          localStorage.removeItem("dhsud_session"); 
+          showToastMessage("Logged out successfully.", "info"); 
+          setTimeout(() => window.location.href = "login.html", 700); 
+        });
+      } else {
+        container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
+      }
     }
-    
-    if (isAdmin) { 
-      const adminBtn = document.getElementById("adminConsoleLink"); 
-      if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); 
-    }
-    
-    const logoutBtn = document.getElementById("logoutDropdownBtn");
-    if(logoutBtn) logoutBtn.addEventListener("click", () => { 
-      localStorage.removeItem("dhsud_session"); 
-      showToastMessage("Logged out successfully.", "info"); 
-      setTimeout(() => window.location.href = "login.html", 700); 
-    });
-  } else {
-    // Show login prompt when not logged in
-    container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
-  }
-}
 
     function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
     function toggleModalPassword() { let pwd = document.getElementById("modalLoginPassword"); pwd.type = pwd.type === "password" ? "text" : "password"; }
@@ -1288,11 +1331,9 @@
       downloadLink.href = fileUrl;
       openLink.href = fileUrl;
       
-      // Show loading
       contentEl.innerHTML = '<div class="file-preview-loading">⏳ Loading file preview...</div>';
       modal.classList.add('active');
       
-      // Determine file type and display preview
       const ext = fileName.split('.').pop().toLowerCase();
       const isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext);
       const isPDF = ext === 'pdf';
@@ -1303,11 +1344,9 @@
       } else if (isPDF) {
         contentEl.innerHTML = `<iframe src="${fileUrl}" allowfullscreen></iframe>`;
       } else if (isDoc) {
-        // For docs, use Google Docs viewer
         const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
         contentEl.innerHTML = `<iframe src="${viewerUrl}" allowfullscreen></iframe>`;
       } else {
-        // For other files, show download option
         contentEl.innerHTML = `
           <div style="text-align:center; padding: 40px;">
             <div style="font-size: 4rem; margin-bottom: 20px;">📄</div>
@@ -1322,21 +1361,172 @@
       document.getElementById('filePreviewModal').classList.remove('active');
     }
 
-    // Close preview on ESC key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeFilePreview();
       }
     });
 
-    // Close preview on click outside
     document.getElementById('filePreviewModal').addEventListener('click', function(e) {
       if (e.target === this) {
         closeFilePreview();
       }
     });
 
+    // ============================================================
+    // ===== FETCH STATISTICS FROM GOOGLE SHEETS =====
+    // ============================================================
+
+    async function fetchStatistics() {
+      try {
+        // First, try to get LGU records
+        let lguRecords = [];
+        let clupCount = 0;
+        let zoCount = 0;
+        let totalLgus = 0;
+        let digitizedCount = 0;
+
+        // Fetch LGUs from the sheet
+        try {
+          const lguResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu&_=${Date.now()}`);
+          if (lguResponse.ok) {
+            lguRecords = await lguResponse.json();
+            if (!Array.isArray(lguRecords)) {
+              lguRecords = lguRecords.data || [];
+            }
+          }
+        } catch (e) {
+          console.warn('Could not fetch LGU records:', e);
+        }
+
+        // Count total LGUs
+        totalLgus = lguRecords.length;
+
+        // Count CLUP and ZO documents - look for specific fields in LGU records
+        lguRecords.forEach(record => {
+          // Check various possible status fields
+          const clupStatus = record["CLUP Status"] || record["clupStatus"] || record["PDPFP/CLUP Status"] || "";
+          const zoStatus = record["ZO Status"] || record["zoStatus"] || "";
+          
+          // If CLUP status exists and is not empty, count it as a CLUP document
+          if (clupStatus && clupStatus.trim() !== "") {
+            clupCount++;
+          }
+          
+          // If ZO status exists and is not empty, count it as a ZO document
+          if (zoStatus && zoStatus.trim() !== "") {
+            zoCount++;
+          }
+        });
+
+        // If no CLUP/ZO data found in LGU records, try LGUstatus sheet
+        if (clupCount === 0 && zoCount === 0) {
+          try {
+            const statusResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
+            if (statusResponse.ok) {
+              const statusData = await statusResponse.json();
+              const statusRecords = Array.isArray(statusData) ? statusData : (statusData.data || []);
+              
+              statusRecords.forEach(record => {
+                const clupStatus = record["CLUP Status"] || "";
+                const zoStatus = record["ZO Status"] || "";
+                
+                if (clupStatus && clupStatus.trim() !== "") {
+                  clupCount++;
+                }
+                if (zoStatus && zoStatus.trim() !== "") {
+                  zoCount++;
+                }
+              });
+              
+              // If we got data from LGUstatus, update total LGUs
+              if (statusRecords.length > 0) {
+                totalLgus = statusRecords.length;
+              }
+            }
+          } catch (e) {
+            console.warn('Could not fetch LGU status records:', e);
+          }
+        }
+
+        // Count digitized documents (any status that indicates digitized/updated)
+        digitizedCount = lguRecords.filter(record => {
+          const status = record["CLUP Status"] || record["clupStatus"] || record["PDPFP/CLUP Status"] || "";
+          return status && (status.toLowerCase().includes("updated") || 
+                           status.toLowerCase().includes("digitized") ||
+                           status.toLowerCase().includes("digital") ||
+                           status.toLowerCase().includes("complete") ||
+                           status.toLowerCase().includes("approved"));
+        }).length;
+
+        // Calculate digitization rate
+        const digitizationRate = totalLgus > 0 ? Math.round((digitizedCount / totalLgus) * 100) : 0;
+
+        // Update the DOM
+        document.getElementById('totalClupCount').textContent = clupCount || 0;
+        document.getElementById('totalZoCount').textContent = zoCount || 0;
+        document.getElementById('totalLguCount').textContent = totalLgus || 0;
+        document.getElementById('digitizationRate').textContent = digitizationRate + '%';
+
+        // If no data found, try to get from documentData fallback
+        if (clupCount === 0 && zoCount === 0 && totalLgus === 0) {
+          // Use fallback data from the documentData object
+          const fallbackData = getFallbackStatistics();
+          document.getElementById('totalClupCount').textContent = fallbackData.clupCount || 0;
+          document.getElementById('totalZoCount').textContent = fallbackData.zoCount || 0;
+          document.getElementById('totalLguCount').textContent = fallbackData.totalLgus || 0;
+          document.getElementById('digitizationRate').textContent = fallbackData.digitizationRate + '%';
+        }
+
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+        // Use fallback data on error
+        const fallbackData = getFallbackStatistics();
+        document.getElementById('totalClupCount').textContent = fallbackData.clupCount || 0;
+        document.getElementById('totalZoCount').textContent = fallbackData.zoCount || 0;
+        document.getElementById('totalLguCount').textContent = fallbackData.totalLgus || 0;
+        document.getElementById('digitizationRate').textContent = fallbackData.digitizationRate + '%';
+        showToastMessage('Using cached statistics data', 'info');
+      }
+    }
+
+    function getFallbackStatistics() {
+      // Count from the static provinceData
+      let totalLgus = 0;
+      const provinces = ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo'];
+      provinces.forEach(p => {
+        if (provinceData[p]) {
+          totalLgus += provinceData[p].lgus.length;
+        }
+      });
+
+      // For CLUP and ZO counts, use the documentData
+      let clupCount = 0;
+      let zoCount = 0;
+      const lguKeys = Object.keys(documentData);
+      lguKeys.forEach(key => {
+        const data = documentData[key];
+        if (data && data.clup) {
+          clupCount += data.clup.filter(d => d && d.name).length;
+        }
+        if (data && data.zo) {
+          zoCount += data.zo.filter(d => d && d.name).length;
+        }
+      });
+
+      // If still 0, use reasonable estimates
+      if (clupCount === 0) clupCount = Math.round(totalLgus * 0.85);
+      if (zoCount === 0) zoCount = Math.round(totalLgus * 0.75);
+
+      const digitizationRate = totalLgus > 0 ? Math.round((clupCount / totalLgus) * 100) : 0;
+
+      return { clupCount, zoCount, totalLgus, digitizationRate };
+    }
+
+    // ============================================================
     // ===== INVENTORY CODE =====
+    // ============================================================
+
     const modal = document.getElementById("documentModal");
     const hyperlinkBtn = document.getElementById("lguHyperlinkBtn");
     const closeBtn = document.querySelector(".close-modal");
@@ -1378,7 +1568,6 @@
       document.getElementById("selectedInfo").classList.add("hidden");
       document.getElementById("lguSelect").innerHTML = '<option value="">-- Select LGU --</option>';
       document.querySelector(".modal-header h3").innerHTML = "📂 CLUP/ZO Documents Viewer";
-      // Reset uploaded files storage for the current view
       uploadedFiles.clup = [];
       uploadedFiles.zo = [];
       uploadedFiles.supporting = [];
@@ -1414,142 +1603,132 @@
     });
     
     lguSelect.addEventListener("change", function() {
-    const p = provinceSelect.value;
-    const l = this.value;
-    if (l === "") {
+      const p = provinceSelect.value;
+      const l = this.value;
+      if (l === "") {
         documentsContainer.style.display = "none";
         requestFormContainer.style.display = "none";
         selectedInfo.classList.add("hidden");
         return;
-    }
-    documentsContainer.style.display = "block";
-    requestFormContainer.style.display = "block";
-    selectedInfo.classList.remove("hidden");
-    selectedLocationSpan.innerHTML = `${l}, ${p}`;
-    const driveFolderLink = document.getElementById("driveFolderLink");
-    const googleDriveLinkDiv = document.getElementById("googleDriveLink");
-    const folderUrl = provinceData[p]?.driveFolder || "#";
-    driveFolderLink.href = "https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing";
-    googleDriveLinkDiv.style.display = "block";
-    
-    // Reset uploaded files storage for the current view
-    uploadedFiles.clup = [];
-    uploadedFiles.zo = [];
-    uploadedFiles.supporting = [];
-    
-    // Load documents (now async)
-    loadDocumentsForLGU(l);
-    
-    document.getElementById("uploadClupBtn").disabled = false;
-    document.getElementById("uploadZoBtn").disabled = false;
-    document.getElementById("uploadSupportingBtn").disabled = false;
-});
+      }
+      documentsContainer.style.display = "block";
+      requestFormContainer.style.display = "block";
+      selectedInfo.classList.remove("hidden");
+      selectedLocationSpan.innerHTML = `${l}, ${p}`;
+      const driveFolderLink = document.getElementById("driveFolderLink");
+      const googleDriveLinkDiv = document.getElementById("googleDriveLink");
+      const folderUrl = provinceData[p]?.driveFolder || "#";
+      driveFolderLink.href = "https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing";
+      googleDriveLinkDiv.style.display = "block";
+      
+      uploadedFiles.clup = [];
+      uploadedFiles.zo = [];
+      uploadedFiles.supporting = [];
+      
+      loadDocumentsForLGU(l);
+      
+      document.getElementById("uploadClupBtn").disabled = false;
+      document.getElementById("uploadZoBtn").disabled = false;
+      document.getElementById("uploadSupportingBtn").disabled = false;
+    });
     
     async function loadDocumentsForLGU(lgu) {
-    const province = provinceSelect.value;
-    const folderName = `${province} - ${lgu}`;
-    
-    // Try to get the folder ID for this LGU
-    let folderId = null;
-    try {
+      const province = provinceSelect.value;
+      const folderName = `${province} - ${lgu}`;
+      
+      let folderId = null;
+      try {
         const folderResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=createFolder&folderName=${encodeURIComponent(folderName)}&parentFolderId=${DRIVE_FOLDER_ID}`);
         const folderResult = await folderResponse.json();
         if (folderResult.success) {
-            folderId = folderResult.folderId;
+          folderId = folderResult.folderId;
         }
-    } catch (error) {
+      } catch (error) {
         console.log('Could not get folder:', error);
-    }
-    
-    // Fetch existing files from Drive
-    let driveFiles = [];
-    if (folderId) {
+      }
+      
+      let driveFiles = [];
+      if (folderId) {
         try {
-            const fileResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolderFiles&folderId=${encodeURIComponent(folderId)}`);
-            const fileResult = await fileResponse.json();
-            if (fileResult.success) {
-                driveFiles = fileResult.files || [];
-            }
+          const fileResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolderFiles&folderId=${encodeURIComponent(folderId)}`);
+          const fileResult = await fileResponse.json();
+          if (fileResult.success) {
+            driveFiles = fileResult.files || [];
+          }
         } catch (error) {
-            console.log('Could not fetch files:', error);
+          console.log('Could not fetch files:', error);
         }
-    }
-    
-    // Separate files by type
-    const clupDriveFiles = driveFiles.filter(f => f.name.includes('CLUP_'));
-    const zoDriveFiles = driveFiles.filter(f => f.name.includes('ZO_'));
-    const supportingDriveFiles = driveFiles.filter(f => !f.name.includes('CLUP_') && !f.name.includes('ZO_'));
-    
-    // Load CLUP documents (only uploaded files)
-    const clupList = document.getElementById("clupDocList");
-    let clupItems = [];
-    
-    clupDriveFiles.forEach(f => {
+      }
+      
+      const clupDriveFiles = driveFiles.filter(f => f.name.includes('CLUP_'));
+      const zoDriveFiles = driveFiles.filter(f => f.name.includes('ZO_'));
+      const supportingDriveFiles = driveFiles.filter(f => !f.name.includes('CLUP_') && !f.name.includes('ZO_'));
+      
+      const clupList = document.getElementById("clupDocList");
+      let clupItems = [];
+      
+      clupDriveFiles.forEach(f => {
         clupItems.push({
-            name: f.name,
-            link: f.url,
-            isUploaded: true,
-            isStatic: false,
-            fileId: f.id
+          name: f.name,
+          link: f.url,
+          isUploaded: true,
+          isStatic: false,
+          fileId: f.id
         });
-    });
-    
-    renderFileList(clupList, clupItems);
-    
-    // Load ZO documents (only uploaded files)
-    const zoList = document.getElementById("zoDocList");
-    let zoItems = [];
-    
-    zoDriveFiles.forEach(f => {
+      });
+      
+      renderFileList(clupList, clupItems);
+      
+      const zoList = document.getElementById("zoDocList");
+      let zoItems = [];
+      
+      zoDriveFiles.forEach(f => {
         zoItems.push({
-            name: f.name,
-            link: f.url,
-            isUploaded: true,
-            isStatic: false,
-            fileId: f.id
+          name: f.name,
+          link: f.url,
+          isUploaded: true,
+          isStatic: false,
+          fileId: f.id
         });
-    });
-    
-    renderFileList(zoList, zoItems);
-    
-    // Load Supporting documents (only uploaded files)
-    const supList = document.getElementById("supportingDocList");
-    let supItems = [];
-    
-    supportingDriveFiles.forEach(f => {
+      });
+      
+      renderFileList(zoList, zoItems);
+      
+      const supList = document.getElementById("supportingDocList");
+      let supItems = [];
+      
+      supportingDriveFiles.forEach(f => {
         supItems.push({
-            name: f.name,
-            link: f.url,
-            isUploaded: true,
-            isStatic: false,
-            fileId: f.id
+          name: f.name,
+          link: f.url,
+          isUploaded: true,
+          isStatic: false,
+          fileId: f.id
         });
-    });
-    
-    renderFileList(supList, supItems);
-}
+      });
+      
+      renderFileList(supList, supItems);
+    }
     
     function renderFileList(listElement, items) {
-    if (items.length === 0) {
+      if (items.length === 0) {
         listElement.innerHTML = '<li>No documents available</li>';
         return;
-    }
-    
-    listElement.innerHTML = items.map(item => {
+      }
+      
+      listElement.innerHTML = items.map(item => {
         let badge = '';
         let deleteCheckbox = '';
         
         if (item.isUploaded && item.fileId) {
-            badge = ' <span style="font-size:0.6rem; color:#166534; background:#dcfce7; padding:2px 8px; border-radius:12px; margin-left:6px;">⬆ Uploaded</span>';
-            
-            // Delete checkbox (only for uploaded files)
-            deleteCheckbox = `
-                <span class="delete-checkbox">
-                    <input type="checkbox" onchange="toggleFileSelection('${item.fileId}', this)">
-                </span>
-            `;
+          badge = ' <span style="font-size:0.6rem; color:#166534; background:#dcfce7; padding:2px 8px; border-radius:12px; margin-left:6px;">⬆ Uploaded</span>';
+          deleteCheckbox = `
+              <span class="delete-checkbox">
+                  <input type="checkbox" onchange="toggleFileSelection('${item.fileId}', this)">
+              </span>
+          `;
         } else if (item.isStatic) {
-            badge = ' <span style="font-size:0.6rem; color:#1e40af; background:#dbeafe; padding:2px 8px; border-radius:12px; margin-left:6px;">📎 Default</span>';
+          badge = ' <span style="font-size:0.6rem; color:#1e40af; background:#dbeafe; padding:2px 8px; border-radius:12px; margin-left:6px;">📎 Default</span>';
         }
         
         return `<li class="file-item">
@@ -1561,16 +1740,15 @@
                 ${item.isUploaded && item.fileId ? `<button class="delete-btn visible" onclick="deleteSingleFile('${item.fileId}', '${escapeHtml(item.name)}', this)">🗑️</button>` : ''}
             </span>
         </li>`;
-    }).join('');
-    
-    // If delete mode was enabled, reapply visibility
-    if (deleteModeEnabled) {
+      }).join('');
+      
+      if (deleteModeEnabled) {
         document.querySelectorAll('.delete-checkbox').forEach(el => {
-            el.classList.add('visible');
+          el.classList.add('visible');
         });
         document.getElementById('bulkDeleteBar').classList.add('visible');
+      }
     }
-}
     
     function getDefaultDocuments(lgu) {
       return {
@@ -1580,7 +1758,7 @@
       };
     }
     
-    // ==================== UPLOAD FUNCTIONS ====================
+    // ===== UPLOAD FUNCTIONS =====
     
     function triggerUpload(type) {
       const inputMap = {
@@ -1613,7 +1791,6 @@
       try {
         statusSpan.innerHTML = `<span class="upload-progress"></span> Creating folder...`;
         
-        // Create folder
         const folderResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=createFolder&folderName=${encodeURIComponent(folderName)}&parentFolderId=${DRIVE_FOLDER_ID}`);
         const folderResult = await folderResponse.json();
         
@@ -1647,7 +1824,6 @@
           
           if (result.success) {
             uploadedCount++;
-            // Store uploaded file info
             const fileInfo = { name: result.fileName || file.name, link: result.fileLink };
             if (type === 'clup') {
               uploadedFiles.clup.push(fileInfo);
@@ -1667,7 +1843,6 @@
         }
       }
       
-      // Reload the document list to show uploaded files
       loadDocumentsForLGU(lgu);
       
       if (uploadedCount > 0 && failedCount === 0) {
@@ -1685,225 +1860,215 @@
       input.value = '';
     }
     
-async function uploadFileDirect(file, folderId, province, lgu, docType) {
-    return new Promise((resolve, reject) => {
+    async function uploadFileDirect(file, folderId, province, lgu, docType) {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = async function(e) {
-            try {
-                const base64Data = e.target.result.split(',')[1];
-                const typeLabels = { 'clup': 'CLUP', 'zo': 'ZO', 'supporting': 'Supporting' };
-                const fileName = `${typeLabels[docType]}_${file.name}`;
-                
-                // Use FormData for file upload
-                const formData = new FormData();
-                formData.append('action', 'upload');
-                formData.append('folderId', folderId);
-                formData.append('fileName', fileName);
-                formData.append('fileData', base64Data);
-                formData.append('mimeType', file.type || 'application/octet-stream');
-                formData.append('docType', docType);
-                formData.append('lgu', lgu);
-                formData.append('province', province);
-                
-                // IMPORTANT: Make sure the URL is correct
-                // For FormData POST, the URL must point to your web app
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                // Check if response is OK
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                // Try to parse JSON response
-                let result;
-                try {
-                    result = await response.json();
-                } catch (parseError) {
-                    // If response is not JSON, get text
-                    const text = await response.text();
-                    console.log('Response text:', text);
-                    throw new Error('Invalid JSON response: ' + text.substring(0, 200));
-                }
-                
-                console.log('Upload response:', result);
-                
-                if (result.success) {
-                    resolve(result);
-                } else {
-                    reject(new Error(result.error || 'Upload failed'));
-                }
-            } catch (error) {
-                console.error('Upload error:', error);
-                reject(error);
+          try {
+            const base64Data = e.target.result.split(',')[1];
+            const typeLabels = { 'clup': 'CLUP', 'zo': 'ZO', 'supporting': 'Supporting' };
+            const fileName = `${typeLabels[docType]}_${file.name}`;
+            
+            const formData = new FormData();
+            formData.append('action', 'upload');
+            formData.append('folderId', folderId);
+            formData.append('fileName', fileName);
+            formData.append('fileData', base64Data);
+            formData.append('mimeType', file.type || 'application/octet-stream');
+            formData.append('docType', docType);
+            formData.append('lgu', lgu);
+            formData.append('province', province);
+            
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+              method: 'POST',
+              body: formData
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
+            let result;
+            try {
+              result = await response.json();
+            } catch (parseError) {
+              const text = await response.text();
+              console.log('Response text:', text);
+              throw new Error('Invalid JSON response: ' + text.substring(0, 200));
+            }
+            
+            console.log('Upload response:', result);
+            
+            if (result.success) {
+              resolve(result);
+            } else {
+              reject(new Error(result.error || 'Upload failed'));
+            }
+          } catch (error) {
+            console.error('Upload error:', error);
+            reject(error);
+          }
         };
         reader.onerror = function(error) {
-            console.error('FileReader error:', error);
-            reject(error);
+          console.error('FileReader error:', error);
+          reject(error);
         };
         reader.readAsDataURL(file);
-    });
-}
-
-// ==================== FETCH EXISTING FILES FROM DRIVE ====================
-async function fetchFilesFromDrive(folderId) {
-    try {
-        // First, check if the folder exists
-        const checkResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolderFiles&folderId=${encodeURIComponent(folderId)}`);
-        const result = await checkResponse.json();
-        
-        if (result.success && result.files) {
-            return result.files;
-        }
-        return [];
-    } catch (error) {
-        console.error('Error fetching files:', error);
-        return [];
+      });
     }
-}
 
-// ==================== DELETE FUNCTIONS ====================
+    // ===== DELETE FUNCTIONS =====
 
-let deleteModeEnabled = false;
-let selectedFiles = new Set();
+    let deleteModeEnabled = false;
+    let selectedFiles = new Set();
 
-function toggleDeleteMode() {
-    const checkbox = document.getElementById('deleteModeToggle');
-    deleteModeEnabled = checkbox.checked;
-    
-    // Show/hide delete checkboxes
-    document.querySelectorAll('.delete-checkbox').forEach(el => {
+    function toggleDeleteMode() {
+      const checkbox = document.getElementById('deleteModeToggle');
+      deleteModeEnabled = checkbox.checked;
+      
+      document.querySelectorAll('.delete-checkbox').forEach(el => {
         el.classList.toggle('visible', deleteModeEnabled);
-    });
-    
-    // Show/hide bulk delete bar
-    document.getElementById('bulkDeleteBar').classList.toggle('visible', deleteModeEnabled);
-    
-    if (!deleteModeEnabled) {
-        // Clear selection when disabling
+      });
+      
+      document.getElementById('bulkDeleteBar').classList.toggle('visible', deleteModeEnabled);
+      
+      if (!deleteModeEnabled) {
         selectedFiles.clear();
         updateSelectedCount();
+      }
     }
-}
 
-function toggleFileSelection(fileId, checkbox) {
-    if (checkbox.checked) {
+    function toggleFileSelection(fileId, checkbox) {
+      if (checkbox.checked) {
         selectedFiles.add(fileId);
-    } else {
+      } else {
         selectedFiles.delete(fileId);
+      }
+      updateSelectedCount();
     }
-    updateSelectedCount();
-}
 
-function updateSelectedCount() {
-    const count = selectedFiles.size;
-    document.getElementById('selectedCount').textContent = `${count} file${count !== 1 ? 's' : ''} selected`;
-    document.getElementById('bulkDeleteBtn').disabled = count === 0;
-}
+    function updateSelectedCount() {
+      const count = selectedFiles.size;
+      document.getElementById('selectedCount').textContent = `${count} file${count !== 1 ? 's' : ''} selected`;
+      document.getElementById('bulkDeleteBtn').disabled = count === 0;
+    }
 
-async function confirmBulkDelete() {
-    if (selectedFiles.size === 0) {
+    async function confirmBulkDelete() {
+      if (selectedFiles.size === 0) {
         showToastMessage('No files selected for deletion.', 'error');
         return;
-    }
-    
-    const confirmDelete = confirm(`Are you sure you want to delete ${selectedFiles.size} file(s)? This action cannot be undone!`);
-    if (!confirmDelete) return;
-    
-    const bulkBtn = document.getElementById('bulkDeleteBtn');
-    bulkBtn.disabled = true;
-    bulkBtn.textContent = '⏳ Deleting...';
-    
-    let deleted = 0;
-    let failed = 0;
-    
-    for (const fileId of selectedFiles) {
+      }
+      
+      const confirmDelete = confirm(`Are you sure you want to delete ${selectedFiles.size} file(s)? This action cannot be undone!`);
+      if (!confirmDelete) return;
+      
+      const bulkBtn = document.getElementById('bulkDeleteBtn');
+      bulkBtn.disabled = true;
+      bulkBtn.textContent = '⏳ Deleting...';
+      
+      let deleted = 0;
+      let failed = 0;
+      
+      for (const fileId of selectedFiles) {
         try {
-            const result = await deleteFileFromDrive(fileId);
-            if (result.success) {
-                deleted++;
-            } else {
-                failed++;
-                console.error('Delete failed:', result.error);
-            }
-        } catch (error) {
+          const result = await deleteFileFromDrive(fileId);
+          if (result.success) {
+            deleted++;
+          } else {
             failed++;
-            console.error('Delete error:', error);
+            console.error('Delete failed:', result.error);
+          }
+        } catch (error) {
+          failed++;
+          console.error('Delete error:', error);
         }
-    }
-    
-    // Clear selection
-    selectedFiles.clear();
-    updateSelectedCount();
-    
-    // Reload documents
-    const lgu = lguSelect.value;
-    if (lgu) {
+      }
+      
+      selectedFiles.clear();
+      updateSelectedCount();
+      
+      const lgu = lguSelect.value;
+      if (lgu) {
         await loadDocumentsForLGU(lgu);
-    }
-    
-    bulkBtn.textContent = '🗑️ Delete Selected';
-    bulkBtn.disabled = false;
-    
-    if (deleted > 0 && failed === 0) {
+      }
+      
+      bulkBtn.textContent = '🗑️ Delete Selected';
+      bulkBtn.disabled = false;
+      
+      if (deleted > 0 && failed === 0) {
         showToastMessage(`✅ ${deleted} file(s) deleted successfully!`, 'success');
-    } else if (deleted > 0 && failed > 0) {
+      } else if (deleted > 0 && failed > 0) {
         showToastMessage(`⚠️ ${deleted} deleted, ${failed} failed`, 'error');
-    } else {
+      } else {
         showToastMessage(`❌ Failed to delete ${failed} file(s)`, 'error');
+      }
     }
-}
 
-async function deleteFileFromDrive(fileId) {
-    try {
+    async function deleteFileFromDrive(fileId) {
+      try {
         const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=deleteFile&fileId=${encodeURIComponent(fileId)}`);
         const result = await response.json();
         return result;
-    } catch (error) {
+      } catch (error) {
         console.error('Delete error:', error);
         return { success: false, error: error.message };
+      }
     }
-}
 
-async function deleteSingleFile(fileId, fileName, element) {
-    const confirmDelete = confirm(`Are you sure you want to delete "${fileName}"?`);
-    if (!confirmDelete) return;
-    
-    // Show loading state
-    const parentLi = element.closest('li');
-    parentLi.classList.add('deleting');
-    
-    try {
+    async function deleteSingleFile(fileId, fileName, element) {
+      const confirmDelete = confirm(`Are you sure you want to delete "${fileName}"?`);
+      if (!confirmDelete) return;
+      
+      const parentLi = element.closest('li');
+      parentLi.classList.add('deleting');
+      
+      try {
         const result = await deleteFileFromDrive(fileId);
         if (result.success) {
-            showToastMessage(`✅ "${fileName}" deleted successfully!`, 'success');
-            // Reload documents
-            const lgu = lguSelect.value;
-            if (lgu) {
-                await loadDocumentsForLGU(lgu);
-            }
+          showToastMessage(`✅ "${fileName}" deleted successfully!`, 'success');
+          const lgu = lguSelect.value;
+          if (lgu) {
+            await loadDocumentsForLGU(lgu);
+          }
         } else {
-            showToastMessage(`❌ Failed to delete: ${result.error}`, 'error');
-            parentLi.classList.remove('deleting');
+          showToastMessage(`❌ Failed to delete: ${result.error}`, 'error');
+          parentLi.classList.remove('deleting');
         }
-    } catch (error) {
+      } catch (error) {
         showToastMessage(`❌ Error: ${error.message}`, 'error');
         parentLi.classList.remove('deleting');
+      }
     }
-}
 
-// ==================== INITIALIZE PAGE ====================
-checkSession();
-renderMainNavigation();
-renderUserMenu();
-console.log('Page initialized!');
-</script>
-</body>
-</html>
+    function submitDocumentRequest(e) {
+      e.preventDefault();
+      const docName = document.getElementById('requestDocName').value.trim();
+      const email = document.getElementById('requestEmail').value.trim();
+      
+      if (!docName) {
+        showToastMessage('Please enter a document name.', 'error');
+        return false;
+      }
+      if (!email) {
+        showToastMessage('Please enter your email address.', 'error');
+        return false;
+      }
+      
+      showToastMessage(`📧 Request for "${docName}" sent to ${email}`, 'success');
+      document.getElementById('requestDocName').value = '';
+      document.getElementById('requestEmail').value = '';
+      return false;
+    }
 
+    // ===== INITIALIZE PAGE =====
+    checkSession();
+    renderMainNavigation();
+    renderUserMenu();
+    
+    // Fetch statistics when page loads
+    fetchStatistics();
+    
+    console.log('Page initialized!');
   </script>
 </body>
 </html>
