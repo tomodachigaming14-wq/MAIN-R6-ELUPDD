@@ -963,7 +963,7 @@ footer {
 
   <script>
     // ==================== CONFIGURATION ====================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDG8YhCf_6qkVTkAARh7nJjUFdRyjhubK7_kiZmLMNBuxXdLaJevtDDaB-pOadX3k/exec";
     
     // ==================== PSGC DATA ====================
     const PSGC_DATA = {
@@ -1148,8 +1148,16 @@ footer {
       if (!container) return;
       let navHtml = `<a href="index.html">Home</a>`;
       if (currentUser) {
-        navHtml += `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div><a href="status.html">PDPFP</a></div></div>
+        navHtml += 
+		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+		  <a href="lc.html">Locational Clearance</a>
+		  <a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+            <!-- CLUP & ZO submenu -->
+            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
+            <!-- PDPFP submenu with Inventory & Status -->
+            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
+          </div></div>
           <a href="Techsamp.html">Technical Assistance</a>
           <a href="lgu-info.html">LGU Information</a>
           <a href="report.html">Reports</a>
@@ -1159,6 +1167,20 @@ footer {
           <a href="#contact">Contact</a>`;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
+      setTimeout(() => {
+        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const submenu = trigger.closest(".dropdown-submenu");
+            if (submenu) submenu.classList.toggle("open");
+          });
+        });
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".dropdown-submenu")) {
+            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+          }
+        });
+      }, 10);
     }
 
     function renderUserMenu() {
@@ -1747,12 +1769,16 @@ async function saveInlineEdit(lguId) {
   
   const oldStatus = l.clupStatus;
   const newStatus = document.getElementById("editClupStatus").value;
+  const isProvincial = document.getElementById("editMunicipality").value === "Provincial Government";
+  const province = document.getElementById("editProvince").value;
+  
+  console.log(`📋 Saving edit - Province: "${province}", Is Provincial: ${isProvincial}, New Status: "${newStatus}"`);
   
   const updatedData = {
     id: l.id,
     psgc: document.getElementById("editPsgc").value,
     region: document.getElementById("editRegion").value,
-    province: document.getElementById("editProvince").value,
+    province: province,
     municipality: document.getElementById("editMunicipality").value,
     incomeClass: document.getElementById("editIncomeClass").value,
     mayor: document.getElementById("editMayor").value,
@@ -1781,20 +1807,37 @@ async function saveInlineEdit(lguId) {
     const updateResult = await updateLGUInSheet(updatedData);
     
     if (updateResult.success) {
-      // 2. If status changed, sync to LGUstatus
+      // 2. Handle status sync based on LGU type
       if (oldStatus !== newStatus && newStatus) {
-        console.log(`🔄 Syncing CLUP Status: ${oldStatus} -> ${newStatus}`);
-        const syncResult = await syncClupStatusDirect(
-          updatedData.province,
-          updatedData.municipality,
-          newStatus
-        );
-        console.log("Sync result:", syncResult);
-        
-        if (syncResult.success) {
-          showToastMessage(`✅ Status synced to both sheets: "${newStatus}"`, "success");
+        if (isProvincial) {
+          // For Provincial Government: Sync to LGUpdpfp_status
+          console.log(`🔄 Syncing PDPFP Status for Provincial Government of "${province}" to: "${newStatus}"`);
+          const syncResult = await syncPdpfpStatusDirect(
+            province,
+            newStatus
+          );
+          console.log("PDPFP Sync result:", syncResult);
+          
+          if (syncResult.success) {
+            showToastMessage(`✅ Provincial PDPFP Status updated to "${newStatus}" in LGUpdpfp_status!`, "success");
+          } else {
+            showToastMessage(`⚠️ LGURecords updated but PDPFP sync failed: ${syncResult.error || "Unknown error"}`, "warning");
+          }
         } else {
-          showToastMessage(`⚠️ Status updated in LGURecords but LGUstatus sync failed: ${syncResult.error || "Unknown error"}`, "warning");
+          // For Municipal/City LGUs: Sync to LGUstatus
+          console.log(`🔄 Syncing CLUP Status for ${updatedData.municipality}: ${oldStatus} -> ${newStatus}`);
+          const syncResult = await syncClupStatusDirect(
+            updatedData.province,
+            updatedData.municipality,
+            newStatus
+          );
+          console.log("CLUP Sync result:", syncResult);
+          
+          if (syncResult.success) {
+            showToastMessage(`✅ CLUP Status updated to "${newStatus}" in LGUstatus!`, "success");
+          } else {
+            showToastMessage(`⚠️ LGURecords updated but LGUstatus sync failed: ${syncResult.error || "Unknown error"}`, "warning");
+          }
         }
       } else {
         showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} updated successfully!`, "success");
@@ -1811,26 +1854,55 @@ async function saveInlineEdit(lguId) {
   }
 }
 
-// Add this new function to handle the sync
+// ==================== SYNC PDPFP STATUS (FOR PROVINCIAL GOVERNMENT) ====================
+async function syncPdpfpStatusDirect(province, newStatus) {
+  try {
+    console.log(`🔄 Syncing PDPFP Status for Provincial Government of ${province} to: ${newStatus}`);
+    
+    if (!province || !newStatus) {
+      console.error("❌ Missing province or status:", { province, newStatus });
+      return { success: false, error: "Missing province or status" };
+    }
+    
+    // Use URL parameters instead of FormData for better compatibility
+    const url = `${GOOGLE_SCRIPT_URL}?action=sync_pdpfp_status&province=${encodeURIComponent(province)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
+    
+    console.log("📤 Sending sync request to:", url);
+    
+    const response = await fetch(url, {
+      method: 'GET'
+    });
+    
+    const result = await response.json();
+    console.log("PDPFP Sync result:", result);
+    return result;
+  } catch (error) {
+    console.error("Error syncing PDPFP:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// ==================== SYNC CLUP STATUS (FOR MUNICIPAL/CITY LGUs) ====================
 async function syncClupStatusDirect(province, municipality, newStatus) {
   try {
     console.log(`🔄 Syncing CLUP Status for ${municipality}, ${province} to: ${newStatus}`);
     
-    // Build the URL with parameters
+    // Build the URL with parameters - using lgu_status data type
     const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
     
     const response = await fetch(url);
     const result = await response.json();
     
-    console.log("Sync result:", result);
+    console.log("CLUP Sync result:", result);
     return result;
   } catch (error) {
-    console.error("Error syncing:", error);
+    console.error("Error syncing CLUP:", error);
     return { success: false, error: error.message };
   }
 }
 
-    document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
+// Update the form submission to handle both LGU types
+document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (isSaving) return;
   
@@ -1851,6 +1923,7 @@ async function syncClupStatusDirect(province, municipality, newStatus) {
     return;
   }
   
+  const isProvincial = mun === "Provincial Government";
   const newLGU = { 
     id: generateId(),
     psgc: psgc || "",
@@ -1895,28 +1968,46 @@ async function syncClupStatusDirect(province, municipality, newStatus) {
       document.getElementById("lguRegForm").reset();
       document.getElementById("regRegion").value = "REGION VI (WESTERN VISAYAS)";
       document.getElementById("regPsgc").value = "";
-      showToastMessage(`✅ LGU ${mun}, ${prov} registered successfully to Google Sheets!`, "success");
       
-      // ====== ADD THIS SYNC CODE HERE ======
-      // After saving the LGU to LGURecords, also sync to LGUstatus
+      // Handle status sync based on LGU type
       if (newLGU.clupStatus) {
-        try {
-          const syncResult = await syncClupStatusDirect(
-            newLGU.province,
-            newLGU.municipality,
-            newLGU.clupStatus
-          );
-          console.log("Sync result for new LGU:", syncResult);
-          if (syncResult.success) {
-            showToastMessage(`✅ LGU registered with status: "${newLGU.clupStatus}"`, "success");
-          } else {
-            console.warn("⚠️ Status saved but sync to LGUstatus failed:", syncResult.error);
+        if (isProvincial) {
+          // Provincial Government -> sync to LGUpdpfp_status
+          try {
+            const syncResult = await syncPdpfpStatusDirect(
+              newLGU.province,
+              newLGU.clupStatus
+            );
+            console.log("PDPFP Sync result for new LGU:", syncResult);
+            if (syncResult.success) {
+              showToastMessage(`✅ Provincial LGU registered with PDPFP Status: "${newLGU.clupStatus}"`, "success");
+            } else {
+              showToastMessage(`✅ LGU registered but PDPFP sync failed.`, "warning");
+            }
+          } catch (syncError) {
+            console.error("Error syncing PDPFP:", syncError);
           }
-        } catch (syncError) {
-          console.error("Error syncing new LGU status:", syncError);
+        } else {
+          // Municipal/City LGU -> sync to LGUstatus
+          try {
+            const syncResult = await syncClupStatusDirect(
+              newLGU.province,
+              newLGU.municipality,
+              newLGU.clupStatus
+            );
+            console.log("CLUP Sync result for new LGU:", syncResult);
+            if (syncResult.success) {
+              showToastMessage(`✅ LGU registered with CLUP Status: "${newLGU.clupStatus}"`, "success");
+            } else {
+              showToastMessage(`✅ LGU registered but LGUstatus sync failed.`, "warning");
+            }
+          } catch (syncError) {
+            console.error("Error syncing CLUP:", syncError);
+          }
         }
+      } else {
+        showToastMessage(`✅ LGU ${mun}, ${prov} registered successfully!`, "success");
       }
-      // ====== END OF SYNC CODE ======
       
     } else {
       showToastMessage(`❌ Error saving to Google Sheets: ${result.error || "Unknown error"}`, "error");
@@ -1976,61 +2067,6 @@ async function syncClupStatusDirect(province, municipality, newStatus) {
       const modal = document.getElementById("loginModal"); 
       if(e.target === modal) modal.classList.remove("active"); 
     };
-	
-	// Add this function to lgu-info.html
-async function updateClupStatusInBothSheets(province, municipality, newStatus) {
-  try {
-    console.log(`🔄 Updating CLUP Status for ${municipality}, ${province} to: ${newStatus}`);
-    
-    // Build the URL with parameters
-    const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
-    
-    const response = await fetch(url);
-    const result = await response.json();
-    
-    console.log("Sync result:", result);
-    
-    if (result.success) {
-      if (result.statusUpdated) {
-        showToastMessage(`✅ CLUP Status updated to "${newStatus}" for ${municipality} in both sheets!`, "success");
-      } else if (result.lguUpdated) {
-        showToastMessage(`⚠️ CLUP Status updated in LGURecords but not found in LGUstatus sheet.`, "warning");
-      } else {
-        showToastMessage(`⚠️ No matching LGU found in either sheet.`, "warning");
-      }
-      // Refresh the data
-      await loadData();
-      return true;
-    } else {
-      showToastMessage(`❌ Error updating status: ${result.error || "Unknown error"}`, "error");
-      return false;
-    }
-  } catch (error) {
-    console.error("Error syncing:", error);
-    showToastMessage(`❌ Error: ${error.message}`, "error");
-    return false;
-  }
-}
-	
-	
-// Add this function near other fetch functions (around line 500-600)
-async function syncClupStatusDirect(province, municipality, newStatus) {
-  try {
-    console.log(`🔄 Syncing CLUP Status for ${municipality}, ${province} to: ${newStatus}`);
-    
-    const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
-    
-    const response = await fetch(url);
-    const result = await response.json();
-    
-    console.log("Sync result:", result);
-    return result;
-  } catch (error) {
-    console.error("Error syncing:", error);
-    return { success: false, error: error.message };
-  }
-}
-	
   </script>
 </body>
 </html>

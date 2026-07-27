@@ -1156,7 +1156,7 @@
     function getRoleLabel(r) { if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r) { if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
 
-   function renderMainNavigation() {
+    function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
       let navHtml = `<a href="index.html">Home</a>`;

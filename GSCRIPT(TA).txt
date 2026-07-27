@@ -1,0 +1,415 @@
+/**
+ * Technical Monitoring Form - Google Apps Script Backend
+ * Supports CLUP and PDPFP with separate sheets
+ * Personnel In-Charge stored in Google Sheet for sharing
+ */
+
+const SHEET_CLUP = 'TechnicalMonitoring_CLUP';
+const SHEET_PDPFP = 'TechnicalMonitoring_PDPFP';
+const SHEET_PIC = 'PersonnelInCharge';
+const HEADER_ROW = 1;
+
+// ============================================
+// GET REQUESTS
+// ============================================
+
+function doGet(e) {
+  const action = e && e.parameter ? e.parameter.action : null;
+  const type = e && e.parameter ? e.parameter.type : null;
+  
+  if (action === 'test') {
+    return createResponse({
+      status: 'online',
+      message: '✅ API is running!',
+      timestamp: new Date().toISOString()
+    });
+  }
+  
+  if (action === 'records') {
+    const records = getRecords(type);
+    return createResponse(records);
+  }
+  
+  if (action === 'getPIC') {
+    const names = getPICNames();
+    return createResponse({ result: 'success', names: names });
+  }
+  
+  return createResponse({
+    status: 'online',
+    message: 'Technical Monitoring API is running',
+    timestamp: new Date().toISOString()
+  });
+}
+
+// ============================================
+// POST REQUESTS
+// ============================================
+
+function doPost(e) {
+  try {
+    // Parse the incoming data
+    let payload;
+    try {
+      payload = JSON.parse(e.postData.contents);
+    } catch (parseError) {
+      return createResponse({
+        result: 'error',
+        message: 'Invalid JSON payload: ' + parseError.message
+      });
+    }
+    
+    console.log('📨 Received payload:', JSON.stringify(payload));
+    
+    // Handle different actions
+    if (payload.action === 'test') {
+      return createResponse({
+        result: 'success',
+        message: '✅ Connection test successful!'
+      });
+    }
+    
+    if (payload.action === 'savePIC') {
+      const result = savePICNames(payload.names);
+      return createResponse(result);
+    }
+    
+    if (payload.action === 'updateRecord') {
+      const result = updateRecord(payload.rowNumber, payload.formType, payload.data);
+      return createResponse(result);
+    }
+    
+    if (payload.action === 'deleteRecord') {
+      const result = deleteRecord(payload.rowNumber, payload.formType);
+      return createResponse(result);
+    }
+    
+    // Default: save record
+    const result = saveRecord(payload);
+    return createResponse(result);
+      
+  } catch (error) {
+    console.error('doPost error:', error);
+    return createResponse({
+      result: 'error',
+      message: '❌ Error: ' + error.message
+    });
+  }
+}
+
+function createResponse(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// ============================================
+// PERSONNEL IN-CHARGE FUNCTIONS
+// ============================================
+
+function getPICSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_PIC);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_PIC);
+    sheet.getRange(HEADER_ROW, 1, 1, 1).setValues([['Name']]);
+    sheet.getRange(HEADER_ROW, 1, 1, 1).setFontWeight('bold');
+    sheet.setFrozenRows(1);
+    const defaultNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+    const data = defaultNames.map(name => [name]);
+    sheet.getRange(2, 1, data.length, 1).setValues(data);
+    sheet.autoResizeColumns(1);
+  }
+  return sheet;
+}
+
+function getPICNames() {
+  try {
+    const sheet = getPICSheet();
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) {
+      return ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+    }
+    const data = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+    const names = data.map(row => row[0]).filter(name => name && name.trim() !== '');
+    if (names.length === 0) {
+      return ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+    }
+    return names;
+  } catch (error) {
+    return ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+  }
+}
+
+function savePICNames(names) {
+  try {
+    if (!Array.isArray(names)) throw new Error('Names must be an array');
+    const sheet = getPICSheet();
+    const lastRow = sheet.getLastRow();
+    if (lastRow >= 2) {
+      sheet.deleteRows(2, lastRow - 1);
+    }
+    if (names.length > 0) {
+      const data = names.map(name => [name]);
+      sheet.getRange(2, 1, data.length, 1).setValues(data);
+      sheet.autoResizeColumns(1);
+    }
+    return { result: 'success', message: 'PIC names saved successfully', count: names.length };
+  } catch (error) {
+    return { result: 'error', message: error.message };
+  }
+}
+
+// ============================================
+// SHEET FUNCTIONS
+// ============================================
+
+function getSheetName(type) {
+  if (type === 'PDPFP') return SHEET_PDPFP;
+  return SHEET_CLUP;
+}
+
+function getHeaders(type) {
+  if (type === 'PDPFP') {
+    return [
+      'Region',
+      'Province',
+      'Query / TA Details',
+      'Type of Assistance Provided',
+      'TA Category',
+      'Planned / Requested',
+      'Date Conducted',
+      'Reporting Month',
+      'Remarks',
+      'Link to MOV',
+      'Personnel In-Charge'
+    ];
+  }
+  return [
+    'PSGC',
+    'Region',
+    'Province',
+    'City/Municipality',
+    'Query / TA Details',
+    'Type of Assistance Provided',
+    'TA Category',
+    'Planned / Requested',
+    'Date Conducted',
+    'Reporting Month',
+    'Remarks',
+    'Link to MOV',
+    'Personnel In-Charge'
+  ];
+}
+
+function getRowData(payload, type) {
+  if (type === 'PDPFP') {
+    return [
+      payload.region || '',
+      payload.province || '',
+      payload.queryDetails || '',
+      payload.assistanceType || '',
+      payload.taCategory || '',
+      payload.plannedRequested || '',
+      payload.dateConducted || '',
+      payload.reportingMonth || '',
+      payload.remarks || 'N/A',
+      payload.linkMov || '',
+      payload.personnelInCharge || ''
+    ];
+  }
+  return [
+    payload.psgc || '',
+    payload.region || '',
+    payload.province || '',
+    payload.cityMun || '',
+    payload.queryDetails || '',
+    payload.assistanceType || '',
+    payload.taCategory || '',
+    payload.plannedRequested || '',
+    payload.dateConducted || '',
+    payload.reportingMonth || '',
+    payload.remarks || 'N/A',
+    payload.linkMov || '',
+    payload.personnelInCharge || ''
+  ];
+}
+
+function saveRecord(payload) {
+  try {
+    console.log('📝 Saving record:', payload);
+    const formType = payload.formType || 'CLUP';
+    const sheetName = getSheetName(formType);
+    const headers = getHeaders(formType);
+    const rowData = getRowData(payload, formType);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+      initializeHeaders(sheet, headers);
+    }
+    const nextRow = sheet.getLastRow() + 1;
+    sheet.getRange(nextRow, 1, 1, rowData.length).setValues([rowData]);
+    sheet.autoResizeColumns(1, rowData.length);
+    return {
+      result: 'success',
+      message: 'Record saved successfully to ' + sheetName,
+      rowNumber: nextRow,
+      sheet: sheetName,
+      timestamp: new Date().toISOString()
+    };
+  } catch (error) {
+    console.error('❌ Error saving record:', error);
+    return { result: 'error', message: error.message || 'An error occurred while saving the record' };
+  }
+}
+
+function getRecords(type) {
+  try {
+    const sheetName = getSheetName(type || 'CLUP');
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      return { result: 'success', records: [], count: 0, sheet: sheetName };
+    }
+    const lastRow = sheet.getLastRow();
+    if (lastRow < HEADER_ROW) {
+      return { result: 'success', records: [], count: 0, sheet: sheetName };
+    }
+    const headers = sheet.getRange(HEADER_ROW, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const data = sheet.getRange(HEADER_ROW + 1, 1, lastRow - HEADER_ROW, sheet.getLastColumn()).getValues();
+    const records = data.map(row => {
+      const record = {};
+      headers.forEach((header, index) => {
+        record[header] = row[index];
+      });
+      return record;
+    });
+    return {
+      result: 'success',
+      records: records,
+      count: records.length,
+      sheet: sheetName
+    };
+  } catch (error) {
+    return { result: 'error', message: error.message };
+  }
+}
+
+// ============================================
+// UPDATE RECORD - NEW
+// ============================================
+
+function updateRecord(rowNumber, formType, data) {
+  try {
+    console.log('📝 Updating record at row ' + rowNumber + ' in ' + formType);
+    const sheetName = getSheetName(formType || 'CLUP');
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      throw new Error('Sheet not found');
+    }
+    const headers = getHeaders(formType || 'CLUP');
+    const rowData = getRowData(data, formType || 'CLUP');
+    sheet.getRange(rowNumber, 1, 1, rowData.length).setValues([rowData]);
+    sheet.autoResizeColumns(1, rowData.length);
+    return {
+      result: 'success',
+      message: 'Record updated successfully',
+      rowNumber: rowNumber,
+      sheet: sheetName
+    };
+  } catch (error) {
+    console.error('❌ Error updating record:', error);
+    return { result: 'error', message: error.message };
+  }
+}
+
+// ============================================
+// DELETE RECORD - NEW
+// ============================================
+
+function deleteRecord(rowNumber, formType) {
+  try {
+    console.log('🗑️ Deleting record at row ' + rowNumber + ' in ' + formType);
+    const sheetName = getSheetName(formType || 'CLUP');
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      throw new Error('Sheet not found');
+    }
+    if (rowNumber <= HEADER_ROW) {
+      throw new Error('Cannot delete header row');
+    }
+    const lastRow = sheet.getLastRow();
+    if (rowNumber > lastRow) {
+      throw new Error('Row number exceeds sheet bounds');
+    }
+    sheet.deleteRow(rowNumber);
+    return {
+      result: 'success',
+      message: 'Record deleted successfully',
+      rowNumber: rowNumber,
+      sheet: sheetName
+    };
+  } catch (error) {
+    console.error('❌ Error deleting record:', error);
+    return { result: 'error', message: error.message };
+  }
+}
+
+function initializeHeaders(sheet, headers) {
+  sheet.getRange(HEADER_ROW, 1, 1, headers.length).setValues([headers]);
+  const headerRange = sheet.getRange(HEADER_ROW, 1, 1, headers.length);
+  headerRange.setFontWeight('bold');
+  headerRange.setBackground('#f0f4f8');
+  headerRange.setFontColor('#1e3a8a');
+  sheet.setFrozenRows(1);
+  sheet.autoResizeColumns(1, headers.length);
+}
+
+// ============================================
+// SETUP
+// ============================================
+
+function setup() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    console.log('🔧 Running setup...');
+    
+    let sheetCLUP = ss.getSheetByName(SHEET_CLUP);
+    if (sheetCLUP) {
+      initializeHeaders(sheetCLUP, getHeaders('CLUP'));
+    } else {
+      sheetCLUP = ss.insertSheet(SHEET_CLUP);
+      initializeHeaders(sheetCLUP, getHeaders('CLUP'));
+    }
+    
+    let sheetPDPFP = ss.getSheetByName(SHEET_PDPFP);
+    if (sheetPDPFP) {
+      initializeHeaders(sheetPDPFP, getHeaders('PDPFP'));
+    } else {
+      sheetPDPFP = ss.insertSheet(SHEET_PDPFP);
+      initializeHeaders(sheetPDPFP, getHeaders('PDPFP'));
+    }
+    
+    let sheetPIC = ss.getSheetByName(SHEET_PIC);
+    if (!sheetPIC) {
+      sheetPIC = ss.insertSheet(SHEET_PIC);
+      sheetPIC.getRange(HEADER_ROW, 1, 1, 1).setValues([['Name']]);
+      sheetPIC.getRange(HEADER_ROW, 1, 1, 1).setFontWeight('bold');
+      sheetPIC.setFrozenRows(1);
+      const defaultNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+      const data = defaultNames.map(name => [name]);
+      sheetPIC.getRange(2, 1, data.length, 1).setValues(data);
+      sheetPIC.autoResizeColumns(1);
+    }
+    
+    SpreadsheetApp.getUi().alert('✅ All sheets created successfully!\n\n' +
+                                 'CLUP: ' + SHEET_CLUP + '\n' +
+                                 'PDPFP: ' + SHEET_PDPFP + '\n' +
+                                 'Personnel In-Charge: ' + SHEET_PIC);
+  } catch (error) {
+    SpreadsheetApp.getUi().alert('❌ Error: ' + error.message);
+  }
+}

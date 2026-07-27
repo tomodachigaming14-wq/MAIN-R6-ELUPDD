@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DHSUD · CLUP/ZO Dashboard</title>
+  <title>DHSUD · PDPFP Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -486,16 +486,16 @@
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div class="container">
-    <h1>📊 CLUP/ZO Formulation Dashboard</h1>
-    <p>Real‑time monitoring · LGU status & progress</p>
+    <h1>📊 PDPFP Formulation Dashboard</h1>
+    <p>Provincial Government · Status & Progress Monitoring</p>
   </div>
 </div>
 
 <div class="container">
 <div class="stats-grid" id="statsGrid">
-  <div class="stat-card"><div class="stat-number" id="statTotalLgu">0</div><div class="stat-label">🏛️ No. of LGUs</div></div>
-  <div class="stat-card"><div class="stat-number" id="statUpdated">0</div><div class="stat-label">✅ Updated CLUP/ZO</div></div>
-  <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">🔄 CLUPs Due for updating</div></div>
+  <div class="stat-card"><div class="stat-number" id="statTotalLgu">0</div><div class="stat-label">🏛️ No. of Provincial LGUs</div></div>
+  <div class="stat-card"><div class="stat-number" id="statUpdated">0</div><div class="stat-label">✅ Updated PDPFP</div></div>
+  <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">🔄 PDPFP Due for updating</div></div>
   <div class="stat-card"><div class="stat-number" id="statUnderReview">0</div><div class="stat-label">📋 Under Review</div></div>
 </div>
 
@@ -503,15 +503,14 @@
   <div class="filter-bar">
     <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
     <select id="filterProvince"><option value="">All Provinces</option></select>
-    <select id="filterLgu"><option value="">All LGUs</option></select>
     <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
 
   <!-- CHARTS -->
   <div class="chart-grid">
-    <div class="chart-box"><h4>🟢 CLUP Status</h4><canvas id="pieChart"></canvas></div>
-    <div class="chart-box"><h4>📊 CLUP Status/Updates Breakdown</h4><canvas id="barChart"></canvas></div>
+    <div class="chart-box"><h4>🟢 PDPFP Status</h4><canvas id="pieChart"></canvas></div>
+    <div class="chart-box"><h4>📊 PDPFP Status Breakdown</h4><canvas id="barChart"></canvas></div>
   </div>
 
   <!-- COLUMN CHART + TABS -->
@@ -528,20 +527,20 @@
 
   <!-- TABLE -->
   <div class="table-section">
-    <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUstatus sheet)</span></h4>
+    <h4>📋 Provincial LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUpdpfp_status sheet)</span></h4>
     <div style="overflow-x:auto;">
       <table class="lgu-table" id="lguTable">
         <thead><tr>
-          <th>Region</th>
           <th>Province</th>
-          <th>City/Municipality</th>
-          <th>Income Class</th>
-          <th>CLUP Status</th>
-          <th>Target Year</th>
-          <th>Remarks</th>
+          <th>Name of Local Chief Executive</th>
+          <th>Name of Vice Governor</th>
+          <th>Name of PPDC</th>
+          <th>PPDC Email</th>
+          <th>PPDC Contact</th>
+          <th>PDPFP Status</th>
           <th>Action</th>
         </tr></thead>
-        <tbody id="lguTableBody"><tr><td colspan="8" style="text-align:center;">Loading LGU data...</td></tr></tbody>
+        <tbody id="lguTableBody"><tr><td colspan="8" style="text-align:center;">Loading provincial data...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -551,7 +550,7 @@
 <div class="modal-overlay" id="detailModal">
   <div class="modal-content">
     <button class="modal-close" id="modalCloseBtn">&times;</button>
-    <h2>📋 LGU Status Details</h2>
+    <h2>📋 Provincial LGU Details</h2>
     <div id="modalBody"></div>
   </div>
 </div>
@@ -560,7 +559,8 @@
 
 <script>
   // ========== INTEGRATED SCRIPT ==========
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
+  // UPDATE THIS URL WITH YOUR DEPLOYED WEB APP URL
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6_D5ctGM3ENYjfm5h1s-DVg9sZKxRG5xfKawmzFJdu0PtzHoUhaYXB2miwRGWikI/exec";
   let currentUser = null;
   function escapeHtml(s){ return String(s).replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
   function showToast(msg, type){ let t=document.createElement("div"); t.className="toast-msg"+(type==='error'?' error':''); t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
@@ -651,23 +651,20 @@
     "Unspecified":"#94a3b8"
   };
 
-  // ========== FIELD ACCESS ==========
+  // ========== FIELD ACCESS FOR PDPFP ==========
   function getField(record, field) {
     if (!record) return "—";
     
-    // Direct match
     if (record[field] !== undefined && record[field] !== null && record[field] !== "") {
       return record[field];
     }
     
-    // Try exact trim match
     for (let key of Object.keys(record)) {
       if (key.trim() === field.trim()) {
         return record[key];
       }
     }
     
-    // Try case-insensitive match
     const lowerField = field.toLowerCase().trim();
     for (let key of Object.keys(record)) {
       if (key.toLowerCase().trim() === lowerField) {
@@ -675,7 +672,6 @@
       }
     }
     
-    // Try contains match (for fields like "CLUP Status" vs "CLUPStatus")
     for (let key of Object.keys(record)) {
       const keyLower = key.toLowerCase().replace(/[^a-z0-9]/g, '');
       const fieldLower = field.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -687,40 +683,25 @@
     return "—";
   }
 
-  function deriveClupStatus(record){
-    // Try multiple possible field names
-    let status = getField(record, "CLUP Status");
-    if (status === "—" || status === "") status = getField(record, "CLUPStatus/Updates");
+  function derivePdpfpStatus(record){
+    let status = getField(record, "PDPFP Status");
     if (status === "—" || status === "") status = getField(record, "PDPFP/CLUP Status");
     if (status === "—" || status === "") status = getField(record, "Status");
     if (status === "—" || status === "") status = "Unknown";
     return status;
   }
 
-  function deriveTargetYear(record){
-    const start = getField(record, "Start Year");
-    const end = getField(record, "End Year");
-    if (start !== "—" && end !== "—") return `${start}-${end}`;
-    if (start !== "—") return start;
-    if (end !== "—") return end;
-    return "—";
-  }
-
   function normalizeStatus(status){
     if (!status) return "Other";
     const s = String(status).toLowerCase().trim();
     
-    // Check for Updated
     if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
     
-    // Check for For Updating
     if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For updating";
     
-    // Check for Under Review
     if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
     
-    // Check for No CLUP
-    if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No CLUP";
+    if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No PDPFP";
     
     return "Other";
   }
@@ -734,46 +715,28 @@
   }
 
   // ========== CHART DATA ==========
-  // NEW: Bar chart for CLUP Status/Updates breakdown
   function getBarData(records){
-    // Categories: None Indicated, Phase 5, Pre-Phase, RA3, RA5, RA7
     const categories = ["None Indicated", "Phase 5", "Pre-Phase", "RA3", "RA5", "RA7"];
     const counts = { "None Indicated":0, "Phase 5":0, "Pre-Phase":0, "RA3":0, "RA5":0, "RA7":0 };
     
     records.forEach(r => {
-      const clupUpdates = String(getField(r, "CLUPStatus/Updates") || "").toLowerCase();
-      const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase();
-      const combined = clupUpdates + " " + clupStatus;
+      const status = String(getField(r, "PDPFP Status") || "").toLowerCase();
+      const combined = status;
       
       let matched = false;
       
-      // Check for Phase 5
       if (combined.includes("phase 5") || combined.includes("phase5")) {
-        counts["Phase 5"]++;
-        matched = true;
-      }
-      // Check for Pre-Phase
-      else if (combined.includes("pre-phase") || combined.includes("prephase") || combined.includes("pre phase")) {
-        counts["Pre-Phase"]++;
-        matched = true;
-      }
-      // Check for RA3
-      else if (combined.includes("ra3") || combined.includes("ra 3")) {
-        counts["RA3"]++;
-        matched = true;
-      }
-      // Check for RA5
-      else if (combined.includes("ra5") || combined.includes("ra 5")) {
-        counts["RA5"]++;
-        matched = true;
-      }
-      // Check for RA7
-      else if (combined.includes("ra7") || combined.includes("ra 7")) {
-        counts["RA7"]++;
-        matched = true;
+        counts["Phase 5"]++; matched = true;
+      } else if (combined.includes("pre-phase") || combined.includes("prephase") || combined.includes("pre phase")) {
+        counts["Pre-Phase"]++; matched = true;
+      } else if (combined.includes("ra3") || combined.includes("ra 3")) {
+        counts["RA3"]++; matched = true;
+      } else if (combined.includes("ra5") || combined.includes("ra 5")) {
+        counts["RA5"]++; matched = true;
+      } else if (combined.includes("ra7") || combined.includes("ra 7")) {
+        counts["RA7"]++; matched = true;
       }
       
-      // If no match, count as None Indicated
       if (!matched) {
         counts["None Indicated"]++;
       }
@@ -785,14 +748,13 @@
   function getPieData(records){
     const statusMap = { "Updated":0, "For updating":0, "Under Review":0 };
     records.forEach(r => {
-      const status = deriveClupStatus(r);
+      const status = derivePdpfpStatus(r);
       const st = normalizeStatus(status);
       if (st === "Updated") {
         statusMap["Updated"]++;
       } else if (st === "For updating") {
         statusMap["For updating"]++;
       } else {
-        // Everything else (No CLUP, Other, Unknown, etc.) goes to Under Review
         statusMap["Under Review"]++;
       }
     });
@@ -806,25 +768,14 @@
     allPhases.forEach(p => phaseCounts[p] = 0);
     
     records.forEach(r => {
-      const clupUpdates = String(getField(r, "CLUPStatus/Updates") || "").toLowerCase();
-      const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase();
-      const combined = clupUpdates + " " + clupStatus;
+      const status = String(getField(r, "PDPFP Status") || "").toLowerCase();
       let found = false;
       
       for (let p of allPhases) {
         const pLower = p.toLowerCase();
-        if (combined.includes(pLower) || pLower.includes(combined.substring(0, Math.min(combined.length, 10)))) {
+        if (status.includes(pLower) || pLower.includes(status.substring(0, Math.min(status.length, 10)))) {
           phaseCounts[p] = (phaseCounts[p]||0) + 1;
           found = true; break;
-        }
-      }
-      if (!found) {
-        const remark = String(getField(r, "Remarks")||"").toLowerCase();
-        for (let p of allPhases) {
-          if (remark.includes(p.toLowerCase())) {
-            phaseCounts[p] = (phaseCounts[p]||0) + 1;
-            found = true; break;
-          }
         }
       }
       if (!found) {
@@ -847,7 +798,7 @@
     let updated=0, due=0, underReview=0;
     
     records.forEach(r => {
-      const status = deriveClupStatus(r);
+      const status = derivePdpfpStatus(r);
       const st = normalizeStatus(status);
       if (st === "Updated") updated++;
       else if (st === "For updating") due++;
@@ -858,8 +809,6 @@
     document.getElementById("statUpdated").innerText = updated;
     document.getElementById("statDue").innerText = due;
     document.getElementById("statUnderReview").innerText = underReview;
-    
-    console.log(`📊 Status breakdown: Updated=${updated}, For updating=${due}, Under Review=${underReview}`);
   }
 
   function renderPie(records){
@@ -872,14 +821,13 @@
         labels: data.labels, 
         datasets: [{ 
           data: data.data, 
-          backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']  // Green, Orange, Blue
+          backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']
         }] 
       },
       options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     });
   }
 
-  // NEW: Bar Chart for CLUP Status/Updates
   function renderBar(records){
     const data = getBarData(records);
     const ctx = document.getElementById("barChart").getContext("2d");
@@ -933,18 +881,18 @@
   function renderTable(records){
     const tbody = document.getElementById("lguTableBody");
     if (!records || records.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No provincial records found in LGUpdpfp_status sheet.</td></tr>`;
       return;
     }
     let html = '';
     records.forEach(r => {
-      const region = getField(r, "Region") || "—";
       const province = getField(r, "Province") || "—";
-      const municipality = getField(r, "City/Municipality") || "—";
-      const income = getField(r, "Income Class") || "—";
-      const status = deriveClupStatus(r) || "—";
-      const target = deriveTargetYear(r) || "—";
-      const remarks = getField(r, "Remarks") || "";
+      const lce = getField(r, "Name of Local Chief Executive") || "—";
+      const vg = getField(r, "Name of Vice Governor") || "—";
+      const ppdc = getField(r, "Name of PPDC") || "—";
+      const ppdcEmail = getField(r, "PPDC Email") || "—";
+      const ppdcContact = getField(r, "PPDC Contact") || "—";
+      const status = derivePdpfpStatus(r) || "—";
       
       const normalized = normalizeStatus(status);
       const statusClass = normalized === "Updated" ? "badge-updated" : 
@@ -952,13 +900,13 @@
                           normalized === "Under Review" ? "badge-under-review" : "badge-other";
       
       html += `<tr>
-        <td>${escapeHtml(region)}</td>
-        <td>${escapeHtml(province)}</td>
-        <td><strong>${escapeHtml(municipality)}</strong></td>
-        <td>${escapeHtml(income)}</td>
+        <td><strong>${escapeHtml(province)}</strong></td>
+        <td>${escapeHtml(lce)}</td>
+        <td>${escapeHtml(vg)}</td>
+        <td>${escapeHtml(ppdc)}</td>
+        <td>${escapeHtml(ppdcEmail)}</td>
+        <td>${escapeHtml(ppdcContact)}</td>
         <td><span class="badge-status ${statusClass}">${escapeHtml(status)}</span></td>
-        <td>${escapeHtml(target)}</td>
-        <td style="max-width:120px; font-size:0.75rem;">${escapeHtml(remarks)}</td>
         <td><button class="btn-view" data-record='${JSON.stringify(r).replace(/'/g, "&#39;")}'>View</button></td>
       </tr>`;
     });
@@ -970,7 +918,7 @@
         showDetailModal(record);
       });
     });
-    document.getElementById("filterCount").innerText = `${records.length} LGUs shown`;
+    document.getElementById("filterCount").innerText = `${records.length} Provinces shown`;
   }
 
   function showDetailModal(record){
@@ -978,22 +926,13 @@
     const body = document.getElementById("modalBody");
     
     const fields = [
-      { label: "Region", key: "Region" },
-      { label: "Income Class", key: "Income Class" },
-      { label: "PSGC", key: "PSGC" },
-      { label: "City/Municipality", key: "City/Municipality" },
       { label: "Province", key: "Province" },
-      { label: "Start Year", key: "Start Year" },
-      { label: "End Year", key: "End Year" },
-      { label: "Resolution Number", key: "Resolution Number of the Latest Plan" },
-      { label: "Approval Date", key: "Approval date of the Latest plan (MM/DD/YYYY)" },
-      { label: "CLUP Status", key: "CLUP Status" },
-      { label: "CLUPStatus/Updates", key: "CLUPStatus/Updates" },
-      { label: "Technical Assistance", key: "Technical Assistance Provided" },
-      { label: "Support from Other Institutions", key: "Support from Other Institutions" },
-      { label: "Name/s of Institutions", key: "If with Support from other institutions, Name/s of Institutions" },
-      { label: "Local Shelter Plan", key: "LGU with Local Shelter Plan" },
-      { label: "Communications Plan", key: "LGU with Communications Plan" },
+      { label: "Name of Local Chief Executive", key: "Name of Local Chief Executive" },
+      { label: "Name of Vice Governor", key: "Name of Vice Governor" },
+      { label: "Name of PPDC", key: "Name of PPDC" },
+      { label: "PPDC Email", key: "PPDC Email" },
+      { label: "PPDC Contact", key: "PPDC Contact" },
+      { label: "PDPFP Status", key: "PDPFP Status" },
       { label: "Remarks", key: "Remarks" }
     ];
     
@@ -1012,29 +951,20 @@
   // ========== FILTERS ==========
   function populateFilters(records){
     const provinceSet = new Set();
-    const lguSet = new Set();
     records.forEach(r => {
       const p = getField(r, "Province") || "—";
-      const m = getField(r, "City/Municipality") || "—";
       if (p !== "—") provinceSet.add(p);
-      if (m !== "—") lguSet.add(m);
     });
     const provSelect = document.getElementById("filterProvince");
-    const lguSelect = document.getElementById("filterLgu");
     const currentProv = provSelect.value;
-    const currentLgu = lguSelect.value;
     provSelect.innerHTML = `<option value="">All Provinces</option>` + [...provinceSet].sort().map(p => `<option value="${p}">${p}</option>`).join('');
-    lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${m}">${m}</option>`).join('');
     if (currentProv) provSelect.value = currentProv;
-    if (currentLgu) lguSelect.value = currentLgu;
   }
 
   function applyFilters(){
     const prov = document.getElementById("filterProvince").value;
-    const lgu = document.getElementById("filterLgu").value;
     let filtered = rawLguData;
     if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
-    if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
     filteredData = filtered;
     renderStats(filtered);
     renderPie(filtered);
@@ -1044,62 +974,117 @@
     renderTable(filtered);
   }
 
-  // ========== FETCH DATA ==========
-  async function fetchLguStatusData(){
+  // ========== FETCH DATA FROM LGUpdpfp_status SHEET ==========
+  async function fetchPdpfpStatusData(){
     try {
-      const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
-      const data = await resp.json();
+      // IMPORTANT: Using the correct data_type 'pdpfp_status' to connect to LGUpdpfp_status sheet
+      const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=pdpfp_status&_=${Date.now()}`);
       
-      // Debug: Log the first record to see what fields are available
-      if (Array.isArray(data) && data.length > 0) {
-        console.log("📋 First LGU Status record:", data[0]);
-        console.log("📋 Available fields:", Object.keys(data[0]));
-        console.log("📋 CLUP Status value:", data[0]["CLUP Status"]);
+      if (!resp.ok) {
+        throw new Error(`HTTP error! status: ${resp.status}`);
       }
       
+      const data = await resp.json();
+      console.log("📊 PDPFP Status data received:", data);
+      
+      // Check if we got valid data
       if (Array.isArray(data) && data.length > 0) {
-        rawLguData = data;
-        return rawLguData;
+        console.log(`✅ Found ${data.length} provincial PDPFP records`);
+        return data;
+      } else if (Array.isArray(data) && data.length === 0) {
+        console.log("ℹ️ No PDPFP status records found in LGUpdpfp_status sheet");
+        // Return fallback data so the page still works
+        return getFallbackData();
       } else {
-        console.warn("No data from LGUstatus, using fallback");
+        console.warn("Unexpected data format received:", data);
         return getFallbackData();
       }
     } catch(e){ 
-      console.error("Fetch error", e); 
+      console.error("❌ Fetch error:", e); 
+      showToast("Error loading PDPFP data. Using fallback data.", "error");
       return getFallbackData();
     }
   }
 
   function getFallbackData(){
     return [
-      { "Region":"Region VI", "Income Class":"1st", "PSGC":"604010000", "City/Municipality":"Bacolod City", "Province":"Negros Occidental", "Start Year":"2020", "End Year":"2029", "Resolution Number of the Latest Plan":"R-2020-001", "Approval date of the Latest plan (MM/DD/YYYY)":"01/15/2021", "CLUP Status":"Updated", "CLUPStatus/Updates":"Updated", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Yes", "If with Support from other institutions, Name/s of Institutions":"NEDA, DILG", "LGU with Local Shelter Plan":"Yes", "LGU with Communications Plan":"Yes", "Remarks":"On track" },
-      { "Region":"Region VI", "Income Class":"2nd", "PSGC":"604020000", "City/Municipality":"Bago City", "Province":"Negros Occidental", "Start Year":"2018", "End Year":"2027", "Resolution Number of the Latest Plan":"R-2018-005", "Approval date of the Latest plan (MM/DD/YYYY)":"03/10/2019", "CLUP Status":"For updating", "CLUPStatus/Updates":"Phase 5", "Technical Assistance Provided":"No", "Support from Other Institutions":"No", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Communications Plan":"Yes", "Remarks":"Tech capacity needed" },
-      { "Region":"Region VI", "Income Class":"3rd", "PSGC":"604030000", "City/Municipality":"Cadiz City", "Province":"Negros Occidental", "Start Year":"2019", "End Year":"2028", "Resolution Number of the Latest Plan":"R-2019-003", "Approval date of the Latest plan (MM/DD/YYYY)":"06/20/2020", "CLUP Status":"Updated", "CLUPStatus/Updates":"Pre-Phase", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Yes", "If with Support from other institutions, Name/s of Institutions":"DILG", "LGU with Local Shelter Plan":"Yes", "LGU with Communications Plan":"Yes", "Remarks":"Data gaps identified" },
-      { "Region":"Region VI", "Income Class":"4th", "PSGC":"603001000", "City/Municipality":"Ajuy", "Province":"Iloilo", "Start Year":"2017", "End Year":"2026", "Resolution Number of the Latest Plan":"R-2017-002", "Approval date of the Latest plan (MM/DD/YYYY)":"08/15/2018", "CLUP Status":"For updating", "CLUPStatus/Updates":"RA3", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"No", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Communications Plan":"No", "Remarks":"Financial support needed" },
-      { "Region":"Region VI", "Income Class":"5th", "PSGC":"603002000", "City/Municipality":"Badiangan", "Province":"Iloilo", "Start Year":"2016", "End Year":"2025", "Resolution Number of the Latest Plan":"R-2016-001", "Approval date of the Latest plan (MM/DD/YYYY)":"12/10/2017", "CLUP Status":"No CLUP", "CLUPStatus/Updates":"RA5", "Technical Assistance Provided":"No", "Support from Other Institutions":"No", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Communications Plan":"No", "Remarks":"Institutional barriers" },
-      { "Region":"Region VI", "Income Class":"4th", "PSGC":"603003000", "City/Municipality":"Altavas", "Province":"Aklan", "Start Year":"2021", "End Year":"2030", "Resolution Number of the Latest Plan":"R-2021-004", "Approval date of the Latest plan (MM/DD/YYYY)":"02/28/2022", "CLUP Status":"Updated", "CLUPStatus/Updates":"RA7", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Yes", "If with Support from other institutions, Name/s of Institutions":"NEDA", "LGU with Local Shelter Plan":"Yes", "LGU with Communications Plan":"Yes", "Remarks":"Ongoing monitoring" },
-      { "Region":"Region VI", "Income Class":"4th", "PSGC":"603004000", "City/Municipality":"Banga", "Province":"Aklan", "Start Year":"2020", "End Year":"2029", "Resolution Number of the Latest Plan":"R-2020-002", "Approval date of the Latest plan (MM/DD/YYYY)":"05/20/2021", "CLUP Status":"For updating", "CLUPStatus/Updates":"", "Technical Assistance Provided":"No", "Support from Other Institutions":"No", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Communications Plan":"No", "Remarks":"No updates provided" }
+      { 
+        "Province": "AKLAN", 
+        "Name of Local Chief Executive": "Jose Enrique M. Miraflores", 
+        "Name of Vice Governor": "Dexter M. Calizo", 
+        "Name of PPDC": "Engr. Roger M. Esto", 
+        "PPDC Email": "ppdoaklan@gmail.com", 
+        "PPDC Contact": "09176238440\n(036) 268-5442", 
+        "PDPFP Status": "Under Review", 
+        "Remarks": "" 
+      },
+      { 
+        "Province": "ANTIQUE", 
+        "Name of Local Chief Executive": "Rhodora J. Cadiao", 
+        "Name of Vice Governor": "Edgar D. Denosta", 
+        "Name of PPDC": "Engr. Nicasio A. Dela Cruz", 
+        "PPDC Email": "ppdoantique@gmail.com", 
+        "PPDC Contact": "09176238441\n(036) 268-5443", 
+        "PDPFP Status": "Updated", 
+        "Remarks": "" 
+      },
+      { 
+        "Province": "CAPIZ", 
+        "Name of Local Chief Executive": "Jose C. Tumbokon", 
+        "Name of Vice Governor": "Vincent P. Soriano", 
+        "Name of PPDC": "Engr. Mario L. Fernandez", 
+        "PPDC Email": "ppdocapiz@gmail.com", 
+        "PPDC Contact": "09176238442\n(036) 268-5444", 
+        "PDPFP Status": "For updating", 
+        "Remarks": "" 
+      },
+      { 
+        "Province": "GUIMARAS", 
+        "Name of Local Chief Executive": "Joaquin Carlos Rahman A. Nava", 
+        "Name of Vice Governor": "Edward S. Gando", 
+        "Name of PPDC": "Engr. Maria Lourdes A. Villanueva", 
+        "PPDC Email": "ppdoguimaras@gmail.com", 
+        "PPDC Contact": "09176238443\n(036) 268-5445", 
+        "PDPFP Status": "Under Review", 
+        "Remarks": "" 
+      },
+      { 
+        "Province": "ILOILO", 
+        "Name of Local Chief Executive": "Arthur R. Defensor Jr.", 
+        "Name of Vice Governor": "Christine S. Garin", 
+        "Name of PPDC": "Engr. Jose S. Cordero", 
+        "PPDC Email": "ppdoiloilo@gmail.com", 
+        "PPDC Contact": "09176238444\n(036) 268-5446", 
+        "PDPFP Status": "Updated", 
+        "Remarks": "" 
+      }
     ];
   }
 
   // ========== INIT ==========
   document.addEventListener('DOMContentLoaded', async function(){
-    checkSession(); renderMainNavigation(); renderUserMenu();
+    checkSession(); 
+    renderMainNavigation(); 
+    renderUserMenu();
 
-    const data = await fetchLguStatusData();
-    if (data.length > 0) {
+    // Show loading state
+    document.getElementById("lguTableBody").innerHTML = `<tr><td colspan="8" style="text-align:center;">⏳ Loading data from LGUpdpfp_status sheet...</td></tr>`;
+
+    const data = await fetchPdpfpStatusData();
+    if (data && data.length > 0) {
       rawLguData = data;
+      console.log(`✅ Loaded ${rawLguData.length} records`);
     } else {
       rawLguData = getFallbackData();
+      console.log("⚠️ Using fallback data with", rawLguData.length, "records");
     }
+    
     populateFilters(rawLguData);
     applyFilters();
 
     document.getElementById("filterProvince").addEventListener('change', applyFilters);
-    document.getElementById("filterLgu").addEventListener('change', applyFilters);
     document.getElementById("resetFiltersBtn").addEventListener('click', function(){
       document.getElementById("filterProvince").value = "";
-      document.getElementById("filterLgu").value = "";
       applyFilters();
     });
 
