@@ -302,6 +302,30 @@
     }
     .chart-box canvas { max-height: 220px; max-width: 100%; }
 
+    /* New pie charts grid for Shelter Plan, Housing Subsector, Comm Plan */
+    .pie-chart-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .pie-chart-grid .chart-box {
+      background: white;
+      border-radius: 28px;
+      padding: 20px 20px 16px;
+      border: 1px solid #eef2ff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .pie-chart-grid .chart-box h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #4a6f88;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .pie-chart-grid .chart-box canvas { max-height: 180px; max-width: 100%; }
+
     .column-chart-wrapper {
       grid-column: 1 / -1;
     }
@@ -558,6 +582,7 @@
     @media print { .filter-bar, .chart-tabs, .btn-view, header { display: none !important; } }
     @media (max-width: 760px) { 
       .chart-grid { grid-template-columns: 1fr; }
+      .pie-chart-grid { grid-template-columns: 1fr; }
       .edit-form-row { grid-template-columns: 1fr; }
       .detail-label { width: 140px; }
       .modal-content { padding: 20px; }
@@ -635,6 +660,22 @@
         </select>
       </h4>
       <canvas id="barChart"></canvas>
+    </div>
+  </div>
+
+  <!-- NEW PIE CHARTS: Shelter Plan, Housing Subsector, Comm Plan -->
+  <div class="pie-chart-grid">
+    <div class="chart-box">
+      <h4>🏠 LGU with Local Shelter Plan</h4>
+      <canvas id="shelterPieChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>🏗️ LGU with Integrated Housing Subsector</h4>
+      <canvas id="housingPieChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>📡 LGU with Communications Plan</h4>
+      <canvas id="commPieChart"></canvas>
     </div>
   </div>
 
@@ -798,7 +839,6 @@
   let isSaving = false;
   
   // ========== FIELD MAPPING ==========
-  // These are all possible field name variations for each column
   const FIELD_ALIASES = {
     "LGU with Local Shelter Plan": [
       "LGU with Local Shelter Plan",
@@ -948,6 +988,7 @@
   let rawLguData = [];
   let filteredData = [];
   let pieChartInstance=null, barChartInstance=null, columnChartInstance=null;
+  let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null;
 
   const phaseMap = {
     "Preparatory phase":"Preparatory",
@@ -975,12 +1016,10 @@
   function getField(record, field) {
     if (!record) return "—";
     
-    // Direct match
     if (record[field] !== undefined && record[field] !== null && record[field] !== "") {
       return record[field];
     }
     
-    // Check aliases for this field
     if (FIELD_ALIASES[field]) {
       for (let alias of FIELD_ALIASES[field]) {
         if (record[alias] !== undefined && record[alias] !== null && record[alias] !== "") {
@@ -989,14 +1028,12 @@
       }
     }
     
-    // Trim match
     for (let key of Object.keys(record)) {
       if (key.trim() === field.trim()) {
         return record[key];
       }
     }
     
-    // Case-insensitive match
     const lowerField = field.toLowerCase().trim();
     for (let key of Object.keys(record)) {
       if (key.toLowerCase().trim() === lowerField) {
@@ -1004,7 +1041,6 @@
       }
     }
     
-    // Fuzzy match
     for (let key of Object.keys(record)) {
       const keyLower = key.toLowerCase().replace(/[^a-z0-9]/g, '');
       const fieldLower = field.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -1061,14 +1097,12 @@
   function filterByStatusUpdates(records, mode) {
     if (mode === 'all') return records;
     
-    // Individual phase/RA selection
     const validOptions = [
       'Pre-Phase', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5',
       'RA 1', 'RA 2', 'RA 3', 'RA 4', 'RA 5', 'RA 6', 'RA 7',
       'None Indicated'
     ];
     
-    // If mode is not in validOptions, return all
     if (!validOptions.includes(mode)) return records;
     
     return records.filter(r => {
@@ -1085,8 +1119,6 @@
       }
       
       const modeLower = mode.toLowerCase();
-      // Check if the combined string contains the mode (case insensitive)
-      // Also handle variations like "Phase1" without space
       const modeNoSpace = modeLower.replace(/\s/g, '');
       const modeWithHyphen = modeLower.replace(/\s/g, '-');
       
@@ -1134,7 +1166,6 @@
       };
     }
     
-    // For individual mode, just show the selected category
     const labels = [mode];
     const counts = {};
     labels.forEach(l => counts[l] = 0);
@@ -1179,6 +1210,17 @@
       }
     });
     return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
+  }
+
+  function getYesNoData(records, field) {
+    let yesCount = 0, noCount = 0, emptyCount = 0;
+    records.forEach(r => {
+      const value = getField(r, field);
+      if (value === "Yes") yesCount++;
+      else if (value === "No") noCount++;
+      else emptyCount++;
+    });
+    return { labels: ["Yes", "No", "Not Specified"], data: [yesCount, noCount, emptyCount] };
   }
 
   function getColumnData(records, view){
@@ -1253,6 +1295,57 @@
         }] 
       },
       options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  function renderShelterPie(records){
+    const data = getYesNoData(records, "LGU with Local Shelter Plan");
+    const ctx = document.getElementById("shelterPieChart").getContext("2d");
+    if (shelterPieInstance) shelterPieInstance.destroy();
+    shelterPieInstance = new Chart(ctx, {
+      type: 'pie',
+      data: { 
+        labels: data.labels, 
+        datasets: [{ 
+          data: data.data, 
+          backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
+        }] 
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
+    });
+  }
+
+  function renderHousingPie(records){
+    const data = getYesNoData(records, "LGU with Integrated Housing Subsector");
+    const ctx = document.getElementById("housingPieChart").getContext("2d");
+    if (housingPieInstance) housingPieInstance.destroy();
+    housingPieInstance = new Chart(ctx, {
+      type: 'pie',
+      data: { 
+        labels: data.labels, 
+        datasets: [{ 
+          data: data.data, 
+          backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
+        }] 
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
+    });
+  }
+
+  function renderCommPie(records){
+    const data = getYesNoData(records, "LGU with Integrated Communications Plan");
+    const ctx = document.getElementById("commPieChart").getContext("2d");
+    if (commPieInstance) commPieInstance.destroy();
+    commPieInstance = new Chart(ctx, {
+      type: 'pie',
+      data: { 
+        labels: data.labels, 
+        datasets: [{ 
+          data: data.data, 
+          backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
+        }] 
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
     });
   }
 
@@ -1334,7 +1427,6 @@
       
       const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
       
-      // Color coding for Yes/No values
       const getColor = (val) => {
         if (val === 'Yes') return '#166534';
         if (val === 'No') return '#991b1b';
@@ -1421,7 +1513,6 @@
     currentEditRecord = record;
     const modal = document.getElementById("editModal");
     
-    // Populate form with exact field names from the sheet
     document.getElementById("editProvince").value = getFieldValue(record, "Province");
     document.getElementById("editCity").value = getFieldValue(record, "City/Municipality");
     document.getElementById("editRegion").value = getFieldValue(record, "Region");
@@ -1452,12 +1543,10 @@
     document.getElementById("editSaveBtn").innerHTML = "⏳ Saving...";
     
     try {
-      // Get the values from the form
       const province = formData.get('Province') || '';
       const city = formData.get('City/Municipality') || '';
       const commPlanValue = formData.get('LGU with Integrated Communications Plan') || '';
       
-      // Build the record object with the exact field names
       const record = {
         'Province': province,
         'City/Municipality': city,
@@ -1478,7 +1567,6 @@
         'Remarks': formData.get('Remarks') || ''
       };
       
-      // ALSO add the field with alternative names to ensure it gets saved
       const altRecord = {
         ...record,
         'LGU with Communications Plan': commPlanValue,
@@ -1486,26 +1574,22 @@
         'Comm Plan': commPlanValue
       };
       
-      // Build URL with parameters
       const params = new URLSearchParams();
       params.append('action', 'update');
       params.append('data_type', 'lgu_status');
       
-      // Add all fields from the main record
       for (let [key, value] of Object.entries(record)) {
         if (value !== undefined && value !== null && value !== '') {
           params.append(key, value);
         }
       }
       
-      // Also add the alternative field names
       if (commPlanValue) {
         params.append('LGU with Communications Plan', commPlanValue);
         params.append('Communications Plan', commPlanValue);
         params.append('Comm Plan', commPlanValue);
       }
       
-      // Add the full data as JSON
       params.append('data', JSON.stringify(altRecord));
       
       const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
@@ -1589,6 +1673,9 @@
     
     renderStats(filtered);
     renderPie(filtered);
+    renderShelterPie(filtered);
+    renderHousingPie(filtered);
+    renderCommPie(filtered);
     renderBar(filtered, barMode);
     
     const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
