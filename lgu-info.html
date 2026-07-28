@@ -707,6 +707,11 @@ footer {
     display: none !important;
 }
 
+/* Hide CLUP Status and Planning Period in view mode */
+.hidden-info {
+    display: none !important;
+}
+
 @media (max-width: 768px) {
     .form-grid {
         grid-template-columns: 1fr;
@@ -862,22 +867,6 @@ footer {
               <option value="Under Review">Under Review</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Table Monitoring</label>
-            <select id="regTableMonitoring">
-              <option value="">-- Select --</option>
-              <option value="Conducted">Conducted</option>
-              <option value="Non-Conducted">Non-Conducted</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Field Monitoring</label>
-            <select id="regFieldMonitoring">
-              <option value="">-- Select --</option>
-              <option value="Conducted">Conducted</option>
-              <option value="Non-Conducted">Non-Conducted</option>
-            </select>
-          </div>
           <div class="form-group" style="grid-column: 1 / -1;">
             <label>Recent Activities Undertaken on CLUP&ZO or PDPFP Formulation/Updating</label>
             <textarea id="regRecentActivities" rows="3" placeholder="Describe recent activities..."></textarea>
@@ -893,22 +882,6 @@ footer {
           <div class="form-group">
             <label>Remarks</label>
             <input type="text" id="regRemarks">
-          </div>
-          <div class="form-group">
-            <label>Contacted via Text/Call</label>
-            <select id="regContactedText">
-              <option value="">-- Select --</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Contacted via FB Messenger</label>
-            <select id="regContactedFb">
-              <option value="">-- Select --</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
           </div>
         </div>
         <div class="modal-actions">
@@ -1114,13 +1087,6 @@ footer {
   return `<span class="status-badge status-for-updating">${escapeHtml(status)}</span>`;
 }
 
-    function getMonitoringBadge(value) {
-      if (!value) return '<span class="status-badge status-non-conducted">—</span>';
-      const lower = value.toLowerCase();
-      if (lower.includes('conducted')) return `<span class="status-badge status-conducted">Conducted</span>`;
-      return `<span class="status-badge status-non-conducted">Non-Conducted</span>`;
-    }
-
     // ==================== SESSION MANAGEMENT ====================
     function checkSession() { 
       const raw = localStorage.getItem("dhsud_session"); 
@@ -1149,9 +1115,9 @@ footer {
       let navHtml = `<a href="index.html">Home</a>`;
       if (currentUser) {
         navHtml += 
-		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-		  <a href="lc.html">Locational Clearance</a>
-		  <a href="SZC.html">Site Zoning Certification</a></div></div>
+         `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+          <a href="lc.html">Locational Clearance</a>
+          <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
             <!-- CLUP & ZO submenu -->
             <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
@@ -1286,15 +1252,11 @@ footer {
           mpdcEmail: record.mpdcEmail || record["C/M/PPDO Email Address"] || "",
           mpdcMobile: record.mpdcMobile || record["C/M/PPDO Contact Number"] || "",
           planningPeriod: record.planningPeriod || record["Planning Period of last approved plan"] || "",
-          clupStatus: clupStatus,  // FIXED: Use the variable we defined
-          tableMonitoring: record.tableMonitoring || record["Table Monitoring"] || "",
-          fieldMonitoring: record.fieldMonitoring || record["Field Monitoring"] || "",
+          clupStatus: clupStatus,
           recentActivities: record.recentActivities || record["Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating"] || "",
           taNeeds: record.taNeeds || record["TA needs"] || "",
           dateUpdated: record.dateUpdated || record["Date last updated"] || "",
-          remarks: record.remarks || record["Remarks"] || "",
-          contactedText: record.contactedText || record["Contacted via Text/Call"] || "",
-          contactedFb: record.contactedFb || record["Contacted via FB Messenger"] || ""
+          remarks: record.remarks || record["Remarks"] || ""
         };
       });
       console.log("Mapped LGUs:", lgus);
@@ -1310,13 +1272,12 @@ footer {
 
    async function saveLGUToSheet(lguData) {
   try {
-    // CRITICAL: The order MUST match LGU_COLUMNS exactly:
-    // PSGC, Income Class, Region, Province, Municipality, ...
+    // CRITICAL: The order MUST match LGU_COLUMNS exactly (without removed columns)
     const record = {
       "PSGC": lguData.psgc || "",
       "Income Class": lguData.incomeClass || "",
-      "Region": "REGION VI (WESTERN VISAYAS)",  // HARD-CODED: Always Region VI
-      "Province": lguData.province || "",       // This is where "ILOILO" should go
+      "Region": "REGION VI (WESTERN VISAYAS)",
+      "Province": lguData.province || "",
       "Municipality": lguData.municipality || "",
       "Name of Local Chief Executive": lguData.mayor || "",
       "Name of Vice Governor/Mayor": lguData.viceMayor || "",
@@ -1327,14 +1288,10 @@ footer {
       "C/M/PPDO Contact Number": lguData.mpdcMobile || "",
       "Planning Period of last approved plan": lguData.planningPeriod || "",
       "PDPFP/CLUP Status": lguData.clupStatus || "",
-      "Table Monitoring": lguData.tableMonitoring || "",
-      "Field Monitoring": lguData.fieldMonitoring || "",
       "Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating": lguData.recentActivities || "",
       "TA needs": lguData.taNeeds || "",
       "Date last updated": lguData.dateUpdated || "",
-      "Remarks": lguData.remarks || "",
-      "Contacted via Text/Call": lguData.contactedText || "",
-      "Contacted via FB Messenger": lguData.contactedFb || ""
+      "Remarks": lguData.remarks || ""
     };
 
     console.log("Saving record:", record);
@@ -1358,11 +1315,10 @@ footer {
 
     async function updateLGUInSheet(lguData) {
   try {
-    // CRITICAL: The order MUST match LGU_COLUMNS exactly
     const record = {
       "PSGC": lguData.psgc || "",
       "Income Class": lguData.incomeClass || "",
-      "Region": "REGION VI (WESTERN VISAYAS)",  // HARD-CODED: Always Region VI
+      "Region": "REGION VI (WESTERN VISAYAS)",
       "Province": lguData.province || "",
       "Municipality": lguData.municipality || "",
       "Name of Local Chief Executive": lguData.mayor || "",
@@ -1374,14 +1330,10 @@ footer {
       "C/M/PPDO Contact Number": lguData.mpdcMobile || "",
       "Planning Period of last approved plan": lguData.planningPeriod || "",
       "PDPFP/CLUP Status": lguData.clupStatus || "",
-      "Table Monitoring": lguData.tableMonitoring || "",
-      "Field Monitoring": lguData.fieldMonitoring || "",
       "Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating": lguData.recentActivities || "",
       "TA needs": lguData.taNeeds || "",
       "Date last updated": lguData.dateUpdated || "",
-      "Remarks": lguData.remarks || "",
-      "Contacted via Text/Call": lguData.contactedText || "",
-      "Contacted via FB Messenger": lguData.contactedFb || ""
+      "Remarks": lguData.remarks || ""
     };
 
     console.log("Updating record:", record);
@@ -1405,7 +1357,6 @@ footer {
 
     async function deleteLGUFromSheet(lguData) {
   try {
-    // Use Province + Municipality as the unique identifier
     const deleteId = `${lguData.municipality}_${lguData.province}`;
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
@@ -1608,7 +1559,8 @@ footer {
       <div class="info-row"><div class="info-label">PSGC:</div><div class="info-value">${escapeHtml(l.psgc || '—')}</div></div>
       <div class="info-row"><div class="info-label">Region:</div><div class="info-value">${escapeHtml(l.region || '—')}</div></div>
       <div class="info-row"><div class="info-label">Income Class:</div><div class="info-value">${escapeHtml(l.incomeClass || '—')}</div></div>
-      <div class="info-row"><div class="info-label">Planning Period:</div><div class="info-value">${escapeHtml(l.planningPeriod || '—')}</div></div>
+      <!-- HIDDEN: Planning Period -->
+      <div class="info-row hidden-info"><div class="info-label">Planning Period:</div><div class="info-value">${escapeHtml(l.planningPeriod || '—')}</div></div>
       <div class="info-row"><div class="info-label">${isProvincial ? 'Governor:' : 'Mayor:'}</div><div class="info-value">${escapeHtml(l.mayor || '—')}</div></div>
       <div class="info-row"><div class="info-label">${isProvincial ? 'Vice Governor:' : 'Vice Mayor:'}</div><div class="info-value">${escapeHtml(l.viceMayor || '—')}</div></div>
       <div class="info-row"><div class="info-label">LGU Email:</div><div class="info-value">${escapeHtml(l.email || '—')}</div></div>
@@ -1616,12 +1568,8 @@ footer {
       <div class="info-row"><div class="info-label">MPDC:</div><div class="info-value">${escapeHtml(l.mpdc || '—')}</div></div>
       <div class="info-row"><div class="info-label">MPDC Email:</div><div class="info-value">${escapeHtml(l.mpdcEmail || '—')}</div></div>
       <div class="info-row"><div class="info-label">MPDC Mobile:</div><div class="info-value">${escapeHtml(l.mpdcMobile || '—')}</div></div>
-      <!-- ADDED: CLUP Status -->
-      <div class="info-row"><div class="info-label">CLUP Status:</div><div class="info-value">${statusBadge}</div></div>
-      <div class="info-row"><div class="info-label">Table Monitoring:</div><div class="info-value">${getMonitoringBadge(l.tableMonitoring)}</div></div>
-      <div class="info-row"><div class="info-label">Field Monitoring:</div><div class="info-value">${getMonitoringBadge(l.fieldMonitoring)}</div></div>
-      <div class="info-row"><div class="info-label">Contacted (Text/Call):</div><div class="info-value">${escapeHtml(l.contactedText || '—')}</div></div>
-      <div class="info-row"><div class="info-label">Contacted (FB):</div><div class="info-value">${escapeHtml(l.contactedFb || '—')}</div></div>
+      <!-- HIDDEN: CLUP Status -->
+      <div class="info-row hidden-info"><div class="info-label">CLUP Status:</div><div class="info-value">${statusBadge}</div></div>
     </div>
     ${l.recentActivities ? `<div class="info-row" style="grid-column:1/-1;"><div class="info-label">Recent Activities:</div><div class="info-value">${escapeHtml(l.recentActivities)}</div></div>` : ''}
     ${l.taNeeds ? `<div class="info-row" style="grid-column:1/-1;"><div class="info-label">TA Needs:</div><div class="info-value">${escapeHtml(l.taNeeds)}</div></div>` : ''}
@@ -1640,7 +1588,6 @@ footer {
   if (!l) return;
   
   try {
-    // Pass the whole LGU object
     const result = await deleteLGUFromSheet(l);
     
     if (result.success) {
@@ -1714,40 +1661,12 @@ footer {
               <option ${l.clupStatus === 'Under Review' ? 'selected' : ''}>Under Review</option>
             </select>
           </div>
-          <div class="form-group"><label>Table Monitoring</label>
-            <select id="editTableMonitoring">
-              <option value="">-- Select --</option>
-              <option ${l.tableMonitoring === 'Conducted' ? 'selected' : ''}>Conducted</option>
-              <option ${l.tableMonitoring === 'Non-Conducted' ? 'selected' : ''}>Non-Conducted</option>
-            </select>
-          </div>
-          <div class="form-group"><label>Field Monitoring</label>
-            <select id="editFieldMonitoring">
-              <option value="">-- Select --</option>
-              <option ${l.fieldMonitoring === 'Conducted' ? 'selected' : ''}>Conducted</option>
-              <option ${l.fieldMonitoring === 'Non-Conducted' ? 'selected' : ''}>Non-Conducted</option>
-            </select>
-          </div>
           <div class="form-group" style="grid-column:1/-1;"><label>Recent Activities</label>
             <textarea id="editRecentActivities" rows="2">${escapeHtml(l.recentActivities || '')}</textarea>
           </div>
           <div class="form-group"><label>TA Needs</label><input id="editTaNeeds" value="${escapeHtml(l.taNeeds || '')}"></div>
           <div class="form-group"><label>Date Updated</label><input type="date" id="editDateUpdated" value="${l.dateUpdated || ''}"></div>
           <div class="form-group"><label>Remarks</label><input id="editRemarks" value="${escapeHtml(l.remarks || '')}"></div>
-          <div class="form-group"><label>Contacted (Text/Call)</label>
-            <select id="editContactedText">
-              <option value="">-- Select --</option>
-              <option ${l.contactedText === 'Yes' ? 'selected' : ''}>Yes</option>
-              <option ${l.contactedText === 'No' ? 'selected' : ''}>No</option>
-            </select>
-          </div>
-          <div class="form-group"><label>Contacted (FB)</label>
-            <select id="editContactedFb">
-              <option value="">-- Select --</option>
-              <option ${l.contactedFb === 'Yes' ? 'selected' : ''}>Yes</option>
-              <option ${l.contactedFb === 'No' ? 'selected' : ''}>No</option>
-            </select>
-          </div>
         </div>
         <div style="display:flex;gap:12px;margin-top:16px;">
           <button class="btn-primary" onclick="saveInlineEdit('${l.id}')">💾 Save Changes</button>
@@ -1790,27 +1709,20 @@ async function saveInlineEdit(lguId) {
     mpdcMobile: document.getElementById("editMpdcMobile").value,
     planningPeriod: document.getElementById("editPlanningPeriod").value,
     clupStatus: newStatus,
-    tableMonitoring: document.getElementById("editTableMonitoring").value,
-    fieldMonitoring: document.getElementById("editFieldMonitoring").value,
     recentActivities: document.getElementById("editRecentActivities").value,
     taNeeds: document.getElementById("editTaNeeds").value,
     dateUpdated: document.getElementById("editDateUpdated").value,
-    remarks: document.getElementById("editRemarks").value,
-    contactedText: document.getElementById("editContactedText").value,
-    contactedFb: document.getElementById("editContactedFb").value
+    remarks: document.getElementById("editRemarks").value
   };
   
   Object.assign(l, updatedData);
   
   try {
-    // 1. Update LGURecords
     const updateResult = await updateLGUInSheet(updatedData);
     
     if (updateResult.success) {
-      // 2. Handle status sync based on LGU type
       if (oldStatus !== newStatus && newStatus) {
         if (isProvincial) {
-          // For Provincial Government: Sync to LGUpdpfp_status
           console.log(`🔄 Syncing PDPFP Status for Provincial Government of "${province}" to: "${newStatus}"`);
           const syncResult = await syncPdpfpStatusDirect(
             province,
@@ -1824,7 +1736,6 @@ async function saveInlineEdit(lguId) {
             showToastMessage(`⚠️ LGURecords updated but PDPFP sync failed: ${syncResult.error || "Unknown error"}`, "warning");
           }
         } else {
-          // For Municipal/City LGUs: Sync to LGUstatus
           console.log(`🔄 Syncing CLUP Status for ${updatedData.municipality}: ${oldStatus} -> ${newStatus}`);
           const syncResult = await syncClupStatusDirect(
             updatedData.province,
@@ -1864,7 +1775,6 @@ async function syncPdpfpStatusDirect(province, newStatus) {
       return { success: false, error: "Missing province or status" };
     }
     
-    // Use URL parameters instead of FormData for better compatibility
     const url = `${GOOGLE_SCRIPT_URL}?action=sync_pdpfp_status&province=${encodeURIComponent(province)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
     
     console.log("📤 Sending sync request to:", url);
@@ -1887,7 +1797,6 @@ async function syncClupStatusDirect(province, municipality, newStatus) {
   try {
     console.log(`🔄 Syncing CLUP Status for ${municipality}, ${province} to: ${newStatus}`);
     
-    // Build the URL with parameters - using lgu_status data type
     const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
     
     const response = await fetch(url);
@@ -1940,14 +1849,10 @@ document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
     mpdcMobile: document.getElementById("regMpdcMobile").value || "",
     planningPeriod: document.getElementById("regPlanningPeriod").value || "",
     clupStatus: document.getElementById("regClupStatus").value || "",
-    tableMonitoring: document.getElementById("regTableMonitoring").value || "",
-    fieldMonitoring: document.getElementById("regFieldMonitoring").value || "",
     recentActivities: document.getElementById("regRecentActivities").value || "",
     taNeeds: document.getElementById("regTaNeeds").value || "",
     dateUpdated: document.getElementById("regDateUpdated").value || "",
-    remarks: document.getElementById("regRemarks").value || "",
-    contactedText: document.getElementById("regContactedText").value || "",
-    contactedFb: document.getElementById("regContactedFb").value || ""
+    remarks: document.getElementById("regRemarks").value || ""
   };
   
   const btn = document.getElementById("saveLGUBtn");
@@ -1969,10 +1874,8 @@ document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
       document.getElementById("regRegion").value = "REGION VI (WESTERN VISAYAS)";
       document.getElementById("regPsgc").value = "";
       
-      // Handle status sync based on LGU type
       if (newLGU.clupStatus) {
         if (isProvincial) {
-          // Provincial Government -> sync to LGUpdpfp_status
           try {
             const syncResult = await syncPdpfpStatusDirect(
               newLGU.province,
@@ -1988,7 +1891,6 @@ document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
             console.error("Error syncing PDPFP:", syncError);
           }
         } else {
-          // Municipal/City LGU -> sync to LGUstatus
           try {
             const syncResult = await syncClupStatusDirect(
               newLGU.province,

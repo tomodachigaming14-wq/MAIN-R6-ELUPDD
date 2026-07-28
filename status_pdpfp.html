@@ -268,9 +268,12 @@
 
     .chart-grid {
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: 1fr;
       gap: 24px;
       margin-bottom: 28px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .chart-box {
       background: white;
@@ -285,8 +288,9 @@
       letter-spacing: 0.5px;
       color: #4a6f88;
       margin-bottom: 12px;
+      text-align: center;
     }
-    .chart-box canvas { max-height: 220px; max-width: 100%; }
+    .chart-box canvas { max-height: 250px; max-width: 100%; }
 
     .column-chart-wrapper {
       grid-column: 1 / -1;
@@ -333,27 +337,32 @@
     .lgu-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     .lgu-table th {
       background: #f2f9f6;
-      padding: 0.8rem 0.6rem;
+      padding: 0.6rem 0.4rem;
       font-weight: 700;
       color: #0f5a46;
       text-align: left;
       white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
     .lgu-table td {
-      padding: 0.6rem 0.6rem;
+      padding: 0.5rem 0.4rem;
       border-bottom: 1px solid #eaf1ed;
+      vertical-align: middle;
     }
     .lgu-table tr:hover { background: #fafcff; }
     .badge-status {
       padding: 2px 12px;
       border-radius: 40px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       display: inline-block;
+      white-space: nowrap;
     }
     .badge-updated { background: #dcfce7; color: #166534; }
     .badge-due { background: #fef3c7; color: #92400e; }
@@ -364,13 +373,30 @@
       background: #d9efff;
       color: #0369a1;
       border: none;
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 30px;
       font-weight: 600;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       cursor: pointer;
     }
     .btn-view:hover { background: #b8dfff; }
+    .btn-edit {
+      background: #fef3c7;
+      color: #92400e;
+      border: none;
+      padding: 3px 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.65rem;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+    .btn-edit:hover { background: #fde68a; }
+    .action-cell {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
 
     /* Detail Modal */
     .modal-overlay {
@@ -389,7 +415,7 @@
     .modal-content {
       background: white;
       border-radius: 32px;
-      max-width: 750px;
+      max-width: 800px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
@@ -424,6 +450,96 @@
       font-size: 0.85rem;
       color: #1f3e54;
     }
+
+    /* Edit Form Styles */
+    .edit-form-group {
+      margin-bottom: 14px;
+    }
+    .edit-form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #4a6f88;
+      margin-bottom: 3px;
+    }
+    .edit-form-group input, .edit-form-group select, .edit-form-group textarea {
+      width: 100%;
+      padding: 7px 12px;
+      border: 1px solid #d0dfe8;
+      border-radius: 8px;
+      font-family: "Inter", sans-serif;
+      font-size: 0.82rem;
+      background: #fafcff;
+      transition: border 0.2s;
+    }
+    .edit-form-group input:focus, .edit-form-group select:focus, .edit-form-group textarea:focus {
+      border-color: #2563eb;
+      outline: none;
+      background: white;
+    }
+    .edit-form-group input:read-only {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .edit-form-group select {
+      appearance: auto;
+    }
+    .edit-form-group textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+    .edit-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .edit-form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      justify-content: flex-end;
+    }
+    .edit-form-actions button {
+      padding: 10px 28px;
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-save {
+      background: #1e3a8a;
+      color: white;
+    }
+    .btn-save:hover { background: #1e4a9a; }
+    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .btn-cancel:hover { background: #e2e8f0; }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #166534;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      z-index: 9999;
+      font-size: 0.85rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      animation: slideUp 0.3s ease;
+    }
+    .toast-msg.error { background: #b91c1c; }
+    .toast-msg.info { background: #2563eb; }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
     @keyframes modalSlideIn {
       from { opacity: 0; transform: scale(0.95); }
       to { opacity: 1; transform: scale(1); }
@@ -444,22 +560,14 @@
     }
 	
 	.badge-under-review { background: #dbeafe; color: #1e40af; }
-	
-    .toast-msg {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #166534;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 40px;
-      z-index: 9999;
-      font-size: 0.8rem;
-    }
-    .toast-msg.error { background: #b91c1c; }
 
     @media print { .filter-bar, .chart-tabs, .btn-view, header { display: none !important; } }
-    @media (max-width: 760px) { .chart-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) { 
+      .chart-grid { grid-template-columns: 1fr; }
+      .edit-form-row { grid-template-columns: 1fr; }
+      .detail-label { width: 140px; }
+      .modal-content { padding: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -503,14 +611,14 @@
   <div class="filter-bar">
     <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
     <select id="filterProvince"><option value="">All Provinces</option></select>
+    <select id="filterStatus"><option value="all">All Status</option></select>
     <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
 
-  <!-- CHARTS -->
+  <!-- CHART -->
   <div class="chart-grid">
     <div class="chart-box"><h4>🟢 PDPFP Status</h4><canvas id="pieChart"></canvas></div>
-    <div class="chart-box"><h4>📊 PDPFP Status Breakdown</h4><canvas id="barChart"></canvas></div>
   </div>
 
   <!-- COLUMN CHART + TABS -->
@@ -528,7 +636,7 @@
   <!-- TABLE -->
   <div class="table-section">
     <h4>📋 Provincial LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUpdpfp_status sheet)</span></h4>
-    <div style="overflow-x:auto;">
+    <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
       <table class="lgu-table" id="lguTable">
         <thead><tr>
           <th>Province</th>
@@ -555,58 +663,151 @@
   </div>
 </div>
 
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-content">
+    <button class="modal-close" id="editModalCloseBtn">&times;</button>
+    <h2>✏️ Edit PDPFP Status Record</h2>
+    <form id="editForm">
+      <!-- Hidden fields for action and data_type -->
+      <input type="hidden" name="action" value="update">
+      <input type="hidden" name="data_type" value="pdpfp_status">
+      
+      <div class="edit-form-group">
+        <label>Province</label>
+        <input type="text" id="editProvince" name="Province" readonly>
+      </div>
+      <div class="edit-form-group">
+        <label>Name of Local Chief Executive</label>
+        <input type="text" id="editLCE" name="Name of Local Chief Executive">
+      </div>
+      <div class="edit-form-group">
+        <label>Name of Vice Governor</label>
+        <input type="text" id="editViceGovernor" name="Name of Vice Governor">
+      </div>
+      <div class="edit-form-group">
+        <label>Name of PPDC</label>
+        <input type="text" id="editPPDC" name="Name of PPDC">
+      </div>
+      <div class="edit-form-group">
+        <label>PPDC Email</label>
+        <input type="text" id="editPPDCEmail" name="PPDC Email">
+      </div>
+      <div class="edit-form-group">
+        <label>PPDC Contact</label>
+        <input type="text" id="editPPDCContact" name="PPDC Contact">
+      </div>
+      <div class="edit-form-group">
+        <label>PDPFP Status</label>
+        <input type="text" id="editPdpfpStatus" name="PDPFP Status">
+      </div>
+      <div class="edit-form-group">
+        <label>Remarks</label>
+        <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
+      </div>
+      <div class="edit-form-actions">
+        <button type="button" class="btn-cancel" id="editCancelBtn">Cancel</button>
+        <button type="submit" class="btn-save" id="editSaveBtn">💾 Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <footer><div class="container"><div class="copyright">© DHSUD Region VI · ELUPDD Integrated Database</div></div></footer>
 
 <script>
   // ========== INTEGRATED SCRIPT ==========
-  // UPDATE THIS URL WITH YOUR DEPLOYED WEB APP URL
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6_D5ctGM3ENYjfm5h1s-DVg9sZKxRG5xfKawmzFJdu0PtzHoUhaYXB2miwRGWikI/exec";
   let currentUser = null;
-  function escapeHtml(s){ return String(s).replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
-  function showToast(msg, type){ let t=document.createElement("div"); t.className="toast-msg"+(type==='error'?' error':''); t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
-  function checkSession(){ const raw=localStorage.getItem("dhsud_session"); if(raw){ try{ const s=JSON.parse(raw); const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60); if(diff<12&&s.email){ currentUser=s; return true; } else localStorage.removeItem("dhsud_session"); }catch(e){localStorage.removeItem("dhsud_session");}} currentUser=null; return false; }
-  function getUserInitials(n){ if(!n) return "U"; let p=n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
-  function getRoleLabel(r){ if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
-  function getRoleClass(r){ if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
-   function renderMainNavigation() {
-      const container = document.getElementById("mainNavContainer");
-      if (!container) return;
-      let navHtml = `<a href="index.html">Home</a>`;
-      if (currentUser) {
-        navHtml += 
-		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-		  <a href="lc.html">Locational Clearance</a>
-		  <a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <!-- CLUP & ZO submenu -->
-            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
-            <!-- PDPFP submenu with Inventory & Status -->
-            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
-          </div></div>
-          <a href="Techsamp.html">Technical Assistance</a>
-          <a href="lgu-info.html">LGU Information</a>
-          <a href="report.html">Reports</a>
-          <a href="calendar.html">Calendar of Activities</a>
-          <a href="issuance.html">Issuances</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>`;
-      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
-      container.innerHTML = navHtml;
-      setTimeout(() => {
-        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const submenu = trigger.closest(".dropdown-submenu");
-            if (submenu) submenu.classList.toggle("open");
-          });
+  let currentEditRecord = null;
+  let isSaving = false;
+  
+  function escapeHtml(s){ 
+    if (s === undefined || s === null) return "—";
+    return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); 
+  }
+  
+  function showToast(msg, type){ 
+    let t=document.createElement("div"); 
+    t.className="toast-msg"+(type==='error'?' error':type==='info'?' info':''); 
+    t.innerText=msg; 
+    document.body.appendChild(t); 
+    setTimeout(()=>t.remove(), 3500); 
+  }
+  
+  function checkSession(){ 
+    const raw=localStorage.getItem("dhsud_session"); 
+    if(raw){ 
+      try{ 
+        const s=JSON.parse(raw); 
+        const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60); 
+        if(diff<12&&s.email){ 
+          currentUser=s; 
+          return true; 
+        } else localStorage.removeItem("dhsud_session"); 
+      }catch(e){localStorage.removeItem("dhsud_session");}
+    } 
+    currentUser=null; 
+    return false; 
+  }
+  
+  function getUserInitials(n){ 
+    if(!n) return "U"; 
+    let p=n.split(" "); 
+    if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); 
+    return n.substring(0,2).toUpperCase(); 
+  }
+  
+  function getRoleLabel(r){ 
+    if(r==="admin") return "👑 Admin"; 
+    if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; 
+    return "👁️ Viewer"; 
+  }
+  
+  function getRoleClass(r){ 
+    if(r==="admin") return "admin"; 
+    if(r==="encoder"||r==="staff") return "staff"; 
+    return "viewer"; 
+  }
+  
+  function renderMainNavigation() {
+    const container = document.getElementById("mainNavContainer");
+    if (!container) return;
+    let navHtml = `<a href="index.html">Home</a>`;
+    if (currentUser) {
+      navHtml += 
+       `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+        <a href="lc.html">Locational Clearance</a>
+        <a href="SZC.html">Site Zoning Certification</a></div></div>
+        <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+          <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
+          <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
+        </div></div>
+        <a href="Techsamp.html">Technical Assistance</a>
+        <a href="lgu-info.html">LGU Information</a>
+        <a href="report.html">Reports</a>
+        <a href="calendar.html">Calendar of Activities</a>
+        <a href="issuance.html">Issuances</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>`;
+    } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+    container.innerHTML = navHtml;
+    setTimeout(() => {
+      document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const submenu = trigger.closest(".dropdown-submenu");
+          if (submenu) submenu.classList.toggle("open");
         });
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".dropdown-submenu")) {
-            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-          }
-        });
-      }, 10);
-    }
+      });
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".dropdown-submenu")) {
+          document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+        }
+      });
+    }, 10);
+  }
+  
   function renderUserMenu(){
     const c=document.getElementById("userMenuContainer"); if(!c) return;
     if(currentUser){
@@ -627,7 +828,7 @@
   // ========== DASHBOARD LOGIC ==========
   let rawLguData = [];
   let filteredData = [];
-  let pieChartInstance=null, barChartInstance=null, columnChartInstance=null;
+  let pieChartInstance=null, columnChartInstance=null;
 
   const phaseMap = {
     "Preparatory phase":"Preparatory",
@@ -683,6 +884,11 @@
     return "—";
   }
 
+  function getFieldValue(record, field) {
+    const val = getField(record, field);
+    return val === "—" ? "" : val;
+  }
+
   function derivePdpfpStatus(record){
     let status = getField(record, "PDPFP Status");
     if (status === "—" || status === "") status = getField(record, "PDPFP/CLUP Status");
@@ -715,36 +921,6 @@
   }
 
   // ========== CHART DATA ==========
-  function getBarData(records){
-    const categories = ["None Indicated", "Phase 5", "Pre-Phase", "RA3", "RA5", "RA7"];
-    const counts = { "None Indicated":0, "Phase 5":0, "Pre-Phase":0, "RA3":0, "RA5":0, "RA7":0 };
-    
-    records.forEach(r => {
-      const status = String(getField(r, "PDPFP Status") || "").toLowerCase();
-      const combined = status;
-      
-      let matched = false;
-      
-      if (combined.includes("phase 5") || combined.includes("phase5")) {
-        counts["Phase 5"]++; matched = true;
-      } else if (combined.includes("pre-phase") || combined.includes("prephase") || combined.includes("pre phase")) {
-        counts["Pre-Phase"]++; matched = true;
-      } else if (combined.includes("ra3") || combined.includes("ra 3")) {
-        counts["RA3"]++; matched = true;
-      } else if (combined.includes("ra5") || combined.includes("ra 5")) {
-        counts["RA5"]++; matched = true;
-      } else if (combined.includes("ra7") || combined.includes("ra 7")) {
-        counts["RA7"]++; matched = true;
-      }
-      
-      if (!matched) {
-        counts["None Indicated"]++;
-      }
-    });
-    
-    return { labels: categories, data: categories.map(c => counts[c]||0) };
-  }
-
   function getPieData(records){
     const statusMap = { "Updated":0, "For updating":0, "Under Review":0 };
     records.forEach(r => {
@@ -773,7 +949,9 @@
       
       for (let p of allPhases) {
         const pLower = p.toLowerCase();
-        if (status.includes(pLower) || pLower.includes(status.substring(0, Math.min(status.length, 10)))) {
+        if (status.includes(pLower) || 
+            status.includes(pLower.replace(/\s/g, '')) ||
+            status.includes(pLower.replace('-', ''))) {
           phaseCounts[p] = (phaseCounts[p]||0) + 1;
           found = true; break;
         }
@@ -828,32 +1006,6 @@
     });
   }
 
-  function renderBar(records){
-    const data = getBarData(records);
-    const ctx = document.getElementById("barChart").getContext("2d");
-    if (barChartInstance) barChartInstance.destroy();
-    
-    const colors = ['#94a3b8', '#8b5cf6', '#3b82f6', '#f59e0b', '#ef4444', '#06b6d4'];
-    
-    barChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          label: 'Count', 
-          data: data.data, 
-          backgroundColor: colors,
-          borderRadius: 4
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, stepSize: 1 } }
-      }
-    });
-  }
-
   function renderColumn(records, view='preparatory'){
     const data = getColumnData(records, view);
     const ctx = document.getElementById("columnChart").getContext("2d");
@@ -899,6 +1051,8 @@
                           normalized === "For updating" ? "badge-due" : 
                           normalized === "Under Review" ? "badge-under-review" : "badge-other";
       
+      const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
+      
       html += `<tr>
         <td><strong>${escapeHtml(province)}</strong></td>
         <td>${escapeHtml(lce)}</td>
@@ -907,7 +1061,12 @@
         <td>${escapeHtml(ppdcEmail)}</td>
         <td>${escapeHtml(ppdcContact)}</td>
         <td><span class="badge-status ${statusClass}">${escapeHtml(status)}</span></td>
-        <td><button class="btn-view" data-record='${JSON.stringify(r).replace(/'/g, "&#39;")}'>View</button></td>
+        <td>
+          <div class="action-cell">
+            <button class="btn-view" data-record='${recordJson}'>View</button>
+            <button class="btn-edit" data-record='${recordJson}'>Edit</button>
+          </div>
+        </td>
       </tr>`;
     });
     tbody.innerHTML = html;
@@ -918,6 +1077,14 @@
         showDetailModal(record);
       });
     });
+    
+    tbody.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', function(){
+        const record = JSON.parse(this.dataset.record);
+        openEditModal(record);
+      });
+    });
+    
     document.getElementById("filterCount").innerText = `${records.length} Provinces shown`;
   }
 
@@ -948,36 +1115,152 @@
     modal.classList.add('active');
   }
 
+  // ========== EDIT MODAL FUNCTIONS ==========
+  function openEditModal(record) {
+    currentEditRecord = record;
+    const modal = document.getElementById("editModal");
+    
+    document.getElementById("editProvince").value = getFieldValue(record, "Province");
+    document.getElementById("editLCE").value = getFieldValue(record, "Name of Local Chief Executive");
+    document.getElementById("editViceGovernor").value = getFieldValue(record, "Name of Vice Governor");
+    document.getElementById("editPPDC").value = getFieldValue(record, "Name of PPDC");
+    document.getElementById("editPPDCEmail").value = getFieldValue(record, "PPDC Email");
+    document.getElementById("editPPDCContact").value = getFieldValue(record, "PPDC Contact");
+    document.getElementById("editPdpfpStatus").value = getFieldValue(record, "PDPFP Status");
+    document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
+    
+    document.getElementById("editSaveBtn").disabled = false;
+    modal.classList.add('active');
+  }
+
+  // ========== SAVE FUNCTION ==========
+  async function saveEditedRecord(formData) {
+    if (isSaving) return;
+    isSaving = true;
+    document.getElementById("editSaveBtn").disabled = true;
+    document.getElementById("editSaveBtn").innerHTML = "⏳ Saving...";
+    
+    try {
+      const record = {
+        'Province': formData.get('Province') || '',
+        'Name of Local Chief Executive': formData.get('Name of Local Chief Executive') || '',
+        'Name of Vice Governor': formData.get('Name of Vice Governor') || '',
+        'Name of PPDC': formData.get('Name of PPDC') || '',
+        'PPDC Email': formData.get('PPDC Email') || '',
+        'PPDC Contact': formData.get('PPDC Contact') || '',
+        'PDPFP Status': formData.get('PDPFP Status') || '',
+        'Remarks': formData.get('Remarks') || ''
+      };
+      
+      console.log("📝 Sending update for PDPFP:", record);
+      
+      const params = new URLSearchParams();
+      params.append('action', 'update');
+      params.append('data_type', 'pdpfp_status');
+      
+      for (let [key, value] of Object.entries(record)) {
+        if (value !== undefined && value !== null && value !== '') {
+          params.append(key, value);
+        }
+      }
+      
+      params.append('data', JSON.stringify(record));
+      
+      const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        mode: 'no-cors'
+      });
+      
+      console.log("✅ Update request sent successfully");
+      
+      showToast("✅ Save request sent successfully!", "");
+      document.getElementById("editModal").classList.remove('active');
+      
+      setTimeout(async () => {
+        await refreshData();
+      }, 2500);
+      
+      return { success: true };
+      
+    } catch (error) {
+      console.error("❌ Error saving record:", error);
+      showToast("❌ Error saving record: " + error.message, "error");
+      return { success: false, error: error.message };
+    } finally {
+      isSaving = false;
+      document.getElementById("editSaveBtn").disabled = false;
+      document.getElementById("editSaveBtn").innerHTML = "💾 Save Changes";
+    }
+  }
+
+  async function refreshData() {
+    try {
+      showToast("🔄 Refreshing data...", "info");
+      const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=pdpfp_status&_=${Date.now()}`);
+      const data = await resp.json();
+      if (Array.isArray(data) && data.length > 0) {
+        rawLguData = data;
+        populateFilters(rawLguData);
+        applyFilters();
+        showToast("✅ Data refreshed successfully!", "");
+      } else {
+        showToast("⚠️ No data returned from server", "error");
+      }
+    } catch (e) {
+      console.error("Refresh error", e);
+      showToast("❌ Error refreshing data: " + e.message, "error");
+    }
+  }
+
   // ========== FILTERS ==========
   function populateFilters(records){
     const provinceSet = new Set();
+    const statusSet = new Set();
     records.forEach(r => {
       const p = getField(r, "Province") || "—";
+      const s = derivePdpfpStatus(r) || "—";
       if (p !== "—") provinceSet.add(p);
+      if (s !== "—") statusSet.add(s);
     });
+    
     const provSelect = document.getElementById("filterProvince");
+    const statusSelect = document.getElementById("filterStatus");
     const currentProv = provSelect.value;
-    provSelect.innerHTML = `<option value="">All Provinces</option>` + [...provinceSet].sort().map(p => `<option value="${p}">${p}</option>`).join('');
+    const currentStatus = statusSelect.value;
+    
+    provSelect.innerHTML = `<option value="">All Provinces</option>` + [...provinceSet].sort().map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+    statusSelect.innerHTML = `<option value="all">All Status</option>` + [...statusSet].sort().map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+    
     if (currentProv) provSelect.value = currentProv;
+    if (currentStatus) statusSelect.value = currentStatus;
   }
 
   function applyFilters(){
     const prov = document.getElementById("filterProvince").value;
+    const statusFilter = document.getElementById("filterStatus").value;
+    
     let filtered = rawLguData;
     if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
+    if (statusFilter && statusFilter !== 'all') {
+      filtered = filtered.filter(r => (derivePdpfpStatus(r) || "") === statusFilter);
+    }
+    
     filteredData = filtered;
+    
     renderStats(filtered);
     renderPie(filtered);
-    renderBar(filtered);
+    
     const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
     renderColumn(filtered, activeView);
+    
     renderTable(filtered);
   }
 
   // ========== FETCH DATA FROM LGUpdpfp_status SHEET ==========
   async function fetchPdpfpStatusData(){
     try {
-      // IMPORTANT: Using the correct data_type 'pdpfp_status' to connect to LGUpdpfp_status sheet
       const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=pdpfp_status&_=${Date.now()}`);
       
       if (!resp.ok) {
@@ -987,13 +1270,11 @@
       const data = await resp.json();
       console.log("📊 PDPFP Status data received:", data);
       
-      // Check if we got valid data
       if (Array.isArray(data) && data.length > 0) {
         console.log(`✅ Found ${data.length} provincial PDPFP records`);
         return data;
       } else if (Array.isArray(data) && data.length === 0) {
         console.log("ℹ️ No PDPFP status records found in LGUpdpfp_status sheet");
-        // Return fallback data so the page still works
         return getFallbackData();
       } else {
         console.warn("Unexpected data format received:", data);
@@ -1067,7 +1348,6 @@
     renderMainNavigation(); 
     renderUserMenu();
 
-    // Show loading state
     document.getElementById("lguTableBody").innerHTML = `<tr><td colspan="8" style="text-align:center;">⏳ Loading data from LGUpdpfp_status sheet...</td></tr>`;
 
     const data = await fetchPdpfpStatusData();
@@ -1083,8 +1363,11 @@
     applyFilters();
 
     document.getElementById("filterProvince").addEventListener('change', applyFilters);
+    document.getElementById("filterStatus").addEventListener('change', applyFilters);
+    
     document.getElementById("resetFiltersBtn").addEventListener('click', function(){
       document.getElementById("filterProvince").value = "";
+      document.getElementById("filterStatus").value = "all";
       applyFilters();
     });
 
@@ -1101,6 +1384,22 @@
     });
     document.getElementById('detailModal').addEventListener('click', function(e){
       if (e.target === this) this.classList.remove('active');
+    });
+
+    document.getElementById('editModalCloseBtn').addEventListener('click', function(){
+      document.getElementById('editModal').classList.remove('active');
+    });
+    document.getElementById('editCancelBtn').addEventListener('click', function(){
+      document.getElementById('editModal').classList.remove('active');
+    });
+    document.getElementById('editModal').addEventListener('click', function(e){
+      if (e.target === this) this.classList.remove('active');
+    });
+
+    document.getElementById('editForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      await saveEditedRecord(formData);
     });
   });
 </script>
