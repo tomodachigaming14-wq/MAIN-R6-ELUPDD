@@ -612,18 +612,29 @@ header {
 }
 .info-row {
     display: flex;
-    padding: 8px 0;
-    border-bottom: 1px solid #eef2ff;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: flex-start;
+}
+.info-row:last-child {
+    border-bottom: none;
 }
 .info-label {
-    width: 200px;
+    width: 180px;
+    min-width: 180px;
     font-weight: 600;
-    color: #1e293b;
+    color: #475569;
+    font-size: 0.85rem;
     flex-shrink: 0;
 }
 .info-value {
     flex: 1;
-    color: #334155;
+    color: #0f2b3a;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+.info-value .status-badge {
+    display: inline-block;
 }
 .stats-badge {
     background: #eef2ff;
@@ -674,12 +685,13 @@ footer {
     to { transform: rotate(360deg); }
 }
 
-/* Status badges - kept for modal view only */
+/* Status badges */
 .status-badge {
-    padding: 2px 12px;
+    padding: 3px 14px;
     border-radius: 20px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 600;
+    display: inline-block;
 }
 .status-updated {
     background: #dcfce7;
@@ -702,11 +714,6 @@ footer {
     color: #991b1b;
 }
 
-/* CLUP status hidden in card list - only shown in modal */
-.lgu-status-hidden {
-    display: none !important;
-}
-
 /* Hide CLUP Status and Planning Period in view mode */
 .hidden-info {
     display: none !important;
@@ -726,6 +733,8 @@ footer {
     }
     .info-label {
         width: 120px;
+        min-width: 120px;
+        font-size: 0.75rem;
     }
     .modal-content {
         padding: 20px 16px;
@@ -733,6 +742,15 @@ footer {
     .top-bar {
         flex-direction: column;
         align-items: stretch;
+    }
+    .info-row {
+        flex-direction: column;
+        padding: 8px 0;
+    }
+    .info-label {
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 2px;
     }
 }
   </style>
@@ -1078,14 +1096,14 @@ footer {
     function encodePassword(p) { return btoa(p); }
     function generateId() { return Date.now() + Math.floor(Math.random() * 1000000); }
 
-   function getStatusBadge(status) {
-  if (!status || status === "") return '<span class="status-badge status-for-updating">—</span>';
-  const lower = status.toLowerCase().trim();
-  if (lower === 'updated' || lower.includes('updated')) return `<span class="status-badge status-updated">✅ Updated</span>`;
-  if (lower === 'under review' || lower.includes('under review') || lower.includes('review')) return `<span class="status-badge status-under-review">📋 Under Review</span>`;
-  if (lower === 'for updating' || lower.includes('for updating') || lower.includes('due')) return `<span class="status-badge status-for-updating">🔄 For Updating</span>`;
-  return `<span class="status-badge status-for-updating">${escapeHtml(status)}</span>`;
-}
+    function getStatusBadge(status) {
+      if (!status || status === "") return '<span class="status-badge status-for-updating">—</span>';
+      const lower = status.toLowerCase().trim();
+      if (lower === 'updated' || lower.includes('updated')) return `<span class="status-badge status-updated">✅ Updated</span>`;
+      if (lower === 'under review' || lower.includes('under review') || lower.includes('review')) return `<span class="status-badge status-under-review">📋 Under Review</span>`;
+      if (lower === 'for updating' || lower.includes('for updating') || lower.includes('due')) return `<span class="status-badge status-for-updating">🔄 For Updating</span>`;
+      return `<span class="status-badge status-for-updating">${escapeHtml(status)}</span>`;
+    }
 
     // ==================== SESSION MANAGEMENT ====================
     function checkSession() { 
@@ -1119,9 +1137,7 @@ footer {
           <a href="lc.html">Locational Clearance</a>
           <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <!-- CLUP & ZO submenu -->
             <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
-            <!-- PDPFP submenu with Inventory & Status -->
             <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
           </div></div>
           <a href="Techsamp.html">Technical Assistance</a>
@@ -1201,178 +1217,159 @@ footer {
     }
 
     // ==================== GOOGLE SHEETS API FUNCTIONS ====================
-  async function fetchLGUsFromSheet() {
-  try {
-    showToastMessage("Fetching data from Google Sheets...", "info");
-    const url = `${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu&_=${Date.now()}`;
-    const response = await fetch(url);
-    const result = await response.json();
-    
-    console.log("Fetch result:", result);
-    
-    // Handle different response formats
-    let data = [];
-    if (Array.isArray(result)) {
-      data = result;
-    } else if (result.success && Array.isArray(result.data)) {
-      data = result.data;
-    } else if (result.data && Array.isArray(result.data)) {
-      data = result.data;
-    } else if (result.data && !Array.isArray(result.data)) {
-      data = Object.values(result.data);
+    async function fetchLGUsFromSheet() {
+      try {
+        showToastMessage("Fetching data from Google Sheets...", "info");
+        const url = `${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu&_=${Date.now()}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        let data = [];
+        if (Array.isArray(result)) {
+          data = result;
+        } else if (result.success && Array.isArray(result.data)) {
+          data = result.data;
+        } else if (result.data && Array.isArray(result.data)) {
+          data = result.data;
+        } else if (result.data && !Array.isArray(result.data)) {
+          data = Object.values(result.data);
+        }
+        
+        if (data && data.length > 0) {
+          const lgus = data.map(record => {
+            let clupStatus = record["PDPFP/CLUP Status"] || 
+                            record["CLUP Status"] || 
+                            record["clupStatus"] || 
+                            record["Status"] || 
+                            "";
+            return {
+              id: record.id || record["id"] || generateId(),
+              psgc: record.psgc || record["PSGC"] || "",
+              incomeClass: record.incomeClass || record["Income Class"] || "",
+              region: record.region || record["Region"] || "REGION VI (WESTERN VISAYAS)",
+              province: record.province || record["Province"] || "",
+              municipality: record.municipality || record["Municipality"] || record["LGU Name"] || "",
+              mayor: record.mayor || record["Name of Local Chief Executive"] || "",
+              viceMayor: record.viceMayor || record["Name of Vice Governor/Mayor"] || "",
+              email: record.email || record["Official Email Address of LGU"] || "",
+              landline: record.landline || record["Official Phone/Landline Number of LGU"] || "",
+              mpdc: record.mpdc || record["Name of C/M/PPDC"] || "",
+              mpdcEmail: record.mpdcEmail || record["C/M/PPDO Email Address"] || "",
+              mpdcMobile: record.mpdcMobile || record["C/M/PPDO Contact Number"] || "",
+              planningPeriod: record.planningPeriod || record["Planning Period of last approved plan"] || "",
+              clupStatus: clupStatus,
+              recentActivities: record.recentActivities || record["Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating"] || "",
+              taNeeds: record.taNeeds || record["TA needs"] || "",
+              dateUpdated: record.dateUpdated || record["Date last updated"] || "",
+              remarks: record.remarks || record["Remarks"] || ""
+            };
+          });
+          return lgus;
+        }
+        return [];
+      } catch (error) {
+        console.error("Error fetching LGUs from sheet:", error);
+        showToastMessage("Error fetching from Google Sheets. Using local data.", "error");
+        return [];
+      }
     }
-    
-    if (data && data.length > 0) {
-      const lgus = data.map(record => {
-        // Debug: log what fields are available
-        console.log("Record fields:", Object.keys(record));
-        console.log("Full record:", record);
-        
-        // Try multiple possible field names for CLUP Status
-        let clupStatus = record["PDPFP/CLUP Status"] || 
-                        record["CLUP Status"] || 
-                        record["clupStatus"] || 
-                        record["Status"] || 
-                        "";
-        
-        console.log(`📋 CLUP Status for ${record["Municipality"]}: "${clupStatus}"`);
-        
-        return {
-          id: record.id || record["id"] || generateId(),
-          psgc: record.psgc || record["PSGC"] || "",
-          incomeClass: record.incomeClass || record["Income Class"] || "",
-          region: record.region || record["Region"] || "REGION VI (WESTERN VISAYAS)",
-          province: record.province || record["Province"] || "",
-          municipality: record.municipality || record["Municipality"] || record["LGU Name"] || "",
-          mayor: record.mayor || record["Name of Local Chief Executive"] || "",
-          viceMayor: record.viceMayor || record["Name of Vice Governor/Mayor"] || "",
-          email: record.email || record["Official Email Address of LGU"] || "",
-          landline: record.landline || record["Official Phone/Landline Number of LGU"] || "",
-          mpdc: record.mpdc || record["Name of C/M/PPDC"] || "",
-          mpdcEmail: record.mpdcEmail || record["C/M/PPDO Email Address"] || "",
-          mpdcMobile: record.mpdcMobile || record["C/M/PPDO Contact Number"] || "",
-          planningPeriod: record.planningPeriod || record["Planning Period of last approved plan"] || "",
-          clupStatus: clupStatus,
-          recentActivities: record.recentActivities || record["Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating"] || "",
-          taNeeds: record.taNeeds || record["TA needs"] || "",
-          dateUpdated: record.dateUpdated || record["Date last updated"] || "",
-          remarks: record.remarks || record["Remarks"] || ""
+
+    async function saveLGUToSheet(lguData) {
+      try {
+        const record = {
+          "PSGC": lguData.psgc || "",
+          "Income Class": lguData.incomeClass || "",
+          "Region": "REGION VI (WESTERN VISAYAS)",
+          "Province": lguData.province || "",
+          "Municipality": lguData.municipality || "",
+          "Name of Local Chief Executive": lguData.mayor || "",
+          "Name of Vice Governor/Mayor": lguData.viceMayor || "",
+          "Official Email Address of LGU": lguData.email || "",
+          "Official Phone/Landline Number of LGU": lguData.landline || "",
+          "Name of C/M/PPDC": lguData.mpdc || "",
+          "C/M/PPDO Email Address": lguData.mpdcEmail || "",
+          "C/M/PPDO Contact Number": lguData.mpdcMobile || "",
+          "Planning Period of last approved plan": lguData.planningPeriod || "",
+          "PDPFP/CLUP Status": lguData.clupStatus || "",
+          "Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating": lguData.recentActivities || "",
+          "TA needs": lguData.taNeeds || "",
+          "Date last updated": lguData.dateUpdated || "",
+          "Remarks": lguData.remarks || ""
         };
-      });
-      console.log("Mapped LGUs:", lgus);
-      return lgus;
+
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `action=add&data_type=lgu&data=${encodeURIComponent(JSON.stringify(record))}`
+        });
+
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error saving LGU to sheet:", error);
+        return { success: false, error: error.toString() };
+      }
     }
-    return [];
-  } catch (error) {
-    console.error("Error fetching LGUs from sheet:", error);
-    showToastMessage("Error fetching from Google Sheets. Using local data.", "error");
-    return [];
-  }
-}
-
-   async function saveLGUToSheet(lguData) {
-  try {
-    // CRITICAL: The order MUST match LGU_COLUMNS exactly (without removed columns)
-    const record = {
-      "PSGC": lguData.psgc || "",
-      "Income Class": lguData.incomeClass || "",
-      "Region": "REGION VI (WESTERN VISAYAS)",
-      "Province": lguData.province || "",
-      "Municipality": lguData.municipality || "",
-      "Name of Local Chief Executive": lguData.mayor || "",
-      "Name of Vice Governor/Mayor": lguData.viceMayor || "",
-      "Official Email Address of LGU": lguData.email || "",
-      "Official Phone/Landline Number of LGU": lguData.landline || "",
-      "Name of C/M/PPDC": lguData.mpdc || "",
-      "C/M/PPDO Email Address": lguData.mpdcEmail || "",
-      "C/M/PPDO Contact Number": lguData.mpdcMobile || "",
-      "Planning Period of last approved plan": lguData.planningPeriod || "",
-      "PDPFP/CLUP Status": lguData.clupStatus || "",
-      "Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating": lguData.recentActivities || "",
-      "TA needs": lguData.taNeeds || "",
-      "Date last updated": lguData.dateUpdated || "",
-      "Remarks": lguData.remarks || ""
-    };
-
-    console.log("Saving record:", record);
-
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `action=add&data_type=lgu&data=${encodeURIComponent(JSON.stringify(record))}`
-    });
-
-    const result = await response.json();
-    console.log("Save result:", result);
-    return result;
-  } catch (error) {
-    console.error("Error saving LGU to sheet:", error);
-    return { success: false, error: error.toString() };
-  }
-}
 
     async function updateLGUInSheet(lguData) {
-  try {
-    const record = {
-      "PSGC": lguData.psgc || "",
-      "Income Class": lguData.incomeClass || "",
-      "Region": "REGION VI (WESTERN VISAYAS)",
-      "Province": lguData.province || "",
-      "Municipality": lguData.municipality || "",
-      "Name of Local Chief Executive": lguData.mayor || "",
-      "Name of Vice Governor/Mayor": lguData.viceMayor || "",
-      "Official Email Address of LGU": lguData.email || "",
-      "Official Phone/Landline Number of LGU": lguData.landline || "",
-      "Name of C/M/PPDC": lguData.mpdc || "",
-      "C/M/PPDO Email Address": lguData.mpdcEmail || "",
-      "C/M/PPDO Contact Number": lguData.mpdcMobile || "",
-      "Planning Period of last approved plan": lguData.planningPeriod || "",
-      "PDPFP/CLUP Status": lguData.clupStatus || "",
-      "Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating": lguData.recentActivities || "",
-      "TA needs": lguData.taNeeds || "",
-      "Date last updated": lguData.dateUpdated || "",
-      "Remarks": lguData.remarks || ""
-    };
+      try {
+        const record = {
+          "PSGC": lguData.psgc || "",
+          "Income Class": lguData.incomeClass || "",
+          "Region": "REGION VI (WESTERN VISAYAS)",
+          "Province": lguData.province || "",
+          "Municipality": lguData.municipality || "",
+          "Name of Local Chief Executive": lguData.mayor || "",
+          "Name of Vice Governor/Mayor": lguData.viceMayor || "",
+          "Official Email Address of LGU": lguData.email || "",
+          "Official Phone/Landline Number of LGU": lguData.landline || "",
+          "Name of C/M/PPDC": lguData.mpdc || "",
+          "C/M/PPDO Email Address": lguData.mpdcEmail || "",
+          "C/M/PPDO Contact Number": lguData.mpdcMobile || "",
+          "Planning Period of last approved plan": lguData.planningPeriod || "",
+          "PDPFP/CLUP Status": lguData.clupStatus || "",
+          "Recent Activities undertaken on CLUP&ZO or PDPFP Formulation/Updating": lguData.recentActivities || "",
+          "TA needs": lguData.taNeeds || "",
+          "Date last updated": lguData.dateUpdated || "",
+          "Remarks": lguData.remarks || ""
+        };
 
-    console.log("Updating record:", record);
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `action=update&data_type=lgu&data=${encodeURIComponent(JSON.stringify(record))}`
+        });
 
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `action=update&data_type=lgu&data=${encodeURIComponent(JSON.stringify(record))}`
-    });
-
-    const result = await response.json();
-    console.log("Update result:", result);
-    return result;
-  } catch (error) {
-    console.error("Error updating LGU in sheet:", error);
-    return { success: false, error: error.toString() };
-  }
-}
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error updating LGU in sheet:", error);
+        return { success: false, error: error.toString() };
+      }
+    }
 
     async function deleteLGUFromSheet(lguData) {
-  try {
-    const deleteId = `${lguData.municipality}_${lguData.province}`;
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `action=delete&data_type=lgu&id=${encodeURIComponent(deleteId)}`
-    });
+      try {
+        const deleteId = `${lguData.municipality}_${lguData.province}`;
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `action=delete&data_type=lgu&id=${encodeURIComponent(deleteId)}`
+        });
 
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error("Error deleting LGU from sheet:", error);
-    return { success: false, error: error.toString() };
-  }
-}
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error deleting LGU from sheet:", error);
+        return { success: false, error: error.toString() };
+      }
+    }
 
     // ==================== SYNC FUNCTIONS ====================
     async function syncAllToSheet() {
@@ -1538,76 +1535,75 @@ footer {
     function updateTotalStats() { renderLGUList(); }
 
     // ==================== VIEW, EDIT, DELETE FUNCTIONS ====================
-   function viewLGUPopup(lguId) {
-  const l = lguDatabase.find(l => String(l.id) === String(lguId));
-  if(!l) return;
-  currentViewLGU = l;
-  
-  const isProvincial = l.municipality === "Provincial Government";
-  const titleLabel = isProvincial ? 'Provincial Government' : 'LGU';
-  
-  // Get status badge for display
-  const statusBadge = getStatusBadge(l.clupStatus);
-  
-  const viewContent = `
-    <div style="margin-bottom:16px;">
-      <strong style="font-size:1.2rem;">${escapeHtml(l.municipality || '—')}</strong>
-      <span style="color:#64748b;">(${escapeHtml(l.province || '—')})</span>
-      ${isProvincial ? '<span style="margin-left:12px;background:#e0e7ff;padding:2px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;">🏛️ Provincial</span>' : ''}
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;">
-      <div class="info-row"><div class="info-label">PSGC:</div><div class="info-value">${escapeHtml(l.psgc || '—')}</div></div>
-      <div class="info-row"><div class="info-label">Region:</div><div class="info-value">${escapeHtml(l.region || '—')}</div></div>
-      <div class="info-row"><div class="info-label">Income Class:</div><div class="info-value">${escapeHtml(l.incomeClass || '—')}</div></div>
-      <!-- HIDDEN: Planning Period -->
-      <div class="info-row hidden-info"><div class="info-label">Planning Period:</div><div class="info-value">${escapeHtml(l.planningPeriod || '—')}</div></div>
-      <div class="info-row"><div class="info-label">${isProvincial ? 'Governor:' : 'Mayor:'}</div><div class="info-value">${escapeHtml(l.mayor || '—')}</div></div>
-      <div class="info-row"><div class="info-label">${isProvincial ? 'Vice Governor:' : 'Vice Mayor:'}</div><div class="info-value">${escapeHtml(l.viceMayor || '—')}</div></div>
-      <div class="info-row"><div class="info-label">LGU Email:</div><div class="info-value">${escapeHtml(l.email || '—')}</div></div>
-      <div class="info-row"><div class="info-label">LGU Landline:</div><div class="info-value">${escapeHtml(l.landline || '—')}</div></div>
-      <div class="info-row"><div class="info-label">MPDC:</div><div class="info-value">${escapeHtml(l.mpdc || '—')}</div></div>
-      <div class="info-row"><div class="info-label">MPDC Email:</div><div class="info-value">${escapeHtml(l.mpdcEmail || '—')}</div></div>
-      <div class="info-row"><div class="info-label">MPDC Mobile:</div><div class="info-value">${escapeHtml(l.mpdcMobile || '—')}</div></div>
-      <!-- HIDDEN: CLUP Status -->
-      <div class="info-row hidden-info"><div class="info-label">CLUP Status:</div><div class="info-value">${statusBadge}</div></div>
-    </div>
-    ${l.recentActivities ? `<div class="info-row" style="grid-column:1/-1;"><div class="info-label">Recent Activities:</div><div class="info-value">${escapeHtml(l.recentActivities)}</div></div>` : ''}
-    ${l.taNeeds ? `<div class="info-row" style="grid-column:1/-1;"><div class="info-label">TA Needs:</div><div class="info-value">${escapeHtml(l.taNeeds)}</div></div>` : ''}
-    ${l.remarks ? `<div class="info-row" style="grid-column:1/-1;"><div class="info-label">Remarks:</div><div class="info-value">${escapeHtml(l.remarks)}</div></div>` : ''}
-    ${l.dateUpdated ? `<div class="info-row"><div class="info-label">Date Updated:</div><div class="info-value">${escapeHtml(l.dateUpdated)}</div></div>` : ''}
-  `;
-  document.getElementById("viewContent").innerHTML = viewContent;
-  document.getElementById("viewModal").style.display = "flex";
-  document.getElementById("inlineEditPanel").style.display = "none";
-}
-
-   async function deleteLGU(lguId) {
-  if (!confirm("Are you sure you want to delete this LGU? This action cannot be undone.")) return;
-  
-  const l = lguDatabase.find(l => String(l.id) === String(lguId));
-  if (!l) return;
-  
-  try {
-    const result = await deleteLGUFromSheet(l);
-    
-    if (result.success) {
-      lguDatabase = lguDatabase.filter(item => String(item.id) !== String(lguId));
-      localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-      renderAll();
-      showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} deleted from Google Sheets!`, "success");
-    } else {
-      lguDatabase = lguDatabase.filter(item => String(item.id) !== String(lguId));
-      localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-      renderAll();
-      showToastMessage(`⚠️ LGU ${l.municipality || 'Unknown'} removed locally only.`, "info");
+    function viewLGUPopup(lguId) {
+      const l = lguDatabase.find(l => String(l.id) === String(lguId));
+      if(!l) return;
+      currentViewLGU = l;
+      
+      const isProvincial = l.municipality === "Provincial Government";
+      
+      // Organized view with clean layout
+      const viewContent = `
+        <div style="margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #eef2ff;">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:1.3rem;font-weight:700;color:#0f2b3a;">${escapeHtml(l.municipality || '—')}</span>
+            <span style="color:#64748b;font-size:0.95rem;">(${escapeHtml(l.province || '—')})</span>
+            ${isProvincial ? '<span style="background:#e0e7ff;padding:2px 14px;border-radius:20px;font-size:0.7rem;font-weight:600;color:#1e40af;">🏛️ Provincial</span>' : ''}
+          </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 30px;">
+          <div class="info-row"><span class="info-label">PSGC</span><span class="info-value">${escapeHtml(l.psgc || '—')}</span></div>
+          <div class="info-row"><span class="info-label">Region</span><span class="info-value">${escapeHtml(l.region || '—')}</span></div>
+          <div class="info-row"><span class="info-label">Income Class</span><span class="info-value">${escapeHtml(l.incomeClass || '—')}</span></div>
+          <div class="info-row hidden-info"><span class="info-label">Planning Period</span><span class="info-value">${escapeHtml(l.planningPeriod || '—')}</span></div>
+          <div class="info-row"><span class="info-label">${isProvincial ? 'Governor' : 'Mayor'}</span><span class="info-value">${escapeHtml(l.mayor || '—')}</span></div>
+          <div class="info-row"><span class="info-label">${isProvincial ? 'Vice Governor' : 'Vice Mayor'}</span><span class="info-value">${escapeHtml(l.viceMayor || '—')}</span></div>
+          <div class="info-row"><span class="info-label">LGU Email</span><span class="info-value">${escapeHtml(l.email || '—')}</span></div>
+          <div class="info-row"><span class="info-label">Landline</span><span class="info-value">${escapeHtml(l.landline || '—')}</span></div>
+          <div class="info-row"><span class="info-label">MPDC</span><span class="info-value">${escapeHtml(l.mpdc || '—')}</span></div>
+          <div class="info-row"><span class="info-label">MPDC Email</span><span class="info-value">${escapeHtml(l.mpdcEmail || '—')}</span></div>
+          <div class="info-row"><span class="info-label">MPDC Mobile</span><span class="info-value">${escapeHtml(l.mpdcMobile || '—')}</span></div>
+          <div class="info-row hidden-info"><span class="info-label">CLUP Status</span><span class="info-value">${getStatusBadge(l.clupStatus)}</span></div>
+        </div>
+        
+        ${l.recentActivities ? `<div class="info-row" style="grid-column:1/-1;margin-top:6px;border-top:1px solid #eef2ff;padding-top:12px;"><span class="info-label">Recent Activities</span><span class="info-value">${escapeHtml(l.recentActivities)}</span></div>` : ''}
+        ${l.taNeeds ? `<div class="info-row" style="grid-column:1/-1;"><span class="info-label">TA Needs</span><span class="info-value">${escapeHtml(l.taNeeds)}</span></div>` : ''}
+        ${l.remarks ? `<div class="info-row" style="grid-column:1/-1;"><span class="info-label">Remarks</span><span class="info-value">${escapeHtml(l.remarks)}</span></div>` : ''}
+        ${l.dateUpdated ? `<div class="info-row" style="grid-column:1/-1;"><span class="info-label">Date Updated</span><span class="info-value">${escapeHtml(l.dateUpdated)}</span></div>` : ''}
+      `;
+      document.getElementById("viewContent").innerHTML = viewContent;
+      document.getElementById("viewModal").style.display = "flex";
+      document.getElementById("inlineEditPanel").style.display = "none";
     }
-  } catch (error) {
-    showToastMessage(`❌ Error: ${error.message}`, "error");
-    lguDatabase = lguDatabase.filter(item => String(item.id) !== String(lguId));
-    localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-    renderAll();
-  }
-}
+
+    async function deleteLGU(lguId) {
+      if (!confirm("Are you sure you want to delete this LGU? This action cannot be undone.")) return;
+      
+      const l = lguDatabase.find(l => String(l.id) === String(lguId));
+      if (!l) return;
+      
+      try {
+        const result = await deleteLGUFromSheet(l);
+        
+        if (result.success) {
+          lguDatabase = lguDatabase.filter(item => String(item.id) !== String(lguId));
+          localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+          renderAll();
+          showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} deleted from Google Sheets!`, "success");
+        } else {
+          lguDatabase = lguDatabase.filter(item => String(item.id) !== String(lguId));
+          localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+          renderAll();
+          showToastMessage(`⚠️ LGU ${l.municipality || 'Unknown'} removed locally only.`, "info");
+        }
+      } catch (error) {
+        showToastMessage(`❌ Error: ${error.message}`, "error");
+        lguDatabase = lguDatabase.filter(item => String(item.id) !== String(lguId));
+        localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+        renderAll();
+      }
+    }
 
     function enableInlineEditForCurrentLGU() {
       if(!currentViewLGU) return;
@@ -1616,61 +1612,62 @@ footer {
       panel.style.display = "block";
       
       const isProvincial = l.municipality === "Provincial Government";
-      const titleLabel = isProvincial ? 'Provincial Government' : 'LGU';
       
       panel.innerHTML = `
-        <h4 style="margin-bottom:12px;">✏️ Edit ${titleLabel} Information</h4>
-        <div class="form-grid">
-          <div class="form-group"><label>PSGC</label><input id="editPsgc" value="${escapeHtml(l.psgc || '')}" readonly></div>
-          <div class="form-group"><label>Region</label><input id="editRegion" value="${escapeHtml(l.region || 'REGION VI (WESTERN VISAYAS)')}" readonly></div>
-          <div class="form-group"><label>Province</label>
-            <select id="editProvince">
-              ${provinceList.map(p => `<option ${l.province === p ? 'selected' : ''}>${p}</option>`).join('')}
-            </select>
+        <div style="border-top:2px solid #eef2ff;padding-top:20px;margin-top:20px;">
+          <h4 style="margin-bottom:16px;font-size:1.1rem;">✏️ Edit ${isProvincial ? 'Provincial Government' : 'LGU'} Information</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>PSGC</label><input id="editPsgc" value="${escapeHtml(l.psgc || '')}" readonly></div>
+            <div class="form-group"><label>Region</label><input id="editRegion" value="${escapeHtml(l.region || 'REGION VI (WESTERN VISAYAS)')}" readonly></div>
+            <div class="form-group"><label>Province</label>
+              <select id="editProvince">
+                ${provinceList.map(p => `<option ${l.province === p ? 'selected' : ''}>${p}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group"><label>Municipality</label>
+              <select id="editMunicipality">
+                ${(municipalityByProvince[l.province] || []).map(m => `<option ${l.municipality === m ? 'selected' : ''}>${m}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group"><label>Income Class</label>
+              <select id="editIncomeClass">
+                <option value="">-- Select --</option>
+                <option ${l.incomeClass === '1ST' ? 'selected' : ''}>1ST</option>
+                <option ${l.incomeClass === '2ND' ? 'selected' : ''}>2ND</option>
+                <option ${l.incomeClass === '3RD' ? 'selected' : ''}>3RD</option>
+                <option ${l.incomeClass === '4TH' ? 'selected' : ''}>4TH</option>
+                <option ${l.incomeClass === '5TH' ? 'selected' : ''}>5TH</option>
+                <option ${l.incomeClass === '6TH' ? 'selected' : ''}>6TH</option>
+                <option ${l.incomeClass === 'N/A' ? 'selected' : ''}>N/A</option>
+              </select>
+            </div>
+            <div class="form-group"><label>${isProvincial ? 'Governor' : 'Mayor'}</label><input id="editMayor" value="${escapeHtml(l.mayor || '')}"></div>
+            <div class="form-group"><label>${isProvincial ? 'Vice Governor' : 'Vice Mayor'}</label><input id="editViceMayor" value="${escapeHtml(l.viceMayor || '')}"></div>
+            <div class="form-group"><label>LGU Email</label><input id="editEmail" value="${escapeHtml(l.email || '')}"></div>
+            <div class="form-group"><label>Landline</label><input id="editLandline" value="${escapeHtml(l.landline || '')}"></div>
+            <div class="form-group"><label>MPDC</label><input id="editMpdc" value="${escapeHtml(l.mpdc || '')}"></div>
+            <div class="form-group"><label>MPDC Email</label><input id="editMpdcEmail" value="${escapeHtml(l.mpdcEmail || '')}"></div>
+            <div class="form-group"><label>MPDC Mobile</label><input id="editMpdcMobile" value="${escapeHtml(l.mpdcMobile || '')}"></div>
+            <div class="form-group"><label>Planning Period</label><input id="editPlanningPeriod" value="${escapeHtml(l.planningPeriod || '')}"></div>
+            <div class="form-group"><label>CLUP Status</label>
+              <select id="editClupStatus">
+                <option value="">-- Select --</option>
+                <option ${l.clupStatus === 'Updated' ? 'selected' : ''}>Updated</option>
+                <option ${l.clupStatus === 'For Updating' ? 'selected' : ''}>For Updating</option>
+                <option ${l.clupStatus === 'Under Review' ? 'selected' : ''}>Under Review</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column:1/-1;"><label>Recent Activities</label>
+              <textarea id="editRecentActivities" rows="2">${escapeHtml(l.recentActivities || '')}</textarea>
+            </div>
+            <div class="form-group"><label>TA Needs</label><input id="editTaNeeds" value="${escapeHtml(l.taNeeds || '')}"></div>
+            <div class="form-group"><label>Date Updated</label><input type="date" id="editDateUpdated" value="${l.dateUpdated || ''}"></div>
+            <div class="form-group"><label>Remarks</label><input id="editRemarks" value="${escapeHtml(l.remarks || '')}"></div>
           </div>
-          <div class="form-group"><label>Municipality</label>
-            <select id="editMunicipality">
-              ${(municipalityByProvince[l.province] || []).map(m => `<option ${l.municipality === m ? 'selected' : ''}>${m}</option>`).join('')}
-            </select>
+          <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+            <button class="btn-primary" onclick="saveInlineEdit('${l.id}')">💾 Save Changes</button>
+            <button class="btn-outline" onclick="document.getElementById('inlineEditPanel').style.display='none'">Cancel</button>
           </div>
-          <div class="form-group"><label>Income Class</label>
-            <select id="editIncomeClass">
-              <option value="">-- Select --</option>
-              <option ${l.incomeClass === '1ST' ? 'selected' : ''}>1ST</option>
-              <option ${l.incomeClass === '2ND' ? 'selected' : ''}>2ND</option>
-              <option ${l.incomeClass === '3RD' ? 'selected' : ''}>3RD</option>
-              <option ${l.incomeClass === '4TH' ? 'selected' : ''}>4TH</option>
-              <option ${l.incomeClass === '5TH' ? 'selected' : ''}>5TH</option>
-              <option ${l.incomeClass === '6TH' ? 'selected' : ''}>6TH</option>
-              <option ${l.incomeClass === 'N/A' ? 'selected' : ''}>N/A</option>
-            </select>
-          </div>
-          <div class="form-group"><label>${isProvincial ? 'Governor' : 'Mayor'}</label><input id="editMayor" value="${escapeHtml(l.mayor || '')}"></div>
-          <div class="form-group"><label>${isProvincial ? 'Vice Governor' : 'Vice Mayor'}</label><input id="editViceMayor" value="${escapeHtml(l.viceMayor || '')}"></div>
-          <div class="form-group"><label>LGU Email</label><input id="editEmail" value="${escapeHtml(l.email || '')}"></div>
-          <div class="form-group"><label>LGU Landline</label><input id="editLandline" value="${escapeHtml(l.landline || '')}"></div>
-          <div class="form-group"><label>MPDC</label><input id="editMpdc" value="${escapeHtml(l.mpdc || '')}"></div>
-          <div class="form-group"><label>MPDC Email</label><input id="editMpdcEmail" value="${escapeHtml(l.mpdcEmail || '')}"></div>
-          <div class="form-group"><label>MPDC Mobile</label><input id="editMpdcMobile" value="${escapeHtml(l.mpdcMobile || '')}"></div>
-          <div class="form-group"><label>Planning Period</label><input id="editPlanningPeriod" value="${escapeHtml(l.planningPeriod || '')}"></div>
-          <div class="form-group"><label>CLUP Status</label>
-            <select id="editClupStatus">
-              <option value="">-- Select --</option>
-              <option ${l.clupStatus === 'Updated' ? 'selected' : ''}>Updated</option>
-              <option ${l.clupStatus === 'For Updating' ? 'selected' : ''}>For Updating</option>
-              <option ${l.clupStatus === 'Under Review' ? 'selected' : ''}>Under Review</option>
-            </select>
-          </div>
-          <div class="form-group" style="grid-column:1/-1;"><label>Recent Activities</label>
-            <textarea id="editRecentActivities" rows="2">${escapeHtml(l.recentActivities || '')}</textarea>
-          </div>
-          <div class="form-group"><label>TA Needs</label><input id="editTaNeeds" value="${escapeHtml(l.taNeeds || '')}"></div>
-          <div class="form-group"><label>Date Updated</label><input type="date" id="editDateUpdated" value="${l.dateUpdated || ''}"></div>
-          <div class="form-group"><label>Remarks</label><input id="editRemarks" value="${escapeHtml(l.remarks || '')}"></div>
-        </div>
-        <div style="display:flex;gap:12px;margin-top:16px;">
-          <button class="btn-primary" onclick="saveInlineEdit('${l.id}')">💾 Save Changes</button>
-          <button class="btn-outline" onclick="document.getElementById('inlineEditPanel').style.display='none'">Cancel</button>
         </div>
       `;
       
@@ -1682,258 +1679,189 @@ footer {
       });
     }
 
-async function saveInlineEdit(lguId) {
-  const l = lguDatabase.find(l => String(l.id) === String(lguId));
-  if(!l) return;
-  
-  const oldStatus = l.clupStatus;
-  const newStatus = document.getElementById("editClupStatus").value;
-  const isProvincial = document.getElementById("editMunicipality").value === "Provincial Government";
-  const province = document.getElementById("editProvince").value;
-  
-  console.log(`📋 Saving edit - Province: "${province}", Is Provincial: ${isProvincial}, New Status: "${newStatus}"`);
-  
-  const updatedData = {
-    id: l.id,
-    psgc: document.getElementById("editPsgc").value,
-    region: document.getElementById("editRegion").value,
-    province: province,
-    municipality: document.getElementById("editMunicipality").value,
-    incomeClass: document.getElementById("editIncomeClass").value,
-    mayor: document.getElementById("editMayor").value,
-    viceMayor: document.getElementById("editViceMayor").value,
-    email: document.getElementById("editEmail").value,
-    landline: document.getElementById("editLandline").value,
-    mpdc: document.getElementById("editMpdc").value,
-    mpdcEmail: document.getElementById("editMpdcEmail").value,
-    mpdcMobile: document.getElementById("editMpdcMobile").value,
-    planningPeriod: document.getElementById("editPlanningPeriod").value,
-    clupStatus: newStatus,
-    recentActivities: document.getElementById("editRecentActivities").value,
-    taNeeds: document.getElementById("editTaNeeds").value,
-    dateUpdated: document.getElementById("editDateUpdated").value,
-    remarks: document.getElementById("editRemarks").value
-  };
-  
-  Object.assign(l, updatedData);
-  
-  try {
-    const updateResult = await updateLGUInSheet(updatedData);
-    
-    if (updateResult.success) {
-      if (oldStatus !== newStatus && newStatus) {
-        if (isProvincial) {
-          console.log(`🔄 Syncing PDPFP Status for Provincial Government of "${province}" to: "${newStatus}"`);
-          const syncResult = await syncPdpfpStatusDirect(
-            province,
-            newStatus
-          );
-          console.log("PDPFP Sync result:", syncResult);
-          
-          if (syncResult.success) {
-            showToastMessage(`✅ Provincial PDPFP Status updated to "${newStatus}" in LGUpdpfp_status!`, "success");
+    async function saveInlineEdit(lguId) {
+      const l = lguDatabase.find(l => String(l.id) === String(lguId));
+      if(!l) return;
+      
+      const oldStatus = l.clupStatus;
+      const newStatus = document.getElementById("editClupStatus").value;
+      const isProvincial = document.getElementById("editMunicipality").value === "Provincial Government";
+      const province = document.getElementById("editProvince").value;
+      
+      const updatedData = {
+        id: l.id,
+        psgc: document.getElementById("editPsgc").value,
+        region: document.getElementById("editRegion").value,
+        province: province,
+        municipality: document.getElementById("editMunicipality").value,
+        incomeClass: document.getElementById("editIncomeClass").value,
+        mayor: document.getElementById("editMayor").value,
+        viceMayor: document.getElementById("editViceMayor").value,
+        email: document.getElementById("editEmail").value,
+        landline: document.getElementById("editLandline").value,
+        mpdc: document.getElementById("editMpdc").value,
+        mpdcEmail: document.getElementById("editMpdcEmail").value,
+        mpdcMobile: document.getElementById("editMpdcMobile").value,
+        planningPeriod: document.getElementById("editPlanningPeriod").value,
+        clupStatus: newStatus,
+        recentActivities: document.getElementById("editRecentActivities").value,
+        taNeeds: document.getElementById("editTaNeeds").value,
+        dateUpdated: document.getElementById("editDateUpdated").value,
+        remarks: document.getElementById("editRemarks").value
+      };
+      
+      Object.assign(l, updatedData);
+      
+      try {
+        const updateResult = await updateLGUInSheet(updatedData);
+        
+        if (updateResult.success) {
+          if (oldStatus !== newStatus && newStatus) {
+            if (isProvincial) {
+              const syncResult = await syncPdpfpStatusDirect(province, newStatus);
+              if (syncResult.success) {
+                showToastMessage(`✅ Provincial PDPFP Status updated to "${newStatus}"`, "success");
+              } else {
+                showToastMessage(`⚠️ LGURecords updated but PDPFP sync failed`, "warning");
+              }
+            } else {
+              const syncResult = await syncClupStatusDirect(updatedData.province, updatedData.municipality, newStatus);
+              if (syncResult.success) {
+                showToastMessage(`✅ CLUP Status updated to "${newStatus}"`, "success");
+              } else {
+                showToastMessage(`⚠️ LGURecords updated but LGUstatus sync failed`, "warning");
+              }
+            }
           } else {
-            showToastMessage(`⚠️ LGURecords updated but PDPFP sync failed: ${syncResult.error || "Unknown error"}`, "warning");
+            showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} updated successfully!`, "success");
           }
+          
+          localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+          renderAll();
+          closeModal("viewModal");
         } else {
-          console.log(`🔄 Syncing CLUP Status for ${updatedData.municipality}: ${oldStatus} -> ${newStatus}`);
-          const syncResult = await syncClupStatusDirect(
-            updatedData.province,
-            updatedData.municipality,
-            newStatus
-          );
-          console.log("CLUP Sync result:", syncResult);
-          
-          if (syncResult.success) {
-            showToastMessage(`✅ CLUP Status updated to "${newStatus}" in LGUstatus!`, "success");
-          } else {
-            showToastMessage(`⚠️ LGURecords updated but LGUstatus sync failed: ${syncResult.error || "Unknown error"}`, "warning");
-          }
+          showToastMessage(`Error updating LGU: ${updateResult.error || "Unknown error"}`, "error");
         }
-      } else {
-        showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} updated successfully!`, "success");
+      } catch (error) {
+        showToastMessage(`Error: ${error.message}`, "error");
+      }
+    }
+
+    async function syncPdpfpStatusDirect(province, newStatus) {
+      try {
+        const url = `${GOOGLE_SCRIPT_URL}?action=sync_pdpfp_status&province=${encodeURIComponent(province)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
+        const response = await fetch(url, { method: 'GET' });
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error syncing PDPFP:", error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    async function syncClupStatusDirect(province, municipality, newStatus) {
+      try {
+        const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error syncing CLUP:", error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    // ==================== FORM SUBMISSION ====================
+    document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (isSaving) return;
+      
+      const prov = document.getElementById("regProvince").value;
+      const mun = document.getElementById("regMunicipality").value;
+      const psgc = document.getElementById("regPsgc").value;
+      
+      if(!prov || !mun) { 
+        showToastMessage("Please select both Province and City/Municipality.", "error");
+        return; 
       }
       
-      localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-      renderAll();
-      closeModal("viewModal");
-    } else {
-      showToastMessage(`Error updating LGU: ${updateResult.error || "Unknown error"}`, "error");
-    }
-  } catch (error) {
-    showToastMessage(`Error: ${error.message}`, "error");
-  }
-}
-
-// ==================== SYNC PDPFP STATUS (FOR PROVINCIAL GOVERNMENT) ====================
-async function syncPdpfpStatusDirect(province, newStatus) {
-  try {
-    console.log(`🔄 Syncing PDPFP Status for Provincial Government of ${province} to: ${newStatus}`);
-    
-    if (!province || !newStatus) {
-      console.error("❌ Missing province or status:", { province, newStatus });
-      return { success: false, error: "Missing province or status" };
-    }
-    
-    const url = `${GOOGLE_SCRIPT_URL}?action=sync_pdpfp_status&province=${encodeURIComponent(province)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
-    
-    console.log("📤 Sending sync request to:", url);
-    
-    const response = await fetch(url, {
-      method: 'GET'
+      const exists = lguDatabase.some(l => 
+        l.municipality === mun && l.province === prov
+      );
+      if (exists) {
+        showToastMessage(`LGU ${mun}, ${prov} already exists!`, "error");
+        return;
+      }
+      
+      const isProvincial = mun === "Provincial Government";
+      const newLGU = { 
+        id: generateId(),
+        psgc: psgc || "",
+        incomeClass: document.getElementById("regIncomeClass").value || "",
+        region: "REGION VI (WESTERN VISAYAS)",
+        province: prov,
+        municipality: mun,
+        mayor: document.getElementById("regMayor").value || "",
+        viceMayor: document.getElementById("regViceMayor").value || "",
+        email: document.getElementById("regEmail").value || "",
+        landline: document.getElementById("regLandline").value || "",
+        mpdc: document.getElementById("regMpdc").value || "",
+        mpdcEmail: document.getElementById("regMpdcEmail").value || "",
+        mpdcMobile: document.getElementById("regMpdcMobile").value || "",
+        planningPeriod: document.getElementById("regPlanningPeriod").value || "",
+        clupStatus: document.getElementById("regClupStatus").value || "",
+        recentActivities: document.getElementById("regRecentActivities").value || "",
+        taNeeds: document.getElementById("regTaNeeds").value || "",
+        dateUpdated: document.getElementById("regDateUpdated").value || "",
+        remarks: document.getElementById("regRemarks").value || ""
+      };
+      
+      const btn = document.getElementById("saveLGUBtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "⏳ Saving...";
+      btn.disabled = true;
+      isSaving = true;
+      
+      try {
+        const result = await saveLGUToSheet(newLGU);
+        
+        if (result.success) {
+          lguDatabase.push(newLGU);
+          localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+          renderAll();
+          closeModal("lguModal");
+          document.getElementById("lguRegForm").reset();
+          document.getElementById("regRegion").value = "REGION VI (WESTERN VISAYAS)";
+          document.getElementById("regPsgc").value = "";
+          
+          if (newLGU.clupStatus) {
+            if (isProvincial) {
+              await syncPdpfpStatusDirect(newLGU.province, newLGU.clupStatus);
+            } else {
+              await syncClupStatusDirect(newLGU.province, newLGU.municipality, newLGU.clupStatus);
+            }
+          }
+          showToastMessage(`✅ LGU ${mun}, ${prov} registered successfully!`, "success");
+        } else {
+          showToastMessage(`❌ Error saving to Google Sheets: ${result.error || "Unknown error"}`, "error");
+          lguDatabase.push(newLGU);
+          localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+          renderAll();
+          closeModal("lguModal");
+          showToastMessage(`⚠️ LGU ${mun}, ${prov} saved locally only.`, "info");
+        }
+      } catch (error) {
+        showToastMessage(`❌ Error: ${error.message}`, "error");
+        lguDatabase.push(newLGU);
+        localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
+        renderAll();
+        closeModal("lguModal");
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        isSaving = false;
+      }
     });
-    
-    const result = await response.json();
-    console.log("PDPFP Sync result:", result);
-    return result;
-  } catch (error) {
-    console.error("Error syncing PDPFP:", error);
-    return { success: false, error: error.message };
-  }
-}
-
-// ==================== SYNC CLUP STATUS (FOR MUNICIPAL/CITY LGUs) ====================
-async function syncClupStatusDirect(province, municipality, newStatus) {
-  try {
-    console.log(`🔄 Syncing CLUP Status for ${municipality}, ${province} to: ${newStatus}`);
-    
-    const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
-    
-    const response = await fetch(url);
-    const result = await response.json();
-    
-    console.log("CLUP Sync result:", result);
-    return result;
-  } catch (error) {
-    console.error("Error syncing CLUP:", error);
-    return { success: false, error: error.message };
-  }
-}
-
-// Update the form submission to handle both LGU types
-document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (isSaving) return;
-  
-  const prov = document.getElementById("regProvince").value;
-  const mun = document.getElementById("regMunicipality").value;
-  const psgc = document.getElementById("regPsgc").value;
-  
-  if(!prov || !mun) { 
-    showToastMessage("Please select both Province and City/Municipality.", "error");
-    return; 
-  }
-  
-  const exists = lguDatabase.some(l => 
-    l.municipality === mun && l.province === prov
-  );
-  if (exists) {
-    showToastMessage(`LGU ${mun}, ${prov} already exists!`, "error");
-    return;
-  }
-  
-  const isProvincial = mun === "Provincial Government";
-  const newLGU = { 
-    id: generateId(),
-    psgc: psgc || "",
-    incomeClass: document.getElementById("regIncomeClass").value || "",
-    region: "REGION VI (WESTERN VISAYAS)",
-    province: prov,
-    municipality: mun,
-    mayor: document.getElementById("regMayor").value || "",
-    viceMayor: document.getElementById("regViceMayor").value || "",
-    email: document.getElementById("regEmail").value || "",
-    landline: document.getElementById("regLandline").value || "",
-    mpdc: document.getElementById("regMpdc").value || "",
-    mpdcEmail: document.getElementById("regMpdcEmail").value || "",
-    mpdcMobile: document.getElementById("regMpdcMobile").value || "",
-    planningPeriod: document.getElementById("regPlanningPeriod").value || "",
-    clupStatus: document.getElementById("regClupStatus").value || "",
-    recentActivities: document.getElementById("regRecentActivities").value || "",
-    taNeeds: document.getElementById("regTaNeeds").value || "",
-    dateUpdated: document.getElementById("regDateUpdated").value || "",
-    remarks: document.getElementById("regRemarks").value || ""
-  };
-  
-  const btn = document.getElementById("saveLGUBtn");
-  const originalText = btn.innerHTML;
-  btn.innerHTML = "⏳ Saving...";
-  btn.disabled = true;
-  isSaving = true;
-  
-  try {
-    const result = await saveLGUToSheet(newLGU);
-    console.log("Save result:", result);
-    
-    if (result.success) {
-      lguDatabase.push(newLGU);
-      localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-      renderAll();
-      closeModal("lguModal");
-      document.getElementById("lguRegForm").reset();
-      document.getElementById("regRegion").value = "REGION VI (WESTERN VISAYAS)";
-      document.getElementById("regPsgc").value = "";
-      
-      if (newLGU.clupStatus) {
-        if (isProvincial) {
-          try {
-            const syncResult = await syncPdpfpStatusDirect(
-              newLGU.province,
-              newLGU.clupStatus
-            );
-            console.log("PDPFP Sync result for new LGU:", syncResult);
-            if (syncResult.success) {
-              showToastMessage(`✅ Provincial LGU registered with PDPFP Status: "${newLGU.clupStatus}"`, "success");
-            } else {
-              showToastMessage(`✅ LGU registered but PDPFP sync failed.`, "warning");
-            }
-          } catch (syncError) {
-            console.error("Error syncing PDPFP:", syncError);
-          }
-        } else {
-          try {
-            const syncResult = await syncClupStatusDirect(
-              newLGU.province,
-              newLGU.municipality,
-              newLGU.clupStatus
-            );
-            console.log("CLUP Sync result for new LGU:", syncResult);
-            if (syncResult.success) {
-              showToastMessage(`✅ LGU registered with CLUP Status: "${newLGU.clupStatus}"`, "success");
-            } else {
-              showToastMessage(`✅ LGU registered but LGUstatus sync failed.`, "warning");
-            }
-          } catch (syncError) {
-            console.error("Error syncing CLUP:", syncError);
-          }
-        }
-      } else {
-        showToastMessage(`✅ LGU ${mun}, ${prov} registered successfully!`, "success");
-      }
-      
-    } else {
-      showToastMessage(`❌ Error saving to Google Sheets: ${result.error || "Unknown error"}`, "error");
-      lguDatabase.push(newLGU);
-      localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-      renderAll();
-      closeModal("lguModal");
-      document.getElementById("lguRegForm").reset();
-      document.getElementById("regRegion").value = "REGION VI (WESTERN VISAYAS)";
-      document.getElementById("regPsgc").value = "";
-      showToastMessage(`⚠️ LGU ${mun}, ${prov} saved locally only.`, "info");
-    }
-  } catch (error) {
-    showToastMessage(`❌ Error: ${error.message}`, "error");
-    lguDatabase.push(newLGU);
-    localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
-    renderAll();
-    closeModal("lguModal");
-  } finally {
-    btn.innerHTML = originalText;
-    btn.disabled = false;
-    isSaving = false;
-  }
-});
 
     // ==================== UI HELPERS ====================
     document.getElementById("applyFilterBtn")?.addEventListener("click", () => renderLGUList());
@@ -1955,7 +1883,6 @@ document.getElementById("lguRegForm")?.addEventListener("submit", async (e) => {
     checkSession();
     renderMainNavigation();
     renderUserMenu();
-    
     loadData();
     
     setInterval(() => {
