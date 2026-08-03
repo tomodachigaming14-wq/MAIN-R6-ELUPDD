@@ -20,7 +20,7 @@
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
-        /* ===== HEADER / NAV (from index.html) ===== */
+        /* ===== HEADER / NAV ===== */
         header {
             background: #ffffff;
             border-bottom: 1px solid #e2edf7;
@@ -246,7 +246,7 @@
             background: #f8fafc;
         }
 
-        /* ===== TECH ASSISTANCE CARD (from Techsamp.html) ===== */
+        /* ===== TECH ASSISTANCE CARD ===== */
         .ta-card {
             max-width: 880px;
             width: 100%;
@@ -1433,7 +1433,7 @@
 </head>
 <body>
 
-<!-- ===== HEADER (from index.html) ===== -->
+<!-- ===== HEADER ===== -->
 <header>
     <div class="container">
         <div class="top-bar">
@@ -1456,7 +1456,6 @@
 <!-- ===== MAIN CONTENT ===== -->
 <main>
     <div class="container">
-        <!-- Technical Assistance Card (from Techsamp.html) -->
         <div class="ta-card" id="mainCard">
             <div class="ta-header">
                 <div class="ta-header-left">
@@ -1840,11 +1839,18 @@
                     <option value="December">December</option>
                 </select>
             </div>
+            <!-- NEW: Personnel In-Charge Filter -->
+            <div class="filter-group">
+                <label for="filterPIC">PIC:</label>
+                <select id="filterPIC">
+                    <option value="all">All Personnel</option>
+                </select>
+            </div>
             <button class="filter-btn" id="applyRecordFilter"><i class="fas fa-filter"></i> Apply</button>
             <button class="filter-btn reset-btn" id="resetRecordFilter"><i class="fas fa-undo"></i> Reset</button>
         </div>
         <div class="modal-search">
-            <input type="text" id="searchInput" placeholder="🔍 Search by PSGC, Province, City/Municipality...">
+            <input type="text" id="searchInput" placeholder="🔍 Search by PSGC, Province, City/Municipality, or Personnel...">
             <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
         </div>
         <div class="modal-body" id="modalBody">
@@ -2000,39 +2006,34 @@
             if (result.result === 'success' && result.names) {
                 picNames = result.names;
                 populatePicDropdowns();
+                updatePICFilters();
                 return picNames;
             } else {
                 picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
                 populatePicDropdowns();
+                updatePICFilters();
                 return picNames;
             }
         } catch (error) {
             console.error('Error loading PIC names:', error);
             picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
             populatePicDropdowns();
+            updatePICFilters();
             return picNames;
         }
     }
 
     async function savePICNamesToSheet(names) {
-    try {
-        // Use GET request with encoded data for no-cors compatibility
-        const encodedNames = encodeURIComponent(JSON.stringify(names));
-        const url = WEB_APP_URL + '?action=savePIC&names=' + encodedNames;
-        
-        await fetch(url, {
-            method: 'GET',
-            mode: 'no-cors'
-        });
-        
-        // Since we're using no-cors, we can't read the response
-        // We'll assume it worked if no error was thrown
-        return true;
-    } catch (error) {
-        console.error('Error saving PIC names:', error);
-        return false;
+        try {
+            const encodedNames = encodeURIComponent(JSON.stringify(names));
+            const url = WEB_APP_URL + '?action=savePIC&names=' + encodedNames;
+            await fetch(url, { method: 'GET', mode: 'no-cors' });
+            return true;
+        } catch (error) {
+            console.error('Error saving PIC names:', error);
+            return false;
+        }
     }
-}
 
     function populatePicDropdowns() {
         const selects = ['clup_pic', 'pdpfp_pic'];
@@ -2053,7 +2054,25 @@
         });
     }
 
-    function refreshPicData() { loadPICNamesFromSheet(); }
+    // NEW: Update all PIC filter dropdowns
+    function updatePICFilters() {
+        const filterIds = ['filterPIC', 'chartPICFilter'];
+        filterIds.forEach(id => {
+            const select = document.getElementById(id);
+            if (!select) return;
+            const currentValue = select.value;
+            select.innerHTML = '<option value="all">All Personnel</option>';
+            picNames.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                select.appendChild(opt);
+            });
+            if (currentValue && picNames.includes(currentValue)) {
+                select.value = currentValue;
+            }
+        });
+    }
 
     // ============================================
     // ADD PERSON MODAL
@@ -2092,6 +2111,7 @@
         }
         picNames.push(name);
         populatePicDropdowns();
+        updatePICFilters();
         await savePICNamesToSheet(picNames);
         const targetSelect = document.getElementById(currentAddTarget + '_pic');
         if (targetSelect) { targetSelect.value = name; }
@@ -2121,6 +2141,7 @@
         if (index > -1) {
             picNames.splice(index, 1);
             populatePicDropdowns();
+            updatePICFilters();
             await savePICNamesToSheet(picNames);
             setStatus('🗑️ "' + selectedName + '" removed from Personnel In-Charge list.', 'info');
         }
@@ -2507,7 +2528,7 @@
     }
 
     // ============================================
-    // RECORDS MODAL
+    // RECORDS MODAL - UPDATED WITH PIC FILTER
     // ============================================
     const recordsModal = document.getElementById('recordsModal');
     const modalBody = document.getElementById('modalBody');
@@ -2519,6 +2540,7 @@
     const filterPSGC = document.getElementById('filterPSGC');
     const filterProvince = document.getElementById('filterProvince');
     const filterReportingMonth = document.getElementById('filterReportingMonth');
+    const filterPIC = document.getElementById('filterPIC');
 
     function closeRecordsModal() {
         recordsModal.classList.remove('active');
@@ -2530,6 +2552,8 @@
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         document.getElementById('recordsModalTitle').textContent = currentFormType + ' Records';
+        // Update PIC filter dropdown with latest names
+        updatePICFilters();
         loadRecords();
     }
 
@@ -2546,6 +2570,7 @@
         const psgcFilter = filterPSGC.value.trim().toLowerCase();
         const provinceFilter = filterProvince.value;
         const monthFilter = filterReportingMonth.value;
+        const picFilter = filterPIC.value;
 
         filteredRecords = allRecords.filter(record => {
             if (psgcFilter) {
@@ -2557,6 +2582,9 @@
             }
             if (monthFilter !== 'all') {
                 if ((record['Reporting Month'] || '') !== monthFilter) return false;
+            }
+            if (picFilter !== 'all') {
+                if ((record['Personnel In-Charge'] || '') !== picFilter) return false;
             }
             return true;
         });
@@ -2572,6 +2600,7 @@
         filterPSGC.value = '';
         filterProvince.value = 'all';
         filterReportingMonth.value = 'all';
+        filterPIC.value = 'all';
         applyRecordFilters();
     });
 
@@ -2818,6 +2847,7 @@
         }
     };
 
+    // Updated search to include Personnel In-Charge
     searchInput.addEventListener('input', function() {
         const term = this.value.trim().toLowerCase();
         if (!term) {
@@ -2828,7 +2858,8 @@
             const psgc = (r.PSGC || '').toLowerCase();
             const province = (r.Province || '').toLowerCase();
             const city = (r['City/Municipality'] || '').toLowerCase();
-            return psgc.includes(term) || province.includes(term) || city.includes(term);
+            const pic = (r['Personnel In-Charge'] || '').toLowerCase();
+            return psgc.includes(term) || province.includes(term) || city.includes(term) || pic.includes(term);
         });
         renderTable(filtered);
         displayCount.textContent = filtered.length;
@@ -2851,7 +2882,7 @@
         document.body.style.overflow = 'hidden';
         document.getElementById('chartModalTitle').textContent = currentFormType + ' Analytics Dashboard';
         updateCategoryFilter();
-        updatePICFilter();
+        updatePICFilters();
         loadChartData();
     }
 
@@ -2883,19 +2914,6 @@
             const opt = document.createElement('option');
             opt.value = cat;
             opt.textContent = cat;
-            select.appendChild(opt);
-        });
-    }
-
-    function updatePICFilter() {
-        const select = document.getElementById('chartPICFilter');
-        if (!select) return;
-        select.innerHTML = '<option value="all">All Personnel</option>';
-        const picList = picNames.length > 0 ? picNames : ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
-        picList.forEach(name => {
-            const opt = document.createElement('option');
-            opt.value = name;
-            opt.textContent = name;
             select.appendChild(opt);
         });
     }
@@ -3157,13 +3175,11 @@
       let navHtml = `<a href="index.html">Home</a>`;
       if (currentUser) {
         navHtml += 
-		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-		  <a href="lc.html">Locational Clearance</a>
-		  <a href="SZC.html">Site Zoning Certification</a></div></div>
+         `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+          <a href="lc.html">Locational Clearance</a>
+          <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <!-- CLUP & ZO submenu -->
             <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
-            <!-- PDPFP submenu with Inventory & Status -->
             <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
           </div></div>
           <a href="Techsamp.html">Technical Assistance</a>
@@ -3304,21 +3320,17 @@
         document.getElementById('pdpfp_region').value = 'Region 6';
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
 
-        // Check session for nav
         checkSession();
         renderMainNavigation();
         renderUserMenu();
 
-        // Login form
         const form = document.getElementById("modalLoginForm");
         if (form) form.addEventListener("submit", handleModalLogin);
 
-        // Load PICs
         loadPICNamesFromSheet();
         setStatus('📋 All set · select CLUP or PDPFP', 'info');
     });
 
-    // Expose login functions globally
     window.openLoginModal = openLoginModal;
     window.closeLoginModal = closeLoginModal;
 </script>
