@@ -898,7 +898,15 @@
       </div>
       <div class="edit-form-group">
         <label>Support from Other Institutions</label>
-        <input type="text" id="editSupport" name="Support from Other Institutions">
+        <select id="editSupport" name="Support from Other Institutions">
+          <option value="">Select...</option>
+          <option value="None">None</option>
+          <option value="National Government Agency">National Government Agency</option>
+          <option value="Donor Agency">Donor Agency</option>
+          <option value="Consultant">Consultant</option>
+          <option value="Academe">Academe</option>
+          <option value="Others">Others</option>
+        </select>
       </div>
       <div class="edit-form-group">
         <label>Name/s of Institutions</label>
@@ -1042,27 +1050,29 @@
     return "viewer"; 
   }
   
-  function renderMainNavigation() {
-    const container = document.getElementById("mainNavContainer");
-    if (!container) return;
-    let navHtml = `<a href="index.html">Home</a>`;
-    if (currentUser) {
-      navHtml += 
-       `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-        <a href="lc.html">Locational Clearance</a>
-        <a href="SZC.html">Site Zoning Certification</a></div></div>
-        <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-          <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory.html">Inventory</a><a href="status.html">Status</a></div></div>
-          <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="inventory_pdpfp.html">Inventory</a><a href="status_pdpfp.html">Status</a></div></div>
-        </div></div>
-        <a href="Techsamp.html">Technical Assistance</a>
-        <a href="lgu-info.html">LGU Information</a>
-        <a href="report.html">Reports</a>
-        <a href="calendar.html">Calendar of Activities</a>
-        <a href="issuance.html">Issuances</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>`;
-    } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+   function renderMainNavigation() {
+      const container = document.getElementById("mainNavContainer");
+      if (!container) return;
+      let navHtml = `<a href="index.html">Home</a>`;
+      if (currentUser) {
+        navHtml += 
+		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+		  <a href="lc.html">Locational Clearance</a>
+		  <a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+            <!-- CLUP & ZO submenu -->
+            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
+            <!-- PDPFP submenu with Inventory & Status -->
+            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
+          </div></div>
+          <a href="Techsamp.html">Technical Assistance</a>
+          <a href="lgu-info.html">LGU Information</a>
+          <a href="report.html">Reports</a>
+          <a href="calendar.html">Calendar of Activities</a>
+          <a href="issuance.html">Issuances</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>`;
+      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
     container.innerHTML = navHtml;
     setTimeout(() => {
       document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
