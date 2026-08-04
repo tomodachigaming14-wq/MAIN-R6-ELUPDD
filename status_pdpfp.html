@@ -343,6 +343,8 @@
     .badge-none { background: #fee2e2; color: #991b1b; }
     .badge-other { background: #f1f5f9; color: #475569; }
     .badge-under-review { background: #dbeafe; color: #1e40af; }
+    .badge-for-approval { background: #dbeafe; color: #1e40af; }
+    .badge-approved { background: #dcfce7; color: #166534; }
     .btn-view {
       background: #d9efff;
       color: #0369a1;
@@ -576,9 +578,9 @@
 <div class="container">
 <div class="stats-grid" id="statsGrid">
   <div class="stat-card"><div class="stat-number" id="statTotalLgu">0</div><div class="stat-label">🏛️ No. of Provincial LGUs</div></div>
-  <div class="stat-card"><div class="stat-number" id="statUpdated">0</div><div class="stat-label">✅ Updated PDPFP</div></div>
-  <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">🔄 PDPFP Due for updating</div></div>
-  <div class="stat-card"><div class="stat-number" id="statUnderReview">0</div><div class="stat-label">📋 Under Review</div></div>
+  <div class="stat-card"><div class="stat-number" id="statForUpdating">0</div><div class="stat-label">🔄 For Updating</div></div>
+  <div class="stat-card"><div class="stat-number" id="statForApproval">0</div><div class="stat-label">📋 For Approval</div></div>
+  <div class="stat-card"><div class="stat-number" id="statApproved">0</div><div class="stat-label">✅ Approved/Updated</div></div>
 </div>
 
   <!-- FILTERS -->
@@ -913,42 +915,41 @@
     return status;
   }
 
-  function normalizeStatus(status){
+  function normalizeStatusForChart(status){
     if (!status) return "Other";
     const s = String(status).toLowerCase().trim();
-    if (s === "updated" || s.includes("updated") || s === "yes" || s === "approved/updated") return "Updated";
-    if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For updating";
-    if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review") || s === "for approval") return "Under Review";
-    if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No PDPFP";
+    if (s === "approved/updated" || s === "approved" || s === "updated") return "Approved/Updated";
+    if (s === "for approval" || s === "forapproval") return "For Approval";
+    if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For Updating";
     return "Other";
   }
 
   function getPieData(records){
-    const statusMap = { "Updated":0, "For updating":0, "Under Review":0 };
+    const statusMap = { "For Updating":0, "For Approval":0, "Approved/Updated":0 };
     records.forEach(r => {
       const status = derivePdpfpStatus(r);
-      const st = normalizeStatus(status);
-      if (st === "Updated") statusMap["Updated"]++;
-      else if (st === "For updating") statusMap["For updating"]++;
-      else statusMap["Under Review"]++;
+      const st = normalizeStatusForChart(status);
+      if (st === "For Updating") statusMap["For Updating"]++;
+      else if (st === "For Approval") statusMap["For Approval"]++;
+      else if (st === "Approved/Updated") statusMap["Approved/Updated"]++;
     });
     return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
   }
 
   function renderStats(records){
     const total = records.length;
-    let updated=0, due=0, underReview=0;
+    let forUpdating=0, forApproval=0, approved=0;
     records.forEach(r => {
       const status = derivePdpfpStatus(r);
-      const st = normalizeStatus(status);
-      if (st === "Updated") updated++;
-      else if (st === "For updating") due++;
-      else underReview++;
+      const st = normalizeStatusForChart(status);
+      if (st === "For Updating") forUpdating++;
+      else if (st === "For Approval") forApproval++;
+      else if (st === "Approved/Updated") approved++;
     });
     document.getElementById("statTotalLgu").innerText = total;
-    document.getElementById("statUpdated").innerText = updated;
-    document.getElementById("statDue").innerText = due;
-    document.getElementById("statUnderReview").innerText = underReview;
+    document.getElementById("statForUpdating").innerText = forUpdating;
+    document.getElementById("statForApproval").innerText = forApproval;
+    document.getElementById("statApproved").innerText = approved;
   }
 
   function renderPie(records){
@@ -961,7 +962,7 @@
         labels: data.labels, 
         datasets: [{ 
           data: data.data, 
-          backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']
+          backgroundColor: ['#f59e0b', '#3b82f6', '#16a34a']
         }] 
       },
       options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
@@ -994,10 +995,11 @@
       const institutions = getField(r, "Name/s of Institutions");
       const remarks = getField(r, "Remarks");
 
-      const normalized = normalizeStatus(pdpfpStatus);
-      const statusClass = normalized === "Updated" ? "badge-updated" : 
-                          normalized === "For updating" ? "badge-due" : 
-                          normalized === "Under Review" ? "badge-under-review" : "badge-other";
+      const normalized = normalizeStatusForChart(pdpfpStatus);
+      let statusClass = "badge-other";
+      if (normalized === "Approved/Updated") statusClass = "badge-approved";
+      else if (normalized === "For Approval") statusClass = "badge-for-approval";
+      else if (normalized === "For Updating") statusClass = "badge-due";
       
       const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
       
