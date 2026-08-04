@@ -302,7 +302,87 @@
     }
     .chart-box canvas { max-height: 220px; max-width: 100%; }
 
-    /* New pie charts grid for Shelter Plan, Housing Subsector, Comm Plan */
+    /* SECOND ROW: Province Status Summary + Formulation Phase & Review Status - side by side */
+    .charts-row-2col {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .charts-row-2col .chart-box {
+      background: white;
+      border-radius: 28px;
+      padding: 20px 20px 16px;
+      border: 1px solid #eef2ff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .charts-row-2col .chart-box h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #4a6f88;
+      margin-bottom: 12px;
+    }
+    .charts-row-2col .chart-box canvas { max-height: 280px; max-width: 100%; }
+    .charts-row-2col .chart-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .charts-row-2col .chart-controls select {
+      padding: 4px 12px;
+      border-radius: 40px;
+      border: 1px solid #d0dfe8;
+      background: white;
+      font-family: "Inter", sans-serif;
+      font-size: 0.7rem;
+      min-width: 150px;
+    }
+    .charts-row-2col .chart-controls label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #4a6f88;
+    }
+    .charts-row-2col .chart-controls .reset-btn {
+      background: #f1f5f9;
+      border: none;
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.7rem;
+      cursor: pointer;
+      color: #1e293b;
+    }
+    .charts-row-2col .chart-controls .reset-btn:hover { background: #e2e8f0; }
+
+    /* Column chart tabs inside the second column */
+    .charts-row-2col .chart-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .charts-row-2col .chart-tabs button {
+      padding: 4px 14px;
+      border-radius: 40px;
+      border: 1px solid #d0dfe8;
+      background: white;
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #2c4e6b;
+      transition: 0.15s;
+    }
+    .charts-row-2col .chart-tabs button.active {
+      background: #1e3a8a;
+      color: white;
+      border-color: #1e3a8a;
+    }
+    .charts-row-2col .chart-tabs button:hover:not(.active) { background: #f1f5f9; }
+
+    /* THIRD ROW: Pie charts */
     .pie-chart-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -325,33 +405,6 @@
       text-align: center;
     }
     .pie-chart-grid .chart-box canvas { max-height: 180px; max-width: 100%; }
-
-    .column-chart-wrapper {
-      grid-column: 1 / -1;
-    }
-    .column-chart-wrapper .chart-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .chart-tabs button {
-      padding: 6px 18px;
-      border-radius: 40px;
-      border: 1px solid #d0dfe8;
-      background: white;
-      font-size: 0.7rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #2c4e6b;
-      transition: 0.15s;
-    }
-    .chart-tabs button.active {
-      background: #1e3a8a;
-      color: white;
-      border-color: #1e3a8a;
-    }
-    .chart-tabs button:hover:not(.active) { background: #f1f5f9; }
 
     .table-section {
       background: white;
@@ -582,6 +635,7 @@
     @media print { .filter-bar, .chart-tabs, .btn-view, header { display: none !important; } }
     @media (max-width: 760px) { 
       .chart-grid { grid-template-columns: 1fr; }
+      .charts-row-2col { grid-template-columns: 1fr; }
       .pie-chart-grid { grid-template-columns: 1fr; }
       .edit-form-row { grid-template-columns: 1fr; }
       .detail-label { width: 140px; }
@@ -635,7 +689,7 @@
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
 
-  <!-- CHARTS -->
+  <!-- CHARTS - Row 1: CLUP Status & Status of CLUP Updating -->
   <div class="chart-grid">
     <div class="chart-box">
       <h4>
@@ -674,7 +728,32 @@
     </div>
   </div>
 
-  <!-- NEW PIE CHARTS: Shelter Plan, Housing Subsector, Comm Plan -->
+  <!-- CHARTS - Row 2: Province Status Summary & Formulation Phase & Review Status (side by side) -->
+  <div class="charts-row-2col">
+    <div class="chart-box">
+      <h4>📊 Province Status Summary (Updated / For Updating / Under Review)</h4>
+      <div class="chart-controls">
+        <label for="filterStackedProvince">Province:</label>
+        <select id="filterStackedProvince">
+          <option value="all">All Provinces</option>
+        </select>
+        <button class="reset-btn" id="resetStackedFilter">↺ Reset</button>
+      </div>
+      <canvas id="stackedChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>📊 Formulation Phase & Review Status</h4>
+      <div class="chart-tabs" id="columnTabs">
+        <button class="active" data-view="preparatory">Preparatory</button>
+        <button data-view="formulation">Formulation</button>
+        <button data-view="review">Review & Approval</button>
+        <button data-view="unspecified">Unspecified</button>
+      </div>
+      <canvas id="columnChart"></canvas>
+    </div>
+  </div>
+
+  <!-- CHARTS - Row 3: Shelter Plan, Housing Subsector, Comm Plan -->
   <div class="pie-chart-grid">
     <div class="chart-box">
       <h4>🏠 LGU with Local Shelter Plan</h4>
@@ -688,18 +767,6 @@
       <h4>📡 LGU with Communications Plan</h4>
       <canvas id="commPieChart"></canvas>
     </div>
-  </div>
-
-  <!-- COLUMN CHART + TABS -->
-  <div class="chart-box column-chart-wrapper">
-    <h4>📊 Formulation Phase & Review Status</h4>
-    <div class="chart-tabs" id="columnTabs">
-      <button class="active" data-view="preparatory">Preparatory</button>
-      <button data-view="formulation">Formulation</button>
-      <button data-view="review">Review & Approval</button>
-      <button data-view="unspecified">Unspecified</button>
-    </div>
-    <canvas id="columnChart" style="max-height:220px;"></canvas>
   </div>
 
   <!-- TABLE -->
@@ -1033,21 +1100,8 @@
   // ========== DASHBOARD LOGIC ==========
   let rawLguData = [];
   let filteredData = [];
-  let pieChartInstance=null, barChartInstance=null, columnChartInstance=null;
+  let pieChartInstance=null, barChartInstance=null, columnChartInstance=null, stackedChartInstance=null;
   let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null;
-
-  const phaseMap = {
-    "Preparatory":"Preparatory",
-    "Formulation":"Formulation",
-    "Review & Approval":"Review & Approval",
-    "Unspecified":"Unspecified"
-  };
-  const phaseColors = {
-    "Preparatory":"#3b82f6",
-    "Formulation":"#8b5cf6",
-    "Review & Approval":"#f59e0b",
-    "Unspecified":"#94a3b8"
-  };
 
   // ========== IMPROVED FIELD ACCESS ==========
   function getField(record, field) {
@@ -1098,7 +1152,6 @@
   function formatDate(value) {
     if (!value || value === "—" || value === "") return "";
     
-    // If it's a string that looks like ISO date with T
     if (typeof value === 'string' && value.includes('T')) {
       const date = new Date(value);
       if (!isNaN(date.getTime())) {
@@ -1109,7 +1162,6 @@
       }
     }
     
-    // If it's a date object
     if (value instanceof Date) {
       const month = String(value.getMonth() + 1).padStart(2, '0');
       const day = String(value.getDate()).padStart(2, '0');
@@ -1117,12 +1169,10 @@
       return `${month}/${day}/${year}`;
     }
     
-    // If it's a string in MM/DD/YYYY format already
     if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
       return value;
     }
     
-    // Try to parse as date
     try {
       const date = new Date(value);
       if (!isNaN(date.getTime())) {
@@ -1148,14 +1198,12 @@
   
   // ========== DETERMINE CLUP STATUS CATEGORY ==========
   function getClupStatusCategory(record) {
-    // First check if there's a direct CLUP Status value
     let clupStatus = getField(record, "CLUP Status");
     if (clupStatus && clupStatus !== "—" && clupStatus !== "") {
       const normalized = normalizeStatusCategory(clupStatus);
       if (normalized) return normalized;
     }
     
-    // Check CLUPStatus/Updates for RA values
     let updates = getField(record, "CLUPStatus/Updates");
     if (updates && updates !== "—" && updates !== "") {
       const updatesLower = String(updates).toLowerCase().trim();
@@ -1211,7 +1259,6 @@
 
   function getPhaseCategory(phaseName){
     const key = phaseName?.trim() || "";
-    // Map exact matches from the dropdown
     if (key.includes("Preparatory") || key.includes("preparatory")) return "Preparatory";
     if (key.includes("Phase") || key.includes("Formulation")) return "Formulation";
     if (key.includes("RA") || key.includes("Review") || key.includes("Approval")) return "Review & Approval";
@@ -1374,14 +1421,11 @@
         combined = clupStatus;
       }
       
-      // Determine which phase category this record belongs to
       let category = null;
       
-      // Check for Pre-Phase (Preparatory)
       if (combined.includes('pre-phase') || combined.includes('prephase') || combined.includes('pre phase')) {
         category = "Preparatory";
       }
-      // Check for Phase 1-5 (Formulation)
       else if (combined.includes('phase 1') || combined.includes('phase1') ||
                combined.includes('phase 2') || combined.includes('phase2') ||
                combined.includes('phase 3') || combined.includes('phase3') ||
@@ -1389,7 +1433,6 @@
                combined.includes('phase 5') || combined.includes('phase5')) {
         category = "Formulation";
       }
-      // Check for RA 1-7 (Review & Approval)
       else if (combined.includes('ra 1') || combined.includes('ra1') ||
                combined.includes('ra 2') || combined.includes('ra2') ||
                combined.includes('ra 3') || combined.includes('ra3') ||
@@ -1399,7 +1442,6 @@
                combined.includes('ra 7') || combined.includes('ra7')) {
         category = "Review & Approval";
       }
-      // Check for None Indicated (Unspecified)
       else if (!combined || combined === '' || combined === 'none' || combined === 'n/a' || combined === 'none indicated') {
         category = "Unspecified";
       }
@@ -1407,12 +1449,10 @@
       if (category && phaseCounts.hasOwnProperty(category)) {
         phaseCounts[category]++;
       } else {
-        // If no category matched, add to Unspecified
         phaseCounts["Unspecified"]++;
       }
     });
     
-    // Return data based on the selected view
     const viewMap = {
       "preparatory": ["Preparatory"],
       "formulation": ["Formulation"],
@@ -1424,6 +1464,53 @@
     return { 
       labels: target, 
       values: target.map(p => phaseCounts[p] || 0) 
+    };
+  }
+
+  // ========== STACKED CHART DATA - COMPLETE PROVINCES ==========
+  function getStackedChartData(records, filterProvince) {
+    const provinceData = {};
+    const allProvinces = [];
+    
+    // Collect all provinces and their data
+    records.forEach(r => {
+      const province = getField(r, "Province");
+      if (province && province !== "—") {
+        if (!provinceData[province]) {
+          provinceData[province] = { 'Updated': 0, 'For Updating': 0, 'Under Review': 0 };
+          allProvinces.push(province);
+        }
+        const category = getClupStatusCategory(r);
+        if (category === 'Updated') provinceData[province]['Updated']++;
+        else if (category === 'For Updating') provinceData[province]['For Updating']++;
+        else if (category === 'Under Review') provinceData[province]['Under Review']++;
+      }
+    });
+    
+    // Sort provinces alphabetically
+    let sortedProvinces = allProvinces.sort();
+    
+    // Filter by selected province
+    if (filterProvince && filterProvince !== 'all') {
+      sortedProvinces = sortedProvinces.filter(p => p === filterProvince);
+    }
+    
+    // If no provinces match the filter, show all
+    if (sortedProvinces.length === 0 && filterProvince !== 'all') {
+      sortedProvinces = allProvinces.sort();
+    }
+    
+    const statuses = ['Updated', 'For Updating', 'Under Review'];
+    const datasets = statuses.map(status => ({
+      label: status,
+      data: sortedProvinces.map(p => provinceData[p]?.[status] || 0),
+      backgroundColor: status === 'Updated' ? '#16a34a' : 
+                       status === 'For Updating' ? '#f59e0b' : '#3b82f6'
+    }));
+    
+    return {
+      labels: sortedProvinces,
+      datasets: datasets
     };
   }
 
@@ -1545,7 +1632,6 @@
     const ctx = document.getElementById("columnChart").getContext("2d");
     if (columnChartInstance) columnChartInstance.destroy();
     
-    // Map view to color
     const colorMap = {
       "Preparatory": "#3b82f6",
       "Formulation": "#8b5cf6",
@@ -1570,6 +1656,47 @@
         responsive: true, 
         plugins: { legend: { display: false } }, 
         scales: { y: { beginAtZero: true, stepSize: 1 } }
+      }
+    });
+  }
+
+  // ========== RENDER STACKED CHART - ALL PROVINCES ==========
+  function renderStackedChart(records, filterProvince) {
+    const data = getStackedChartData(records, filterProvince);
+    const ctx = document.getElementById("stackedChart").getContext("2d");
+    if (stackedChartInstance) stackedChartInstance.destroy();
+    
+    if (data.labels.length === 0) {
+      stackedChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+      return;
+    }
+    
+    stackedChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: { font: { size: 11 } }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 }
+          },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            ticks: { stepSize: 1 }
+          }
+        }
       }
     });
   }
@@ -1672,7 +1799,6 @@
     let html = '';
     fields.forEach(f => {
       let value = getField(record, f.key);
-      // Format date fields
       if (f.key === "Approval date of the Latest plan (MM/DD/YYYY)") {
         value = formatDate(value);
       }
@@ -1699,7 +1825,6 @@
     document.getElementById("editEndYear").value = getFieldValue(record, "End Year");
     document.getElementById("editResolution").value = getFieldValue(record, "Resolution Number of the Latest Plan");
     
-    // Format approval date
     let approvalDate = getFieldValue(record, "Approval date of the Latest plan (MM/DD/YYYY)");
     document.getElementById("editApprovalDate").value = formatDate(approvalDate);
     
@@ -1831,14 +1956,23 @@
       if (p !== "—") provinceSet.add(p);
       if (m !== "—") lguSet.add(m);
     });
+    
     const provSelect = document.getElementById("filterProvince");
     const lguSelect = document.getElementById("filterLgu");
+    const stackedProvSelect = document.getElementById("filterStackedProvince");
+    
     const currentProv = provSelect.value;
     const currentLgu = lguSelect.value;
-    provSelect.innerHTML = `<option value="">All Provinces</option>` + [...provinceSet].sort().map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+    const currentStackedProv = stackedProvSelect.value;
+    
+    const sortedProvinces = [...provinceSet].sort();
+    provSelect.innerHTML = `<option value="">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
     lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+    stackedProvSelect.innerHTML = `<option value="all">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+    
     if (currentProv) provSelect.value = currentProv;
     if (currentLgu) lguSelect.value = currentLgu;
+    if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
   }
 
   function applyFilters(){
@@ -1846,6 +1980,7 @@
     const lgu = document.getElementById("filterLgu").value;
     const barMode = document.getElementById("barChartDropdown").value || 'all';
     const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
+    const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
     
     let filtered = rawLguData;
     if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
@@ -1866,6 +2001,8 @@
     
     const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
     renderColumn(filtered, activeView);
+    
+    renderStackedChart(filtered, stackedProvFilter);
     
     renderTable(tableFiltered);
   }
@@ -1918,12 +2055,19 @@
     document.getElementById("filterProvince").addEventListener('change', applyFilters);
     document.getElementById("filterLgu").addEventListener('change', applyFilters);
     document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
+    document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
     
     document.getElementById("resetFiltersBtn").addEventListener('click', function(){
       document.getElementById("filterProvince").value = "";
       document.getElementById("filterLgu").value = "";
       document.getElementById("filterClupStatus").value = "all";
       document.getElementById("barChartDropdown").value = "all";
+      document.getElementById("filterStackedProvince").value = "all";
+      applyFilters();
+    });
+    
+    document.getElementById("resetStackedFilter").addEventListener('click', function(){
+      document.getElementById("filterStackedProvince").value = "all";
       applyFilters();
     });
 
