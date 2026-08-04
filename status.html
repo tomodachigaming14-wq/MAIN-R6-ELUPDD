@@ -268,7 +268,7 @@
 
     .chart-grid {
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: 1fr 1.2fr 0.8fr;
       gap: 24px;
       margin-bottom: 28px;
     }
@@ -280,7 +280,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.02);
     }
     .chart-box h4 {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #4a6f88;
@@ -292,15 +292,15 @@
     .chart-box h4 .chart-dropdown {
       font-weight: 400;
       text-transform: none;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       background: #f1f5f9;
       border: 1px solid #e2e8f0;
       border-radius: 40px;
-      padding: 4px 12px;
+      padding: 3px 10px;
       cursor: pointer;
       font-family: "Inter", sans-serif;
     }
-    .chart-box canvas { max-height: 220px; max-width: 100%; }
+    .chart-box canvas { max-height: 200px; max-width: 100%; }
 
     /* SECOND ROW: Province Status Summary + Formulation Phase & Review Status - side by side */
     .charts-row-2col {
@@ -689,7 +689,7 @@
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
 
-  <!-- CHARTS - Row 1: CLUP Status & Status of CLUP Updating -->
+  <!-- CHARTS - Row 1: CLUP Status, Status of CLUP Updating, Support from Other Institutions -->
   <div class="chart-grid">
     <div class="chart-box">
       <h4>
@@ -725,6 +725,21 @@
         </select>
       </h4>
       <canvas id="barChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>
+        🏛️ Support from Other Institutions
+        <select class="chart-dropdown" id="filterSupportPie">
+          <option value="all">All</option>
+          <option value="None">None</option>
+          <option value="National Government Agency">National Government Agency</option>
+          <option value="Donor Agency">Donor Agency</option>
+          <option value="Consultant">Consultant</option>
+          <option value="Academe">Academe</option>
+          <option value="Others">Others</option>
+        </select>
+      </h4>
+      <canvas id="supportPieChart"></canvas>
     </div>
   </div>
 
@@ -999,6 +1014,12 @@
       "CLUP Updates",
       "Updates",
       "clup_updates"
+    ],
+    "Support from Other Institutions": [
+      "Support from Other Institutions",
+      "Support",
+      "Institutions Support",
+      "support_from_other_institutions"
     ]
   };
   
@@ -1050,29 +1071,27 @@
     return "viewer"; 
   }
   
-   function renderMainNavigation() {
-      const container = document.getElementById("mainNavContainer");
-      if (!container) return;
-      let navHtml = `<a href="index.html">Home</a>`;
-      if (currentUser) {
-        navHtml += 
-		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-		  <a href="lc.html">Locational Clearance</a>
-		  <a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <!-- CLUP & ZO submenu -->
-            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-            <!-- PDPFP submenu with Inventory & Status -->
-            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-          </div></div>
-          <a href="Techsamp.html">Technical Assistance</a>
-          <a href="lgu-info.html">LGU Information</a>
-          <a href="report.html">Reports</a>
-          <a href="calendar.html">Calendar of Activities</a>
-          <a href="issuance.html">Issuances</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>`;
-      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+  function renderMainNavigation() {
+    const container = document.getElementById("mainNavContainer");
+    if (!container) return;
+    let navHtml = `<a href="index.html">Home</a>`;
+    if (currentUser) {
+      navHtml += 
+       `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+        <a href="lc.html">Locational Clearance</a>
+        <a href="SZC.html">Site Zoning Certification</a></div></div>
+        <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+          <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
+          <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
+        </div></div>
+        <a href="Techsamp.html">Technical Assistance</a>
+        <a href="lgu-info.html">LGU Information</a>
+        <a href="report.html">Reports</a>
+        <a href="calendar.html">Calendar of Activities</a>
+        <a href="issuance.html">Issuances</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>`;
+    } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
     container.innerHTML = navHtml;
     setTimeout(() => {
       document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
@@ -1111,7 +1130,7 @@
   let rawLguData = [];
   let filteredData = [];
   let pieChartInstance=null, barChartInstance=null, columnChartInstance=null, stackedChartInstance=null;
-  let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null;
+  let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null, supportPieInstance=null;
 
   // ========== IMPROVED FIELD ACCESS ==========
   function getField(record, field) {
@@ -1320,6 +1339,16 @@
       return categoryValue === category;
     });
   }
+  
+  // ========== FILTER BY SUPPORT CATEGORY ==========
+  function filterBySupportCategory(records, category) {
+    if (category === 'all') return records;
+    
+    return records.filter(r => {
+      const supportValue = getField(r, "Support from Other Institutions");
+      return supportValue === category;
+    });
+  }
 
   // ========== CHART DATA ==========
   function getBarData(records, mode) {
@@ -1404,6 +1433,55 @@
     return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
   }
 
+  function getSupportPieData(records, filterCategory) {
+    const supportMap = {
+      "None": 0,
+      "National Government Agency": 0,
+      "Donor Agency": 0,
+      "Consultant": 0,
+      "Academe": 0,
+      "Others": 0,
+      "Not Specified": 0
+    };
+    
+    let filteredRecords = records;
+    if (filterCategory && filterCategory !== 'all') {
+      filteredRecords = records.filter(r => {
+        const value = getField(r, "Support from Other Institutions");
+        return value === filterCategory;
+      });
+    }
+    
+    filteredRecords.forEach(r => {
+      const value = getField(r, "Support from Other Institutions");
+      if (value && value !== "—" && value !== "") {
+        if (supportMap.hasOwnProperty(value)) {
+          supportMap[value]++;
+        } else {
+          supportMap["Others"]++;
+        }
+      } else {
+        supportMap["Not Specified"]++;
+      }
+    });
+    
+    const labels = [];
+    const data = [];
+    for (let [key, val] of Object.entries(supportMap)) {
+      if (val > 0 || key === "Not Specified") {
+        labels.push(key);
+        data.push(val);
+      }
+    }
+    
+    // If all values are 0, show "No Data"
+    if (data.every(d => d === 0)) {
+      return { labels: ["No Data"], data: [1] };
+    }
+    
+    return { labels, data };
+  }
+
   function getYesNoData(records, field) {
     let yesCount = 0, noCount = 0, emptyCount = 0;
     records.forEach(r => {
@@ -1482,7 +1560,6 @@
     const provinceData = {};
     const allProvinces = [];
     
-    // Collect all provinces and their data
     records.forEach(r => {
       const province = getField(r, "Province");
       if (province && province !== "—") {
@@ -1497,15 +1574,12 @@
       }
     });
     
-    // Sort provinces alphabetically
     let sortedProvinces = allProvinces.sort();
     
-    // Filter by selected province
     if (filterProvince && filterProvince !== 'all') {
       sortedProvinces = sortedProvinces.filter(p => p === filterProvince);
     }
     
-    // If no provinces match the filter, show all
     if (sortedProvinces.length === 0 && filterProvince !== 'all') {
       sortedProvinces = allProvinces.sort();
     }
@@ -1554,7 +1628,46 @@
           backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']
         }] 
       },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
+    });
+  }
+
+  function renderSupportPie(records, filterCategory) {
+    const data = getSupportPieData(records, filterCategory);
+    const ctx = document.getElementById("supportPieChart").getContext("2d");
+    if (supportPieInstance) supportPieInstance.destroy();
+    
+    const colorMap = {
+      "None": "#94a3b8",
+      "National Government Agency": "#3b82f6",
+      "Donor Agency": "#8b5cf6",
+      "Consultant": "#f59e0b",
+      "Academe": "#10b981",
+      "Others": "#ef4444",
+      "Not Specified": "#e2e8f0",
+      "No Data": "#e2e8f0"
+    };
+    
+    const colors = data.labels.map(l => colorMap[l] || '#e2e8f0');
+    
+    supportPieInstance = new Chart(ctx, {
+      type: 'pie',
+      data: { 
+        labels: data.labels, 
+        datasets: [{ 
+          data: data.data, 
+          backgroundColor: colors
+        }] 
+      },
+      options: { 
+        responsive: true, 
+        plugins: { 
+          legend: { 
+            position: 'bottom', 
+            labels: { font: { size: 9 } } 
+          } 
+        } 
+      }
     });
   }
 
@@ -1991,6 +2104,7 @@
     const barMode = document.getElementById("barChartDropdown").value || 'all';
     const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
     const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
+    const supportFilter = document.getElementById("filterSupportPie").value || 'all';
     
     let filtered = rawLguData;
     if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
@@ -1998,12 +2112,16 @@
     
     filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
     
+    // Apply support filter for the pie chart
+    let supportFiltered = filterBySupportCategory(filtered, supportFilter);
+    
     let tableFiltered = filterByStatusUpdates(filtered, barMode);
     
     filteredData = filtered;
     
     renderStats(filtered);
     renderPie(filtered);
+    renderSupportPie(filtered, supportFilter);
     renderShelterPie(filtered);
     renderHousingPie(filtered);
     renderCommPie(filtered);
@@ -2038,10 +2156,11 @@
 
   function getFallbackData(){
     return [
-      { "Region":"Region VI", "Income Class":"1st", "PSGC":"604010000", "City/Municipality":"Bacolod City", "Province":"Negros Occidental", "Start Year":"2020", "End Year":"2029", "Resolution Number of the Latest Plan":"R-2020-001", "Approval date of the Latest plan (MM/DD/YYYY)":"01/15/2021", "CLUP Status":"Updated", "CLUPStatus/Updates":"Pre-Phase", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Yes", "If with Support from other institutions, Name/s of Institutions":"NEDA, DILG", "LGU with Local Shelter Plan":"Yes", "LGU with Integrated Housing Subsector":"Yes", "LGU with Integrated Communications Plan":"Yes", "Remarks":"On track" },
-      { "Region":"Region VI", "Income Class":"2nd", "PSGC":"604020000", "City/Municipality":"Bago City", "Province":"Negros Occidental", "Start Year":"2018", "End Year":"2027", "Resolution Number of the Latest Plan":"R-2018-005", "Approval date of the Latest plan (MM/DD/YYYY)":"03/10/2019", "CLUP Status":"For Updating", "CLUPStatus/Updates":"Phase 5", "Technical Assistance Provided":"No", "Support from Other Institutions":"No", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Integrated Housing Subsector":"No", "LGU with Integrated Communications Plan":"Yes", "Remarks":"Tech capacity needed" },
-      { "Region":"Region VI", "Income Class":"3rd", "PSGC":"604030000", "City/Municipality":"Cadiz City", "Province":"Negros Occidental", "Start Year":"2019", "End Year":"2028", "Resolution Number of the Latest Plan":"R-2019-003", "Approval date of the Latest plan (MM/DD/YYYY)":"06/20/2020", "CLUP Status":"Updated", "CLUPStatus/Updates":"Phase 2", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Yes", "If with Support from other institutions, Name/s of Institutions":"DILG", "LGU with Local Shelter Plan":"Yes", "LGU with Integrated Housing Subsector":"Yes", "LGU with Integrated Communications Plan":"Yes", "Remarks":"Data gaps identified" },
-      { "Region":"Region VI", "Income Class":"4th", "PSGC":"603001000", "City/Municipality":"Ajuy", "Province":"Iloilo", "Start Year":"2017", "End Year":"2026", "Resolution Number of the Latest Plan":"R-2017-002", "Approval date of the Latest plan (MM/DD/YYYY)":"08/15/2018", "CLUP Status":"For Updating", "CLUPStatus/Updates":"RA 3", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"No", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Integrated Housing Subsector":"No", "LGU with Integrated Communications Plan":"No", "Remarks":"Financial support needed" }
+      { "Region":"Region VI", "Income Class":"1st", "PSGC":"604010000", "City/Municipality":"Bacolod City", "Province":"Negros Occidental", "Start Year":"2020", "End Year":"2029", "Resolution Number of the Latest Plan":"R-2020-001", "Approval date of the Latest plan (MM/DD/YYYY)":"01/15/2021", "CLUP Status":"Updated", "CLUPStatus/Updates":"Pre-Phase", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"National Government Agency", "If with Support from other institutions, Name/s of Institutions":"NEDA, DILG", "LGU with Local Shelter Plan":"Yes", "LGU with Integrated Housing Subsector":"Yes", "LGU with Integrated Communications Plan":"Yes", "Remarks":"On track" },
+      { "Region":"Region VI", "Income Class":"2nd", "PSGC":"604020000", "City/Municipality":"Bago City", "Province":"Negros Occidental", "Start Year":"2018", "End Year":"2027", "Resolution Number of the Latest Plan":"R-2018-005", "Approval date of the Latest plan (MM/DD/YYYY)":"03/10/2019", "CLUP Status":"For Updating", "CLUPStatus/Updates":"Phase 5", "Technical Assistance Provided":"No", "Support from Other Institutions":"None", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Integrated Housing Subsector":"No", "LGU with Integrated Communications Plan":"Yes", "Remarks":"Tech capacity needed" },
+      { "Region":"Region VI", "Income Class":"3rd", "PSGC":"604030000", "City/Municipality":"Cadiz City", "Province":"Negros Occidental", "Start Year":"2019", "End Year":"2028", "Resolution Number of the Latest Plan":"R-2019-003", "Approval date of the Latest plan (MM/DD/YYYY)":"06/20/2020", "CLUP Status":"Updated", "CLUPStatus/Updates":"Phase 2", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Donor Agency", "If with Support from other institutions, Name/s of Institutions":"DILG", "LGU with Local Shelter Plan":"Yes", "LGU with Integrated Housing Subsector":"Yes", "LGU with Integrated Communications Plan":"Yes", "Remarks":"Data gaps identified" },
+      { "Region":"Region VI", "Income Class":"4th", "PSGC":"603001000", "City/Municipality":"Ajuy", "Province":"Iloilo", "Start Year":"2017", "End Year":"2026", "Resolution Number of the Latest Plan":"R-2017-002", "Approval date of the Latest plan (MM/DD/YYYY)":"08/15/2018", "CLUP Status":"For Updating", "CLUPStatus/Updates":"RA 3", "Technical Assistance Provided":"Yes", "Support from Other Institutions":"Academe", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"No", "LGU with Integrated Housing Subsector":"No", "LGU with Integrated Communications Plan":"No", "Remarks":"Financial support needed" },
+      { "Region":"Region VI", "Income Class":"4th", "PSGC":"603002000", "City/Municipality":"Barotac Nuevo", "Province":"Iloilo", "Start Year":"2018", "End Year":"2027", "Resolution Number of the Latest Plan":"R-2018-002", "Approval date of the Latest plan (MM/DD/YYYY)":"09/20/2019", "CLUP Status":"Updated", "CLUPStatus/Updates":"Pre-Phase", "Technical Assistance Provided":"Trained", "Support from Other Institutions":"Consultant", "If with Support from other institutions, Name/s of Institutions":"", "LGU with Local Shelter Plan":"Yes", "LGU with Integrated Housing Subsector":"No", "LGU with Integrated Communications Plan":"Yes", "Remarks":"" }
     ];
   }
 
@@ -2066,6 +2185,7 @@
     document.getElementById("filterLgu").addEventListener('change', applyFilters);
     document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
     document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
+    document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
     
     document.getElementById("resetFiltersBtn").addEventListener('click', function(){
       document.getElementById("filterProvince").value = "";
@@ -2073,6 +2193,7 @@
       document.getElementById("filterClupStatus").value = "all";
       document.getElementById("barChartDropdown").value = "all";
       document.getElementById("filterStackedProvince").value = "all";
+      document.getElementById("filterSupportPie").value = "all";
       applyFilters();
     });
     
