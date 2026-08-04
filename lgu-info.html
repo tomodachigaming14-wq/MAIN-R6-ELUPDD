@@ -778,7 +778,7 @@ footer {
   <div class="page-header">
     <div class="container">
       <h1>LGU Information Management</h1>
-      <p>Comprehensive database of Local Government Units in Western Visayas</p>
+      <p>Comprehensive Database of Local Government Units in Western Visayas</p>
     </div>
   </div>
 
@@ -792,7 +792,7 @@ footer {
     </div>
     
     <div class="search-filter-row">
-      <div class="search-group"><label>🔍 SEARCH</label><input type="text" id="globalSearch" placeholder="Municipality, Mayor, MPDC, Email..."></div>
+      <div class="search-group"><label>🔍 SEARCH LGU</label><input type="text" id="globalSearch" placeholder="Search by LGU Name, Province, Mayor, MPDC..."></div>
       <div class="filter-group"><label>🏞️ FILTER BY PROVINCE</label><select id="provinceFilter"><option value="">All Provinces</option></select></div>
       <div><button class="btn-primary" id="applyFilterBtn" style="padding:12px 28px;">Apply Filter</button></div>
     </div>
@@ -1495,22 +1495,30 @@ footer {
     }
 
     function renderLGUList() {
-      const searchTerm = document.getElementById("globalSearch").value.toLowerCase();
+      const searchTerm = document.getElementById("globalSearch").value.toLowerCase().trim();
       const provinceVal = document.getElementById("provinceFilter").value;
       
       let filtered = lguDatabase.filter(l => {
         const matchProvince = provinceVal ? l.province === provinceVal : true;
-        const matchSearch = searchTerm === "" || 
-          (l.municipality && l.municipality.toLowerCase().includes(searchTerm)) || 
-          (l.mayor && l.mayor.toLowerCase().includes(searchTerm)) || 
-          (l.mpdc && l.mpdc.toLowerCase().includes(searchTerm)) ||
-          (l.email && l.email.toLowerCase().includes(searchTerm));
+        
+        // Search across all relevant LGU fields
+        let matchSearch = true;
+        if (searchTerm !== "") {
+          matchSearch = 
+            (l.municipality && l.municipality.toLowerCase().includes(searchTerm)) || 
+            (l.province && l.province.toLowerCase().includes(searchTerm)) ||
+            (l.mayor && l.mayor.toLowerCase().includes(searchTerm)) || 
+            (l.mpdc && l.mpdc.toLowerCase().includes(searchTerm)) ||
+            (l.email && l.email.toLowerCase().includes(searchTerm)) ||
+            (l.mpdcEmail && l.mpdcEmail.toLowerCase().includes(searchTerm));
+        }
+        
         return matchProvince && matchSearch;
       });
       
       const container = document.getElementById("lguGrid");
       if(filtered.length === 0) { 
-        container.innerHTML = '<div class="no-data" style="text-align:center;padding:40px;color:#94a3b8;">No LGU records found. Click "Register New LGU" to add one.</div>'; 
+        container.innerHTML = '<div class="no-data" style="text-align:center;padding:40px;color:#94a3b8;">No LGU records found matching your search. Click "Register New LGU" to add one.</div>'; 
         document.getElementById("totalCountStat").innerHTML = `📊 Total LGUs: ${lguDatabase.length} | Showing: 0`; 
         return; 
       }
@@ -1556,7 +1564,6 @@ footer {
           <div class="info-row"><span class="info-label">PSGC</span><span class="info-value">${escapeHtml(l.psgc || '—')}</span></div>
           <div class="info-row"><span class="info-label">Region</span><span class="info-value">${escapeHtml(l.region || '—')}</span></div>
           <div class="info-row"><span class="info-label">Income Class</span><span class="info-value">${escapeHtml(l.incomeClass || '—')}</span></div>
-          <div class="info-row hidden-info"><span class="info-label">Planning Period</span><span class="info-value">${escapeHtml(l.planningPeriod || '—')}</span></div>
           <div class="info-row"><span class="info-label">${isProvincial ? 'Governor' : 'Mayor'}</span><span class="info-value">${escapeHtml(l.mayor || '—')}</span></div>
           <div class="info-row"><span class="info-label">${isProvincial ? 'Vice Governor' : 'Vice Mayor'}</span><span class="info-value">${escapeHtml(l.viceMayor || '—')}</span></div>
           <div class="info-row"><span class="info-label">LGU Email</span><span class="info-value">${escapeHtml(l.email || '—')}</span></div>
@@ -1564,7 +1571,6 @@ footer {
           <div class="info-row"><span class="info-label">MPDC</span><span class="info-value">${escapeHtml(l.mpdc || '—')}</span></div>
           <div class="info-row"><span class="info-label">MPDC Email</span><span class="info-value">${escapeHtml(l.mpdcEmail || '—')}</span></div>
           <div class="info-row"><span class="info-label">MPDC Mobile</span><span class="info-value">${escapeHtml(l.mpdcMobile || '—')}</span></div>
-          <div class="info-row hidden-info"><span class="info-label">CLUP Status</span><span class="info-value">${getStatusBadge(l.clupStatus)}</span></div>
         </div>
         
         ${l.recentActivities ? `<div class="info-row" style="grid-column:1/-1;margin-top:6px;border-top:1px solid #eef2ff;padding-top:12px;"><span class="info-label">Recent Activities</span><span class="info-value">${escapeHtml(l.recentActivities)}</span></div>` : ''}
@@ -1613,6 +1619,7 @@ footer {
       
       const isProvincial = l.municipality === "Provincial Government";
       
+      // Remove Planning Period and CLUP Status from edit panel
       panel.innerHTML = `
         <div style="border-top:2px solid #eef2ff;padding-top:20px;margin-top:20px;">
           <h4 style="margin-bottom:16px;font-size:1.1rem;">✏️ Edit ${isProvincial ? 'Provincial Government' : 'LGU'} Information</h4>
@@ -1648,15 +1655,6 @@ footer {
             <div class="form-group"><label>MPDC</label><input id="editMpdc" value="${escapeHtml(l.mpdc || '')}"></div>
             <div class="form-group"><label>MPDC Email</label><input id="editMpdcEmail" value="${escapeHtml(l.mpdcEmail || '')}"></div>
             <div class="form-group"><label>MPDC Mobile</label><input id="editMpdcMobile" value="${escapeHtml(l.mpdcMobile || '')}"></div>
-            <div class="form-group"><label>Planning Period</label><input id="editPlanningPeriod" value="${escapeHtml(l.planningPeriod || '')}"></div>
-            <div class="form-group"><label>CLUP Status</label>
-              <select id="editClupStatus">
-                <option value="">-- Select --</option>
-                <option ${l.clupStatus === 'Updated' ? 'selected' : ''}>Updated</option>
-                <option ${l.clupStatus === 'For Updating' ? 'selected' : ''}>For Updating</option>
-                <option ${l.clupStatus === 'Under Review' ? 'selected' : ''}>Under Review</option>
-              </select>
-            </div>
             <div class="form-group" style="grid-column:1/-1;"><label>Recent Activities</label>
               <textarea id="editRecentActivities" rows="2">${escapeHtml(l.recentActivities || '')}</textarea>
             </div>
@@ -1683,8 +1681,6 @@ footer {
       const l = lguDatabase.find(l => String(l.id) === String(lguId));
       if(!l) return;
       
-      const oldStatus = l.clupStatus;
-      const newStatus = document.getElementById("editClupStatus").value;
       const isProvincial = document.getElementById("editMunicipality").value === "Provincial Government";
       const province = document.getElementById("editProvince").value;
       
@@ -1702,8 +1698,9 @@ footer {
         mpdc: document.getElementById("editMpdc").value,
         mpdcEmail: document.getElementById("editMpdcEmail").value,
         mpdcMobile: document.getElementById("editMpdcMobile").value,
-        planningPeriod: document.getElementById("editPlanningPeriod").value,
-        clupStatus: newStatus,
+        // Keep existing planningPeriod and clupStatus (not editable)
+        planningPeriod: l.planningPeriod || "",
+        clupStatus: l.clupStatus || "",
         recentActivities: document.getElementById("editRecentActivities").value,
         taNeeds: document.getElementById("editTaNeeds").value,
         dateUpdated: document.getElementById("editDateUpdated").value,
@@ -1716,26 +1713,7 @@ footer {
         const updateResult = await updateLGUInSheet(updatedData);
         
         if (updateResult.success) {
-          if (oldStatus !== newStatus && newStatus) {
-            if (isProvincial) {
-              const syncResult = await syncPdpfpStatusDirect(province, newStatus);
-              if (syncResult.success) {
-                showToastMessage(`✅ Provincial PDPFP Status updated to "${newStatus}"`, "success");
-              } else {
-                showToastMessage(`⚠️ LGURecords updated but PDPFP sync failed`, "warning");
-              }
-            } else {
-              const syncResult = await syncClupStatusDirect(updatedData.province, updatedData.municipality, newStatus);
-              if (syncResult.success) {
-                showToastMessage(`✅ CLUP Status updated to "${newStatus}"`, "success");
-              } else {
-                showToastMessage(`⚠️ LGURecords updated but LGUstatus sync failed`, "warning");
-              }
-            }
-          } else {
-            showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} updated successfully!`, "success");
-          }
-          
+          showToastMessage(`✅ LGU ${l.municipality || 'Unknown'} updated successfully!`, "success");
           localStorage.setItem("lgu_master_db_v4", JSON.stringify(lguDatabase));
           renderAll();
           closeModal("viewModal");
@@ -1744,30 +1722,6 @@ footer {
         }
       } catch (error) {
         showToastMessage(`Error: ${error.message}`, "error");
-      }
-    }
-
-    async function syncPdpfpStatusDirect(province, newStatus) {
-      try {
-        const url = `${GOOGLE_SCRIPT_URL}?action=sync_pdpfp_status&province=${encodeURIComponent(province)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
-        const response = await fetch(url, { method: 'GET' });
-        const result = await response.json();
-        return result;
-      } catch (error) {
-        console.error("Error syncing PDPFP:", error);
-        return { success: false, error: error.message };
-      }
-    }
-
-    async function syncClupStatusDirect(province, municipality, newStatus) {
-      try {
-        const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
-        const response = await fetch(url);
-        const result = await response.json();
-        return result;
-      } catch (error) {
-        console.error("Error syncing CLUP:", error);
-        return { success: false, error: error.message };
       }
     }
 
@@ -1862,6 +1816,31 @@ footer {
         isSaving = false;
       }
     });
+
+    // ==================== SYNC STATUS FUNCTIONS ====================
+    async function syncPdpfpStatusDirect(province, newStatus) {
+      try {
+        const url = `${GOOGLE_SCRIPT_URL}?action=sync_pdpfp_status&province=${encodeURIComponent(province)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
+        const response = await fetch(url, { method: 'GET' });
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error syncing PDPFP:", error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    async function syncClupStatusDirect(province, municipality, newStatus) {
+      try {
+        const url = `${GOOGLE_SCRIPT_URL}?action=sync_clup_status&province=${encodeURIComponent(province)}&municipality=${encodeURIComponent(municipality)}&status=${encodeURIComponent(newStatus)}&_=${Date.now()}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        console.error("Error syncing CLUP:", error);
+        return { success: false, error: error.message };
+      }
+    }
 
     // ==================== UI HELPERS ====================
     document.getElementById("applyFilterBtn")?.addEventListener("click", () => renderLGUList());
