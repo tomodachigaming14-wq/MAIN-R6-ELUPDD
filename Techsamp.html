@@ -1542,7 +1542,7 @@
                             <select id="clup_taCategory" required>
                                 <option value="">Select...</option>
                                 <option value="CDRA">CDRA</option>
-                                <option value="Formulation or Updating">Formulation and Updating</option>
+                                <option value="Formulation or Updating">Formulation or Updating</option>
                                 <option value="GIS">GIS</option>
                                 <option value="Implementation and Monitoring">Implementation and Monitoring</option>
                                 <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
@@ -1658,7 +1658,7 @@
                             <select id="pdpfp_taCategory" required>
                                 <option value="">Select...</option>
                                 <option value="CDRA & PCRD">CDRA & PCRD</option>
-                                <option value="Formulation or Updating">Formulation and Updating</option>
+                                <option value="Formulation or Updating">Formulation or Updating</option>
                                 <option value="GIS">GIS</option>
                                 <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
                                 <option value="PlanSmart for SHS">PlanSmart for SHS</option>
@@ -1839,7 +1839,6 @@
                     <option value="December">December</option>
                 </select>
             </div>
-            <!-- NEW: Personnel In-Charge Filter -->
             <div class="filter-group">
                 <label for="filterPIC">PIC:</label>
                 <select id="filterPIC">
@@ -2054,7 +2053,6 @@
         });
     }
 
-    // NEW: Update all PIC filter dropdowns
     function updatePICFilters() {
         const filterIds = ['filterPIC', 'chartPICFilter'];
         filterIds.forEach(id => {
@@ -2552,7 +2550,6 @@
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         document.getElementById('recordsModalTitle').textContent = currentFormType + ' Records';
-        // Update PIC filter dropdown with latest names
         updatePICFilters();
         loadRecords();
     }
@@ -2691,8 +2688,8 @@
                         html += `<td><input type="date" name="${fieldName}" data-key="${col.key}" value="${value}"></td>`;
                     } else if (col.key === 'TA Category') {
                         const categories = currentFormType === 'CLUP' ?
-                            ['CDRA', 'Formulation and Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                            ['CDRA & PCRD', 'Formulation and Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
+                            ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
+                            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
                         html += `<td><select name="${fieldName}" data-key="${col.key}">`;
                         html += `<option value="">Select...</option>`;
                         categories.forEach(cat => {
@@ -2847,7 +2844,6 @@
         }
     };
 
-    // Updated search to include Personnel In-Charge
     searchInput.addEventListener('input', function() {
         const term = this.value.trim().toLowerCase();
         if (!term) {
@@ -2908,8 +2904,8 @@
         const select = document.getElementById('chartCategoryFilter');
         select.innerHTML = '<option value="all">All Categories</option>';
         const categories = currentFormType === 'CLUP' ?
-            ['CDRA', 'Formulation and Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-            ['CDRA & PCRD', 'Formulation and Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
+            ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
+            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
         categories.forEach(cat => {
             const opt = document.createElement('option');
             opt.value = cat;
@@ -2976,8 +2972,8 @@
         if (currentChartType === 'category') {
             const categoryCounts = {};
             const categories = currentFormType === 'CLUP' ?
-                ['CDRA', 'Formulation and Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                ['CDRA & PCRD', 'Formulation and Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
+                ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
+                ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
             categories.forEach(cat => categoryCounts[cat] = 0);
             filtered.forEach(r => {
                 const cat = r['TA Category'] || 'Other';
