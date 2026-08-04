@@ -16,7 +16,7 @@
     }
     .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
 
-    /* --- HEADER (PRESERVED) --- */
+    /* HEADER */
     header {
       background: white;
       border-bottom: 1px solid #eef2ff;
@@ -292,33 +292,7 @@
     }
     .chart-box canvas { max-height: 250px; max-width: 100%; }
 
-    .column-chart-wrapper {
-      grid-column: 1 / -1;
-    }
-    .column-chart-wrapper .chart-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-    .chart-tabs button {
-      padding: 6px 18px;
-      border-radius: 40px;
-      border: 1px solid #d0dfe8;
-      background: white;
-      font-size: 0.7rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #2c4e6b;
-      transition: 0.15s;
-    }
-    .chart-tabs button.active {
-      background: #1e3a8a;
-      color: white;
-      border-color: #1e3a8a;
-    }
-    .chart-tabs button:hover:not(.active) { background: #f1f5f9; }
-
+    /* Table */
     .table-section {
       background: white;
       border-radius: 28px;
@@ -451,7 +425,7 @@
       color: #1f3e54;
     }
 
-    /* Edit Form Styles */
+    /* Edit Form */
     .edit-form-group {
       margin-bottom: 14px;
     }
@@ -561,7 +535,7 @@
 	
 	.badge-under-review { background: #dbeafe; color: #1e40af; }
 
-    @media print { .filter-bar, .chart-tabs, .btn-view, header { display: none !important; } }
+    @media print { .filter-bar, .btn-view, header { display: none !important; } }
     @media (max-width: 760px) { 
       .chart-grid { grid-template-columns: 1fr; }
       .edit-form-row { grid-template-columns: 1fr; }
@@ -571,7 +545,7 @@
   </style>
 </head>
 <body>
-<!-- HEADER (PRESERVED) -->
+<!-- HEADER -->
 <header>
   <div class="container">
     <div class="top-bar">
@@ -616,39 +590,35 @@
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
 
-  <!-- CHART -->
+  <!-- CHART (only pie chart remains) -->
   <div class="chart-grid">
     <div class="chart-box"><h4>🟢 PDPFP Status</h4><canvas id="pieChart"></canvas></div>
   </div>
 
-  <!-- COLUMN CHART + TABS -->
-  <div class="chart-box column-chart-wrapper">
-    <h4>📊 Formulation Phase & Review Status</h4>
-    <div class="chart-tabs" id="columnTabs">
-      <button class="active" data-view="preparatory">Preparatory</button>
-      <button data-view="formulation">Formulation</button>
-      <button data-view="review">Review & Approval</button>
-      <button data-view="unspecified">Unspecified</button>
-    </div>
-    <canvas id="columnChart" style="max-height:220px;"></canvas>
-  </div>
-
-  <!-- TABLE -->
+  <!-- TABLE with new columns -->
   <div class="table-section">
     <h4>📋 Provincial LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUpdpfp_status sheet)</span></h4>
     <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
       <table class="lgu-table" id="lguTable">
         <thead><tr>
+          <th>PSGC</th>
+          <th>Region</th>
           <th>Province</th>
-          <th>Name of Local Chief Executive</th>
-          <th>Name of Vice Governor</th>
-          <th>Name of PPDC</th>
-          <th>PPDC Email</th>
-          <th>PPDC Contact</th>
-          <th>PDPFP Status</th>
+          <th>Start Year (YYYY)</th>
+          <th>End Year (YYYY)</th>
+          <th>Resolution Approving Plan</th>
+          <th>Date of Approval</th>
+          <th>Year Approved</th>
+          <th>Date of Adoption</th>
+          <th>Year Adopted</th>
+          <th>PDPFP/PPFP Status</th>
+          <th>Technical Assistance Provided</th>
+          <th>Support from Other Institutions</th>
+          <th>Name/s of Institutions</th>
+          <th>Remarks</th>
           <th>Action</th>
         </tr></thead>
-        <tbody id="lguTableBody"><tr><td colspan="8" style="text-align:center;">Loading provincial data...</td></tr></tbody>
+        <tbody id="lguTableBody"><tr><td colspan="16" style="text-align:center;">Loading provincial data...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -669,41 +639,87 @@
     <button class="modal-close" id="editModalCloseBtn">&times;</button>
     <h2>✏️ Edit PDPFP Status Record</h2>
     <form id="editForm">
-      <!-- Hidden fields for action and data_type -->
       <input type="hidden" name="action" value="update">
       <input type="hidden" name="data_type" value="pdpfp_status">
       
+      <div class="edit-form-group">
+        <label>PSGC</label>
+        <input type="text" id="editPSGC" name="PSGC" readonly>
+      </div>
+      <div class="edit-form-group">
+        <label>Region</label>
+        <input type="text" id="editRegion" name="Region">
+      </div>
       <div class="edit-form-group">
         <label>Province</label>
         <input type="text" id="editProvince" name="Province" readonly>
       </div>
       <div class="edit-form-group">
-        <label>Name of Local Chief Executive</label>
-        <input type="text" id="editLCE" name="Name of Local Chief Executive">
+        <label>Start Year (YYYY)</label>
+        <input type="text" id="editStartYear" name="Start Year (YYYY)">
       </div>
       <div class="edit-form-group">
-        <label>Name of Vice Governor</label>
-        <input type="text" id="editViceGovernor" name="Name of Vice Governor">
+        <label>End Year (YYYY)</label>
+        <input type="text" id="editEndYear" name="End Year (YYYY)">
       </div>
       <div class="edit-form-group">
-        <label>Name of PPDC</label>
-        <input type="text" id="editPPDC" name="Name of PPDC">
+        <label>Resolution Approving Plan</label>
+        <input type="text" id="editResolution" name="Resolution Approving Plan">
       </div>
       <div class="edit-form-group">
-        <label>PPDC Email</label>
-        <input type="text" id="editPPDCEmail" name="PPDC Email">
+        <label>Date of Approval</label>
+        <input type="text" id="editApprovalDate" name="Date of Approval (MM/DD/YYYY)" placeholder="MM-DD-YYYY">
       </div>
       <div class="edit-form-group">
-        <label>PPDC Contact</label>
-        <input type="text" id="editPPDCContact" name="PPDC Contact">
+        <label>Year Approved</label>
+        <input type="text" id="editYearApproved" name="Year Approved (do not edit)" readonly>
       </div>
       <div class="edit-form-group">
-        <label>PDPFP Status</label>
-        <input type="text" id="editPdpfpStatus" name="PDPFP Status">
+        <label>Date of Adoption</label>
+        <input type="text" id="editAdoptionDate" name="Date of Adoption (DD/MM/YYYY)" placeholder="MM-DD-YYYY">
+      </div>
+      <div class="edit-form-group">
+        <label>Year Adopted</label>
+        <input type="text" id="editYearAdopted" name="Year Adopted (do not edit)" readonly>
+      </div>
+      <div class="edit-form-group">
+        <label>PDPFP/PPFP Status</label>
+        <select id="editPdpfpStatus" name="PDPFP/PPFP Status (do not edit)">
+          <option value="">Select Status</option>
+          <option value="For Updating">For Updating</option>
+          <option value="For Approval">For Approval</option>
+          <option value="Approved/Updated">Approved/Updated</option>
+        </select>
+      </div>
+      <div class="edit-form-group">
+        <label>Technical Assistance Provided</label>
+        <select id="editTechAssistance" name="Technical Assistance Provided">
+          <option value="">Select Assistance</option>
+          <option value="Assisted">Assisted</option>
+          <option value="Trained">Trained</option>
+          <option value="Trained and Assisted">Trained and Assisted</option>
+          <option value="No Assistance">No Assistance</option>
+        </select>
+      </div>
+      <div class="edit-form-group">
+        <label>Support from Other Institutions</label>
+        <select id="editSupportOther" name="Support from Other Institutions">
+          <option value="">Select Support</option>
+          <option value="None">None</option>
+          <option value="National Government Agency">National Government Agency</option>
+          <option value="Donor Agency">Donor Agency</option>
+          <option value="Consultant">Consultant</option>
+          <option value="Academe">Academe</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      <div class="edit-form-group">
+        <label>Name/s of Institutions</label>
+        <input type="text" id="editInstitutions" name="Name/s of Institutions">
       </div>
       <div class="edit-form-group">
         <label>Remarks</label>
-        <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
+        <textarea id="editRemarks" name="Remarks" rows="2"></textarea>
       </div>
       <div class="edit-form-actions">
         <button type="button" class="btn-cancel" id="editCancelBtn">Cancel</button>
@@ -828,51 +844,52 @@
   // ========== DASHBOARD LOGIC ==========
   let rawLguData = [];
   let filteredData = [];
-  let pieChartInstance=null, columnChartInstance=null;
+  let pieChartInstance=null;
 
-  const phaseMap = {
-    "Preparatory phase":"Preparatory",
-    "Phase 1":"Formulation",
-    "Phase 2":"Formulation",
-    "Phase 3":"Formulation",
-    "Phase 4":"Formulation",
-    "Phase 5":"Formulation",
-    "RA 1":"Review & Approval",
-    "RA 2":"Review & Approval",
-    "RA 3":"Review & Approval",
-    "RA 4":"Review & Approval",
-    "RA 5":"Review & Approval",
-    "RA 6":"Review & Approval",
-    "RA 7":"Review & Approval"
-  };
-  const phaseColors = {
-    "Preparatory":"#3b82f6",
-    "Formulation":"#8b5cf6",
-    "Review & Approval":"#f59e0b",
-    "Unspecified":"#94a3b8"
-  };
+  // Helper: Format ISO date to MM-DD-YYYY
+  function formatDateToDisplay(dateStr) {
+    if (!dateStr) return "";
+    // If it's already in MM-DD-YYYY format, return as is
+    if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) return dateStr;
+    // If it's in MM/DD/YYYY format, convert to MM-DD-YYYY
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+      const parts = dateStr.split('/');
+      return parts[0] + '-' + parts[1] + '-' + parts[2];
+    }
+    // Try to parse ISO date
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        const year = d.getFullYear();
+        return month + '-' + day + '-' + year;
+      }
+    } catch(e) {}
+    return dateStr;
+  }
 
-  // ========== FIELD ACCESS FOR PDPFP ==========
+  // Helper: Format date for API (MM-DD-YYYY)
+  function formatDateForApi(dateStr) {
+    if (!dateStr) return "";
+    // If it has slashes, convert to dashes
+    if (dateStr.includes('/')) {
+      const parts = dateStr.split('/');
+      return parts[0] + '-' + parts[1] + '-' + parts[2];
+    }
+    return dateStr;
+  }
+
   function getField(record, field) {
     if (!record) return "—";
-    
-    if (record[field] !== undefined && record[field] !== null && record[field] !== "") {
-      return record[field];
-    }
-    
+    if (record[field] !== undefined && record[field] !== null && record[field] !== "") return record[field];
     for (let key of Object.keys(record)) {
-      if (key.trim() === field.trim()) {
-        return record[key];
-      }
+      if (key.trim() === field.trim()) return record[key];
     }
-    
     const lowerField = field.toLowerCase().trim();
     for (let key of Object.keys(record)) {
-      if (key.toLowerCase().trim() === lowerField) {
-        return record[key];
-      }
+      if (key.toLowerCase().trim() === lowerField) return record[key];
     }
-    
     for (let key of Object.keys(record)) {
       const keyLower = key.toLowerCase().replace(/[^a-z0-9]/g, '');
       const fieldLower = field.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -880,7 +897,6 @@
         return record[key];
       }
     }
-    
     return "—";
   }
 
@@ -890,8 +906,8 @@
   }
 
   function derivePdpfpStatus(record){
-    let status = getField(record, "PDPFP Status");
-    if (status === "—" || status === "") status = getField(record, "PDPFP/CLUP Status");
+    let status = getField(record, "PDPFP/PPFP Status (do not edit)");
+    if (status === "—" || status === "") status = getField(record, "PDPFP Status");
     if (status === "—" || status === "") status = getField(record, "Status");
     if (status === "—" || status === "") status = "Unknown";
     return status;
@@ -900,81 +916,28 @@
   function normalizeStatus(status){
     if (!status) return "Other";
     const s = String(status).toLowerCase().trim();
-    
-    if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
-    
+    if (s === "updated" || s.includes("updated") || s === "yes" || s === "approved/updated") return "Updated";
     if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For updating";
-    
-    if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
-    
+    if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review") || s === "for approval") return "Under Review";
     if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No PDPFP";
-    
     return "Other";
   }
 
-  function getPhaseCategory(phaseName){
-    const key = phaseName?.trim() || "";
-    for (let [k, v] of Object.entries(phaseMap)) {
-      if (key.includes(k) || k.includes(key)) return v;
-    }
-    return "Unspecified";
-  }
-
-  // ========== CHART DATA ==========
   function getPieData(records){
     const statusMap = { "Updated":0, "For updating":0, "Under Review":0 };
     records.forEach(r => {
       const status = derivePdpfpStatus(r);
       const st = normalizeStatus(status);
-      if (st === "Updated") {
-        statusMap["Updated"]++;
-      } else if (st === "For updating") {
-        statusMap["For updating"]++;
-      } else {
-        statusMap["Under Review"]++;
-      }
+      if (st === "Updated") statusMap["Updated"]++;
+      else if (st === "For updating") statusMap["For updating"]++;
+      else statusMap["Under Review"]++;
     });
     return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
-  }
-
-  function getColumnData(records, view){
-    const phaseCounts = {};
-    const allPhases = ["Preparatory phase","Phase 1","Phase 2","Phase 3","Phase 4","Phase 5",
-                       "RA 1","RA 2","RA 3","RA 4","RA 5","RA 6","RA 7"];
-    allPhases.forEach(p => phaseCounts[p] = 0);
-    
-    records.forEach(r => {
-      const status = String(getField(r, "PDPFP Status") || "").toLowerCase();
-      let found = false;
-      
-      for (let p of allPhases) {
-        const pLower = p.toLowerCase();
-        if (status.includes(pLower) || 
-            status.includes(pLower.replace(/\s/g, '')) ||
-            status.includes(pLower.replace('-', ''))) {
-          phaseCounts[p] = (phaseCounts[p]||0) + 1;
-          found = true; break;
-        }
-      }
-      if (!found) {
-        phaseCounts["Unspecified"] = (phaseCounts["Unspecified"]||0) + 1;
-      }
-    });
-    
-    const viewMap = {
-      "preparatory": ["Preparatory phase"],
-      "formulation": ["Phase 1","Phase 2","Phase 3","Phase 4","Phase 5"],
-      "review": ["RA 1","RA 2","RA 3","RA 4","RA 5","RA 6","RA 7"],
-      "unspecified": ["Unspecified"]
-    };
-    const target = viewMap[view] || viewMap["preparatory"];
-    return { labels: target, values: target.map(p => phaseCounts[p]||0) };
   }
 
   function renderStats(records){
     const total = records.length;
     let updated=0, due=0, underReview=0;
-    
     records.forEach(r => {
       const status = derivePdpfpStatus(r);
       const st = normalizeStatus(status);
@@ -982,7 +945,6 @@
       else if (st === "For updating") due++;
       else underReview++;
     });
-    
     document.getElementById("statTotalLgu").innerText = total;
     document.getElementById("statUpdated").innerText = updated;
     document.getElementById("statDue").innerText = due;
@@ -1006,47 +968,33 @@
     });
   }
 
-  function renderColumn(records, view='preparatory'){
-    const data = getColumnData(records, view);
-    const ctx = document.getElementById("columnChart").getContext("2d");
-    if (columnChartInstance) columnChartInstance.destroy();
-    const colors = data.labels.map(l => phaseColors[getPhaseCategory(l)] || '#94a3b8');
-    columnChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          label: 'Count', 
-          data: data.values, 
-          backgroundColor: colors,
-          borderRadius: 4
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        plugins: { legend: { display: false } }, 
-        scales: { y: { beginAtZero: true, stepSize: 1 } }
-      }
-    });
-  }
-
   function renderTable(records){
     const tbody = document.getElementById("lguTableBody");
     if (!records || records.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">No provincial records found in LGUpdpfp_status sheet.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">No provincial records found.</td></tr>`;
       return;
     }
     let html = '';
     records.forEach(r => {
-      const province = getField(r, "Province") || "—";
-      const lce = getField(r, "Name of Local Chief Executive") || "—";
-      const vg = getField(r, "Name of Vice Governor") || "—";
-      const ppdc = getField(r, "Name of PPDC") || "—";
-      const ppdcEmail = getField(r, "PPDC Email") || "—";
-      const ppdcContact = getField(r, "PPDC Contact") || "—";
-      const status = derivePdpfpStatus(r) || "—";
-      
-      const normalized = normalizeStatus(status);
+      const psgc = getField(r, "PSGC");
+      const region = getField(r, "Region");
+      const province = getField(r, "Province");
+      const startYear = getField(r, "Start Year (YYYY)");
+      const endYear = getField(r, "End Year (YYYY)");
+      const resolution = getField(r, "Resolution Approving Plan");
+      const approvalDateRaw = getField(r, "Date of Approval (MM/DD/YYYY)");
+      const approvalDate = formatDateToDisplay(approvalDateRaw);
+      const yearApproved = getField(r, "Year Approved (do not edit)");
+      const adoptionDateRaw = getField(r, "Date of Adoption (DD/MM/YYYY)");
+      const adoptionDate = formatDateToDisplay(adoptionDateRaw);
+      const yearAdopted = getField(r, "Year Adopted (do not edit)");
+      const pdpfpStatus = derivePdpfpStatus(r);
+      const techAssistance = getField(r, "Technical Assistance Provided");
+      const supportOther = getField(r, "Support from Other Institutions");
+      const institutions = getField(r, "Name/s of Institutions");
+      const remarks = getField(r, "Remarks");
+
+      const normalized = normalizeStatus(pdpfpStatus);
       const statusClass = normalized === "Updated" ? "badge-updated" : 
                           normalized === "For updating" ? "badge-due" : 
                           normalized === "Under Review" ? "badge-under-review" : "badge-other";
@@ -1054,13 +1002,21 @@
       const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
       
       html += `<tr>
+        <td>${escapeHtml(psgc)}</td>
+        <td>${escapeHtml(region)}</td>
         <td><strong>${escapeHtml(province)}</strong></td>
-        <td>${escapeHtml(lce)}</td>
-        <td>${escapeHtml(vg)}</td>
-        <td>${escapeHtml(ppdc)}</td>
-        <td>${escapeHtml(ppdcEmail)}</td>
-        <td>${escapeHtml(ppdcContact)}</td>
-        <td><span class="badge-status ${statusClass}">${escapeHtml(status)}</span></td>
+        <td>${escapeHtml(startYear)}</td>
+        <td>${escapeHtml(endYear)}</td>
+        <td>${escapeHtml(resolution)}</td>
+        <td>${escapeHtml(approvalDate)}</td>
+        <td>${escapeHtml(yearApproved)}</td>
+        <td>${escapeHtml(adoptionDate)}</td>
+        <td>${escapeHtml(yearAdopted)}</td>
+        <td><span class="badge-status ${statusClass}">${escapeHtml(pdpfpStatus)}</span></td>
+        <td>${escapeHtml(techAssistance)}</td>
+        <td>${escapeHtml(supportOther)}</td>
+        <td>${escapeHtml(institutions)}</td>
+        <td>${escapeHtml(remarks)}</td>
         <td>
           <div class="action-cell">
             <button class="btn-view" data-record='${recordJson}'>View</button>
@@ -1091,21 +1047,30 @@
   function showDetailModal(record){
     const modal = document.getElementById("detailModal");
     const body = document.getElementById("modalBody");
-    
     const fields = [
+      { label: "PSGC", key: "PSGC" },
+      { label: "Region", key: "Region" },
       { label: "Province", key: "Province" },
-      { label: "Name of Local Chief Executive", key: "Name of Local Chief Executive" },
-      { label: "Name of Vice Governor", key: "Name of Vice Governor" },
-      { label: "Name of PPDC", key: "Name of PPDC" },
-      { label: "PPDC Email", key: "PPDC Email" },
-      { label: "PPDC Contact", key: "PPDC Contact" },
-      { label: "PDPFP Status", key: "PDPFP Status" },
+      { label: "Start Year (YYYY)", key: "Start Year (YYYY)" },
+      { label: "End Year (YYYY)", key: "End Year (YYYY)" },
+      { label: "Resolution Approving Plan", key: "Resolution Approving Plan" },
+      { label: "Date of Approval", key: "Date of Approval (MM/DD/YYYY)" },
+      { label: "Year Approved", key: "Year Approved (do not edit)" },
+      { label: "Date of Adoption", key: "Date of Adoption (DD/MM/YYYY)" },
+      { label: "Year Adopted", key: "Year Adopted (do not edit)" },
+      { label: "PDPFP/PPFP Status", key: "PDPFP/PPFP Status (do not edit)" },
+      { label: "Technical Assistance Provided", key: "Technical Assistance Provided" },
+      { label: "Support from Other Institutions", key: "Support from Other Institutions" },
+      { label: "Name/s of Institutions", key: "Name/s of Institutions" },
       { label: "Remarks", key: "Remarks" }
     ];
-    
     let html = '';
     fields.forEach(f => {
-      const value = getField(record, f.key);
+      let value = getField(record, f.key);
+      // Format dates for display
+      if (f.key === "Date of Approval (MM/DD/YYYY)" || f.key === "Date of Adoption (DD/MM/YYYY)") {
+        value = formatDateToDisplay(value);
+      }
       html += `<div class="detail-row">
         <div class="detail-label">${f.label}</div>
         <div class="detail-value">${escapeHtml(value)}</div>
@@ -1115,75 +1080,78 @@
     modal.classList.add('active');
   }
 
-  // ========== EDIT MODAL FUNCTIONS ==========
   function openEditModal(record) {
     currentEditRecord = record;
     const modal = document.getElementById("editModal");
-    
+    document.getElementById("editPSGC").value = getFieldValue(record, "PSGC");
+    document.getElementById("editRegion").value = getFieldValue(record, "Region");
     document.getElementById("editProvince").value = getFieldValue(record, "Province");
-    document.getElementById("editLCE").value = getFieldValue(record, "Name of Local Chief Executive");
-    document.getElementById("editViceGovernor").value = getFieldValue(record, "Name of Vice Governor");
-    document.getElementById("editPPDC").value = getFieldValue(record, "Name of PPDC");
-    document.getElementById("editPPDCEmail").value = getFieldValue(record, "PPDC Email");
-    document.getElementById("editPPDCContact").value = getFieldValue(record, "PPDC Contact");
-    document.getElementById("editPdpfpStatus").value = getFieldValue(record, "PDPFP Status");
-    document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
+    document.getElementById("editStartYear").value = getFieldValue(record, "Start Year (YYYY)");
+    document.getElementById("editEndYear").value = getFieldValue(record, "End Year (YYYY)");
+    document.getElementById("editResolution").value = getFieldValue(record, "Resolution Approving Plan");
     
+    // Format dates for edit fields (MM-DD-YYYY)
+    const approvalRaw = getFieldValue(record, "Date of Approval (MM/DD/YYYY)");
+    document.getElementById("editApprovalDate").value = formatDateToDisplay(approvalRaw);
+    
+    document.getElementById("editYearApproved").value = getFieldValue(record, "Year Approved (do not edit)");
+    
+    const adoptionRaw = getFieldValue(record, "Date of Adoption (DD/MM/YYYY)");
+    document.getElementById("editAdoptionDate").value = formatDateToDisplay(adoptionRaw);
+    
+    document.getElementById("editYearAdopted").value = getFieldValue(record, "Year Adopted (do not edit)");
+    document.getElementById("editPdpfpStatus").value = getFieldValue(record, "PDPFP/PPFP Status (do not edit)");
+    document.getElementById("editTechAssistance").value = getFieldValue(record, "Technical Assistance Provided");
+    document.getElementById("editSupportOther").value = getFieldValue(record, "Support from Other Institutions");
+    document.getElementById("editInstitutions").value = getFieldValue(record, "Name/s of Institutions");
+    document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
     document.getElementById("editSaveBtn").disabled = false;
     modal.classList.add('active');
   }
 
-  // ========== SAVE FUNCTION ==========
   async function saveEditedRecord(formData) {
     if (isSaving) return;
     isSaving = true;
     document.getElementById("editSaveBtn").disabled = true;
     document.getElementById("editSaveBtn").innerHTML = "⏳ Saving...";
-    
     try {
+      // Format dates for API (ensure MM-DD-YYYY)
+      const approvalDate = formData.get('Date of Approval (MM/DD/YYYY)') || '';
+      const adoptionDate = formData.get('Date of Adoption (DD/MM/YYYY)') || '';
+      
       const record = {
+        'PSGC': formData.get('PSGC') || '',
+        'Region': formData.get('Region') || '',
         'Province': formData.get('Province') || '',
-        'Name of Local Chief Executive': formData.get('Name of Local Chief Executive') || '',
-        'Name of Vice Governor': formData.get('Name of Vice Governor') || '',
-        'Name of PPDC': formData.get('Name of PPDC') || '',
-        'PPDC Email': formData.get('PPDC Email') || '',
-        'PPDC Contact': formData.get('PPDC Contact') || '',
-        'PDPFP Status': formData.get('PDPFP Status') || '',
+        'Start Year (YYYY)': formData.get('Start Year (YYYY)') || '',
+        'End Year (YYYY)': formData.get('End Year (YYYY)') || '',
+        'Resolution Approving Plan': formData.get('Resolution Approving Plan') || '',
+        'Date of Approval (MM/DD/YYYY)': formatDateForApi(approvalDate),
+        'Year Approved (do not edit)': formData.get('Year Approved (do not edit)') || '',
+        'Date of Adoption (DD/MM/YYYY)': formatDateForApi(adoptionDate),
+        'Year Adopted (do not edit)': formData.get('Year Adopted (do not edit)') || '',
+        'PDPFP/PPFP Status (do not edit)': formData.get('PDPFP/PPFP Status (do not edit)') || '',
+        'Technical Assistance Provided': formData.get('Technical Assistance Provided') || '',
+        'Support from Other Institutions': formData.get('Support from Other Institutions') || '',
+        'Name/s of Institutions': formData.get('Name/s of Institutions') || '',
         'Remarks': formData.get('Remarks') || ''
       };
-      
       console.log("📝 Sending update for PDPFP:", record);
-      
       const params = new URLSearchParams();
       params.append('action', 'update');
       params.append('data_type', 'pdpfp_status');
-      
       for (let [key, value] of Object.entries(record)) {
         if (value !== undefined && value !== null && value !== '') {
           params.append(key, value);
         }
       }
-      
       params.append('data', JSON.stringify(record));
-      
       const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
-      
-      const response = await fetch(url, {
-        method: 'GET',
-        mode: 'no-cors'
-      });
-      
-      console.log("✅ Update request sent successfully");
-      
+      await fetch(url, { method: 'GET', mode: 'no-cors' });
       showToast("✅ Save request sent successfully!", "");
       document.getElementById("editModal").classList.remove('active');
-      
-      setTimeout(async () => {
-        await refreshData();
-      }, 2500);
-      
+      setTimeout(async () => { await refreshData(); }, 2500);
       return { success: true };
-      
     } catch (error) {
       console.error("❌ Error saving record:", error);
       showToast("❌ Error saving record: " + error.message, "error");
@@ -1214,7 +1182,6 @@
     }
   }
 
-  // ========== FILTERS ==========
   function populateFilters(records){
     const provinceSet = new Set();
     const statusSet = new Set();
@@ -1224,15 +1191,12 @@
       if (p !== "—") provinceSet.add(p);
       if (s !== "—") statusSet.add(s);
     });
-    
     const provSelect = document.getElementById("filterProvince");
     const statusSelect = document.getElementById("filterStatus");
     const currentProv = provSelect.value;
     const currentStatus = statusSelect.value;
-    
     provSelect.innerHTML = `<option value="">All Provinces</option>` + [...provinceSet].sort().map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
     statusSelect.innerHTML = `<option value="all">All Status</option>` + [...statusSet].sort().map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-    
     if (currentProv) provSelect.value = currentProv;
     if (currentStatus) statusSelect.value = currentStatus;
   }
@@ -1240,44 +1204,28 @@
   function applyFilters(){
     const prov = document.getElementById("filterProvince").value;
     const statusFilter = document.getElementById("filterStatus").value;
-    
     let filtered = rawLguData;
     if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
     if (statusFilter && statusFilter !== 'all') {
       filtered = filtered.filter(r => (derivePdpfpStatus(r) || "") === statusFilter);
     }
-    
     filteredData = filtered;
-    
     renderStats(filtered);
     renderPie(filtered);
-    
-    const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
-    renderColumn(filtered, activeView);
-    
     renderTable(filtered);
   }
 
-  // ========== FETCH DATA FROM LGUpdpfp_status SHEET ==========
   async function fetchPdpfpStatusData(){
     try {
       const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=pdpfp_status&_=${Date.now()}`);
-      
-      if (!resp.ok) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
-      }
-      
+      if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
       const data = await resp.json();
       console.log("📊 PDPFP Status data received:", data);
-      
       if (Array.isArray(data) && data.length > 0) {
         console.log(`✅ Found ${data.length} provincial PDPFP records`);
         return data;
-      } else if (Array.isArray(data) && data.length === 0) {
-        console.log("ℹ️ No PDPFP status records found in LGUpdpfp_status sheet");
-        return getFallbackData();
       } else {
-        console.warn("Unexpected data format received:", data);
+        console.log("ℹ️ No PDPFP status records found, using fallback");
         return getFallbackData();
       }
     } catch(e){ 
@@ -1289,66 +1237,18 @@
 
   function getFallbackData(){
     return [
-      { 
-        "Province": "AKLAN", 
-        "Name of Local Chief Executive": "Jose Enrique M. Miraflores", 
-        "Name of Vice Governor": "Dexter M. Calizo", 
-        "Name of PPDC": "Engr. Roger M. Esto", 
-        "PPDC Email": "ppdoaklan@gmail.com", 
-        "PPDC Contact": "09176238440\n(036) 268-5442", 
-        "PDPFP Status": "Under Review", 
-        "Remarks": "" 
-      },
-      { 
-        "Province": "ANTIQUE", 
-        "Name of Local Chief Executive": "Rhodora J. Cadiao", 
-        "Name of Vice Governor": "Edgar D. Denosta", 
-        "Name of PPDC": "Engr. Nicasio A. Dela Cruz", 
-        "PPDC Email": "ppdoantique@gmail.com", 
-        "PPDC Contact": "09176238441\n(036) 268-5443", 
-        "PDPFP Status": "Updated", 
-        "Remarks": "" 
-      },
-      { 
-        "Province": "CAPIZ", 
-        "Name of Local Chief Executive": "Jose C. Tumbokon", 
-        "Name of Vice Governor": "Vincent P. Soriano", 
-        "Name of PPDC": "Engr. Mario L. Fernandez", 
-        "PPDC Email": "ppdocapiz@gmail.com", 
-        "PPDC Contact": "09176238442\n(036) 268-5444", 
-        "PDPFP Status": "For updating", 
-        "Remarks": "" 
-      },
-      { 
-        "Province": "GUIMARAS", 
-        "Name of Local Chief Executive": "Joaquin Carlos Rahman A. Nava", 
-        "Name of Vice Governor": "Edward S. Gando", 
-        "Name of PPDC": "Engr. Maria Lourdes A. Villanueva", 
-        "PPDC Email": "ppdoguimaras@gmail.com", 
-        "PPDC Contact": "09176238443\n(036) 268-5445", 
-        "PDPFP Status": "Under Review", 
-        "Remarks": "" 
-      },
-      { 
-        "Province": "ILOILO", 
-        "Name of Local Chief Executive": "Arthur R. Defensor Jr.", 
-        "Name of Vice Governor": "Christine S. Garin", 
-        "Name of PPDC": "Engr. Jose S. Cordero", 
-        "PPDC Email": "ppdoiloilo@gmail.com", 
-        "PPDC Contact": "09176238444\n(036) 268-5446", 
-        "PDPFP Status": "Updated", 
-        "Remarks": "" 
-      }
+      { "PSGC":"06400000","Region":"Region VI","Province":"AKLAN","Start Year (YYYY)":"2023","End Year (YYYY)":"2028","Resolution Approving Plan":"Res. No. 2023-01","Date of Approval (MM/DD/YYYY)":"03-15-2023","Year Approved (do not edit)":"2023","Date of Adoption (DD/MM/YYYY)":"03-15-2023","Year Adopted (do not edit)":"2023","PDPFP/PPFP Status (do not edit)":"For Approval","Technical Assistance Provided":"Assisted","Support from Other Institutions":"National Government Agency","Name/s of Institutions":"DILG","Remarks":"Initial review" },
+      { "PSGC":"06410000","Region":"Region VI","Province":"ANTIQUE","Start Year (YYYY)":"2022","End Year (YYYY)":"2027","Resolution Approving Plan":"Res. No. 2022-05","Date of Approval (MM/DD/YYYY)":"06-20-2022","Year Approved (do not edit)":"2022","Date of Adoption (DD/MM/YYYY)":"06-20-2022","Year Adopted (do not edit)":"2022","PDPFP/PPFP Status (do not edit)":"Approved/Updated","Technical Assistance Provided":"Trained and Assisted","Support from Other Institutions":"None","Name/s of Institutions":"","Remarks":"Approved" },
+      { "PSGC":"06420000","Region":"Region VI","Province":"CAPIZ","Start Year (YYYY)":"2021","End Year (YYYY)":"2026","Resolution Approving Plan":"Res. No. 2021-12","Date of Approval (MM/DD/YYYY)":"11-10-2021","Year Approved (do not edit)":"2021","Date of Adoption (DD/MM/YYYY)":"11-10-2021","Year Adopted (do not edit)":"2021","PDPFP/PPFP Status (do not edit)":"For Updating","Technical Assistance Provided":"No Assistance","Support from Other Institutions":"Consultant","Name/s of Institutions":"NEDA","Remarks":"Due for update" }
     ];
   }
 
-  // ========== INIT ==========
   document.addEventListener('DOMContentLoaded', async function(){
     checkSession(); 
     renderMainNavigation(); 
     renderUserMenu();
 
-    document.getElementById("lguTableBody").innerHTML = `<tr><td colspan="8" style="text-align:center;">⏳ Loading data from LGUpdpfp_status sheet...</td></tr>`;
+    document.getElementById("lguTableBody").innerHTML = `<tr><td colspan="16" style="text-align:center;">⏳ Loading data from LGUpdpfp_status sheet...</td></tr>`;
 
     const data = await fetchPdpfpStatusData();
     if (data && data.length > 0) {
@@ -1364,19 +1264,10 @@
 
     document.getElementById("filterProvince").addEventListener('change', applyFilters);
     document.getElementById("filterStatus").addEventListener('change', applyFilters);
-    
     document.getElementById("resetFiltersBtn").addEventListener('click', function(){
       document.getElementById("filterProvince").value = "";
       document.getElementById("filterStatus").value = "all";
       applyFilters();
-    });
-
-    document.querySelectorAll('#columnTabs button').forEach(btn => {
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('#columnTabs button').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        renderColumn(filteredData, this.dataset.view);
-      });
     });
 
     document.getElementById('modalCloseBtn').addEventListener('click', function(){
