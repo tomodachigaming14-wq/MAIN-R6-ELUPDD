@@ -1486,12 +1486,49 @@ footer {
       </div>
       <div class="card-body">
         <div class="zoning-subnav no-print">
-          <button class="subnav-link active" onclick="switchView('dataEntry')">📝 Data Entry</button>
+          <button class="subnav-link" onclick="switchView('dashboard')">📊 Dashboard</button>
+          <button class="subnav-link" onclick="switchView('dataEntry')">📝 Data Entry</button>
           <button class="subnav-link" onclick="switchView('status')">📋 Status Tracking</button>
           <button class="subnav-link" onclick="switchView('accomplishment')">✅ Accomplishment</button>
         </div>
-        
-        <div id="dataEntryView" class="zoning-view active">
+
+        <!-- DASHBOARD VIEW - NOW FIRST -->
+        <div id="dashboardView" class="zoning-view active">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div style="background: #f0f9ff; border-radius: 20px; padding: 20px; text-align: center; border-left: 5px solid #2563eb;">
+              <div style="font-size: 2.5rem; font-weight: 700; color: #1e3a8a;" id="totalApplications">0</div>
+              <div style="font-size: 0.8rem; color: #475569;">Total Applications</div>
+            </div>
+            <div style="background: #fefce8; border-radius: 20px; padding: 20px; text-align: center; border-left: 5px solid #eab308;">
+              <div style="font-size: 2.5rem; font-weight: 700; color: #854d0e;" id="pendingApplications">0</div>
+              <div style="font-size: 0.8rem; color: #475569;">Pending (For Review/RD/Release)</div>
+            </div>
+            <div style="background: #ecfdf5; border-radius: 20px; padding: 20px; text-align: center; border-left: 5px solid #10b981;">
+              <div style="font-size: 2.5rem; font-weight: 700; color: #065f46;" id="releasedApplications">0</div>
+              <div style="font-size: 0.8rem; color: #475569;">Released Clearances</div>
+            </div>
+            <div style="background: #fef2f2; border-radius: 20px; padding: 20px; text-align: center; border-left: 5px solid #ef4444;">
+              <div style="font-size: 2.5rem; font-weight: 700; color: #991b1b;" id="disapprovedApplications">0</div>
+              <div style="font-size: 0.8rem; color: #475569;">Disapproved</div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: white; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0;">
+              <h4 style="margin-bottom: 15px; font-size: 1rem;">📅 Status Breakdown</h4>
+              <div id="statusBreakdown"></div>
+            </div>
+            <div style="background: white; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0;">
+              <h4 style="margin-bottom: 15px; font-size: 1rem;">📈 Monthly Issuance Trend</h4>
+              <div id="monthlyTrend"></div>
+            </div>
+          </div>
+          <div style="margin-top: 20px; background: white; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0;">
+            <h4 style="margin-bottom: 15px; font-size: 1rem;">🏷️ Recent Activity</h4>
+            <div id="recentActivity"></div>
+          </div>
+        </div>
+
+        <div id="dataEntryView" class="zoning-view">
           <form id="locationalForm"  onsubmit="return saveLocationalRecord(event)">
 		  
 		  <!-- Latest Numbers Display Panel -->
@@ -1650,6 +1687,7 @@ footer {
 			</table>
           </div>
         </div>
+
       </div>
     </div>
   </main>
@@ -2142,12 +2180,14 @@ function validateDecisionNo(decNo) {
         localStorage.setItem("locationalRecords", JSON.stringify(locationalRecords));
         refreshStatusTable();
         refreshAccTable();
+        refreshDashboard();
     } catch (e) {
         console.error("Fetch error:", e);
         const local = localStorage.getItem("locationalRecords");
         locationalRecords = local ? JSON.parse(local) : [];
         refreshStatusTable();
         refreshAccTable();
+        refreshDashboard();
     }
 }
 
@@ -2240,6 +2280,7 @@ function validateDecisionNo(decNo) {
             clearForm();
             refreshStatusTable();
             refreshAccTable();
+            refreshDashboard();
             showToastMessage(`✅ Saved: ${record.applicationNo}`);
         } else {
             if (currentEditingId) {
@@ -2252,6 +2293,7 @@ function validateDecisionNo(decNo) {
             clearForm();
             refreshStatusTable();
             refreshAccTable();
+            refreshDashboard();
             showToastMessage(`⚠️ Saved locally only: ${record.applicationNo}`);
         }
     } catch (error) {
@@ -2272,6 +2314,7 @@ function validateDecisionNo(decNo) {
             localStorage.setItem("locationalRecords", JSON.stringify(locationalRecords));
             refreshStatusTable();
             refreshAccTable();
+            refreshDashboard();
             showToastMessage(`Status updated to "${newStatus}"`);
         }
     }
@@ -2906,7 +2949,7 @@ function printRecord(id) {
 }
 
     function switchView(view) {
-        const views = { dataEntry: "dataEntryView", status: "statusView", accomplishment: "accomplishmentView" };
+        const views = { dataEntry: "dataEntryView", status: "statusView", accomplishment: "accomplishmentView", dashboard: "dashboardView" };
         Object.values(views).forEach((v) => {
             const el = document.getElementById(v);
             if (el) el.classList.remove("active");
@@ -2915,14 +2958,16 @@ function printRecord(id) {
         document.querySelectorAll(".subnav-link").forEach((btn, i) => {
             btn.classList.remove("active");
             if (
-                (view === "dataEntry" && i === 0) ||
-                (view === "status" && i === 1) ||
-                (view === "accomplishment" && i === 2)
+                (view === "dataEntry" && i === 1) ||
+                (view === "status" && i === 2) ||
+                (view === "accomplishment" && i === 3) ||
+                (view === "dashboard" && i === 0)
             )
                 btn.classList.add("active");
         });
         if (view === "status") refreshStatusTable();
         if (view === "accomplishment") refreshAccTable();
+        if (view === "dashboard") refreshDashboard();
     }
     function closeModal() {
         document.getElementById("dataModal").classList.remove("active");
@@ -4262,6 +4307,7 @@ async function deleteRecord(id) {
         
         refreshStatusTable();
         refreshAccTable();
+        refreshDashboard();
     }
 }
 
@@ -4569,6 +4615,76 @@ function removeBoldFromLabels() {
 
 // Call this before printing
 removeBoldFromLabels();
+
+// ===== DASHBOARD FUNCTIONS =====
+function refreshDashboard() {
+    const total = locationalRecords.length;
+    const pending = locationalRecords.filter(r => r.status !== 'Released' && r.status !== 'Disapproved').length;
+    const released = locationalRecords.filter(r => r.status === 'Released').length;
+    const disapproved = locationalRecords.filter(r => r.decision === 'Disapproved').length;
+    
+    document.getElementById('totalApplications').textContent = total;
+    document.getElementById('pendingApplications').textContent = pending;
+    document.getElementById('releasedApplications').textContent = released;
+    document.getElementById('disapprovedApplications').textContent = disapproved;
+    
+    // Status breakdown
+    const statuses = ['For Review', 'For RD Signature', 'For Release', 'Released'];
+    const breakdown = document.getElementById('statusBreakdown');
+    breakdown.innerHTML = statuses.map(s => {
+        const count = locationalRecords.filter(r => r.status === s).length;
+        return `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;">
+            <span>${s}</span>
+            <span style="font-weight:600;">${count}</span>
+        </div>`;
+    }).join('');
+    
+    // Monthly trend (last 6 months)
+    const now = new Date();
+    const months = [];
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        months.push(d.toLocaleString('default', { month: 'short', year: 'numeric' }));
+    }
+    const trend = document.getElementById('monthlyTrend');
+    trend.innerHTML = months.map(m => {
+        const count = locationalRecords.filter(r => {
+            if (!r.dateIssue) return false;
+            const d = new Date(r.dateIssue);
+            return d.toLocaleString('default', { month: 'short', year: 'numeric' }) === m;
+        }).length;
+        const barHeight = Math.max(4, count * 8);
+        return `<div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+            <div style="background:#2563eb; width:80%; height:${barHeight}px; border-radius:4px 4px 0 0; min-height:4px;"></div>
+            <span style="font-size:0.65rem; margin-top:4px; color:#475569;">${m}</span>
+            <span style="font-size:0.6rem; color:#94a3b8;">${count}</span>
+        </div>`;
+    }).join('');
+    
+    // Recent activity
+    const recent = locationalRecords.slice(-5).reverse();
+    const activity = document.getElementById('recentActivity');
+    if (recent.length === 0) {
+        activity.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:10px;">No recent activity</div>';
+    } else {
+        activity.innerHTML = recent.map(r => {
+            const statusColor = r.status === 'Released' ? '#10b981' : r.status === 'Disapproved' ? '#ef4444' : '#eab308';
+            return `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9; align-items:center;">
+                <div>
+                    <strong>${escapeHtml(r.applicationNo)}</strong>
+                    <span style="font-size:0.75rem; color:#64748b; margin-left:8px;">${escapeHtml(r.applicant)}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <span style="font-size:0.7rem; color:#94a3b8;">${formatDate(r.dateIssue)}</span>
+                    <span style="background:${statusColor}; color:white; padding:2px 10px; border-radius:20px; font-size:0.6rem; font-weight:600;">${r.status}</span>
+                </div>
+            </div>`;
+        }).join('');
+    }
+}
+
+// Make refreshDashboard globally available
+window.refreshDashboard = refreshDashboard;
 
 </script>
 
