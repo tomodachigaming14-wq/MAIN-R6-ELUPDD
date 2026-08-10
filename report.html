@@ -1803,178 +1803,276 @@ footer {
     }
 
     function printClupSummary() {
-      // Get the current filter values
-      const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
-      const provinceValue = document.getElementById("clupProvinceFilter")?.value || "all";
+  // Get the current filter values
+  const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
+  const provinceValue = document.getElementById("clupProvinceFilter")?.value || "all";
+  
+  // Build the title
+  let statusLabel = "All";
+  if (filterValue === "Updated") statusLabel = "Updated";
+  else if (filterValue === "For Updating") statusLabel = "For Updating";
+  else if (filterValue === "Under Review") statusLabel = "Under Review";
+  
+  let provinceLabel = "";
+  if (provinceValue !== "all") {
+    provinceLabel = ` (${provinceValue})`;
+  }
+  
+  let reportTitle = `Status of CLUP/ZO Preparation/Updating: ${statusLabel}${provinceLabel}`;
+  
+  // Get the filtered data based on the current filters
+  let dataToPrint = [...clupStatusData];
+  
+  // Filter by status
+  if (filterValue !== "all") {
+    dataToPrint = dataToPrint.filter(rec => {
+      const clupStatus = rec["CLUP Status"] || rec["CLUPStatus"] || rec["status"] || "";
+      const statusLower = String(clupStatus).toLowerCase().trim();
+      const filterLower = String(filterValue).toLowerCase().trim();
       
-      // Build the title
-      let statusLabel = "All";
-      if (filterValue === "Updated") statusLabel = "Updated";
-      else if (filterValue === "For Updating") statusLabel = "For Updating";
-      else if (filterValue === "Under Review") statusLabel = "Under Review";
-      
-      let provinceLabel = "";
-      if (provinceValue !== "all") {
-        provinceLabel = ` (${provinceValue})`;
+      if (filterLower === "updated") {
+        return statusLower.includes("updated") || statusLower === "updated";
+      } else if (filterLower === "for updating") {
+        return statusLower.includes("for updating") || statusLower === "for updating";
+      } else if (filterLower === "under review") {
+        return statusLower.includes("under review") || statusLower === "under review";
       }
-      
-      let reportTitle = `Status of CLUP/ZO Preparation/Updating: ${statusLabel}${provinceLabel}`;
-      
-      // Get the filtered data based on the current filters
-      let dataToPrint = [...clupStatusData];
-      
-      // Filter by status
-      if (filterValue !== "all") {
-        dataToPrint = dataToPrint.filter(rec => {
-          const clupStatus = rec["CLUP Status"] || rec["CLUPStatus"] || rec["status"] || "";
-          const statusLower = String(clupStatus).toLowerCase().trim();
-          const filterLower = String(filterValue).toLowerCase().trim();
-          
-          if (filterLower === "updated") {
-            return statusLower.includes("updated") || statusLower === "updated";
-          } else if (filterLower === "for updating") {
-            return statusLower.includes("for updating") || statusLower === "for updating";
-          } else if (filterLower === "under review") {
-            return statusLower.includes("under review") || statusLower === "under review";
-          }
-          return statusLower === filterLower;
-        });
-      }
-      
-      // Filter by province
-      if (provinceValue !== "all") {
-        dataToPrint = dataToPrint.filter(rec => {
-          const province = rec["Province"] || rec["province"] || "";
-          return province === provinceValue;
-        });
-      }
-      
-      // Sort by City/Municipality
-      dataToPrint.sort((a, b) => {
-        const cityA = (a["City/Municipality"] || a["city"] || a["City"] || "").toUpperCase();
-        const cityB = (b["City/Municipality"] || b["city"] || b["City"] || "").toUpperCase();
-        return cityA.localeCompare(cityB);
-      });
-      
-      // Build summary table - WITHOUT the summary cards
-      let tableHtml = `
-        <html>
-        <head>
-          <style>
-            body { font-family: 'Inter', sans-serif; padding: 40px; color: #0f2b3a; }
-            .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-            .header-title h1 { color: #1e3a8a; margin: 0; font-size: 1.8rem; }
-            .header-date { font-size: 0.85rem; color: #475569; }
-            .sub-header { color: #475569; margin-bottom: 30px; font-size: 0.95rem; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th { background: #1e3a8a; color: white; padding: 12px; text-align: left; }
-            td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
-            tr:hover { background: #f8fafc; }
-            .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 0.8rem; color: #64748b; text-align: center; }
-            .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-            .status-updated { background: #dcfce7; color: #166534; }
-            .status-for-updating { background: #fef3c7; color: #92400e; }
-            .status-under-review { background: #dbeafe; color: #1e40af; }
-            .status-default { background: #e2e8f0; color: #475569; }
-            .phase-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 500; margin-left: 4px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-            .phase-badge.phase { background: #e0f2fe; color: #0369a1; border-color: #b8dfff; }
-            .phase-badge.ra { background: #fef3c7; color: #92400e; border-color: #fde68a; }
-            .phase-badge.pre { background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
-          </style>
-        </head>
-        <body>
-          <div class="header-row">
-            <div class="header-title">
-              <h1>${reportTitle}</h1>
-            </div>
-            <div class="header-date">
-              ${new Date().toLocaleString()}
-            </div>
-          </div>
-          <div class="sub-header">DHSUD Region VI - ELUPDD Integrated Database and Information System</div>
-          
-          <table>
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>City/Municipality</th>
-                <th>Province</th>
-                <th>Latest Plan Approval</th>
-                <th>Resolution No.</th>
-                <th>Date Approved</th>
-                <th>Start Year</th>
-                <th>End Year</th>
-                <th>Specific Status</th>
-              </tr>
-            </thead>
-            <tbody>`;
-      
-      dataToPrint.forEach((rec, idx) => {
-        const row = mapClupToRow(rec, idx);
-        const statusDisplay = row["Specific Status"];
-        
-        // Determine main status class for printing
-        let mainClass = "status-default";
-        const mainStatus = row._mainStatus || "Other";
-        if (mainStatus === "Updated") mainClass = "status-updated";
-        else if (mainStatus === "For Updating") mainClass = "status-for-updating";
-        else if (mainStatus === "Under Review") mainClass = "status-under-review";
-        
-        // Build status HTML for print
-        let statusHtml = '';
-        const hasPhase = statusDisplay.includes('(') && statusDisplay.includes(')');
-        if (hasPhase) {
-          const parts = statusDisplay.split('(');
-          const mainPart = parts[0].trim();
-          const phasePart = parts[1] ? parts[1].replace(')', '').trim() : '';
-          let phaseClass = '';
-          const phaseType = row._phaseType || '';
-          if (phaseType === 'phase') phaseClass = 'phase';
-          else if (phaseType === 'ra') phaseClass = 'ra';
-          else if (phaseType === 'pre') phaseClass = 'pre';
-          statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(mainPart)}</span>`;
-          if (phasePart && phasePart !== "None Indicated") {
-            statusHtml += ` <span class="phase-badge ${phaseClass}">${escapeHtml(phasePart)}</span>`;
-          }
-        } else {
-          statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(statusDisplay)}</span>`;
+      return statusLower === filterLower;
+    });
+  }
+  
+  // Filter by province
+  if (provinceValue !== "all") {
+    dataToPrint = dataToPrint.filter(rec => {
+      const province = rec["Province"] || rec["province"] || "";
+      return province === provinceValue;
+    });
+  }
+  
+  // Sort by City/Municipality
+  dataToPrint.sort((a, b) => {
+    const cityA = (a["City/Municipality"] || a["city"] || a["City"] || "").toUpperCase();
+    const cityB = (b["City/Municipality"] || b["city"] || b["City"] || "").toUpperCase();
+    return cityA.localeCompare(cityB);
+  });
+  
+  // Format date and time properly - single line
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString('en-US', { 
+    month: 'numeric', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+  const formattedTime = now.toLocaleTimeString('en-US', { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit',
+    hour12: true 
+  });
+  const formattedDateTime = `${formattedDate}, ${formattedTime}`;
+  
+  // Build summary table - WITHOUT the summary cards
+  let tableHtml = `
+    <html>
+    <head>
+      <style>
+        body { 
+          font-family: "Inter", sans-serif; 
+          padding: 40px; 
+          color: #0f2b3a; 
         }
-        
-        tableHtml += `
+        .header-row { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          margin-bottom: 5px; 
+        }
+        .header-title h1 { 
+          color: #1e3a8a; 
+          margin: 0; 
+          font-size: 1.8rem; 
+        }
+        .header-date { 
+          font-size: 0.85rem; 
+          color: #475569; 
+          white-space: nowrap; /* Prevent wrapping */
+        }
+        .sub-header { 
+          color: #475569; 
+          margin-bottom: 30px; 
+          font-size: 0.95rem; 
+        }
+        table { 
+          width: 100%; 
+          border-collapse: collapse; 
+          margin-top: 20px; 
+        }
+        th { 
+          background: #1e3a8a; 
+          color: #1a1a1a; 
+          padding: 12px; 
+          text-align: left; 
+          font-weight: 700;
+        }
+        td { 
+          padding: 10px; 
+          border-bottom: 1px solid #e2e8f0; 
+        }
+        tr:hover { 
+          background: #f8fafc; 
+        }
+        .footer { 
+          margin-top: 30px; 
+          padding-top: 20px; 
+          border-top: 1px solid #e2e8f0; 
+          font-size: 0.8rem; 
+          color: #64748b; 
+          text-align: center; 
+        }
+        .status-badge { 
+          display: inline-block; 
+          padding: 4px 12px; 
+          border-radius: 20px; 
+          font-size: 0.75rem; 
+          font-weight: 600; 
+        }
+        .status-updated { 
+          background: #dcfce7; 
+          color: #166534; 
+        }
+        .status-for-updating { 
+          background: #fef3c7; 
+          color: #92400e; 
+        }
+        .status-under-review { 
+          background: #dbeafe; 
+          color: #1e40af; 
+        }
+        .status-default { 
+          background: #e2e8f0; 
+          color: #475569; 
+        }
+        .phase-badge { 
+          display: inline-block; 
+          padding: 2px 10px; 
+          border-radius: 12px; 
+          font-size: 0.7rem; 
+          font-weight: 500; 
+          margin-left: 4px; 
+          background: #f1f5f9; 
+          color: #475569; 
+          border: 1px solid #e2e8f0; 
+        }
+        .phase-badge.phase { 
+          background: #e0f2fe; 
+          color: #0369a1; 
+          border-color: #b8dfff; 
+        }
+        .phase-badge.ra { 
+          background: #fef3c7; 
+          color: #92400e; 
+          border-color: #fde68a; 
+        }
+        .phase-badge.pre { 
+          background: #e0e7ff; 
+          color: #3730a3; 
+          border-color: #c7d2fe; 
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header-row">
+        <div class="header-title">
+          <h1>${reportTitle}</h1>
+        </div>
+        <div class="header-date">
+          ${formattedDateTime}
+        </div>
+      </div>
+      <div class="sub-header">DHSUD Region VI - ELUPDD Integrated Database and Information System</div>
+      
+      <table>
+        <thead>
           <tr>
-            <td>${idx + 1}</td>
-            <td>${escapeHtml(row["City/Municipality"])}</td>
-            <td>${escapeHtml(row["Province"])}</td>
-            <td>${escapeHtml(row["Latest Plan Approval"])}</td>
-            <td>${escapeHtml(row["Resolution No."])}</td>
-            <td>${escapeHtml(row["Date Approved"])}</td>
-            <td>${escapeHtml(row["Start Year"])}</td>
-            <td>${escapeHtml(row["End Year"])}</td>
-            <td>${statusHtml}</td>
-          </tr>`;
-      });
-      
-      tableHtml += `
-            </tbody>
-          </table>
-          <div class="footer">
-            DHSUD Region VI - ELUPDD Integrated Database and Information System<br>
-            Report generated on ${new Date().toLocaleString()}
-          </div>
-        </body>
-        </html>`;
-      
-      // Open in new window for printing
-      const win = window.open("", "_blank", "width=1200,height=800");
-      if (win) {
-        win.document.write(tableHtml);
-        win.document.close();
-        win.focus();
-        win.print();
-      } else {
-        showToastMessage("Please allow popups to print the summary.", "error");
+            <th>No.</th>
+            <th>City/Municipality</th>
+            <th>Province</th>
+            <th>Latest Plan Approval</th>
+            <th>Resolution No.</th>
+            <th>Date Approved</th>
+            <th>Start Year</th>
+            <th>End Year</th>
+            <th>Specific Status</th>
+          </tr>
+        </thead>
+        <tbody>`;
+  
+  dataToPrint.forEach((rec, idx) => {
+    const row = mapClupToRow(rec, idx);
+    const statusDisplay = row["Specific Status"];
+    
+    // Determine main status class for printing
+    let mainClass = "status-default";
+    const mainStatus = row._mainStatus || "Other";
+    if (mainStatus === "Updated") mainClass = "status-updated";
+    else if (mainStatus === "For Updating") mainClass = "status-for-updating";
+    else if (mainStatus === "Under Review") mainClass = "status-under-review";
+    
+    // Build status HTML for print
+    let statusHtml = '';
+    const hasPhase = statusDisplay.includes('(') && statusDisplay.includes(')');
+    if (hasPhase) {
+      const parts = statusDisplay.split('(');
+      const mainPart = parts[0].trim();
+      const phasePart = parts[1] ? parts[1].replace(')', '').trim() : '';
+      let phaseClass = '';
+      const phaseType = row._phaseType || '';
+      if (phaseType === 'phase') phaseClass = 'phase';
+      else if (phaseType === 'ra') phaseClass = 'ra';
+      else if (phaseType === 'pre') phaseClass = 'pre';
+      statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(mainPart)}</span>`;
+      if (phasePart && phasePart !== "None Indicated") {
+        statusHtml += ` <span class="phase-badge ${phaseClass}">${escapeHtml(phasePart)}</span>`;
       }
+    } else {
+      statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(statusDisplay)}</span>`;
     }
+    
+    tableHtml += `
+      <tr>
+        <td>${idx + 1}</td>
+        <td>${escapeHtml(row["City/Municipality"])}</td>
+        <td>${escapeHtml(row["Province"])}</td>
+        <td>${escapeHtml(row["Latest Plan Approval"])}</td>
+        <td>${escapeHtml(row["Resolution No."])}</td>
+        <td>${escapeHtml(row["Date Approved"])}</td>
+        <td>${escapeHtml(row["Start Year"])}</td>
+        <td>${escapeHtml(row["End Year"])}</td>
+        <td>${statusHtml}</td>
+      </tr>`;
+  });
+  
+  tableHtml += `
+        </tbody>
+      </table>
+      <div class="footer">
+        DHSUD Region VI - ELUPDD Integrated Database and Information System<br>
+        Report generated on ${formattedDateTime}
+      </div>
+    </body>
+    </html>`;
+  
+  // Open in new window for printing
+  const win = window.open("", "_blank", "width=1200,height=800");
+  if (win) {
+    win.document.write(tableHtml);
+    win.document.close();
+    win.focus();
+    win.print();
+  } else {
+    showToastMessage("Please allow popups to print the summary.", "error");
+  }
+}
 
     // ============================================
     // EXPORT FUNCTIONS
