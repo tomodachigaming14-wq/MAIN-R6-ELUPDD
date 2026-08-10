@@ -712,6 +712,10 @@ footer {
               <option value="For Updating">🔄 Summary of CLUP's For Updating</option>
               <option value="Under Review">📝 Summary of CLUP's Under Review</option>
             </select>
+            <select id="clupProvinceFilter" class="month-filter" onchange="filterReportTable()">
+              <option value="all">🌍 All Provinces</option>
+            </select>
+            <button class="clear-filter-btn" onclick="clearClupFilters()">✖ Clear Filters</button>
             <button class="btn btn-print" onclick="printClupSummary()">🖨️ Print Summary</button>
             <button class="btn btn-success" onclick="exportCurrentReportToExcel()">📥 Download Excel</button>
             <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
@@ -776,6 +780,7 @@ footer {
     let filteredData = [];
     let currentMonthFilter = "all";
     let currentClupStatusFilter = "all";
+    let currentClupProvinceFilter = "all";
     let currentUser = null;
 
     // ============================================
@@ -1121,10 +1126,40 @@ footer {
         console.log(`Received ${records.length} CLUP status records`);
         clupStatusData = records;
         
+        // Populate province filter
+        populateProvinceFilter();
+        
       } catch(e) {
         console.error("Error fetching CLUP status data:", e);
         clupStatusData = [];
         throw e;
+      }
+    }
+    
+    // Populate province filter dropdown
+    function populateProvinceFilter() {
+      const provinceSet = new Set();
+      clupStatusData.forEach(rec => {
+        const province = rec["Province"] || rec["province"] || "";
+        if (province) provinceSet.add(province);
+      });
+      
+      const sortedProvinces = Array.from(provinceSet).sort();
+      const sel = document.getElementById("clupProvinceFilter");
+      const cur = sel.value;
+      sel.innerHTML = '<option value="all">🌍 All Provinces</option>';
+      sortedProvinces.forEach(province => {
+        const opt = document.createElement("option");
+        opt.value = province;
+        opt.textContent = province;
+        sel.appendChild(opt);
+      });
+      
+      if (cur !== "all" && sortedProvinces.includes(cur)) {
+        sel.value = cur;
+      } else {
+        sel.value = "all";
+        currentClupProvinceFilter = "all";
       }
     }
 
@@ -1471,10 +1506,21 @@ footer {
       filterReportTable();
     }
 
+    // Clear CLUP filters
+    function clearClupFilters() {
+      document.getElementById("clupStatusFilter").value = "all";
+      document.getElementById("clupProvinceFilter").value = "all";
+      currentClupStatusFilter = "all";
+      currentClupProvinceFilter = "all";
+      document.getElementById("clupSearchInput").value = "";
+      filterReportTable();
+    }
+
     // Filter and render the report table
     function filterReportTable() {
       if (currentReportType === "clup_status") {
         currentClupStatusFilter = document.getElementById("clupStatusFilter")?.value || "all";
+        currentClupProvinceFilter = document.getElementById("clupProvinceFilter")?.value || "all";
       } else {
         currentMonthFilter = document.getElementById("monthFilter")?.value || "all";
       }
@@ -1537,6 +1583,7 @@ footer {
         // CLUP Status filtering
         const search = document.getElementById("clupSearchInput")?.value.toLowerCase() || "";
         const statusFilter = currentClupStatusFilter;
+        const provinceFilter = currentClupProvinceFilter;
         
         if (search) {
           filtered = filtered.filter(rec => {
@@ -1560,6 +1607,13 @@ footer {
               return statusLower.includes("under review") || statusLower === "under review";
             }
             return statusLower === filterLower;
+          });
+        }
+        
+        if (provinceFilter !== "all") {
+          filtered = filtered.filter(rec => {
+            const province = rec["Province"] || rec["province"] || "";
+            return province === provinceFilter;
           });
         }
         
@@ -1709,7 +1763,9 @@ footer {
       // Reset filters
       if (isClup) {
         document.getElementById("clupStatusFilter").value = "all";
+        document.getElementById("clupProvinceFilter").value = "all";
         currentClupStatusFilter = "all";
+        currentClupProvinceFilter = "all";
         document.getElementById("clupSearchInput").value = "";
       } else {
         document.getElementById("monthFilter").value = "all";
@@ -1747,20 +1803,27 @@ footer {
     }
 
     function printClupSummary() {
-      // Get the current filter value to determine the title
+      // Get the current filter values
       const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
-      let reportTitle = "Status of CLUP/ZO Preparation/Updating: All";
+      const provinceValue = document.getElementById("clupProvinceFilter")?.value || "all";
       
-      if (filterValue === "Updated") {
-        reportTitle = "Status of CLUP/ZO Preparation/Updating: Updated";
-      } else if (filterValue === "For Updating") {
-        reportTitle = "Status of CLUP/ZO Preparation/Updating: For Updating";
-      } else if (filterValue === "Under Review") {
-        reportTitle = "Status of CLUP/ZO Preparation/Updating: Under Review";
+      // Build the title
+      let statusLabel = "All";
+      if (filterValue === "Updated") statusLabel = "Updated";
+      else if (filterValue === "For Updating") statusLabel = "For Updating";
+      else if (filterValue === "Under Review") statusLabel = "Under Review";
+      
+      let provinceLabel = "";
+      if (provinceValue !== "all") {
+        provinceLabel = ` (${provinceValue})`;
       }
       
-      // Get the filtered data based on the current filter
+      let reportTitle = `Status of CLUP/ZO Preparation/Updating: ${statusLabel}${provinceLabel}`;
+      
+      // Get the filtered data based on the current filters
       let dataToPrint = [...clupStatusData];
+      
+      // Filter by status
       if (filterValue !== "all") {
         dataToPrint = dataToPrint.filter(rec => {
           const clupStatus = rec["CLUP Status"] || rec["CLUPStatus"] || rec["status"] || "";
@@ -1775,6 +1838,14 @@ footer {
             return statusLower.includes("under review") || statusLower === "under review";
           }
           return statusLower === filterLower;
+        });
+      }
+      
+      // Filter by province
+      if (provinceValue !== "all") {
+        dataToPrint = dataToPrint.filter(rec => {
+          const province = rec["Province"] || rec["province"] || "";
+          return province === provinceValue;
         });
       }
       
@@ -2006,6 +2077,7 @@ footer {
     window.switchReportType = switchReportType;
     window.filterReportTable = filterReportTable;
     window.clearMonthFilter = clearMonthFilter;
+    window.clearClupFilters = clearClupFilters;
     window.exportCurrentReportToExcel = exportCurrentReportToExcel;
     window.fetchLiveData = fetchLiveData;
     window.openLoginModal = openLoginModal;
