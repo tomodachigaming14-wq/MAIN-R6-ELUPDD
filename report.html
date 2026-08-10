@@ -1856,7 +1856,7 @@ function printClupSummary() {
     return cityA.localeCompare(cityB);
   });
   
-  // Format date and time separately
+  // Format date and time separately - NO SECONDS
   const now = new Date();
   const dateStr = now.toLocaleDateString("en-US", {
     year: 'numeric',
@@ -1866,7 +1866,6 @@ function printClupSummary() {
   const timeStr = now.toLocaleTimeString("en-US", {
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
     hour12: true
   });
   
@@ -1892,10 +1891,10 @@ function printClupSummary() {
           font-size: 1.8rem;
         }
         .header-date {
-          font-size: 0.75rem;
+          font-size: 0.85rem;
           color: #475569;
           text-align: right;
-          line-height: 1.4;
+          line-height: 1.5;
         }
         .header-date .date-line {
           display: block;
@@ -2080,7 +2079,6 @@ function printClupSummary() {
     showToastMessage("Please allow popups to print the summary.", "error");
   }
 }
-
     // ============================================
     // EXPORT FUNCTIONS
     // ============================================
