@@ -340,6 +340,14 @@ header {
     background: #5b21b6;
     transform: translateY(-1px);
 }
+.btn-print-lgu {
+    background: #0d9488;
+    color: white;
+}
+.btn-print-lgu:hover {
+    background: #0f766e;
+    transform: translateY(-1px);
+}
 .search-bar {
     display: flex;
     gap: 1rem;
@@ -662,6 +670,26 @@ footer {
 .hidden-filter {
     display: none !important;
 }
+/* LGU Print button styles */
+.lgu-print-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.lgu-print-container .btn-print-lgu {
+    display: none;
+}
+.lgu-print-container .btn-print-lgu.visible {
+    display: inline-flex;
+}
+/* Hide LGU filter initially */
+#clupLguFilter {
+    display: none;
+}
+#clupLguFilter.visible {
+    display: inline-block;
+}
 </style>
 </head>
 <body>
@@ -715,10 +743,16 @@ footer {
             <select id="clupProvinceFilter" class="month-filter" onchange="filterReportTable()">
               <option value="all">🌍 All Provinces</option>
             </select>
-            <button class="clear-filter-btn" onclick="clearClupFilters()">✖ Clear Filters</button>
-            <button class="btn btn-print" onclick="printClupSummary()">🖨️ Print Summary</button>
-            <button class="btn btn-success" onclick="exportCurrentReportToExcel()">📥 Download Excel</button>
-            <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
+            <select id="clupLguFilter" class="month-filter" onchange="filterReportTable()">
+              <option value="all">🏛️ All LGUs</option>
+            </select>
+            <div class="lgu-print-container">
+              <button class="clear-filter-btn" onclick="clearClupFilters()">✖ Clear Filters</button>
+              <button class="btn btn-print-lgu" id="printLguBtn" onclick="printLguStatus()">🖨️ Print LGU Status</button>
+              <button class="btn btn-print" onclick="printClupSummary()">🖨️ Print Summary</button>
+              <button class="btn btn-success" onclick="exportCurrentReportToExcel()">📥 Download Excel</button>
+              <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
+            </div>
           </div>
         </div>
       </div>
@@ -776,11 +810,13 @@ footer {
     let locationalReleased = [];
     let zoningReleased = [];
     let clupStatusData = [];
+    let lguRecordsData = [];
     let currentReportType = "locational";
     let filteredData = [];
     let currentMonthFilter = "all";
     let currentClupStatusFilter = "all";
     let currentClupProvinceFilter = "all";
+    let currentClupLguFilter = "all";
     let currentUser = null;
 
     // ============================================
@@ -1128,10 +1164,52 @@ footer {
         
         // Populate province filter
         populateProvinceFilter();
+        populateLguFilter();
         
       } catch(e) {
         console.error("Error fetching CLUP status data:", e);
         clupStatusData = [];
+        throw e;
+      }
+    }
+    
+    // Fetch LGU Records data from LGURecords sheet
+    async function fetchLguRecords() {
+      try {
+        const url = `${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu&_=${Date.now()}`;
+        console.log("Fetching LGU records from:", url);
+        
+        const response = await fetch(url, { mode: "cors" });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log("Raw LGU records response:", data);
+        
+        let records = [];
+        if (Array.isArray(data)) {
+          records = data;
+        } else if (data && data.success === true && Array.isArray(data.data)) {
+          records = data.data;
+        } else if (data && data.data && Array.isArray(data.data)) {
+          records = data.data;
+        } else if (data && typeof data === 'object') {
+          for (let key in data) {
+            if (Array.isArray(data[key]) && data[key].length > 0) {
+              records = data[key];
+              break;
+            }
+          }
+        }
+        
+        console.log(`Received ${records.length} LGU records`);
+        lguRecordsData = records;
+        
+      } catch(e) {
+        console.error("Error fetching LGU records:", e);
+        lguRecordsData = [];
         throw e;
       }
     }
@@ -1161,6 +1239,109 @@ footer {
         sel.value = "all";
         currentClupProvinceFilter = "all";
       }
+      
+      // Update LGU filter based on province selection
+      updateLguFilterByProvince();
+    }
+    
+    // Populate LGU filter dropdown based on selected province
+    function populateLguFilter() {
+      const lguSet = new Set();
+      clupStatusData.forEach(rec => {
+        const lgu = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
+        if (lgu) lguSet.add(lgu);
+      });
+      
+      const sortedLgus = Array.from(lguSet).sort();
+      const sel = document.getElementById("clupLguFilter");
+      // Store all LGUs for later filtering by province
+      sel.dataset.allLgus = JSON.stringify(sortedLgus);
+      
+      // Initially hide the LGU filter
+      sel.classList.remove("visible");
+      sel.style.display = "none";
+      sel.value = "all";
+      currentClupLguFilter = "all";
+      
+      // Show/hide LGU Print button
+      updateLguPrintButton();
+    }
+    
+    // Update LGU filter based on selected province
+    function updateLguFilterByProvince() {
+      const province = document.getElementById("clupProvinceFilter").value;
+      const lguSelect = document.getElementById("clupLguFilter");
+      const allLgus = JSON.parse(lguSelect.dataset.allLgus || '[]');
+      
+      if (province !== "all") {
+        // Filter LGUs by selected province
+        const filteredLgus = clupStatusData
+          .filter(rec => (rec["Province"] || rec["province"] || "") === province)
+          .map(rec => rec["City/Municipality"] || rec["city"] || rec["City"] || "")
+          .filter(Boolean);
+        
+        // Remove duplicates and sort
+        const uniqueLgus = [...new Set(filteredLgus)].sort();
+        
+        // Populate the LGU dropdown
+        lguSelect.innerHTML = '<option value="all">🏛️ All LGUs</option>';
+        uniqueLgus.forEach(lgu => {
+          const opt = document.createElement("option");
+          opt.value = lgu;
+          opt.textContent = lgu;
+          lguSelect.appendChild(opt);
+        });
+        
+        // Show the LGU filter
+        lguSelect.classList.add("visible");
+        lguSelect.style.display = "inline-block";
+        lguSelect.value = "all";
+        currentClupLguFilter = "all";
+      } else {
+        // Hide the LGU filter when no province is selected
+        lguSelect.classList.remove("visible");
+        lguSelect.style.display = "none";
+        lguSelect.value = "all";
+        currentClupLguFilter = "all";
+      }
+      
+      // Update Print button visibility
+      updateLguPrintButton();
+      
+      // Re-render the table
+      renderReportTable();
+    }
+    
+    // Update LGU Print button visibility
+    function updateLguPrintButton() {
+      const lguFilter = document.getElementById("clupLguFilter");
+      const printBtn = document.getElementById("printLguBtn");
+      
+      // Hide all buttons except Clear Filters and Print Summary when LGU is selected
+      const container = document.querySelector(".lgu-print-container");
+      const allButtons = container.querySelectorAll("button");
+      
+      if (lguFilter && printBtn) {
+        if (lguFilter.value !== "all" && lguFilter.style.display !== "none") {
+          printBtn.classList.add("visible");
+          // Hide other buttons when LGU is selected
+          allButtons.forEach(btn => {
+            if (btn.id !== "printLguBtn" && btn.className !== "clear-filter-btn") {
+              btn.style.display = "none";
+            }
+          });
+          // Show Clear Filters and Print LGU button
+          document.querySelector(".clear-filter-btn").style.display = "inline-flex";
+          printBtn.style.display = "inline-flex";
+        } else {
+          printBtn.classList.remove("visible");
+          // Show all buttons when no LGU is selected
+          allButtons.forEach(btn => {
+            btn.style.display = "inline-flex";
+          });
+          printBtn.style.display = "none";
+        }
+      }
     }
 
     // Main fetch function
@@ -1172,7 +1353,7 @@ footer {
       
       try {
         // Fetch all datasets
-        await Promise.all([fetchLocationalReleased(), fetchZoningReleased(), fetchClupStatus()]);
+        await Promise.all([fetchLocationalReleased(), fetchZoningReleased(), fetchClupStatus(), fetchLguRecords()]);
         
         // Populate filters and render
         populateMonthFilter();
@@ -1510,17 +1691,37 @@ footer {
     function clearClupFilters() {
       document.getElementById("clupStatusFilter").value = "all";
       document.getElementById("clupProvinceFilter").value = "all";
+      document.getElementById("clupLguFilter").value = "all";
       currentClupStatusFilter = "all";
       currentClupProvinceFilter = "all";
+      currentClupLguFilter = "all";
       document.getElementById("clupSearchInput").value = "";
+      
+      // Hide LGU filter when clearing
+      const lguSelect = document.getElementById("clupLguFilter");
+      lguSelect.classList.remove("visible");
+      lguSelect.style.display = "none";
+      
       filterReportTable();
+      updateLguPrintButton();
     }
 
     // Filter and render the report table
     function filterReportTable() {
       if (currentReportType === "clup_status") {
         currentClupStatusFilter = document.getElementById("clupStatusFilter")?.value || "all";
-        currentClupProvinceFilter = document.getElementById("clupProvinceFilter")?.value || "all";
+        const newProvince = document.getElementById("clupProvinceFilter")?.value || "all";
+        
+        // Check if province changed
+        if (newProvince !== currentClupProvinceFilter) {
+          currentClupProvinceFilter = newProvince;
+          updateLguFilterByProvince();
+        } else {
+          currentClupProvinceFilter = newProvince;
+        }
+        
+        currentClupLguFilter = document.getElementById("clupLguFilter")?.value || "all";
+        updateLguPrintButton();
       } else {
         currentMonthFilter = document.getElementById("monthFilter")?.value || "all";
       }
@@ -1584,6 +1785,7 @@ footer {
         const search = document.getElementById("clupSearchInput")?.value.toLowerCase() || "";
         const statusFilter = currentClupStatusFilter;
         const provinceFilter = currentClupProvinceFilter;
+        const lguFilter = currentClupLguFilter;
         
         if (search) {
           filtered = filtered.filter(rec => {
@@ -1614,6 +1816,13 @@ footer {
           filtered = filtered.filter(rec => {
             const province = rec["Province"] || rec["province"] || "";
             return province === provinceFilter;
+          });
+        }
+        
+        if (lguFilter !== "all") {
+          filtered = filtered.filter(rec => {
+            const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
+            return city === lguFilter;
           });
         }
         
@@ -1764,9 +1973,18 @@ footer {
       if (isClup) {
         document.getElementById("clupStatusFilter").value = "all";
         document.getElementById("clupProvinceFilter").value = "all";
+        document.getElementById("clupLguFilter").value = "all";
         currentClupStatusFilter = "all";
         currentClupProvinceFilter = "all";
+        currentClupLguFilter = "all";
         document.getElementById("clupSearchInput").value = "";
+        
+        // Hide LGU filter
+        const lguSelect = document.getElementById("clupLguFilter");
+        lguSelect.classList.remove("visible");
+        lguSelect.style.display = "none";
+        
+        updateLguPrintButton();
       } else {
         document.getElementById("monthFilter").value = "all";
         currentMonthFilter = "all";
@@ -1802,283 +2020,642 @@ footer {
       return { updated, forUpdating, underReview, other, total: clupStatusData.length };
     }
 
-function printClupSummary() {
-  // Get the current filter values
-  const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
-  const provinceValue = document.getElementById("clupProvinceFilter")?.value || "all";
-  
-  // Build the title
-  let statusLabel = "All";
-  if (filterValue === "Updated") statusLabel = "Updated";
-  else if (filterValue === "For Updating") statusLabel = "For Updating";
-  else if (filterValue === "Under Review") statusLabel = "Under Review";
-  
-  let provinceLabel = "";
-  if (provinceValue !== "all") {
-    provinceLabel = ` (${provinceValue})`;
-  }
-  
-  let reportTitle = `Status of CLUP/ZO Preparation/Updating: ${statusLabel}${provinceLabel}`;
-  
-  // Get the filtered data based on the current filters
-  let dataToPrint = [...clupStatusData];
-  
-  // Filter by status
-  if (filterValue !== "all") {
-    dataToPrint = dataToPrint.filter(rec => {
-      const clupStatus = rec["CLUP Status"] || rec["CLUPStatus"] || rec["status"] || "";
-      const statusLower = String(clupStatus).toLowerCase().trim();
-      const filterLower = String(filterValue).toLowerCase().trim();
+    function printClupSummary() {
+      // Get the current filter values
+      const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
+      const provinceValue = document.getElementById("clupProvinceFilter")?.value || "all";
       
-      if (filterLower === "updated") {
-        return statusLower.includes("updated") || statusLower === "updated";
-      } else if (filterLower === "for updating") {
-        return statusLower.includes("for updating") || statusLower === "for updating";
-      } else if (filterLower === "under review") {
-        return statusLower.includes("under review") || statusLower === "under review";
+      // Build the title
+      let statusLabel = "All";
+      if (filterValue === "Updated") statusLabel = "Updated";
+      else if (filterValue === "For Updating") statusLabel = "For Updating";
+      else if (filterValue === "Under Review") statusLabel = "Under Review";
+      
+      let provinceLabel = "";
+      if (provinceValue !== "all") {
+        provinceLabel = ` (${provinceValue})`;
       }
-      return statusLower === filterLower;
-    });
-  }
-  
-  // Filter by province
-  if (provinceValue !== "all") {
-    dataToPrint = dataToPrint.filter(rec => {
-      const province = rec["Province"] || rec["province"] || "";
-      return province === provinceValue;
-    });
-  }
-  
-  // Sort by City/Municipality
-  dataToPrint.sort((a, b) => {
-    const cityA = (a["City/Municipality"] || a["city"] || a["City"] || "").toUpperCase();
-    const cityB = (b["City/Municipality"] || b["city"] || b["City"] || "").toUpperCase();
-    return cityA.localeCompare(cityB);
-  });
-  
-  // Format date and time separately - NO SECONDS
-  const now = new Date();
-  const dateStr = now.toLocaleDateString("en-US", {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-  const timeStr = now.toLocaleTimeString("en-US", {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-  });
-  
-  // Build summary table - WITHOUT the summary cards
-  let tableHtml = `
-    <html>
-    <head>
-      <style>
-        body {
-          font-family: "Inter", sans-serif;
-          padding: 40px;
-          color: #0f2b3a;
-        }
-        .header-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 5px;
-        }
-        .header-title h1 {
-          color: #1e3a8a;
-          margin: 0;
-          font-size: 1.8rem;
-        }
-        .header-date {
-          font-size: 0.85rem;
-          color: #475569;
-          text-align: right;
-          line-height: 1.5;
-        }
-        .header-date .date-line {
-          display: block;
-        }
-        .header-date .time-line {
-          display: block;
-        }
-        .sub-header {
-          color: #475569;
-          margin-bottom: 30px;
-          font-size: 0.95rem;
-        }
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
-        }
-        th {
-          background: #1e3a8a;
-          color: #1a1a1a;
-          padding: 12px;
-          text-align: left;
-          font-weight: 700;
-        }
-        td {
-          padding: 10px;
-          border-bottom: 1px solid #e2e8f0;
-        }
-        tr:hover {
-          background: #f8fafc;
-        }
-        .footer {
-          margin-top: 30px;
-          padding-top: 20px;
-          border-top: 1px solid #e2e8f0;
-          font-size: 0.8rem;
-          color: #64748b;
-          text-align: center;
-        }
-        .status-badge {
-          display: inline-block;
-          padding: 4px 12px;
-          border-radius: 20px;
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-        .status-updated {
-          background: #dcfce7;
-          color: #166534;
-        }
-        .status-for-updating {
-          background: #fef3c7;
-          color: #92400e;
-        }
-        .status-under-review {
-          background: #dbeafe;
-          color: #1e40af;
-        }
-        .status-default {
-          background: #e2e8f0;
-          color: #475569;
-        }
-        .phase-badge {
-          display: inline-block;
-          padding: 2px 10px;
-          border-radius: 12px;
-          font-size: 0.7rem;
-          font-weight: 500;
-          margin-left: 4px;
-          background: #f1f5f9;
-          color: #475569;
-          border: 1px solid #e2e8f0;
-        }
-        .phase-badge.phase {
-          background: #e0f2fe;
-          color: #0369a1;
-          border-color: #b8dfff;
-        }
-        .phase-badge.ra {
-          background: #fef3c7;
-          color: #92400e;
-          border-color: #fde68a;
-        }
-        .phase-badge.pre {
-          background: #e0e7ff;
-          color: #3730a3;
-          border-color: #c7d2fe;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="header-row">
-        <div class="header-title">
-          <h1>${reportTitle}</h1>
-        </div>
-        <div class="header-date">
-          <span class="date-line">${dateStr}</span>
-          <span class="time-line">${timeStr}</span>
-        </div>
-      </div>
-      <div class="sub-header">DHSUD Region VI - ELUPDD Integrated Database and Information System</div>
       
-      <table>
-        <thead>
+      let reportTitle = `Status of CLUP/ZO Preparation/Updating: ${statusLabel}${provinceLabel}`;
+      
+      // Get the filtered data based on the current filters
+      let dataToPrint = [...clupStatusData];
+      
+      // Filter by status
+      if (filterValue !== "all") {
+        dataToPrint = dataToPrint.filter(rec => {
+          const clupStatus = rec["CLUP Status"] || rec["CLUPStatus"] || rec["status"] || "";
+          const statusLower = String(clupStatus).toLowerCase().trim();
+          const filterLower = String(filterValue).toLowerCase().trim();
+          
+          if (filterLower === "updated") {
+            return statusLower.includes("updated") || statusLower === "updated";
+          } else if (filterLower === "for updating") {
+            return statusLower.includes("for updating") || statusLower === "for updating";
+          } else if (filterLower === "under review") {
+            return statusLower.includes("under review") || statusLower === "under review";
+          }
+          return statusLower === filterLower;
+        });
+      }
+      
+      // Filter by province
+      if (provinceValue !== "all") {
+        dataToPrint = dataToPrint.filter(rec => {
+          const province = rec["Province"] || rec["province"] || "";
+          return province === provinceValue;
+        });
+      }
+      
+      // Sort by City/Municipality
+      dataToPrint.sort((a, b) => {
+        const cityA = (a["City/Municipality"] || a["city"] || a["City"] || "").toUpperCase();
+        const cityB = (b["City/Municipality"] || b["city"] || b["City"] || "").toUpperCase();
+        return cityA.localeCompare(cityB);
+      });
+      
+      // Format date and time separately - NO SECONDS
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      const timeStr = now.toLocaleTimeString("en-US", {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      // Build summary table - WITHOUT the summary cards
+      let tableHtml = `
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: "Inter", sans-serif;
+              padding: 40px;
+              color: #0f2b3a;
+            }
+            .header-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 5px;
+            }
+            .header-title h1 {
+              color: #1e3a8a;
+              margin: 0;
+              font-size: 1.8rem;
+            }
+            .header-date {
+              font-size: 0.85rem;
+              color: #475569;
+              text-align: right;
+              line-height: 1.5;
+            }
+            .header-date .date-line {
+              display: block;
+            }
+            .header-date .time-line {
+              display: block;
+            }
+            .sub-header {
+              color: #475569;
+              margin-bottom: 30px;
+              font-size: 0.95rem;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+            }
+            th {
+              background: #1e3a8a;
+              color: #1a1a1a;
+              padding: 12px;
+              text-align: left;
+              font-weight: 700;
+            }
+            td {
+              padding: 10px;
+              border-bottom: 1px solid #e2e8f0;
+            }
+            tr:hover {
+              background: #f8fafc;
+            }
+            .footer {
+              margin-top: 30px;
+              padding-top: 20px;
+              border-top: 1px solid #e2e8f0;
+              font-size: 0.8rem;
+              color: #64748b;
+              text-align: center;
+            }
+            .status-badge {
+              display: inline-block;
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: 0.75rem;
+              font-weight: 600;
+            }
+            .status-updated {
+              background: #dcfce7;
+              color: #166534;
+            }
+            .status-for-updating {
+              background: #fef3c7;
+              color: #92400e;
+            }
+            .status-under-review {
+              background: #dbeafe;
+              color: #1e40af;
+            }
+            .status-default {
+              background: #e2e8f0;
+              color: #475569;
+            }
+            .phase-badge {
+              display: inline-block;
+              padding: 2px 10px;
+              border-radius: 12px;
+              font-size: 0.7rem;
+              font-weight: 500;
+              margin-left: 4px;
+              background: #f1f5f9;
+              color: #475569;
+              border: 1px solid #e2e8f0;
+            }
+            .phase-badge.phase {
+              background: #e0f2fe;
+              color: #0369a1;
+              border-color: #b8dfff;
+            }
+            .phase-badge.ra {
+              background: #fef3c7;
+              color: #92400e;
+              border-color: #fde68a;
+            }
+            .phase-badge.pre {
+              background: #e0e7ff;
+              color: #3730a3;
+              border-color: #c7d2fe;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header-row">
+            <div class="header-title">
+              <h1>${reportTitle}</h1>
+            </div>
+            <div class="header-date">
+              <span class="date-line">${dateStr}</span>
+              <span class="time-line">${timeStr}</span>
+            </div>
+          </div>
+          <div class="sub-header">DHSUD Region VI - ELUPDD Integrated Database and Information System</div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>City/Municipality</th>
+                <th>Province</th>
+                <th>Latest Plan Approval</th>
+                <th>Resolution No.</th>
+                <th>Date Approved</th>
+                <th>Start Year</th>
+                <th>End Year</th>
+                <th>Specific Status</th>
+              </tr>
+            </thead>
+            <tbody>`;
+      
+      dataToPrint.forEach((rec, idx) => {
+        const row = mapClupToRow(rec, idx);
+        const statusDisplay = row["Specific Status"];
+        
+        // Determine main status class for printing
+        let mainClass = "status-default";
+        const mainStatus = row._mainStatus || "Other";
+        if (mainStatus === "Updated") mainClass = "status-updated";
+        else if (mainStatus === "For Updating") mainClass = "status-for-updating";
+        else if (mainStatus === "Under Review") mainClass = "status-under-review";
+        
+        // Build status HTML for print
+        let statusHtml = '';
+        const hasPhase = statusDisplay.includes('(') && statusDisplay.includes(')');
+        if (hasPhase) {
+          const parts = statusDisplay.split('(');
+          const mainPart = parts[0].trim();
+          const phasePart = parts[1] ? parts[1].replace(')', '').trim() : '';
+          let phaseClass = '';
+          const phaseType = row._phaseType || '';
+          if (phaseType === 'phase') phaseClass = 'phase';
+          else if (phaseType === 'ra') phaseClass = 'ra';
+          else if (phaseType === 'pre') phaseClass = 'pre';
+          statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(mainPart)}</span>`;
+          if (phasePart && phasePart !== "None Indicated") {
+            statusHtml += ` <span class="phase-badge ${phaseClass}">${escapeHtml(phasePart)}</span>`;
+          }
+        } else {
+          statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(statusDisplay)}</span>`;
+        }
+        
+        tableHtml += `
           <tr>
-            <th>No.</th>
-            <th>City/Municipality</th>
-            <th>Province</th>
-            <th>Latest Plan Approval</th>
-            <th>Resolution No.</th>
-            <th>Date Approved</th>
-            <th>Start Year</th>
-            <th>End Year</th>
-            <th>Specific Status</th>
-          </tr>
-        </thead>
-        <tbody>`;
-  
-  dataToPrint.forEach((rec, idx) => {
-    const row = mapClupToRow(rec, idx);
-    const statusDisplay = row["Specific Status"];
-    
-    // Determine main status class for printing
-    let mainClass = "status-default";
-    const mainStatus = row._mainStatus || "Other";
-    if (mainStatus === "Updated") mainClass = "status-updated";
-    else if (mainStatus === "For Updating") mainClass = "status-for-updating";
-    else if (mainStatus === "Under Review") mainClass = "status-under-review";
-    
-    // Build status HTML for print
-    let statusHtml = '';
-    const hasPhase = statusDisplay.includes('(') && statusDisplay.includes(')');
-    if (hasPhase) {
-      const parts = statusDisplay.split('(');
-      const mainPart = parts[0].trim();
-      const phasePart = parts[1] ? parts[1].replace(')', '').trim() : '';
-      let phaseClass = '';
-      const phaseType = row._phaseType || '';
-      if (phaseType === 'phase') phaseClass = 'phase';
-      else if (phaseType === 'ra') phaseClass = 'ra';
-      else if (phaseType === 'pre') phaseClass = 'pre';
-      statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(mainPart)}</span>`;
-      if (phasePart && phasePart !== "None Indicated") {
-        statusHtml += ` <span class="phase-badge ${phaseClass}">${escapeHtml(phasePart)}</span>`;
+            <td>${idx + 1}</td>
+            <td>${escapeHtml(row["City/Municipality"])}</td>
+            <td>${escapeHtml(row["Province"])}</td>
+            <td>${escapeHtml(row["Latest Plan Approval"])}</td>
+            <td>${escapeHtml(row["Resolution No."])}</td>
+            <td>${escapeHtml(row["Date Approved"])}</td>
+            <td>${escapeHtml(row["Start Year"])}</td>
+            <td>${escapeHtml(row["End Year"])}</td>
+            <td>${statusHtml}</td>
+          </tr>`;
+      });
+      
+      tableHtml += `
+            </tbody>
+          </table>
+          <div class="footer">
+            DHSUD Region VI - ELUPDD Integrated Database and Information System<br>
+            Report generated on ${dateStr} at ${timeStr}
+          </div>
+        </body>
+        </html>`;
+      
+      // Open in new window for printing
+      const win = window.open("", "_blank", "width=1200,height=800");
+      if (win) {
+        win.document.write(tableHtml);
+        win.document.close();
+        win.focus();
+        win.print();
+      } else {
+        showToastMessage("Please allow popups to print the summary.", "error");
       }
-    } else {
-      statusHtml = `<span class="status-badge ${mainClass}">${escapeHtml(statusDisplay)}</span>`;
     }
-    
-    tableHtml += `
-      <tr>
-        <td>${idx + 1}</td>
-        <td>${escapeHtml(row["City/Municipality"])}</td>
-        <td>${escapeHtml(row["Province"])}</td>
-        <td>${escapeHtml(row["Latest Plan Approval"])}</td>
-        <td>${escapeHtml(row["Resolution No."])}</td>
-        <td>${escapeHtml(row["Date Approved"])}</td>
-        <td>${escapeHtml(row["Start Year"])}</td>
-        <td>${escapeHtml(row["End Year"])}</td>
-        <td>${statusHtml}</td>
-      </tr>`;
-  });
-  
-  tableHtml += `
-        </tbody>
-      </table>
-      <div class="footer">
-        DHSUD Region VI - ELUPDD Integrated Database and Information System<br>
-        Report generated on ${dateStr} at ${timeStr}
-      </div>
-    </body>
-    </html>`;
-  
-  // Open in new window for printing
-  const win = window.open("", "_blank", "width=1200,height=800");
-  if (win) {
-    win.document.write(tableHtml);
-    win.document.close();
-    win.focus();
-    win.print();
-  } else {
-    showToastMessage("Please allow popups to print the summary.", "error");
-  }
-}
+
+    // ============================================
+    // LGU STATUS PRINT FUNCTION - Based on DOCX template
+    // ============================================
+    function printLguStatus() {
+      const lguFilter = document.getElementById("clupLguFilter")?.value || "all";
+      
+      if (lguFilter === "all") {
+        showToastMessage("Please select a specific LGU to print.", "error");
+        return;
+      }
+      
+      // Find the LGU data from clupStatusData
+      const lguData = clupStatusData.find(rec => {
+        const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
+        return city === lguFilter;
+      });
+      
+      if (!lguData) {
+        showToastMessage(`No data found for ${lguFilter}.`, "error");
+        return;
+      }
+      
+      // Find LGU record from lguRecordsData for additional info
+      const lguRecord = lguRecordsData.find(rec => {
+        const municipality = rec["Municipality"] || "";
+        return municipality === lguFilter;
+      });
+      
+      // Get the province
+      const province = lguData["Province"] || lguData["province"] || "";
+      
+      // Get region
+      const region = lguData["Region"] || lguRecord?.["Region"] || "WESTERN VISAYAS";
+      
+      // Get data fields with fallbacks
+      const incomeClass = lguData["Income Class"] || lguRecord?.["Income Class"] || "";
+      
+      // Latest CLUP info
+      const approvalDate = lguData["Approval date of the Latest plan (MM/DD/YYYY)"] || "";
+      const approvalYear = approvalDate ? formatDateToMMDDYYYY(approvalDate) : "";
+      const startYear = lguData["Start Year"] || "";
+      const endYear = lguData["End Year"] || "";
+      const resolutionNo = lguData["Resolution Number of the Latest Plan"] || "";
+      
+      // Specific Status
+      const clupStatus = lguData["CLUP Status"] || lguData["CLUPStatus"] || lguData["status"] || "";
+      const clupUpdates = lguData["CLUPStatus/Updates"] || lguData["updates"] || "";
+      
+      // Get specific status category
+      let specificStatus = clupStatus;
+      let statusDisplay = "Other";
+      if (clupStatus) {
+        const statusLower = String(clupStatus).toLowerCase().trim();
+        if (statusLower.includes("updated") || statusLower === "updated") {
+          statusDisplay = "Updated";
+        } else if (statusLower.includes("for updating") || statusLower === "for updating") {
+          statusDisplay = "For Updating";
+        } else if (statusLower.includes("under review") || statusLower === "under review") {
+          statusDisplay = "Under Review";
+        } else {
+          statusDisplay = clupStatus;
+        }
+      }
+      
+      // Build combined status for display
+      let combinedStatus = statusDisplay;
+      const phaseInfo = getPhaseDisplay(clupUpdates);
+      if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
+        combinedStatus = `${statusDisplay} (${phaseInfo.display})`;
+      }
+      
+      // Due for Updating
+      const dueForUpdating = clupUpdates || "";
+      
+      // C/MPDC info from LGU Records
+      const cmpdcName = lguRecord?.["Name of C/M/PPDC"] || "";
+      const cmpdcEmail = lguRecord?.["C/M/PPDO Email Address"] || "";
+      const cmpdcContact = lguRecord?.["C/M/PPDO Contact Number"] || "";
+      
+      // Local Chief Executive
+      const mayor = lguRecord?.["Name of Local Chief Executive"] || "";
+      const mayorMobile = lguRecord?.["Official Phone/Landline Number of LGU"] || "";
+      
+      // Format date and time
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      const timeStr = now.toLocaleTimeString("en-US", {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      // Build the LGU Status print HTML with new layout
+      let printHtml = `
+        <html>
+        <head>
+          <style>
+            body {
+              font-family: "Inter", sans-serif;
+              padding: 50px 60px;
+              color: #0f2b3a;
+              max-width: 900px;
+              margin: 0 auto;
+            }
+            .header-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 5px;
+            }
+            .header-title h1 {
+              color: #1e3a8a;
+              margin: 0;
+              font-size: 1.6rem;
+              font-weight: 700;
+              letter-spacing: -0.5px;
+            }
+            .header-date {
+              font-size: 0.85rem;
+              color: #475569;
+              text-align: right;
+              line-height: 1.5;
+            }
+            .header-date .date-line {
+              display: block;
+            }
+            .header-date .time-line {
+              display: block;
+            }
+            .sub-header {
+              color: #475569;
+              margin-bottom: 25px;
+              font-size: 0.95rem;
+            }
+            .lgu-header {
+              display: flex;
+              flex-direction: column;
+              border-bottom: 2px solid #1e3a8a;
+              padding-bottom: 8px;
+              margin-bottom: 20px;
+            }
+            .lgu-header .lgu-top-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: baseline;
+            }
+            .lgu-header .lgu-province {
+              font-size: 1.1rem;
+              font-weight: 600;
+              color: #1e3a8a;
+            }
+            .lgu-header .lgu-region {
+              font-size: 0.95rem;
+              font-weight: 500;
+              color: #475569;
+            }
+            .lgu-header .lgu-bottom-row {
+              display: flex;
+              justify-content: space-between;
+              align-items: baseline;
+              margin-top: 2px;
+            }
+            .lgu-header .lgu-name {
+              font-size: 1.4rem;
+              font-weight: 700;
+              color: #1e3a8a;
+            }
+            .lgu-header .income-class {
+              font-size: 0.85rem;
+              color: #475569;
+              font-weight: 500;
+            }
+            .section-title {
+              font-size: 0.85rem;
+              font-weight: 700;
+              color: #1e3a8a;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              border-bottom: 1px solid #e2e8f0;
+              padding-bottom: 5px;
+              margin-top: 20px;
+              margin-bottom: 12px;
+            }
+            .info-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 4px 30px;
+              margin-bottom: 8px;
+            }
+            .info-item {
+              display: flex;
+              padding: 4px 0;
+              font-size: 0.85rem;
+              align-items: baseline;
+            }
+            .info-item .label {
+              font-weight: 600;
+              color: #475569;
+              min-width: 140px;
+              flex-shrink: 0;
+            }
+            .info-item .value {
+              color: #1e293b;
+              font-weight: 500;
+            }
+            .info-item .value.empty {
+              color: #94a3b8;
+              font-style: italic;
+            }
+            .status-value {
+              font-weight: 600;
+              padding: 2px 12px;
+              border-radius: 20px;
+              display: inline-block;
+              font-size: 0.85rem;
+            }
+            .status-updated { background: #dcfce7; color: #166534; }
+            .status-for-updating { background: #fef3c7; color: #92400e; }
+            .status-under-review { background: #dbeafe; color: #1e40af; }
+            .status-default { background: #e2e8f0; color: #475569; }
+            
+            .section-spacer {
+              margin-top: 20px;
+            }
+            
+            .cmpdc-section {
+              margin-top: 25px;
+              border-top: 1px solid #e2e8f0;
+              padding-top: 15px;
+            }
+            
+            .footer {
+              margin-top: 35px;
+              padding-top: 15px;
+              border-top: 1px solid #e2e8f0;
+              font-size: 0.7rem;
+              color: #94a3b8;
+              text-align: center;
+            }
+            
+            @media print {
+              body { padding: 30px 40px; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header-row">
+            <div class="header-title">
+              <h1>STATUS OF CLUP/ZO FORMULATION</h1>
+            </div>
+            <div class="header-date">
+              <span class="date-line">${dateStr}</span>
+              <span class="time-line">${timeStr}</span>
+            </div>
+          </div>
+          <div class="sub-header">DHSUD Region VI - ELUPDD Integrated Database and Information System</div>
+          
+          <div class="lgu-header">
+            <div class="lgu-top-row">
+              <span class="lgu-province">${escapeHtml(province)}</span>
+              <span class="lgu-region">${escapeHtml(region)}</span>
+            </div>
+            <div class="lgu-bottom-row">
+              <span class="lgu-name">${escapeHtml(lguFilter)}</span>
+              ${incomeClass ? `<span class="income-class">Income Classification: ${escapeHtml(incomeClass)}</span>` : ''}
+            </div>
+          </div>
+          
+          <div class="section-title">Latest CLUP</div>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Year of Approval :</span>
+              <span class="value ${!approvalYear ? 'empty' : ''}">${approvalYear || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Planning Period :</span>
+              <span class="value ${(!startYear && !endYear) ? 'empty' : ''}">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">SP/HLURB Resolution :</span>
+              <span class="value ${!resolutionNo ? 'empty' : ''}">${resolutionNo || '—'}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Date Approved :</span>
+              <span class="value ${!approvalYear ? 'empty' : ''}">${approvalYear || '—'}</span>
+            </div>
+          </div>
+          
+          <div class="section-title">Specific Status</div>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Status of CLUP Preparation :</span>
+              <span class="value">
+                <span class="status-value status-${statusDisplay.toLowerCase().replace(' ', '-')}">${escapeHtml(combinedStatus)}</span>
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="label">Due for Updating :</span>
+              <span class="value ${!dueForUpdating ? 'empty' : ''}">${escapeHtml(dueForUpdating) || '—'}</span>
+            </div>
+          </div>
+          
+          <div class="cmpdc-section">
+            <div class="section-title" style="margin-top: 0;">City/Municipal Planning and Development Coordinator (C/MPDC)</div>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="label">Name :</span>
+                <span class="value ${!cmpdcName ? 'empty' : ''}">${escapeHtml(cmpdcName) || '—'}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Email :</span>
+                <span class="value ${!cmpdcEmail ? 'empty' : ''}">${escapeHtml(cmpdcEmail) || '—'}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Mobile :</span>
+                <span class="value ${!cmpdcContact ? 'empty' : ''}">${escapeHtml(cmpdcContact) || '—'}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="cmpdc-section">
+            <div class="section-title" style="margin-top: 0;">Local Chief Executive</div>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="label">Mayor :</span>
+                <span class="value ${!mayor ? 'empty' : ''}">${escapeHtml(mayor) || '—'}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Mobile :</span>
+                <span class="value ${!mayorMobile ? 'empty' : ''}">${escapeHtml(mayorMobile) || '—'}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="footer">
+            DHSUD Region VI - ELUPDD Integrated Database and Information System<br>
+            Report generated on ${dateStr} at ${timeStr}
+          </div>
+        </body>
+        </html>`;
+      
+      // Open in new window for printing
+      const win = window.open("", "_blank", "width=900,height=800");
+      if (win) {
+        win.document.write(printHtml);
+        win.document.close();
+        win.focus();
+        win.print();
+      } else {
+        showToastMessage("Please allow popups to print the LGU status.", "error");
+      }
+    }
+
     // ============================================
     // EXPORT FUNCTIONS
     // ============================================
@@ -2187,6 +2764,9 @@ function printClupSummary() {
     window.toggleModalPassword = toggleModalPassword;
     window.handleModalLogin = handleModalLogin;
     window.printClupSummary = printClupSummary;
+    window.printLguStatus = printLguStatus;
+    window.updateLguPrintButton = updateLguPrintButton;
+    window.updateLguFilterByProvince = updateLguFilterByProvince;
   </script>
 </body>
 </html>
