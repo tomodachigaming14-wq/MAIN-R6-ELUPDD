@@ -2502,13 +2502,13 @@ function printLguStatus() {
         }
         .lgu-header .lgu-name {
           font-size: 1.1rem;
-          font-weight: 700;
+          font-weight: 600;
           color: #1e3a8a;
         }
         .lgu-header .income-class {
           font-size: 1.1rem;
           color: #475569;
-          font-weight: 500;
+          font-weight: 600;
         }
         
         .status-row {
@@ -2643,11 +2643,11 @@ function printLguStatus() {
       
       <div class="lgu-header">
         <div class="lgu-top-row">
-          <span class="lgu-province">${escapeHtml(province)}</span>
-          <span class="lgu-region">${escapeHtml(region)}</span>
+		<span class="lgu-name">${escapeHtml(lguFilter)}</span>	    
+		  <span class="lgu-region">${escapeHtml(region)}</span>            
         </div>
         <div class="lgu-bottom-row">
-          <span class="lgu-name">${escapeHtml(lguFilter)}</span>
+          <span class="lgu-province">${escapeHtml(province)}</span>  
           ${incomeClass ? `<span class="income-class">Income Classification: ${escapeHtml(incomeClass)}</span>` : ''}
         </div>
       </div>
@@ -2717,10 +2717,6 @@ function printLguStatus() {
       <div class="cmpdc-section">
         <div class="section-title-with-acting">
           <span>Local Chief Executive</span>
-          <span class="acting-checkbox-wrapper">
-            <span class="acting-checkbox"></span>
-            <span>Acting</span>
-          </span>
         </div>
         <div class="info-grid">
           <div class="info-item">
