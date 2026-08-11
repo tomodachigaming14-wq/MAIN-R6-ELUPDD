@@ -2299,9 +2299,9 @@ footer {
     }
 
     // ============================================
-    // LGU STATUS PRINT FUNCTION - Based on DOCX template
+    // LGU STATUS PRINT FUNCTION - Matches DOCX format
     // ============================================
-    function printLguStatus() {
+function printLguStatus() {
   const lguFilter = document.getElementById("clupLguFilter")?.value || "all";
   
   if (lguFilter === "all") {
@@ -2331,7 +2331,6 @@ footer {
   
   // Get region and format it properly
   let region = lguData["Region"] || lguRecord?.["Region"] || "";
-  // Format region name - convert "Region_06" to "WESTERN VISAYAS"
   if (region) {
     const regionUpper = region.toUpperCase().trim();
     if (regionUpper.includes("REGION_06") || regionUpper.includes("REGION 06") || regionUpper.includes("REGION VI") || regionUpper.includes("VI")) {
@@ -2340,38 +2339,8 @@ footer {
       region = "CENTRAL VISAYAS";
     } else if (regionUpper.includes("REGION_08") || regionUpper.includes("REGION 08") || regionUpper.includes("REGION VIII") || regionUpper.includes("VIII")) {
       region = "EASTERN VISAYAS";
-    } else if (regionUpper.includes("NCR") || regionUpper.includes("NATIONAL CAPITAL")) {
-      region = "NATIONAL CAPITAL REGION";
-    } else if (regionUpper.includes("CAR") || regionUpper.includes("CORDILLERA")) {
-      region = "CORDILLERA ADMINISTRATIVE REGION";
-    } else if (regionUpper.includes("REGION_01") || regionUpper.includes("REGION 01") || regionUpper.includes("REGION I")) {
-      region = "REGION I (ILOCOS REGION)";
-    } else if (regionUpper.includes("REGION_02") || regionUpper.includes("REGION 02") || regionUpper.includes("REGION II")) {
-      region = "REGION II (CAGAYAN VALLEY)";
-    } else if (regionUpper.includes("REGION_03") || regionUpper.includes("REGION 03") || regionUpper.includes("REGION III")) {
-      region = "REGION III (CENTRAL LUZON)";
-    } else if (regionUpper.includes("REGION_04A") || regionUpper.includes("REGION 4A") || regionUpper.includes("REGION IV-A") || regionUpper.includes("CALABARZON")) {
-      region = "REGION IV-A (CALABARZON)";
-    } else if (regionUpper.includes("REGION_04B") || regionUpper.includes("REGION 4B") || regionUpper.includes("REGION IV-B") || regionUpper.includes("MIMAROPA")) {
-      region = "REGION IV-B (MIMAROPA)";
-    } else if (regionUpper.includes("REGION_05") || regionUpper.includes("REGION 05") || regionUpper.includes("REGION V")) {
-      region = "REGION V (BICOL REGION)";
-    } else if (regionUpper.includes("REGION_09") || regionUpper.includes("REGION 09") || regionUpper.includes("REGION IX")) {
-      region = "REGION IX (ZAMBOANGA PENINSULA)";
-    } else if (regionUpper.includes("REGION_10") || regionUpper.includes("REGION 10") || regionUpper.includes("REGION X")) {
-      region = "REGION X (NORTHERN MINDANAO)";
-    } else if (regionUpper.includes("REGION_11") || regionUpper.includes("REGION 11") || regionUpper.includes("REGION XI")) {
-      region = "REGION XI (DAVAO REGION)";
-    } else if (regionUpper.includes("REGION_12") || regionUpper.includes("REGION 12") || regionUpper.includes("REGION XII")) {
-      region = "REGION XII (SOCCSKSARGEN)";
-    } else if (regionUpper.includes("REGION_13") || regionUpper.includes("REGION 13") || regionUpper.includes("REGION XIII") || regionUpper.includes("CARAGA")) {
-      region = "REGION XIII (CARAGA)";
-    } else if (regionUpper.includes("BARMM") || regionUpper.includes("BANGSAMORO")) {
-      region = "BANGSAMORO AUTONOMOUS REGION";
     }
   }
-  
-  // Default fallback
   if (!region) {
     region = "WESTERN VISAYAS";
   }
@@ -2389,40 +2358,57 @@ footer {
   // Specific Status
   const clupStatus = lguData["CLUP Status"] || lguData["CLUPStatus"] || lguData["status"] || "";
   const clupUpdates = lguData["CLUPStatus/Updates"] || lguData["updates"] || "";
+  const shelterPlan = lguData["LGU with Local Shelter Plan"] || lguRecord?.["LGU with Local Shelter Plan"] || "";
+  const housingSubsector = lguData["LGU with Integrated Housing Subsector"] || lguRecord?.["LGU with Integrated Housing Subsector"] || "";
+  const commPlan = lguData["LGU with Integrated Communications Plan"] || lguRecord?.["LGU with Integrated Communications Plan"] || "";
   
   // Get specific status category
-  let specificStatus = clupStatus;
   let statusDisplay = "Other";
+  let statusClass = "status-Other";
   if (clupStatus) {
     const statusLower = String(clupStatus).toLowerCase().trim();
     if (statusLower.includes("updated") || statusLower === "updated") {
-      statusDisplay = "Updated";
+      statusDisplay = "UPDATED";
+      statusClass = "status-Updated";
     } else if (statusLower.includes("for updating") || statusLower === "for updating") {
-      statusDisplay = "For Updating";
+      statusDisplay = "FOR UPDATING";
+      statusClass = "status-For-Updating";
     } else if (statusLower.includes("under review") || statusLower === "under review") {
-      statusDisplay = "Under Review";
+      statusDisplay = "UNDER REVIEW";
+      statusClass = "status-Under-Review";
     } else {
-      statusDisplay = clupStatus;
+      statusDisplay = clupStatus.toUpperCase();
     }
   }
   
-  // Build combined status for display
-  let combinedStatus = statusDisplay;
+  // Get phase info
   const phaseInfo = getPhaseDisplay(clupUpdates);
+  let specificStatusText = "None Indicated";
   if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
-    combinedStatus = `${statusDisplay} (${phaseInfo.display})`;
+    specificStatusText = phaseInfo.display;
+  } else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") {
+    specificStatusText = clupUpdates;
   }
   
-  // Due for Updating
-  const dueForUpdating = clupUpdates || "";
+  // Format names - combine first and last name if they appear on separate lines
+  let cmpdcName = lguRecord?.["Name of C/M/PPDC"] || "";
+  if (cmpdcName) {
+    // Remove any line breaks, extra spaces, and combine into single line
+    cmpdcName = cmpdcName.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+  }
   
-  // C/MPDC info from LGU Records
-  const cmpdcName = lguRecord?.["Name of C/M/PPDC"] || "";
+  let mayor = lguRecord?.["Name of Local Chief Executive"] || "";
+  if (mayor) {
+    mayor = mayor.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  
+  let viceMayor = lguRecord?.["Name of Vice Governor/Mayor"] || "";
+  if (viceMayor) {
+    viceMayor = viceMayor.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  
   const cmpdcEmail = lguRecord?.["C/M/PPDO Email Address"] || "";
   const cmpdcContact = lguRecord?.["C/M/PPDO Contact Number"] || "";
-  
-  // Local Chief Executive
-  const mayor = lguRecord?.["Name of Local Chief Executive"] || "";
   const mayorMobile = lguRecord?.["Official Phone/Landline Number of LGU"] || "";
   
   // Format date and time
@@ -2438,14 +2424,14 @@ footer {
     hour12: true
   });
   
-  // Build the LGU Status print HTML with new layout
+  // Build the LGU Status print HTML matching the new DOCX format
   let printHtml = `
     <html>
     <head>
       <style>
         body {
           font-family: "Inter", sans-serif;
-          padding: 50px 60px;
+          padding: 40px 50px;
           color: #0f2b3a;
           max-width: 900px;
           margin: 0 auto;
@@ -2454,17 +2440,22 @@ footer {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          margin-bottom: 5px;
+          margin-bottom: 3px;
         }
         .header-title h1 {
           color: #1e3a8a;
           margin: 0;
-          font-size: 1.6rem;
+          font-size: 1.4rem;
           font-weight: 700;
-          letter-spacing: -0.5px;
+        }
+        .header-title .sub-title {
+          color: #1e3a8a;
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 600;
         }
         .header-date {
-          font-size: 0.85rem;
+          font-size: 0.75rem;
           color: #475569;
           text-align: right;
           line-height: 1.5;
@@ -2477,15 +2468,16 @@ footer {
         }
         .sub-header {
           color: #475569;
-          margin-bottom: 25px;
-          font-size: 0.95rem;
+          margin-bottom: 15px;
+          font-size: 0.8rem;
         }
+        
         .lgu-header {
           display: flex;
           flex-direction: column;
           border-bottom: 2px solid #1e3a8a;
-          padding-bottom: 8px;
-          margin-bottom: 20px;
+          padding-bottom: 6px;
+          margin-bottom: 12px;
         }
         .lgu-header .lgu-top-row {
           display: flex;
@@ -2498,9 +2490,9 @@ footer {
           color: #1e3a8a;
         }
         .lgu-header .lgu-region {
-          font-size: 0.95rem;
+          font-size: 1.1rem;
           font-weight: 500;
-          color: #475569;
+          color: #1e3a8a;
         }
         .lgu-header .lgu-bottom-row {
           display: flex;
@@ -2509,77 +2501,123 @@ footer {
           margin-top: 2px;
         }
         .lgu-header .lgu-name {
-          font-size: 1.4rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: #1e3a8a;
         }
         .lgu-header .income-class {
-          font-size: 0.85rem;
+          font-size: 1.1rem;
           color: #475569;
           font-weight: 500;
         }
-        .section-title {
-          font-size: 0.85rem;
+        
+        .status-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 8px;
+        }
+        .status-row .status-label {
           font-weight: 700;
           color: #1e3a8a;
+          font-size: 0.85rem;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
-          border-bottom: 1px solid #e2e8f0;
-          padding-bottom: 5px;
-          margin-top: 20px;
-          margin-bottom: 12px;
         }
+        .status-badge {
+          display: inline-block;
+          font-weight: 700;
+          padding: 2px 14px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+        }
+        .status-Updated { background: #dcfce7; color: #166534; }
+        .status-For-Updating { background: #fef3c7; color: #92400e; }
+        .status-Under-Review { background: #dbeafe; color: #1e40af; }
+        .status-Other { background: #e2e8f0; color: #475569; }
+        
         .info-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 4px 30px;
-          margin-bottom: 8px;
+          gap: 2px 30px;
+          margin-bottom: 6px;
         }
         .info-item {
           display: flex;
-          padding: 4px 0;
-          font-size: 0.85rem;
+          padding: 2px 0;
+          font-size: 0.82rem;
           align-items: baseline;
         }
         .info-item .label {
           font-weight: 600;
           color: #475569;
-          min-width: 140px;
+          min-width: 160px;
           flex-shrink: 0;
         }
         .info-item .value {
           color: #1e293b;
           font-weight: 500;
+          white-space: normal;
+          word-wrap: break-word;
         }
         .info-item .value.empty {
           color: #94a3b8;
           font-style: italic;
         }
-        .status-value {
-          font-weight: 600;
-          padding: 2px 12px;
-          border-radius: 20px;
-          display: inline-block;
-          font-size: 0.85rem;
-        }
-        .status-updated { background: #dcfce7; color: #166534; }
-        .status-for-updating { background: #fef3c7; color: #92400e; }
-        .status-under-review { background: #dbeafe; color: #1e40af; }
-        .status-default { background: #e2e8f0; color: #475569; }
         
-        .section-spacer {
-          margin-top: 20px;
+        .section-title {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #1e3a8a;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-bottom: 1px solid #e2e8f0;
+          padding-bottom: 3px;
+          margin-top: 12px;
+          margin-bottom: 6px;
         }
         
         .cmpdc-section {
-          margin-top: 25px;
+          margin-top: 15px;
           border-top: 1px solid #e2e8f0;
-          padding-top: 15px;
+          padding-top: 10px;
+        }
+        
+        .section-title-with-acting {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #1e3a8a;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-bottom: 1px solid #e2e8f0;
+          padding-bottom: 3px;
+          margin-top: 12px;
+          margin-bottom: 6px;
+        }
+        .acting-checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-weight: 400;
+          text-transform: none;
+          color: #475569;
+          font-size: 0.78rem;
+        }
+        .acting-checkbox {
+          display: inline-block;
+          width: 14px;
+          height: 14px;
+          border: 2px solid #475569;
+          border-radius: 3px;
+          background: white;
+          flex-shrink: 0;
         }
         
         .footer {
-          margin-top: 35px;
-          padding-top: 15px;
+          margin-top: 25px;
+          padding-top: 10px;
           border-top: 1px solid #e2e8f0;
           font-size: 0.7rem;
           color: #94a3b8;
@@ -2587,8 +2625,7 @@ footer {
         }
         
         @media print {
-          body { padding: 30px 40px; }
-          .no-print { display: none; }
+          body { padding: 25px 35px; }
         }
       </style>
     </head>
@@ -2615,37 +2652,47 @@ footer {
         </div>
       </div>
       
-      <div class="section-title">Latest CLUP</div>
+      <div class="status-row">
+        <span class="status-label">Status</span>
+        <span class="status-badge ${statusClass}">${escapeHtml(statusDisplay)}</span>
+      </div>
+      
       <div class="info-grid">
         <div class="info-item">
-          <span class="label">Year of Approval :</span>
-          <span class="value ${!approvalYear ? 'empty' : ''}">${approvalYear || '—'}</span>
+          <span class="label">Specific Status :</span>
+          <span class="value ${!specificStatusText ? 'empty' : ''}">${escapeHtml(specificStatusText) || ''}</span>
         </div>
         <div class="info-item">
-          <span class="label">Planning Period :</span>
-          <span class="value ${(!startYear && !endYear) ? 'empty' : ''}">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span>
+          <span class="label">With Local Shelter Plan :</span>
+          <span class="value ${!shelterPlan ? 'empty' : ''}">${escapeHtml(shelterPlan) || ''}</span>
         </div>
         <div class="info-item">
-          <span class="label">SP/HLURB Resolution :</span>
-          <span class="value ${!resolutionNo ? 'empty' : ''}">${resolutionNo || '—'}</span>
+          <span class="label">With Integrated Housing Subsector :</span>
+          <span class="value ${!housingSubsector ? 'empty' : ''}">${escapeHtml(housingSubsector) || ''}</span>
         </div>
         <div class="info-item">
-          <span class="label">Date Approved :</span>
-          <span class="value ${!approvalYear ? 'empty' : ''}">${approvalYear || '—'}</span>
+          <span class="label">With Communication Plan :</span>
+          <span class="value ${!commPlan ? 'empty' : ''}">${escapeHtml(commPlan) || ''}</span>
         </div>
       </div>
       
-      <div class="section-title">Specific Status</div>
+      <div class="section-title">Latest CLUP</div>
       <div class="info-grid">
         <div class="info-item">
-          <span class="label">Status of CLUP Preparation :</span>
-          <span class="value">
-            <span class="status-value status-${statusDisplay.toLowerCase().replace(' ', '-')}">${escapeHtml(combinedStatus)}</span>
-          </span>
+          <span class="label">Planning Period :</span>
+          <span class="value ${(!startYear && !endYear) ? 'empty' : ''}">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '')}</span>
         </div>
         <div class="info-item">
-          <span class="label">Due for Updating :</span>
-          <span class="value ${!dueForUpdating ? 'empty' : ''}">${escapeHtml(dueForUpdating) || '—'}</span>
+          <span class="label">Date Approved :</span>
+          <span class="value ${!approvalYear ? 'empty' : ''}">${approvalYear || ''}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">SP/DHSUD DC :</span>
+          <span class="value ${!resolutionNo ? 'empty' : ''}">${resolutionNo || ''}</span>
+        </div>
+        <div class="info-item">
+          <span class="label"></span>
+          <span class="value"></span>
         </div>
       </div>
       
@@ -2654,29 +2701,39 @@ footer {
         <div class="info-grid">
           <div class="info-item">
             <span class="label">Name :</span>
-            <span class="value ${!cmpdcName ? 'empty' : ''}">${escapeHtml(cmpdcName) || '—'}</span>
+            <span class="value ${!cmpdcName ? 'empty' : ''}">${escapeHtml(cmpdcName) || ''}</span>
           </div>
           <div class="info-item">
             <span class="label">Email :</span>
-            <span class="value ${!cmpdcEmail ? 'empty' : ''}">${escapeHtml(cmpdcEmail) || '—'}</span>
+            <span class="value ${!cmpdcEmail ? 'empty' : ''}">${escapeHtml(cmpdcEmail) || ''}</span>
           </div>
           <div class="info-item">
             <span class="label">Mobile :</span>
-            <span class="value ${!cmpdcContact ? 'empty' : ''}">${escapeHtml(cmpdcContact) || '—'}</span>
+            <span class="value ${!cmpdcContact ? 'empty' : ''}">${escapeHtml(cmpdcContact) || ''}</span>
           </div>
         </div>
       </div>
       
       <div class="cmpdc-section">
-        <div class="section-title" style="margin-top: 0;">Local Chief Executive</div>
+        <div class="section-title-with-acting">
+          <span>Local Chief Executive</span>
+          <span class="acting-checkbox-wrapper">
+            <span class="acting-checkbox"></span>
+            <span>Acting</span>
+          </span>
+        </div>
         <div class="info-grid">
           <div class="info-item">
             <span class="label">Mayor :</span>
-            <span class="value ${!mayor ? 'empty' : ''}">${escapeHtml(mayor) || '—'}</span>
+            <span class="value ${!mayor ? 'empty' : ''}">${escapeHtml(mayor) || ''}</span>
           </div>
           <div class="info-item">
             <span class="label">Mobile :</span>
-            <span class="value ${!mayorMobile ? 'empty' : ''}">${escapeHtml(mayorMobile) || '—'}</span>
+            <span class="value ${!mayorMobile ? 'empty' : ''}">${escapeHtml(mayorMobile) || ''}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Vice Mayor :</span>
+            <span class="value ${!viceMayor ? 'empty' : ''}">${escapeHtml(viceMayor) || ''}</span>
           </div>
         </div>
       </div>
