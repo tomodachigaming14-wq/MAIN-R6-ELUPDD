@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>DHSUD VI | ELUPDD - Technical Assistance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DHSUD VI | CLUP/ZO Trainings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* ===== GLOBAL ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: "Inter", sans-serif;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             background: #f4f9fe;
             color: #0a2540;
             line-height: 1.5;
-            scroll-behavior: smooth;
             min-height: 100vh;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -100,6 +100,10 @@
             padding: 0.5rem 0;
             transition: 0.2s;
             letter-spacing: -0.2px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
         }
         .main-nav-links a:hover,
         .dropbtn:hover {
@@ -109,12 +113,6 @@
         .dropdown {
             position: relative;
             display: inline-block;
-        }
-        .dropbtn {
-            background: none;
-            border: none;
-            font-family: inherit;
-            cursor: pointer;
         }
         .dropbtn::after {
             content: " ▾";
@@ -246,8 +244,8 @@
             background: #f8fafc;
         }
 
-        /* ===== TECH ASSISTANCE CARD ===== */
-        .ta-card {
+        /* ===== CARD (from index) ===== */
+        .card {
             max-width: 880px;
             width: 100%;
             background: white;
@@ -259,7 +257,7 @@
             position: relative;
             z-index: 1;
         }
-        .ta-header {
+        .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -269,12 +267,12 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .ta-header-left {
+        .header-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        .ta-header-icon {
+        .header-icon {
             width: 52px;
             height: 52px;
             background: linear-gradient(135deg, #1e3a8a, #2563eb);
@@ -286,13 +284,13 @@
             color: white;
             box-shadow: 0 8px 24px rgba(26, 115, 232, 0.3);
         }
-        .ta-header h1 {
+        .header h1 {
             font-size: 1.6rem;
             font-weight: 700;
             color: #1e3a8a;
             letter-spacing: -0.5px;
         }
-        .ta-header h1 small {
+        .header h1 small {
             display: block;
             font-size: 0.7rem;
             font-weight: 400;
@@ -301,7 +299,7 @@
             text-transform: uppercase;
             margin-top: 2px;
         }
-        .ta-header-badge {
+        .header-badge {
             background: rgba(0, 200, 150, 0.15);
             border: 1px solid rgba(0, 200, 150, 0.2);
             padding: 0.4rem 1rem;
@@ -315,60 +313,20 @@
             align-items: center;
             gap: 6px;
         }
-        .ta-toggle-container {
-            display: flex;
-            gap: 0;
-            margin-bottom: 2rem;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 2px solid #e2e8f0;
-            background: #f8fafc;
-        }
-        .ta-toggle-btn {
-            flex: 1;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            background: transparent;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #64748b;
-            position: relative;
-            font-family: "Inter", sans-serif;
-        }
-        .ta-toggle-btn i {
-            margin-right: 8px;
-        }
-        .ta-toggle-btn.active {
-            background: #1e3a8a;
-            color: white;
-            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
-        }
-        .ta-toggle-btn:not(.active):hover {
-            background: #e2e8f0;
-            color: #1e3a8a;
-        }
-        .ta-toggle-btn:first-child {
-            border-radius: 14px 0 0 14px;
-        }
-        .ta-toggle-btn:last-child {
-            border-radius: 0 14px 14px 0;
-        }
-        .ta-form-grid {
+        .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.2rem 1.8rem;
         }
-        .ta-full-width {
+        .full-width {
             grid-column: 1 / -1;
         }
-        .ta-field-group {
+        .field-group {
             display: flex;
             flex-direction: column;
             gap: 0.4rem;
         }
-        .ta-field-group label {
+        .field-group label {
             font-weight: 700;
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -378,23 +336,23 @@
             align-items: center;
             gap: 8px;
         }
-        .ta-field-group label i {
+        .field-group label i {
             color: #2563eb;
             font-size: 0.75rem;
             width: 16px;
         }
-        .ta-field-group label .required {
+        .field-group label .required {
             color: #dc2626;
             font-size: 0.6rem;
         }
-        .ta-field-group input:read-only {
+        .field-group input:read-only {
             background: #f1f5f9;
             cursor: not-allowed;
             color: #475569;
         }
-        .ta-field-group input,
-        .ta-field-group select,
-        .ta-field-group textarea {
+        .field-group input,
+        .field-group select,
+        .field-group textarea {
             background: #ffffff;
             border: 1.5px solid #cbd5e1;
             border-radius: 16px;
@@ -407,14 +365,14 @@
             font-weight: 400;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .ta-field-group input:focus,
-        .ta-field-group select:focus,
-        .ta-field-group textarea:focus {
+        .field-group input:focus,
+        .field-group select:focus,
+        .field-group textarea:focus {
             border-color: #2563eb;
             background: #ffffff;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
-        .ta-field-group select {
+        .field-group select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -423,7 +381,7 @@
             color: #0f172a;
             min-height: 50px;
         }
-        .ta-field-group select option {
+        .field-group select option {
             background: #ffffff;
             color: #0f172a;
             white-space: normal !important;
@@ -433,51 +391,21 @@
             min-height: 30px !important;
             height: auto !important;
         }
-        .ta-field-group textarea {
+        .field-group textarea {
             resize: vertical;
             min-height: 60px;
         }
-        .ta-others-text-container {
-            display: none;
-            margin-top: 0.5rem;
-        }
-        .ta-others-text-container.active {
-            display: block;
-        }
-        .ta-others-text-container input {
-            background: #ffffff;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 16px;
-            padding: 0.75rem 1.1rem;
-            font-size: 0.9rem;
-            transition: all 0.25s ease;
-            outline: none;
-            width: 100%;
-            color: #0f172a;
-            font-weight: 400;
-            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
-        }
-        .ta-others-text-container input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-        .ta-form-type {
-            display: none;
-        }
-        .ta-form-type.active {
-            display: block;
-        }
-        .ta-pic-container {
+        .pic-container {
             display: flex;
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
-        .ta-pic-container select {
+        .pic-container select {
             flex: 1;
             min-width: 200px;
         }
-        .ta-pic-btn {
+        .pic-btn {
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 12px;
@@ -491,27 +419,28 @@
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             white-space: nowrap;
         }
-        .ta-pic-btn-add {
+        .pic-btn-add {
             background: #10b981;
             color: white;
         }
-        .ta-pic-btn-add:hover {
+        .pic-btn-add:hover {
             background: #059669;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
-        .ta-pic-btn-delete {
+        .pic-btn-add:active { transform: scale(0.95); }
+        .pic-btn-delete {
             background: #ef4444;
             color: white;
         }
-        .ta-pic-btn-delete:hover {
+        .pic-btn-delete:hover {
             background: #dc2626;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
-        .ta-pic-btn i {
-            font-size: 0.7rem;
-        }
-
-        .ta-btn-submit {
+        .pic-btn-delete:active { transform: scale(0.95); }
+        .pic-btn i { font-size: 0.7rem; }
+        .btn-submit {
             background: linear-gradient(135deg, #2563eb, #1e3a8a);
             border: none;
             padding: 1rem 2rem;
@@ -533,7 +462,7 @@
             overflow: hidden;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .ta-btn-submit::before {
+        .btn-submit::before {
             content: "";
             position: absolute;
             top: 0;
@@ -543,39 +472,18 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             transition: left 0.6s ease;
         }
-        .ta-btn-submit:hover::before {
-            left: 100%;
+        .btn-submit:hover::before { left: 100%; }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
         }
-        .ta-btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.35);
-        }
-        .ta-btn-submit:disabled {
+        .btn-submit:active { transform: scale(0.97); }
+        .btn-submit:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none !important;
         }
-        .ta-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .ta-btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .ta-btn-test {
+        .btn-test {
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
             padding: 0.5rem 1rem;
@@ -587,45 +495,54 @@
             transition: all 0.3s ease;
             flex: 1;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
-            text-align: center;
-            text-decoration: none;
         }
-        .ta-btn-test:hover {
+        .btn-test:hover {
             background: #e2e8f0;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        .ta-btn-test i {
-            margin-right: 4px;
+        .btn-test:active { transform: scale(0.97); }
+        .btn-test i { margin-right: 4px; }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
-        .ta-btn-view-all {
+        .btn-view-all {
             background: #1e3a8a;
             border: 1px solid #1e3a8a;
             color: white;
         }
-        .ta-btn-view-all:hover {
+        .btn-view-all:hover {
             background: #2563eb;
             border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
         }
-        .ta-btn-chart {
+        .btn-chart {
             background: #059669;
             border: 1px solid #059669;
             color: white;
         }
-        .ta-btn-chart:hover {
+        .btn-chart:hover {
             background: #047857;
             border-color: #047857;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
-        .ta-btn-sheet {
+        .btn-sheet {
             background: #0f9d58;
             border: 1px solid #0f9d58;
             color: white;
         }
-        .ta-btn-sheet:hover {
+        .btn-sheet:hover {
             background: #0b7e48;
             border-color: #0b7e48;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
         }
-
-        .ta-status-message {
+        .status-message {
             margin-top: 1.2rem;
             padding: 0.8rem 1.2rem;
             border-radius: 16px;
@@ -639,28 +556,24 @@
             font-size: 0.85rem;
             min-height: 52px;
         }
-        .ta-status-message i {
+        .status-message i {
             font-size: 1rem;
             color: #2563eb;
             flex-shrink: 0;
         }
-        .ta-status-message.success {
+        .status-message.success {
             background: #f0fdf4;
             border-color: #86efac;
             color: #166534;
         }
-        .ta-status-message.success i {
-            color: #10b981;
-        }
-        .ta-status-message.error {
+        .status-message.success i { color: #10b981; }
+        .status-message.error {
             background: #fef2f2;
             border-color: #fca5a5;
             color: #991b1b;
         }
-        .ta-status-message.error i {
-            color: #dc2626;
-        }
-        .ta-footer-note {
+        .status-message.error i { color: #dc2626; }
+        .footer-note {
             margin-top: 1.5rem;
             font-size: 0.65rem;
             color: #94a3b8;
@@ -669,8 +582,59 @@
             padding-top: 1.2rem;
             letter-spacing: 0.5px;
         }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .logo-image {
+            height: 50px;
+            width: auto;
+            display: block;
+        }
+        .header-icon, .header-logo { display: flex; align-items: center; }
 
-        /* ===== MODALS ===== */
+        /* ===== BUTTON ANIMATIONS ===== */
+        .btn-action {
+            transition: all 0.25s ease !important;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-action:hover { transform: translateY(-2px) scale(1.05); }
+        .btn-action:active { transform: scale(0.9); }
+        .btn-action.btn-edit { background: #f59e0b; color: white; }
+        .btn-action.btn-edit:hover { background: #d97706; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
+        .btn-action.btn-delete { background: #ef4444; color: white; }
+        .btn-action.btn-delete:hover { background: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+        .btn-action.btn-save-edit { background: #10b981; color: white; }
+        .btn-action.btn-save-edit:hover { background: #059669; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+        .btn-action.btn-cancel-edit { background: #6b7280; color: white; }
+        .btn-action.btn-cancel-edit:hover { background: #4b5563; box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4); }
+        .btn-action .btn-spinner {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        .btn-action.loading .btn-spinner { display: inline-block; }
+        .btn-action.loading i { display: none; }
+        .btn-action.loading { opacity: 0.7; pointer-events: none; }
+
+        /* ===== MODAL STYLES ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -686,13 +650,8 @@
             padding: 2rem;
             animation: fadeIn 0.3s ease;
         }
-        .modal-overlay.active {
-            display: flex;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        .modal-overlay.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal-box {
             background: white;
             border-radius: 24px;
@@ -704,10 +663,7 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.3s ease;
         }
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -725,9 +681,7 @@
             align-items: center;
             gap: 10px;
         }
-        .modal-header h2 i {
-            color: #2563eb;
-        }
+        .modal-header h2 i { color: #2563eb; }
         .modal-header .close-btn {
             background: #f1f5f9;
             border: none;
@@ -742,10 +696,7 @@
             justify-content: center;
             color: #475569;
         }
-        .modal-header .close-btn:hover {
-            background: #fee2e2;
-            color: #dc2626;
-        }
+        .modal-header .close-btn:hover { background: #fee2e2; color: #dc2626; }
         .modal-filters {
             padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
@@ -769,8 +720,7 @@
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
-        .modal-filters select,
-        .modal-filters input {
+        .modal-filters select, .modal-filters input {
             padding: 0.4rem 0.8rem;
             border: 1.5px solid #cbd5e1;
             border-radius: 10px;
@@ -780,8 +730,7 @@
             transition: all 0.3s ease;
             min-width: 100px;
         }
-        .modal-filters select:focus,
-        .modal-filters input:focus {
+        .modal-filters select:focus, .modal-filters input:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
@@ -796,15 +745,9 @@
             transition: all 0.3s ease;
             font-size: 0.75rem;
         }
-        .modal-filters .filter-btn:hover {
-            background: #1d4ed8;
-        }
-        .modal-filters .filter-btn.reset-btn {
-            background: #64748b;
-        }
-        .modal-filters .filter-btn.reset-btn:hover {
-            background: #475569;
-        }
+        .modal-filters .filter-btn:hover { background: #1d4ed8; }
+        .modal-filters .filter-btn.reset-btn { background: #64748b; }
+        .modal-filters .filter-btn.reset-btn:hover { background: #475569; }
         .modal-search {
             padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
@@ -833,10 +776,7 @@
             color: #64748b;
             white-space: nowrap;
         }
-        .modal-search .search-info span {
-            font-weight: 700;
-            color: #1e3a8a;
-        }
+        .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
         .modal-body {
             padding: 1.5rem 2rem;
             overflow-y: auto;
@@ -870,9 +810,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .modal-body table tr:hover td {
-            background: #f8fafc;
-        }
+        .modal-body table tr:hover td { background: #f8fafc; }
         .modal-body table .no-records td {
             text-align: center;
             padding: 3rem 0;
@@ -897,44 +835,16 @@
             align-items: center;
             gap: 4px;
         }
-        .modal-body .action-cell .btn-action:hover {
-            transform: translateY(-2px) scale(1.05);
-        }
-        .modal-body .action-cell .btn-action:active {
-            transform: scale(0.9);
-        }
-        .modal-body .action-cell .btn-edit {
-            background: #f59e0b;
-            color: white;
-        }
-        .modal-body .action-cell .btn-edit:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-        .modal-body .action-cell .btn-delete {
-            background: #ef4444;
-            color: white;
-        }
-        .modal-body .action-cell .btn-delete:hover {
-            background: #dc2626;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-        }
-        .modal-body .action-cell .btn-save-edit {
-            background: #10b981;
-            color: white;
-        }
-        .modal-body .action-cell .btn-save-edit:hover {
-            background: #059669;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-        .modal-body .action-cell .btn-cancel-edit {
-            background: #6b7280;
-            color: white;
-        }
-        .modal-body .action-cell .btn-cancel-edit:hover {
-            background: #4b5563;
-            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
-        }
+        .modal-body .action-cell .btn-action:hover { transform: translateY(-2px) scale(1.05); }
+        .modal-body .action-cell .btn-action:active { transform: scale(0.9); }
+        .modal-body .action-cell .btn-edit { background: #f59e0b; color: white; }
+        .modal-body .action-cell .btn-edit:hover { background: #d97706; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
+        .modal-body .action-cell .btn-delete { background: #ef4444; color: white; }
+        .modal-body .action-cell .btn-delete:hover { background: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+        .modal-body .action-cell .btn-save-edit { background: #10b981; color: white; }
+        .modal-body .action-cell .btn-save-edit:hover { background: #059669; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+        .modal-body .action-cell .btn-cancel-edit { background: #6b7280; color: white; }
+        .modal-body .action-cell .btn-cancel-edit:hover { background: #4b5563; box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4); }
         .modal-body .action-cell .btn-action .btn-spinner {
             display: none;
             width: 14px;
@@ -944,27 +854,14 @@
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
         }
-        .modal-body .action-cell .btn-action.loading .btn-spinner {
-            display: inline-block;
-        }
-        .modal-body .action-cell .btn-action.loading i {
-            display: none;
-        }
-        .modal-body .action-cell .btn-action.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        .modal-body .editing-row td {
-            background: #fef3c7 !important;
-        }
+        .modal-body .action-cell .btn-action.loading .btn-spinner { display: inline-block; }
+        .modal-body .action-cell .btn-action.loading i { display: none; }
+        .modal-body .action-cell .btn-action.loading { opacity: 0.7; pointer-events: none; }
+        .modal-body .editing-row td { background: #fef3c7 !important; }
         .modal-body .editing-row .action-cell .btn-edit,
-        .modal-body .editing-row .action-cell .btn-delete {
-            display: none !important;
-        }
+        .modal-body .editing-row .action-cell .btn-delete { display: none !important; }
         .modal-body .editing-row .action-cell .btn-save-edit,
-        .modal-body .editing-row .action-cell .btn-cancel-edit {
-            display: inline-flex !important;
-        }
+        .modal-body .editing-row .action-cell .btn-cancel-edit { display: inline-flex !important; }
         .modal-body .editing-row input,
         .modal-body .editing-row select,
         .modal-body .editing-row textarea {
@@ -983,10 +880,6 @@
             border-color: #2563eb;
             box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
         }
-        .modal-body .editing-row textarea {
-            min-height: 30px;
-            resize: vertical;
-        }
         .modal-footer {
             padding: 1rem 2rem;
             border-top: 1px solid #e2e8f0;
@@ -1002,10 +895,7 @@
             font-size: 0.85rem;
             color: #475569;
         }
-        .modal-footer .record-count span {
-            font-weight: 700;
-            color: #1e3a8a;
-        }
+        .modal-footer .record-count span { font-weight: 700; color: #1e3a8a; }
         .modal-footer .btn-close-modal {
             background: #2563eb;
             border: none;
@@ -1017,9 +907,7 @@
             transition: all 0.3s ease;
             font-size: 0.85rem;
         }
-        .modal-footer .btn-close-modal:hover {
-            background: #1d4ed8;
-        }
+        .modal-footer .btn-close-modal:hover { background: #1d4ed8; }
 
         /* ===== CHART STYLES ===== */
         .chart-filters {
@@ -1047,8 +935,7 @@
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
-        .chart-filters select,
-        .chart-filters input {
+        .chart-filters select, .chart-filters input {
             padding: 0.4rem 0.8rem;
             border: 1.5px solid #cbd5e1;
             border-radius: 10px;
@@ -1058,8 +945,7 @@
             transition: all 0.3s ease;
             min-width: 120px;
         }
-        .chart-filters select:focus,
-        .chart-filters input:focus {
+        .chart-filters select:focus, .chart-filters input:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
@@ -1075,15 +961,9 @@
             font-size: 0.75rem;
             white-space: nowrap;
         }
-        .chart-filters .filter-btn:hover {
-            background: #1d4ed8;
-        }
-        .chart-filters .filter-btn.reset-btn {
-            background: #64748b;
-        }
-        .chart-filters .filter-btn.reset-btn:hover {
-            background: #475569;
-        }
+        .chart-filters .filter-btn:hover { background: #1d4ed8; }
+        .chart-filters .filter-btn.reset-btn { background: #64748b; }
+        .chart-filters .filter-btn.reset-btn:hover { background: #475569; }
         .chart-filters .filter-divider {
             width: 1px;
             height: 30px;
@@ -1120,18 +1000,13 @@
             background: #2563eb;
             color: white;
         }
-        .chart-type-selector button:hover {
-            border-color: #2563eb;
-        }
+        .chart-type-selector button:hover { border-color: #2563eb; }
         .chart-container {
             position: relative;
             height: 400px;
             margin-top: 0.5rem;
         }
-        .chart-container canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
+        .chart-container canvas { width: 100% !important; height: 100% !important; }
         .chart-summary {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -1142,9 +1017,7 @@
             border-radius: 12px;
             border: 1px solid #e2e8f0;
         }
-        .chart-summary .stat-item {
-            text-align: center;
-        }
+        .chart-summary .stat-item { text-align: center; }
         .chart-summary .stat-item .stat-value {
             font-size: 1.3rem;
             font-weight: 700;
@@ -1166,15 +1039,9 @@
             margin-bottom: 1rem;
         }
 
-        .add-person-modal .modal-box {
-            max-width: 500px;
-        }
-        .add-person-modal .modal-body {
-            padding: 2rem;
-        }
-        .add-person-modal .ta-field-group {
-            margin-bottom: 1rem;
-        }
+        .add-person-modal .modal-box { max-width: 500px; }
+        .add-person-modal .modal-body { padding: 2rem; }
+        .add-person-modal .field-group { margin-bottom: 1rem; }
         .add-person-modal .btn-add-person {
             background: #10b981;
             border: none;
@@ -1188,22 +1055,28 @@
             font-size: 1rem;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .add-person-modal .btn-add-person:hover {
-            background: #059669;
-        }
-        .add-person-modal .btn-add-person:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .add-person-modal .btn-add-person:hover { background: #059669; }
+        .add-person-modal .btn-add-person:disabled { opacity: 0.6; cursor: not-allowed; }
         .add-person-modal .error-msg {
             color: #dc2626;
             font-size: 0.8rem;
             margin-top: 0.3rem;
             display: none;
         }
-        .add-person-modal .error-msg.show {
-            display: block;
-        }
+        .add-person-modal .error-msg.show { display: block; }
+        .col-region { min-width: 70px; max-width: 90px; }
+        .col-province { min-width: 80px; max-width: 100px; }
+        .col-city { min-width: 100px; max-width: 130px; }
+        .col-title { min-width: 120px; max-width: 160px; }
+        .col-topics { min-width: 120px; max-width: 160px; }
+        .col-category { min-width: 80px; max-width: 110px; }
+        .col-date { min-width: 80px; max-width: 95px; }
+        .col-participants { min-width: 50px; max-width: 70px; text-align: center; }
+        .col-budget { min-width: 70px; max-width: 90px; }
+        .col-partner { min-width: 80px; max-width: 100px; }
+        .col-month { min-width: 80px; max-width: 100px; }
+        .col-personnel { min-width: 90px; max-width: 120px; }
+        .col-actions { min-width: 70px; max-width: 80px; }
 
         /* ===== LOGIN MODAL ===== */
         .login-modal {
@@ -1216,9 +1089,7 @@
             justify-content: center;
             z-index: 10000;
         }
-        .login-modal.active {
-            display: flex;
-        }
+        .login-modal.active { display: flex; }
         .login-modal-content {
             background: white;
             border-radius: 2.5rem;
@@ -1250,9 +1121,7 @@
             margin-bottom: 0.8rem;
             transition: transform 0.2s;
         }
-        .login-modal-brand img:hover {
-            transform: scale(1.02);
-        }
+        .login-modal-brand img:hover { transform: scale(1.02); }
         .login-modal-brand h3 {
             font-size: 1.6rem;
             font-weight: 800;
@@ -1278,10 +1147,7 @@
             transition: 0.2s;
             z-index: 10;
         }
-        .login-modal-close:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
+        .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
         .login-modal-body {
             padding: 2rem 1.8rem 1.8rem;
         }
@@ -1356,6 +1222,7 @@
         }
         .toast-msg.success { background: #166534; }
         .toast-msg.error { background: #b91c1c; }
+        .toast-msg.info { background: #1e3a8a; }
 
         /* ===== FOOTER ===== */
         .footer-new {
@@ -1389,19 +1256,17 @@
             margin-bottom: 12px;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 800px) {
-            .ta-card { padding: 1.5rem; border-radius: 2rem; }
-            .ta-form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
-            .ta-full-width { grid-column: 1; }
-            .ta-header h1 { font-size: 1.2rem; }
-            .ta-header-icon { width: 42px; height: 42px; font-size: 1.2rem; }
-            .ta-header-badge { display: none; }
-            .ta-btn-group { flex-direction: column; }
-            .ta-toggle-btn { font-size: 0.75rem; padding: 0.6rem 1rem; }
-            .ta-pic-container { flex-direction: column; }
-            .ta-pic-container select { width: 100%; }
-            .ta-pic-btn { width: 100%; justify-content: center; }
+            .card { padding: 1.5rem; }
+            .form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+            .full-width { grid-column: 1; }
+            .header h1 { font-size: 1.2rem; }
+            .header-icon { width: 42px; height: 42px; font-size: 1.2rem; }
+            .header-badge { display: none; }
+            .btn-group { flex-direction: column; }
+            .pic-container { flex-direction: column; }
+            .pic-container select { width: 100%; }
+            .pic-btn { width: 100%; justify-content: center; }
             .modal-box { max-height: 95vh; }
             .modal-header { padding: 1rem; }
             .modal-filters { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; }
@@ -1423,8 +1288,8 @@
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
         }
         @media (max-width: 400px) {
-            .ta-card { padding: 1rem; }
-            .ta-field-group input, .ta-field-group select, .ta-field-group textarea {
+            .card { padding: 1rem; }
+            .field-group input, .field-group select, .field-group textarea {
                 padding: 0.6rem 0.9rem;
                 font-size: 0.85rem;
             }
@@ -1453,55 +1318,41 @@
     </div>
 </header>
 
-<!-- ===== MAIN CONTENT ===== -->
+<!-- ===== MAIN CONTENT (from index.html, loading removed) ===== -->
 <main>
     <div class="container">
-        <div class="ta-card" id="mainCard">
-            <div class="ta-header">
-                <div class="ta-header-left">
-                    <div class="ta-header-icon">
-                        <i class="fas fa-headset"></i>
+        <div class="card" id="mainCard">
+            <div class="header">
+                <div class="header-left">
+                    <div class="header-logo">
+                        <img src="DHSUD_LOGO.png" alt="DHSUD Logo" class="logo-image" onerror="this.style.display='none'">
                     </div>
                     <div>
                         <h1>
-                            Technical Assistance
-                            <small>Technical Assistance Management Information System</small>
+                            CLUP/ZO Trainings
+                            <small>Training Management System</small>
                         </h1>
                     </div>
                 </div>
-                <div class="ta-header-badge">
+                <div class="header-badge">
                     <i class="fas fa-circle" style="font-size: 0.4rem; color: #00c896;"></i>
                     <span>Live</span>
                 </div>
             </div>
 
-            <!-- Toggle Buttons -->
-            <div class="ta-toggle-container">
-                <button class="ta-toggle-btn active" data-type="CLUP" id="toggleCLUP">
-                    <i class="fas fa-file-alt"></i> CLUP
-                </button>
-                <button class="ta-toggle-btn" data-type="PDPFP" id="togglePDPFP">
-                    <i class="fas fa-file-pdf"></i> PDPFP
-                </button>
-            </div>
-
-            <!-- ===== CLUP FORM ===== -->
-            <div class="ta-form-type active" id="formCLUP">
-                <form id="clupForm">
-                    <div class="ta-form-grid">
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-hashtag"></i> PSGC <span class="required">*</span></label>
-                            <input type="text" id="clup_psgc" placeholder="Auto-fills when city selected" readonly required>
-                        </div>
-                        <div class="ta-field-group">
+            <!-- SINGLE FORM -->
+            <div class="form-type active" id="formTraining">
+                <form id="trainingForm">
+                    <div class="form-grid">
+                        <div class="field-group">
                             <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
-                            <select id="clup_region" required>
-                                <option value="Region 6">Region 6 - Western Visayas</option>
+                            <select id="training_region" required>
+                                <option value="Region_06">Region_06</option>
                             </select>
                         </div>
-                        <div class="ta-field-group">
+                        <div class="field-group">
                             <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
-                            <select id="clup_province" required>
+                            <select id="training_province" required>
                                 <option value="">Select Province...</option>
                                 <option value="Aklan">Aklan</option>
                                 <option value="Antique">Antique</option>
@@ -1511,61 +1362,109 @@
                                 <option value="Negros Occidental">Negros Occidental</option>
                             </select>
                         </div>
-                        <div class="ta-field-group">
+                        <div class="field-group">
                             <label><i class="fas fa-city"></i> City/Municipality <span class="required">*</span></label>
-                            <select id="clup_cityMun" required>
+                            <select id="training_cityMun" required>
                                 <option value="">Select City/Municipality...</option>
                             </select>
                         </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-quote-right"></i> Query / TA Details <span class="required">*</span></label>
-                            <textarea id="clup_queryDetails" placeholder="Describe the request or technical assistance..." rows="2" required></textarea>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-headset"></i> Type of Assistance Provided <span class="required">*</span></label>
-                            <select id="clup_assistanceType" required>
-                                <option value="">Select Type of Assistance...</option>
-                                <option value="Assistance through on-field mentoring and coaching">Assistance through on-field mentoring and coaching</option>
-                                <option value="Assistance to walk-in/by-appointment consultations">Assistance to walk-in/by-appointment consultations</option>
-                                <option value="Assistance through online platform, telephone, and letter queries">Assistance through online platform, telephone, and letter queries</option>
-                                <option value="Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)">Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)</option>
-                                <option value="Assistance through the provision of orientations/briefings">Assistance through the provision of orientations/briefings</option>
-                                <option value="Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.">Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.</option>
-                                <option value="Others (to specify in the remarks)">Others (to specify in the remarks)</option>
+                        <div class="field-group full-width">
+                            <label><i class="fas fa-chalkboard-teacher"></i> Training Title <span class="required">*</span></label>
+                            <select id="training_title" required>
+                                <option value="">Select Training Title...</option>
+                                <option value="Basic and Advance GIS Training">Basic and Advance GIS Training</option>
+                                <option value="CLUP Module 1 Training">CLUP Module 1 Training</option>
+                                <option value="CLUP Module 2 Training">CLUP Module 2 Training</option>
+                                <option value="Enhanced Climate and Disaster Risk Assessment (CDRA)">Enhanced Climate and Disaster Risk Assessment (CDRA)</option>
+                                <option value="Inter-Agency Consultative Conference on Land Reclassification and Conversion">Inter-Agency Consultative Conference on Land Reclassification and Conversion</option>
+                                <option value="LGU Cuartero, Capiz - CLUP Formulation and Sectoral Workshop">LGU Cuartero, Capiz - CLUP Formulation and Sectoral Workshop</option>
+                                <option value="LGU Nueva Valencia, Guimaras - Enhanced Climate and Disaster Risk Assessment (CDRA) Training">LGU Nueva Valencia, Guimaras - Enhanced Climate and Disaster Risk Assessment (CDRA) Training</option>
+                                <option value="Orientation on CLUP and ZO Formulation">Orientation on CLUP and ZO Formulation</option>
+                                <option value="Orientation on CLUP and ZO Updating for LGU San Joaquin, Iloilo">Orientation on CLUP and ZO Updating for LGU San Joaquin, Iloilo</option>
+                                <option value="Orientation on the Comprehensive Land Use Plan and Zoning ordinance Procedure and Data Gathering">Orientation on the Comprehensive Land Use Plan and Zoning ordinance Procedure and Data Gathering</option>
+                                <option value="Orientation on the LSP/Housing Sub-sector and Data Collection Tools for LGUs">Orientation on the LSP/Housing Sub-sector and Data Collection Tools for LGUs</option>
+                                <option value="Orientation on the Updating of CLUP and ZO">Orientation on the Updating of CLUP and ZO</option>
+                                <option value="Orientation on Zoning Administration and Enforcement for LGU Janiuay, Iloilo">Orientation on Zoning Administration and Enforcement for LGU Janiuay, Iloilo</option>
+                                <option value="PlanSmart for Sustainable Human Settlements: Harmonized Ecological Profile and Climate and Disaster Risk Assessment (EP-CDRA) for Resilience Rollout Training - Visayas Cluster">PlanSmart for Sustainable Human Settlements: Harmonized Ecological Profile and Climate and Disaster Risk Assessment (EP-CDRA) for Resilience Rollout Training - Visayas Cluster</option>
                             </select>
-                            <div class="ta-others-text-container" id="clup_othersContainer">
-                                <input type="text" id="clup_othersText" placeholder="Please specify other type of assistance...">
-                            </div>
                         </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-tag"></i> TA Category <span class="required">*</span></label>
-                            <select id="clup_taCategory" required>
-                                <option value="">Select...</option>
+                        <div class="field-group full-width">
+                            <label><i class="fas fa-list-ul"></i> Training Topics <span class="required">*</span></label>
+                            <select id="training_topics" required>
+                                <option value="">Select Training Topic...</option>
+                                <option value="12-Step Process and Brief CDRA Process">12-Step Process and Brief CDRA Process</option>
+                                <option value="Basic Requirements on the CLUP and ZO Formulation">Basic Requirements on the CLUP and ZO Formulation</option>
+                                <option value="CLUP & ZO Legal Mandates; Introduction to Zoning Administration and Enforcement; Processing and Issuance of Locational Clearance, Composition and Functions of the Local Zoning Board of Appeals (LZBA), Mitigating Devices; Composition and Functions of the Local Zoning Review Committee (LZRC); The Rezoning & Reclassification Process">CLUP & ZO Legal Mandates; Introduction to Zoning Administration and Enforcement; Processing and Issuance of Locational Clearance, Composition and Functions of the Local Zoning Board of Appeals (LZBA), Mitigating Devices; Composition and Functions of the Local Zoning Review Committee (LZRC); The Rezoning & Reclassification Process</option>
+                                <option value="CLUP 12-Step Process; CLUP Steps 1 & 2">CLUP 12-Step Process; CLUP Steps 1 & 2</option>
+                                <option value="CLUP Legal Mandates and Enabling Policy Environment, CLUP 12-Step Process, CCA-DRR Mainstreaming, and Zoning Administration and Enforcement">CLUP Legal Mandates and Enabling Policy Environment, CLUP 12-Step Process, CCA-DRR Mainstreaming, and Zoning Administration and Enforcement</option>
+                                <option value="CLUP Step 4 - Situational Analysis">CLUP Step 4 - Situational Analysis</option>
+                                <option value="Collection & Organization of Climate Change & Hazard Information; Workshop 1: Changes in Climate Variables, Inventory of Hazards, Records of Previous Disasters, and Barangay Level Hazard Inventory; Demonstration: Exposure and Risk Analysis (Population – without CBMS)">Collection & Organization of Climate Change & Hazard Information; Workshop 1: Changes in Climate Variables, Inventory of Hazards, Records of Previous Disasters, and Barangay Level Hazard Inventory; Demonstration: Exposure and Risk Analysis (Population – without CBMS)</option>
+                                <option value="Collection and Organization of Climate Change and Hazard Information; Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities">Collection and Organization of Climate Change and Hazard Information; Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities</option>
+                                <option value="DRREALL TA Project: Building resilience and empowering local governments for a safer future; Session 1: Background and Rationale for Harmonizing and Digitizing the Ecological Profile (EP) and the Climate and Disaster Risk Assessment (CDRA); Session 2: The Philippine Disaster Risk Landscape; GeoRisk PH Initiative; Session 3: Getting Started with the EP-CDRA Module using GeoAnalyticsPH Pro; Session 4: EP-CDRA Prework (GeoAnalyticsPH Pro); Session 5: CDRA Exposure Database Development and Digitization using GeoMapperPH; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 7: Climate and Disaster Risk Assessment using GeoAnalyticsPH Pro">DRREALL TA Project: Building resilience and empowering local governments for a safer future; Session 1: Background and Rationale for Harmonizing and Digitizing the Ecological Profile (EP) and the Climate and Disaster Risk Assessment (CDRA); Session 2: The Philippine Disaster Risk Landscape; GeoRisk PH Initiative; Session 3: Getting Started with the EP-CDRA Module using GeoAnalyticsPH Pro; Session 4: EP-CDRA Prework (GeoAnalyticsPH Pro); Session 5: CDRA Exposure Database Development and Digitization using GeoMapperPH; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 7: Climate and Disaster Risk Assessment using GeoAnalyticsPH Pro</option>
+                                <option value="Enhanced Housing Sub-sector">Enhanced Housing Sub-sector</option>
+                                <option value="Enhanced Housing Sub-sector; Guidelines on the Conduct of Baseline Study for the Housing Sub-sector/LSP; LSP/Housing Sub-sector Data Collection Tool">Enhanced Housing Sub-sector; Guidelines on the Conduct of Baseline Study for the Housing Sub-sector/LSP; LSP/Housing Sub-sector Data Collection Tool</option>
+                                <option value="Establish Development Thrust and Spatial Strategies; Preparation of Land Use Plan, Land Use Schemes, and Policies; Drafting of the Zoning Ordinance; Conduct of Public Hearing; Communication Plan">Establish Development Thrust and Spatial Strategies; Preparation of Land Use Plan, Land Use Schemes, and Policies; Drafting of the Zoning Ordinance; Conduct of Public Hearing; Communication Plan</option>
+                                <option value="Green Growth, RUDD, & UPDCR">Green Growth, RUDD, & UPDCR</option>
+                                <option value="Introduction to Ecosystem Analysis, Resource Mapping, and the Forest Ecosystem; Introduction to Special Area Studies and Ancestral Domain">Introduction to Ecosystem Analysis, Resource Mapping, and the Forest Ecosystem; Introduction to Special Area Studies and Ancestral Domain</option>
+                                <option value="Introduction to GIS: Basic Concepts and Map Appreciation; Introduction to QGIS; Installation and Familiarization of QGIS; Understanding Coordinate System and Projections; Georeferencing;  Creating and Editing Shapefiles, Digitizing; Creating and Editing Shapefiles, Digitizing; Map Symbology; Basemapping; Introduction to Advance GIS; Working with Attribute Tables; Creating Population Density Map; Hazard Mapping; Existing Land Use Mapping; Geospatial Data Collection; Data Collection Using KoboToolbox">Introduction to GIS: Basic Concepts and Map Appreciation; Introduction to QGIS; Installation and Familiarization of QGIS; Understanding Coordinate System and Projections; Georeferencing;  Creating and Editing Shapefiles, Digitizing; Creating and Editing Shapefiles, Digitizing; Map Symbology; Basemapping; Introduction to Advance GIS; Working with Attribute Tables; Creating Population Density Map; Hazard Mapping; Existing Land Use Mapping; Geospatial Data Collection; Data Collection Using KoboToolbox</option>
+                                <option value="Mainstreaming CCA & DRRM into the 12-Step CLUP Process">Mainstreaming CCA & DRRM into the 12-Step CLUP Process</option>
+                                <option value="Open Space Development">Open Space Development</option>
+                                <option value="Overview of the 5-Step CDRA Process & Mainstreaming into the CLUP">Overview of the 5-Step CDRA Process & Mainstreaming into the CLUP</option>
+                                <option value="Reclassification and Rezoning">Reclassification and Rezoning</option>
+                                <option value="Review, Adopt and Approve the CLUP and ZO">Review, Adopt and Approve the CLUP and ZO</option>
+                                <option value="Understanding Fundamental Concepts, Terminologies, and Principles (Hazards and Climate Change); Overview on CDRA; Collection and Organization of Climate Change and Hazard Information;  Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities">Understanding Fundamental Concepts, Terminologies, and Principles (Hazards and Climate Change); Overview on CDRA; Collection and Organization of Climate Change and Hazard Information;  Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities</option>
+                                <option value="Zoning Jurisprudence; Rezoning and Reclassification; Implementation of the CLUP and ZO">Zoning Jurisprudence; Rezoning and Reclassification; Implementation of the CLUP and ZO</option>
+                                <option value="Zoning Ordinance; Zoning Enforcement & Administration">Zoning Ordinance; Zoning Enforcement & Administration</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label><i class="fas fa-tag"></i> Training Category <span class="required">*</span></label>
+                            <select id="training_category" required>
+                                <option value="">Select Category...</option>
                                 <option value="CDRA">CDRA</option>
                                 <option value="Formulation or Updating">Formulation or Updating</option>
                                 <option value="GIS">GIS</option>
+                                <option value="Housing Subsector">Housing Subsector</option>
                                 <option value="Implementation and Monitoring">Implementation and Monitoring</option>
-                                <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
+                                <option value="OSD">OSD</option>
                                 <option value="PlanSmart for SHS">PlanSmart for SHS</option>
                                 <option value="Review and Approval">Review and Approval</option>
-                                <option value="Urban Development">Urban Development</option>
+                                <option value="RUDD">RUDD</option>
                             </select>
                         </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-clock"></i> Planned / Requested <span class="required">*</span></label>
-                            <select id="clup_plannedRequested" required>
-                                <option value="">Select...</option>
-                                <option value="Planned">Planned</option>
-                                <option value="Requested">Requested</option>
+                        <div class="field-group">
+                            <label><i class="fas fa-calendar-alt"></i> Start Date <span class="required">*</span></label>
+                            <input type="date" id="training_startDate" required>
+                        </div>
+                        <div class="field-group">
+                            <label><i class="fas fa-calendar-alt"></i> End Date <span class="required">*</span></label>
+                            <input type="date" id="training_endDate" required>
+                        </div>
+                        <div class="field-group">
+                            <label><i class="fas fa-users"></i> No. of Participants <span class="required">*</span></label>
+                            <input type="number" id="training_participants" min="0" placeholder="e.g. 25" required>
+                        </div>
+                        <div class="field-group">
+                            <label><i class="fas fa-coins"></i> Budget/Funding Source <span class="required">*</span></label>
+                            <select id="training_budget" required>
+                                <option value="">Select Source...</option>
+                                <option value="DRREALL-TA">DRREALL-TA</option>
+                                <option value="LGU">LGU</option>
+                                <option value="N/A">N/A</option>
                             </select>
                         </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-alt"></i> Date Conducted <span class="required">*</span></label>
-                            <input type="date" id="clup_dateConducted" required>
+                        <div class="field-group">
+                            <label><i class="fas fa-handshake"></i> Partner Agency <span class="required">*</span></label>
+                            <select id="training_partner" required>
+                                <option value="">Select Partner...</option>
+                                <option value="DILG; DOST-PHIVOLCS; DOF">DILG; DOST-PHIVOLCS; DOF</option>
+                                <option value="LLPDV-WV, Inc">LLPDV-WV, Inc</option>
+                                <option value="N/A">N/A</option>
+                            </select>
                         </div>
-                        <div class="ta-field-group">
+                        <div class="field-group">
                             <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
-                            <select id="clup_reportingMonth" required>
+                            <select id="training_reportingMonth" required>
                                 <option value="">Select Month...</option>
                                 <option value="January">January</option>
                                 <option value="February">February</option>
@@ -1581,170 +1480,55 @@
                                 <option value="December">December</option>
                             </select>
                         </div>
-                        <div class="ta-field-group ta-full-width">
+                        <div class="field-group full-width">
                             <label><i class="fas fa-pencil-alt"></i> Remarks</label>
-                            <input type="text" id="clup_remarks" placeholder="N/A or additional notes">
+                            <input type="text" id="training_remarks" placeholder="N/A or additional notes">
                         </div>
-                        <div class="ta-field-group ta-full-width">
+                        <div class="field-group full-width">
                             <label><i class="fas fa-link"></i> Link to MOV</label>
-                            <input type="url" id="clup_linkMov" placeholder="https://drive.google.com/...">
+                            <input type="url" id="training_linkMov" placeholder="https://drive.google.com/...">
                         </div>
-                        <div class="ta-field-group ta-full-width">
+                        <div class="field-group full-width">
                             <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
-                            <div class="ta-pic-container">
-                                <select id="clup_pic" required>
+                            <div class="pic-container">
+                                <select id="training_pic" required>
                                     <option value="">Select Person...</option>
                                 </select>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-add" id="clup_addPic">
+                                <button type="button" class="pic-btn pic-btn-add" id="training_addPic">
                                     <i class="fas fa-plus"></i> Add
                                 </button>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-delete" id="clup_deletePic">
+                                <button type="button" class="pic-btn pic-btn-delete" id="training_deletePic">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="ta-btn-submit" id="clup_submitBtn">
+                    <button type="submit" class="btn-submit" id="training_submitBtn">
                         <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Google Sheet (CLUP)</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- ===== PDPFP FORM ===== -->
-            <div class="ta-form-type" id="formPDPFP">
-                <form id="pdpfpForm">
-                    <div class="ta-form-grid">
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
-                            <select id="pdpfp_region" required>
-                                <option value="Region 6">Region 6 - Western Visayas</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
-                            <select id="pdpfp_province" required>
-                                <option value="">Select Province...</option>
-                                <option value="Aklan">Aklan</option>
-                                <option value="Antique">Antique</option>
-                                <option value="Capiz">Capiz</option>
-                                <option value="Guimaras">Guimaras</option>
-                                <option value="Iloilo">Iloilo</option>
-                                <option value="Negros Occidental">Negros Occidental</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-quote-right"></i> Query / TA Details <span class="required">*</span></label>
-                            <textarea id="pdpfp_queryDetails" placeholder="Describe the request or technical assistance..." rows="2" required></textarea>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-headset"></i> Type of Assistance Provided <span class="required">*</span></label>
-                            <select id="pdpfp_assistanceType" required>
-                                <option value="">Select Type of Assistance...</option>
-                                <option value="Assistance through on-field mentoring and coaching">Assistance through on-field mentoring and coaching</option>
-                                <option value="Assistance to walk-in/by-appointment consultations">Assistance to walk-in/by-appointment consultations</option>
-                                <option value="Assistance through online platform, telephone, and letter queries">Assistance through online platform, telephone, and letter queries</option>
-                                <option value="Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)">Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)</option>
-                                <option value="Assistance through the provision of orientations/briefings">Assistance through the provision of orientations/briefings</option>
-                                <option value="Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.">Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.</option>
-                                <option value="Others (to specify in the remarks)">Others (to specify in the remarks)</option>
-                            </select>
-                            <div class="ta-others-text-container" id="pdpfp_othersContainer">
-                                <input type="text" id="pdpfp_othersText" placeholder="Please specify other type of assistance...">
-                            </div>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-tag"></i> TA Category <span class="required">*</span></label>
-                            <select id="pdpfp_taCategory" required>
-                                <option value="">Select...</option>
-                                <option value="CDRA & PCRD">CDRA & PCRD</option>
-                                <option value="Formulation or Updating">Formulation or Updating</option>
-                                <option value="GIS">GIS</option>
-                                <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
-                                <option value="PlanSmart for SHS">PlanSmart for SHS</option>
-                                <option value="Review and Approval">Review and Approval</option>
-                                <option value="Urban Development">Urban Development</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-clock"></i> Planned / Requested <span class="required">*</span></label>
-                            <select id="pdpfp_plannedRequested" required>
-                                <option value="">Select...</option>
-                                <option value="Planned">Planned</option>
-                                <option value="Requested">Requested</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-alt"></i> Date Conducted <span class="required">*</span></label>
-                            <input type="date" id="pdpfp_dateConducted" required>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
-                            <select id="pdpfp_reportingMonth" required>
-                                <option value="">Select Month...</option>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-pencil-alt"></i> Remarks</label>
-                            <input type="text" id="pdpfp_remarks" placeholder="N/A or additional notes">
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-link"></i> Link to MOV</label>
-                            <input type="url" id="pdpfp_linkMov" placeholder="https://drive.google.com/...">
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
-                            <div class="ta-pic-container">
-                                <select id="pdpfp_pic" required>
-                                    <option value="">Select Person...</option>
-                                </select>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-add" id="pdpfp_addPic">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-delete" id="pdpfp_deletePic">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="ta-btn-submit" id="pdpfp_submitBtn">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Google Sheet (PDPFP)</span>
+                        <span>Save to Google Sheet (Training_CLUP/ZO)</span>
                     </button>
                 </form>
             </div>
 
             <!-- Buttons -->
-            <div class="ta-btn-group">
-                <button type="button" class="ta-btn-test ta-btn-view-all" id="viewAllBtn">
+            <div class="btn-group">
+                <button type="button" class="btn-test btn-view-all" id="viewAllBtn">
                     <i class="fas fa-database"></i> View All Records
                 </button>
-                <button type="button" class="ta-btn-test ta-btn-chart" id="chartBtn">
+                <button type="button" class="btn-test btn-chart" id="chartBtn">
                     <i class="fas fa-chart-bar"></i> View Chart
                 </button>
-                <button type="button" class="ta-btn-test ta-btn-sheet" id="sheetBtn">
+                <button type="button" class="btn-test btn-sheet" id="sheetBtn">
                     <i class="fas fa-external-link-alt"></i> View Google Sheet
                 </button>
             </div>
 
-            <div id="statusMessage" class="ta-status-message">
+            <div id="statusMessage" class="status-message">
                 <i class="fas fa-info-circle"></i>
                 <span id="statusText">Ready · fill in all required fields</span>
             </div>
 
-            <div class="ta-footer-note">
+            <div class="footer-note">
                 <i class="fas fa-database"></i> Data saved directly to Google Sheets via Apps Script
             </div>
         </div>
@@ -1756,7 +1540,7 @@
     <div class="container">
         <div class="footer-grid">
             <div>
-                <img src="img/DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
+                <img src="DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
                 <strong>DHSUD Region VI</strong><br />ELUPDD – CLUP & ZO Platform<br />Geospatial Innovation for Resilience
             </div>
             <div>
@@ -1776,7 +1560,7 @@
     <div class="login-modal-content">
         <div class="login-modal-brand">
             <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
-            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <img src="DHSUD_LOGO.png" alt="DHSUD Logo" />
             <h3>DHSUD Region VI</h3>
             <p>ELUPDD · CLUP & ZO Platform</p>
         </div>
@@ -1801,14 +1585,10 @@
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Technical Assistance</span></h2>
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Training Records</span></h2>
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-filters">
-            <div class="filter-group">
-                <label for="filterPSGC">PSGC:</label>
-                <input type="text" id="filterPSGC" placeholder="Search PSGC..." style="min-width: 120px;">
-            </div>
             <div class="filter-group">
                 <label for="filterProvince">Province:</label>
                 <select id="filterProvince">
@@ -1840,7 +1620,7 @@
                 </select>
             </div>
             <div class="filter-group">
-                <label for="filterPIC">PIC:</label>
+                <label for="filterPIC">Personnel:</label>
                 <select id="filterPIC">
                     <option value="all">All Personnel</option>
                 </select>
@@ -1849,13 +1629,17 @@
             <button class="filter-btn reset-btn" id="resetRecordFilter"><i class="fas fa-undo"></i> Reset</button>
         </div>
         <div class="modal-search">
-            <input type="text" id="searchInput" placeholder="🔍 Search by PSGC, Province, City/Municipality, or Personnel...">
+            <input type="text" id="searchInput" placeholder="🔍 Search by Province, City/Municipality, Training Title...">
             <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
         </div>
-        <div class="modal-body" id="modalBody">
-            <div style="text-align:center; padding: 2rem; color: #94a3b8;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
-                <p style="margin-top: 1rem;">Loading records...</p>
+        <div class="modal-body">
+            <div class="table-wrapper" id="tableWrapper">
+                <div id="modalBodyContent">
+                    <div style="text-align:center; padding: 2rem; color: #94a3b8;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                        <p style="margin-top: 1rem;">Loading records...</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -1869,16 +1653,16 @@
 <div class="modal-overlay" id="chartModal">
     <div class="modal-box" style="max-width: 1100px;">
         <div class="modal-header">
-            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">CLUP and ZO TA Analytics Dashboard</span></h2>
+            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">Training Analytics Dashboard</span></h2>
             <button class="close-btn" id="closeChartBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="chartModalBody">
             <div class="chart-filters" style="border-bottom: none; margin-bottom: 0.5rem; background: transparent; padding: 0 0 0.5rem 0;">
                 <div class="chart-type-selector">
                     <label>Chart Type:</label>
-                    <button class="active" data-chart="category">TA Category</button>
-                    <button data-chart="planned">Planned/Requested</button>
-                    <button data-chart="province">By City/Municipality</button>
+                    <button class="active" data-chart="category">Training Category</button>
+                    <button data-chart="monthly">Monthly Trend</button>
+                    <button data-chart="city">By City/Municipality</button>
                 </div>
             </div>
             <div class="chart-filters">
@@ -1905,20 +1689,21 @@
                     <input type="number" id="chartYearFilter" placeholder="e.g. 2026" style="width: 100px; min-width: 80px;">
                 </div>
                 <div class="filter-group">
-                    <label for="chartCategoryFilter">TA Category:</label>
+                    <label for="chartCategoryFilter">Training Category:</label>
                     <select id="chartCategoryFilter">
                         <option value="all">All Categories</option>
+                        <option value="CDRA">CDRA</option>
+                        <option value="Formulation or Updating">Formulation or Updating</option>
+                        <option value="GIS">GIS</option>
+                        <option value="Housing Subsector">Housing Subsector</option>
+                        <option value="Implementation and Monitoring">Implementation and Monitoring</option>
+                        <option value="OSD">OSD</option>
+                        <option value="PlanSmart for SHS">PlanSmart for SHS</option>
+                        <option value="Review and Approval">Review and Approval</option>
+                        <option value="RUDD">RUDD</option>
                     </select>
                 </div>
                 <div class="filter-divider"></div>
-                <div class="filter-group">
-                    <label for="chartPlannedFilter">Planned/Requested:</label>
-                    <select id="chartPlannedFilter">
-                        <option value="all">All</option>
-                        <option value="Planned">Planned</option>
-                        <option value="Requested">Requested</option>
-                    </select>
-                </div>
                 <div class="filter-group">
                     <label for="chartProvinceFilter">Province:</label>
                     <select id="chartProvinceFilter">
@@ -1951,12 +1736,11 @@
                 </div>
             </div>
             <div id="chartSummary" class="chart-summary" style="display: none;">
-                <div class="stat-item"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Records</div></div>
+                <div class="stat-item"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Trainings</div></div>
                 <div class="stat-item"><div class="stat-value" id="statCategories">0</div><div class="stat-label">Categories</div></div>
                 <div class="stat-item"><div class="stat-value" id="statTopCategory">-</div><div class="stat-label">Top Category</div></div>
                 <div class="stat-item"><div class="stat-value" id="statMonths">0</div><div class="stat-label">Months</div></div>
-                <div class="stat-item"><div class="stat-value" id="statPlanned">0</div><div class="stat-label">Planned</div></div>
-                <div class="stat-item"><div class="stat-value" id="statRequested">0</div><div class="stat-label">Requested</div></div>
+                <div class="stat-item"><div class="stat-value" id="statParticipants">0</div><div class="stat-label">Total Participants</div></div>
             </div>
         </div>
         <div class="modal-footer">
@@ -1974,7 +1758,7 @@
             <button class="close-btn" id="closeAddPersonBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <div class="ta-field-group">
+            <div class="field-group">
                 <label>Full Name <span class="required">*</span></label>
                 <input type="text" id="newPersonName" placeholder="Enter full name..." style="padding: 0.75rem 1.1rem; border: 1.5px solid #cbd5e1; border-radius: 16px; font-size: 0.9rem; width: 100%; outline: none; font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;">
                 <div class="error-msg" id="personError">Please enter a name.</div>
@@ -1988,10 +1772,22 @@
 
 <script>
     // ============================================
-    // CONFIGURATION
+    // TOAST NOTIFICATION SYSTEM
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzC4lST4LEKp8HstTrNhCZ-eA2rrlE0xg8u27pxNN0uXy38DBzKc18b1OXB9VEYLo11-Q/exec';
-    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1ikMuQVy3MBiuK6KuAEGBJ2sod-jlzLwCqsTtenORczg/edit?usp=sharing';
+    function showToast(title, message, type = 'info', duration = 4000) {
+        const toast = document.createElement('div');
+        toast.className = `toast-msg ${type}`;
+        toast.innerText = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), duration);
+    }
+
+    // ============================================
+    // CONFIG
+    // ============================================
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw8LItzmPsoJ4Ysrk7Ms2HNVM_Q0QSm5VusdPxby7mm1GTWx7Sfj3qyRH9FqBVhKyEGqw/exec';
+    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/16fN6OsGQtUno_KPCc2W1A1VktolQTN1oYnSFG4MybbQ/edit?usp=sharing';
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
 
     // ============================================
     // PERSONNEL IN-CHARGE DATA
@@ -2000,75 +1796,59 @@
 
     async function loadPICNamesFromSheet() {
         try {
-            const response = await fetch(WEB_APP_URL + '?action=getPIC', { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=getPIC');
             const result = await response.json();
-            if (result.result === 'success' && result.names) {
+            if (result.result === 'success' && result.names && result.names.length > 0) {
                 picNames = result.names;
-                populatePicDropdowns();
-                updatePICFilters();
-                return picNames;
             } else {
                 picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
-                populatePicDropdowns();
-                updatePICFilters();
-                return picNames;
+                await savePICNamesToSheet(picNames);
             }
         } catch (error) {
             console.error('Error loading PIC names:', error);
             picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
-            populatePicDropdowns();
-            updatePICFilters();
-            return picNames;
         }
+        populatePicDropdowns();
+        updatePICFilters();
+        return picNames;
     }
 
     async function savePICNamesToSheet(names) {
         try {
             const encodedNames = encodeURIComponent(JSON.stringify(names));
-            const url = WEB_APP_URL + '?action=savePIC&names=' + encodedNames;
-            await fetch(url, { method: 'GET', mode: 'no-cors' });
+            await fetch(WEB_APP_URL + '?action=savePIC&names=' + encodedNames, { method: 'GET', mode: 'no-cors' });
             return true;
-        } catch (error) {
-            console.error('Error saving PIC names:', error);
-            return false;
-        }
+        } catch (error) { return false; }
     }
 
     function populatePicDropdowns() {
-        const selects = ['clup_pic', 'pdpfp_pic'];
-        selects.forEach(id => {
-            const select = document.getElementById(id);
-            if (!select) return;
-            const currentValue = select.value;
-            select.innerHTML = '<option value="">Select Person...</option>';
-            picNames.forEach(name => {
-                const opt = document.createElement('option');
-                opt.value = name;
-                opt.textContent = name;
-                select.appendChild(opt);
-            });
-            if (currentValue && picNames.includes(currentValue)) {
-                select.value = currentValue;
-            }
+        const select = document.getElementById('training_pic');
+        if (!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Select Person...</option>';
+        picNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            select.appendChild(opt);
         });
+        if (currentValue && picNames.includes(currentValue)) select.value = currentValue;
     }
 
     function updatePICFilters() {
-        const filterIds = ['filterPIC', 'chartPICFilter'];
-        filterIds.forEach(id => {
-            const select = document.getElementById(id);
-            if (!select) return;
-            const currentValue = select.value;
-            select.innerHTML = '<option value="all">All Personnel</option>';
+        ['filterPIC', 'chartPICFilter'].forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            const curr = sel.value;
+            sel.innerHTML = '<option value="all">All Personnel</option>';
             picNames.forEach(name => {
                 const opt = document.createElement('option');
                 opt.value = name;
                 opt.textContent = name;
-                select.appendChild(opt);
+                sel.appendChild(opt);
             });
-            if (currentValue && picNames.includes(currentValue)) {
-                select.value = currentValue;
-            }
+            if (curr && picNames.includes(curr)) sel.value = curr;
+            else sel.value = 'all';
         });
     }
 
@@ -2078,25 +1858,18 @@
     const addPersonModal = document.getElementById('addPersonModal');
     const newPersonName = document.getElementById('newPersonName');
     const personError = document.getElementById('personError');
-    let currentAddTarget = 'clup';
 
-    function openAddPersonModal(target) {
-        currentAddTarget = target;
+    function openAddPersonModal() {
         newPersonName.value = '';
         personError.classList.remove('show');
         addPersonModal.classList.add('active');
         setTimeout(() => newPersonName.focus(), 100);
     }
-
     function closeAddPersonModal() { addPersonModal.classList.remove('active'); }
 
     document.getElementById('closeAddPersonBtn').addEventListener('click', closeAddPersonModal);
-    addPersonModal.addEventListener('click', function(e) {
-        if (e.target === addPersonModal) closeAddPersonModal();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeAddPersonModal();
-    });
+    addPersonModal.addEventListener('click', function(e) { if (e.target === addPersonModal) closeAddPersonModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAddPersonModal(); });
 
     document.getElementById('confirmAddPerson').addEventListener('click', async function() {
         const name = newPersonName.value.trim();
@@ -2111,42 +1884,38 @@
         populatePicDropdowns();
         updatePICFilters();
         await savePICNamesToSheet(picNames);
-        const targetSelect = document.getElementById(currentAddTarget + '_pic');
-        if (targetSelect) { targetSelect.value = name; }
-        setStatus('✅ "' + name + '" added to Personnel In-Charge list.', 'success');
+        document.getElementById('training_pic').value = name;
+        showToast('✅ Success', `"${name}" added to Personnel In-Charge list.`, 'success');
         closeAddPersonModal();
     });
 
     newPersonName.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            document.getElementById('confirmAddPerson').click();
-        }
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('confirmAddPerson').click(); }
     });
 
     // ============================================
     // DELETE PERSON
     // ============================================
-    async function deleteSelectedPerson(type) {
-        const select = document.getElementById(type + '_pic');
+    async function deleteSelectedPerson() {
+        const select = document.getElementById('training_pic');
         const selectedName = select.value;
-        if (!selectedName) {
-            setStatus('⚠️ Please select a person to delete.', 'error');
-            return;
-        }
-        if (!confirm('Are you sure you want to remove "' + selectedName + '" from the list?')) { return; }
+        if (!selectedName) { showToast('⚠️ Warning', 'Please select a person to delete.', 'warning'); return; }
+        if (!confirm('Are you sure you want to remove "' + selectedName + '" from the list?')) return;
         const index = picNames.indexOf(selectedName);
         if (index > -1) {
             picNames.splice(index, 1);
             populatePicDropdowns();
             updatePICFilters();
             await savePICNamesToSheet(picNames);
-            setStatus('🗑️ "' + selectedName + '" removed from Personnel In-Charge list.', 'info');
+            showToast('🗑️ Removed', `"${selectedName}" removed.`, 'info');
         }
     }
 
+    document.getElementById('training_addPic').addEventListener('click', openAddPersonModal);
+    document.getElementById('training_deletePic').addEventListener('click', deleteSelectedPerson);
+
     // ============================================
-    // PSGC DATABASE
+    // PSGC DATA
     // ============================================
     const psgcData = {
         '600401000': { city: 'Altavas', province: 'Aklan' },
@@ -2255,119 +2024,48 @@
     function getCitiesByProvince(province) {
         const cities = [];
         for (const [psgc, data] of Object.entries(psgcData)) {
-            if (data.province === province) {
-                cities.push({ psgc, city: data.city });
-            }
+            if (data.province === province) cities.push({ psgc, city: data.city });
         }
         return cities.sort((a, b) => a.city.localeCompare(b.city));
     }
 
     // ============================================
-    // STATE
+    // DOM REFS & STATE
     // ============================================
-    let currentFormType = 'CLUP';
+    const trainingForm = document.getElementById('trainingForm');
+    const statusDiv = document.getElementById('statusMessage');
+    const statusText = document.getElementById('statusText');
     let allRecords = [];
     let filteredRecords = [];
     let chartInstance = null;
     let currentChartType = 'category';
     let editingRowNumber = null;
+    const modalBodyContent = document.getElementById('modalBodyContent');
 
-    // ============================================
-    // TOGGLE FUNCTION
-    // ============================================
-    function switchForm(type) {
-        currentFormType = type;
-        document.querySelectorAll('.ta-toggle-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.type === type);
-        });
-        document.getElementById('formCLUP').classList.toggle('active', type === 'CLUP');
-        document.getElementById('formPDPFP').classList.toggle('active', type === 'PDPFP');
-        setStatus('📋 ' + type + ' form selected · fill in all required fields', 'info');
-    }
-
-    document.getElementById('toggleCLUP').addEventListener('click', function() { switchForm('CLUP'); });
-    document.getElementById('togglePDPFP').addEventListener('click', function() { switchForm('PDPFP'); });
-
-    // ============================================
-    // DOM REFS
-    // ============================================
-    const clupForm = document.getElementById('clupForm');
-    const pdpfpForm = document.getElementById('pdpfpForm');
-    const statusDiv = document.getElementById('statusMessage');
-    const statusText = document.getElementById('statusText');
-
-    // ============================================
-    // SET STATUS
-    // ============================================
     function setStatus(message, type = 'info') {
         statusText.textContent = message;
-        statusDiv.className = 'ta-status-message';
+        statusDiv.className = 'status-message';
         const icon = statusDiv.querySelector('i');
-        if (type === 'success') {
-            statusDiv.classList.add('success');
-            icon.className = 'fas fa-check-circle';
-        } else if (type === 'error') {
-            statusDiv.classList.add('error');
-            icon.className = 'fas fa-exclamation-circle';
-        } else {
-            icon.className = 'fas fa-info-circle';
-        }
+        if (type === 'success') { statusDiv.classList.add('success'); icon.className = 'fas fa-check-circle'; }
+        else if (type === 'error') { statusDiv.classList.add('error'); icon.className = 'fas fa-exclamation-circle'; }
+        else { icon.className = 'fas fa-info-circle'; }
     }
 
-    // ============================================
-    // CLUP CITY DEPENDENCY
-    // ============================================
-    const clupProvince = document.getElementById('clup_province');
-    const clupCity = document.getElementById('clup_cityMun');
-    const clupPsgc = document.getElementById('clup_psgc');
+    // City dependency
+    const trainingProvince = document.getElementById('training_province');
+    const trainingCity = document.getElementById('training_cityMun');
 
-    clupProvince.addEventListener('change', function() {
+    trainingProvince.addEventListener('change', function() {
         const province = this.value;
-        clupCity.innerHTML = '<option value="">Select City/Municipality...</option>';
-        if (!province) { clupPsgc.value = ''; return; }
+        trainingCity.innerHTML = '<option value="">Select City/Municipality...</option>';
+        if (!province) return;
         const cities = getCitiesByProvince(province);
-        cities.forEach(({ psgc, city }) => {
+        cities.forEach(({ city }) => {
             const opt = document.createElement('option');
-            opt.value = psgc;
+            opt.value = city;
             opt.textContent = city;
-            clupCity.appendChild(opt);
+            trainingCity.appendChild(opt);
         });
-        clupPsgc.value = '';
-    });
-
-    clupCity.addEventListener('change', function() {
-        const selected = this.options[this.selectedIndex];
-        clupPsgc.value = selected && selected.value ? selected.value : '';
-        clupPsgc.style.borderColor = selected && selected.value ? '#10b981' : '#cbd5e1';
-    });
-
-    // ============================================
-    // CLUP OTHERS TOGGLE
-    // ============================================
-    document.getElementById('clup_assistanceType').addEventListener('change', function() {
-        const container = document.getElementById('clup_othersContainer');
-        const input = document.getElementById('clup_othersText');
-        if (this.value === 'Others (to specify in the remarks)') {
-            container.classList.add('active');
-            input.setAttribute('required', 'required');
-        } else {
-            container.classList.remove('active');
-            input.removeAttribute('required');
-            input.value = '';
-        }
-    });
-
-    document.getElementById('pdpfp_assistanceType').addEventListener('change', function() {
-        const container = document.getElementById('pdpfp_othersContainer');
-        const input = document.getElementById('pdpfp_othersText');
-        if (this.value === 'Others (to specify in the remarks)') {
-            container.classList.add('active');
-            input.setAttribute('required', 'required');
-        } else {
-            container.classList.remove('active');
-            input.removeAttribute('required');
-            input.value = '';
-        }
     });
 
     // ============================================
@@ -2375,127 +2073,70 @@
     // ============================================
     function formatDate(dateValue) {
         if (!dateValue) return '-';
-        if (typeof dateValue === 'string' && dateValue.includes('T')) {
-            return dateValue.split('T')[0];
+        if (typeof dateValue === 'number') {
+            const d = new Date((dateValue - 25569) * 86400 * 1000);
+            return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();
         }
-        if (dateValue instanceof Date) {
-            return dateValue.toISOString().split('T')[0];
-        }
+        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) return dateValue;
         if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-            return dateValue;
+            const p = dateValue.split('-');
+            return p[1]+'/'+p[2]+'/'+p[0];
         }
+        try {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();
+            }
+        } catch(e) {}
         return dateValue || '-';
     }
 
     // ============================================
     // GET FORM DATA
     // ============================================
-    function getFormData(type) {
-        const prefix = type.toLowerCase();
-        const getVal = (id) => document.getElementById(prefix + '_' + id).value.trim();
-        const getText = (id) => document.getElementById(prefix + '_' + id).options[document.getElementById(prefix + '_' + id).selectedIndex]?.text || '';
-
-        let assistance = getVal('assistanceType');
-        if (assistance === 'Others (to specify in the remarks)') {
-            const others = document.getElementById(prefix + '_othersText').value.trim();
-            assistance = others ? 'Others: ' + others : '';
-        }
-
-        let regionValue = getVal('region');
-        if (regionValue === 'Region 6') {
-            regionValue = 'Region_06';
-        }
-
-        let payload = {
-            formType: type,
-            region: regionValue,
+    function getFormData() {
+        const getVal = (id) => document.getElementById('training_'+id).value.trim();
+        return {
+            formType: 'Training_CLUP/ZO',
+            region: getVal('region'),
             province: getVal('province'),
-            queryDetails: getVal('queryDetails'),
-            assistanceType: assistance,
-            taCategory: getVal('taCategory'),
-            plannedRequested: getVal('plannedRequested'),
-            dateConducted: getVal('dateConducted'),
+            cityMun: getVal('cityMun'),
+            trainingTitle: getVal('title'),
+            trainingTopics: getVal('topics'),
+            trainingCategory: getVal('category'),
+            startDate: getVal('startDate'),
+            endDate: getVal('endDate'),
+            participants: getVal('participants'),
+            budget: getVal('budget'),
+            partner: getVal('partner'),
             reportingMonth: getVal('reportingMonth'),
             remarks: getVal('remarks') || 'N/A',
             linkMov: getVal('linkMov') || '',
             personnelInCharge: getVal('pic')
         };
-
-        if (type === 'CLUP') {
-            payload.psgc = getVal('psgc');
-            payload.cityMun = getText('cityMun');
-        } else {
-            payload.psgc = '';
-            payload.cityMun = '';
-        }
-        return payload;
     }
 
     // ============================================
-    // VALIDATE FORM
+    // VALIDATE & SUBMIT
     // ============================================
-    function validateForm(payload, type) {
-        let required = ['region', 'province', 'queryDetails', 'assistanceType', 'taCategory', 'plannedRequested', 'dateConducted', 'reportingMonth', 'personnelInCharge'];
-        if (type === 'CLUP') {
-            required.push('psgc');
-            required.push('cityMun');
-        }
-        for (const field of required) {
-            if (!payload[field]) {
-                setStatus('❌ Please fill in all required fields', 'error');
+    function validateForm(payload) {
+        const required = ['region','province','cityMun','trainingTitle','trainingTopics','trainingCategory','startDate','endDate','participants','budget','partner','reportingMonth','personnelInCharge'];
+        for (const f of required) {
+            if (!payload[f]) {
+                showToast('❌ Validation Error', 'Please fill in all required fields.', 'error');
                 return false;
             }
-        }
-        if (!payload.assistanceType || payload.assistanceType === '') {
-            setStatus('❌ Please specify the other type of assistance.', 'error');
-            return false;
         }
         return true;
     }
 
-    // ============================================
-    // RESET FORM
-    // ============================================
-    function resetForm(type) {
-        const prefix = type.toLowerCase();
-        const form = document.getElementById(prefix + 'Form');
-        form.reset();
-        document.getElementById(prefix + '_dateConducted').value = new Date().toISOString().split('T')[0];
-        document.getElementById(prefix + '_region').value = 'Region 6';
-        document.getElementById(prefix + '_province').value = '';
-        if (type === 'CLUP') {
-            document.getElementById(prefix + '_cityMun').innerHTML = '<option value="">Select City/Municipality...</option>';
-            document.getElementById(prefix + '_psgc').value = '';
-        }
-        document.getElementById(prefix + '_othersContainer').classList.remove('active');
-        document.getElementById(prefix + '_othersText').value = '';
-        document.getElementById(prefix + '_taCategory').value = '';
-        document.getElementById(prefix + '_plannedRequested').value = '';
-        document.getElementById(prefix + '_reportingMonth').value = '';
-        const picSelect = document.getElementById(prefix + '_pic');
-        if (picSelect) picSelect.value = '';
-    }
-
-    // ============================================
-    // SUBMIT HANDLERS
-    // ============================================
-    clupForm.addEventListener('submit', async function(e) {
+    trainingForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const payload = getFormData('CLUP');
-        if (!validateForm(payload, 'CLUP')) return;
-        await submitRecord(payload, 'CLUP');
-    });
-
-    pdpfpForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const payload = getFormData('PDPFP');
-        if (!validateForm(payload, 'PDPFP')) return;
-        await submitRecord(payload, 'PDPFP');
-    });
-
-    async function submitRecord(payload, type) {
-        setLoading(true);
-        setStatus('⏳ Saving to Google Sheet (' + type + ')...', 'info');
+        const payload = getFormData();
+        if (!validateForm(payload)) return;
+        const btn = document.getElementById('training_submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Saving...';
         try {
             await fetch(WEB_APP_URL, {
                 method: 'POST',
@@ -2503,89 +2144,51 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            setStatus('✅ Record SAVED to Google Sheet (' + type + ')!', 'success');
-            resetForm(type);
+            showToast('✅ Success', 'Training record saved to Google Sheet!', 'success');
+            trainingForm.reset();
+            document.getElementById('training_startDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('training_endDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('training_region').value = 'Region_06';
+            document.getElementById('training_province').value = '';
+            document.getElementById('training_cityMun').innerHTML = '<option value="">Select City/Municipality...</option>';
         } catch (error) {
-            setStatus('❌ Error saving record: ' + error.message, 'error');
+            showToast('❌ Error', 'Failed to save: ' + error.message, 'error');
         } finally {
-            setLoading(false);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet (Training_CLUP/ZO)</span>';
         }
-    }
-
-    function setLoading(loading) {
-        const btns = ['clup_submitBtn', 'pdpfp_submitBtn'];
-        btns.forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) {
-                btn.disabled = loading;
-                btn.innerHTML = loading ? '<span class="ta-spinner"></span> Saving...' :
-                    (id.includes('clup') ? '<i class="fas fa-cloud-upload-alt"></i> Save to Google Sheet (CLUP)' :
-                        '<i class="fas fa-cloud-upload-alt"></i> Save to Google Sheet (PDPFP)');
-            }
-        });
-    }
+    });
 
     // ============================================
     // RECORDS MODAL
     // ============================================
     const recordsModal = document.getElementById('recordsModal');
-    const modalBody = document.getElementById('modalBody');
     const searchInput = document.getElementById('searchInput');
     const displayCount = document.getElementById('displayCount');
     const totalCount = document.getElementById('totalCount');
     const footerTotalCount = document.getElementById('footerTotalCount');
-
-    const filterPSGC = document.getElementById('filterPSGC');
     const filterProvince = document.getElementById('filterProvince');
     const filterReportingMonth = document.getElementById('filterReportingMonth');
     const filterPIC = document.getElementById('filterPIC');
 
-    function closeRecordsModal() {
-        recordsModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        editingRowNumber = null;
-    }
-
-    function openRecordsModal() {
-        recordsModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        document.getElementById('recordsModalTitle').textContent = currentFormType + ' Technical Assistance';
-        updatePICFilters();
-        loadRecords();
-    }
+    function closeRecordsModal() { recordsModal.classList.remove('active'); document.body.style.overflow = 'auto'; editingRowNumber = null; }
+    function openRecordsModal() { recordsModal.classList.add('active'); document.body.style.overflow = 'hidden'; document.getElementById('recordsModalTitle').textContent = 'Training Records'; loadRecords(); }
 
     document.getElementById('closeModalBtn').addEventListener('click', closeRecordsModal);
     document.getElementById('closeModalBtn2').addEventListener('click', closeRecordsModal);
-    recordsModal.addEventListener('click', function(e) {
-        if (e.target === recordsModal) closeRecordsModal();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeRecordsModal();
-    });
+    recordsModal.addEventListener('click', function(e) { if (e.target === recordsModal) closeRecordsModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeRecordsModal(); });
 
     function applyRecordFilters() {
-        const psgcFilter = filterPSGC.value.trim().toLowerCase();
         const provinceFilter = filterProvince.value;
         const monthFilter = filterReportingMonth.value;
         const picFilter = filterPIC.value;
-
         filteredRecords = allRecords.filter(record => {
-            if (psgcFilter) {
-                const psgc = (record.PSGC || '').toLowerCase();
-                if (!psgc.includes(psgcFilter)) return false;
-            }
-            if (provinceFilter !== 'all') {
-                if ((record.Province || '') !== provinceFilter) return false;
-            }
-            if (monthFilter !== 'all') {
-                if ((record['Reporting Month'] || '') !== monthFilter) return false;
-            }
-            if (picFilter !== 'all') {
-                if ((record['Personnel In-Charge'] || '') !== picFilter) return false;
-            }
+            if (provinceFilter !== 'all' && (record.Province || '') !== provinceFilter) return false;
+            if (monthFilter !== 'all' && (record['Reporting Month'] || '') !== monthFilter) return false;
+            if (picFilter !== 'all' && (record['Personnel In-Charge'] || '') !== picFilter) return false;
             return true;
         });
-
         renderTable(filteredRecords);
         displayCount.textContent = filteredRecords.length;
         footerTotalCount.textContent = filteredRecords.length;
@@ -2594,7 +2197,6 @@
 
     document.getElementById('applyRecordFilter').addEventListener('click', applyRecordFilters);
     document.getElementById('resetRecordFilter').addEventListener('click', function() {
-        filterPSGC.value = '';
         filterProvince.value = 'all';
         filterReportingMonth.value = 'all';
         filterPIC.value = 'all';
@@ -2602,9 +2204,12 @@
     });
 
     async function loadRecords() {
-        modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p style="margin-top: 1rem;">Loading records...</p></div>`;
+        modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+            <p style="margin-top: 1rem;">Loading records...</p>
+        </div>`;
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=' + currentFormType, { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Training_CLUP/ZO');
             const result = await response.json();
             if (result.result === 'success') {
                 allRecords = result.records || [];
@@ -2615,247 +2220,213 @@
                 displayCount.textContent = allRecords.length;
                 editingRowNumber = null;
             } else {
-                modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error loading records: ${result.message}</div>`;
+                throw new Error(result.message || 'Failed to load records');
             }
         } catch (error) {
-            modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load records: ${error.message}</div>`;
+            modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">
+                <i class="fas fa-exclamation-circle" style="font-size: 2rem;"></i>
+                <p style="margin-top: 1rem;">Failed to load records: ${error.message}</p>
+                <button onclick="loadRecords()" style="margin-top: 1rem; padding: 0.5rem 1.5rem; border-radius: 30px; background: #2563eb; color: white; border: none; cursor: pointer;">
+                    <i class="fas fa-sync"></i> Retry
+                </button>
+            </div>`;
         }
     }
 
+    // ===== RENDER TABLE =====
     function renderTable(records) {
         if (!records || records.length === 0) {
-            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>PSGC</th><th>Region</th><th>Province</th><th>City/Municipality</th><th>Query Details</th><th>Assistance Type</th><th>TA Category</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel In-Charge</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="13">📭 No records found for ${currentFormType}.</td></tr></tbody></table>`;
+            modalBodyContent.innerHTML = `<table><thead><tr><th>#</th><th class="col-region">Region</th><th class="col-province">Province</th><th class="col-city">City/Municipality</th><th class="col-title">Training Title</th><th class="col-topics">Training Topics</th><th class="col-category">Category</th><th class="col-date">Start Date</th><th class="col-date">End Date</th><th class="col-participants">Participants</th><th class="col-budget">Budget</th><th class="col-partner">Partner</th><th class="col-month">Reporting Month</th><th class="col-personnel">Personnel</th><th class="col-actions">Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="15">📭 No training records found.</td></tr></tbody></table>`;
             displayCount.textContent = '0';
             return;
         }
 
         const columns = [
-            { key: 'PSGC', label: 'PSGC' },
-            { key: 'Region', label: 'Region' },
-            { key: 'Province', label: 'Province' },
-            { key: 'City/Municipality', label: 'City/Municipality' },
-            { key: 'Query / TA Details', label: 'Query Details' },
-            { key: 'Type of Assistance Provided', label: 'Assistance Type' },
-            { key: 'TA Category', label: 'TA Category' },
-            { key: 'Planned / Requested', label: 'Planned/Requested' },
-            { key: 'Date Conducted', label: 'Date Conducted' },
-            { key: 'Reporting Month', label: 'Reporting Month' },
-            { key: 'Personnel In-Charge', label: 'Personnel In-Charge' }
+            { key: 'Region', label: 'Region', cls: 'col-region' },
+            { key: 'Province', label: 'Province', cls: 'col-province' },
+            { key: 'City/Municipality', label: 'City/Municipality', cls: 'col-city' },
+            { key: 'Training Title', label: 'Training Title', cls: 'col-title' },
+            { key: 'Training Topics', label: 'Training Topics', cls: 'col-topics' },
+            { key: 'Training Category', label: 'Category', cls: 'col-category' },
+            { key: 'Start Date of Training Conducted', label: 'Start Date', cls: 'col-date' },
+            { key: 'End Date of Training Conducted', label: 'End Date', cls: 'col-date' },
+            { key: 'No. of Participants', label: 'Participants', cls: 'col-participants' },
+            { key: 'Budget / Funding Source', label: 'Budget', cls: 'col-budget' },
+            { key: 'Partner Agency / Organization', label: 'Partner', cls: 'col-partner' },
+            { key: 'Reporting Month', label: 'Reporting Month', cls: 'col-month' },
+            { key: 'Personnel In-Charge', label: 'Personnel', cls: 'col-personnel' }
         ];
 
-        let html = `<table><thead><tr><th>#</th>`;
-        columns.forEach(col => html += `<th>${col.label}</th>`);
-        html += `<th>Actions</th></tr></thead><tbody>`;
+        let html = `<table><thead><tr><th style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; min-width:30px;">#</th>`;
+        columns.forEach(col => html += `<th class="${col.cls}" style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; white-space:nowrap;">${col.label}</th>`);
+        html += `<th class="col-actions" style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; white-space:nowrap;">Actions</th></tr></thead><tbody>`;
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
             const actualRow = index + 2;
             const isEditing = editingRowNumber === actualRow;
 
-            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}">`;
-            html += `<td>${rowNum}</td>`;
+            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" style="${isEditing ? 'background:#fef3c7 !important;' : ''}">`;
+            html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; text-align:center;">${rowNum}</td>`;
 
             columns.forEach(col => {
                 let value = record[col.key] || '-';
-                if (col.key === 'Date Conducted') {
+                if (col.key === 'Start Date of Training Conducted' || col.key === 'End Date of Training Conducted') {
                     value = formatDate(value);
                 }
 
                 if (isEditing) {
-                    const fieldName = col.key.replace(/ /g, '_').replace(/\//g, '_');
-                    if (col.key === 'Query / TA Details' || col.key === 'Remarks' || col.key === 'Link to MOV') {
-                        html += `<td><textarea name="${fieldName}" data-key="${col.key}" rows="1">${value}</textarea></td>`;
-                    } else if (col.key === 'Personnel In-Charge') {
-                        html += `<td><select name="${fieldName}" data-key="${col.key}">`;
-                        html += `<option value="">Select Person...</option>`;
+                    const fieldName = col.key.replace(/ /g,'_').replace(/\//g,'_').replace(/\(/g,'').replace(/\)/g,'').replace(/"/g,'');
+
+                    if (col.key === 'Personnel In-Charge') {
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50; min-width:90px;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:80px; max-width:120px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
+                                <option value="">Select...</option>`;
                         picNames.forEach(name => {
                             html += `<option value="${name}" ${name === value ? 'selected' : ''}>${name}</option>`;
                         });
                         html += `</select></td>`;
-                    } else if (col.key === 'Planned / Requested') {
-                        html += `<td><select name="${fieldName}" data-key="${col.key}">
-                            <option value="Planned" ${value === 'Planned' ? 'selected' : ''}>Planned</option>
-                            <option value="Requested" ${value === 'Requested' ? 'selected' : ''}>Requested</option>
-                        </select></td>`;
                     } else if (col.key === 'Reporting Month') {
-                        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                        html += `<td><select name="${fieldName}" data-key="${col.key}">`;
-                        months.forEach(m => {
-                            html += `<option value="${m}" ${m === value ? 'selected' : ''}>${m}</option>`;
-                        });
+                        const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">`;
+                        months.forEach(m => html += `<option value="${m}" ${m === value ? 'selected' : ''}>${m}</option>`);
                         html += `</select></td>`;
-                    } else if (col.key === 'Date Conducted') {
-                        html += `<td><input type="date" name="${fieldName}" data-key="${col.key}" value="${value}"></td>`;
-                    } else if (col.key === 'TA Category') {
-                        const categories = currentFormType === 'CLUP' ?
-                            ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
-                        html += `<td><select name="${fieldName}" data-key="${col.key}">`;
-                        html += `<option value="">Select...</option>`;
-                        categories.forEach(cat => {
-                            html += `<option value="${cat}" ${cat === value ? 'selected' : ''}>${cat}</option>`;
-                        });
+                    } else if (col.key === 'Training Category') {
+                        const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:110px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
+                                <option value="">Select...</option>`;
+                        cats.forEach(c => html += `<option value="${c}" ${c === value ? 'selected' : ''}>${c}</option>`);
                         html += `</select></td>`;
-                    } else if (col.key === 'Type of Assistance Provided') {
-                        const assistanceTypes = [
-                            'Assistance through on-field mentoring and coaching',
-                            'Assistance to walk-in/by-appointment consultations',
-                            'Assistance through online platform, telephone, and letter queries',
-                            'Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)',
-                            'Assistance through the provision of orientations/briefings',
-                            'Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.',
-                            'Others (to specify in the remarks)'
-                        ];
-                        html += `<td><select name="${fieldName}" data-key="${col.key}" style="min-width: 120px;">`;
-                        html += `<option value="">Select Type of Assistance...</option>`;
-                        assistanceTypes.forEach(type => {
-                            html += `<option value="${type}" ${type === value ? 'selected' : ''}>${type}</option>`;
-                        });
+                    } else if (col.key === 'Budget / Funding Source') {
+                        const sources = ['DRREALL-TA','LGU','N/A'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:60px; max-width:90px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">`;
+                        sources.forEach(s => html += `<option value="${s}" ${s === value ? 'selected' : ''}>${s}</option>`);
                         html += `</select></td>`;
+                    } else if (col.key === 'Partner Agency / Organization') {
+                        const partners = ['DILG; DOST-PHIVOLCS; DOF','LLPDV-WV, Inc','N/A'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">`;
+                        partners.forEach(p => html += `<option value="${p}" ${p === value ? 'selected' : ''}>${p}</option>`);
+                        html += `</select></td>`;
+                    } else if (col.key === 'Training Title') {
+                        const titles = ['Basic and Advance GIS Training','CLUP Module 1 Training','CLUP Module 2 Training','Enhanced Climate and Disaster Risk Assessment (CDRA)','Inter-Agency Consultative Conference on Land Reclassification and Conversion','LGU Cuartero, Capiz - CLUP Formulation and Sectoral Workshop','LGU Nueva Valencia, Guimaras - Enhanced Climate and Disaster Risk Assessment (CDRA) Training','Orientation on CLUP and ZO Formulation','Orientation on CLUP and ZO Updating for LGU San Joaquin, Iloilo','Orientation on the Comprehensive Land Use Plan and Zoning ordinance Procedure and Data Gathering','Orientation on the LSP/Housing Sub-sector and Data Collection Tools for LGUs','Orientation on the Updating of CLUP and ZO','Orientation on Zoning Administration and Enforcement for LGU Janiuay, Iloilo','PlanSmart for Sustainable Human Settlements: Harmonized Ecological Profile and Climate and Disaster Risk Assessment (EP-CDRA) for Resilience Rollout Training - Visayas Cluster'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:100px; max-width:160px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
+                                <option value="">Select...</option>`;
+                        titles.forEach(t => html += `<option value="${t}" ${t === value ? 'selected' : ''}>${t}</option>`);
+                        html += `</select></td>`;
+                    } else if (col.key === 'Training Topics') {
+                        const topics = ['12-Step Process and Brief CDRA Process','Basic Requirements on the CLUP and ZO Formulation','CLUP & ZO Legal Mandates; Introduction to Zoning Administration and Enforcement; Processing and Issuance of Locational Clearance, Composition and Functions of the Local Zoning Board of Appeals (LZBA), Mitigating Devices; Composition and Functions of the Local Zoning Review Committee (LZRC); The Rezoning & Reclassification Process','CLUP 12-Step Process; CLUP Steps 1 & 2','CLUP Legal Mandates and Enabling Policy Environment, CLUP 12-Step Process, CCA-DRR Mainstreaming, and Zoning Administration and Enforcement','CLUP Step 4 - Situational Analysis','Collection & Organization of Climate Change & Hazard Information; Workshop 1: Changes in Climate Variables, Inventory of Hazards, Records of Previous Disasters, and Barangay Level Hazard Inventory; Demonstration: Exposure and Risk Analysis (Population – without CBMS)','Collection and Organization of Climate Change and Hazard Information; Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities','DRREALL TA Project: Building resilience and empowering local governments for a safer future; Session 1: Background and Rationale for Harmonizing and Digitizing the Ecological Profile (EP) and the Climate and Disaster Risk Assessment (CDRA); Session 2: The Philippine Disaster Risk Landscape; GeoRisk PH Initiative; Session 3: Getting Started with the EP-CDRA Module using GeoAnalyticsPH Pro; Session 4: EP-CDRA Prework (GeoAnalyticsPH Pro); Session 5: CDRA Exposure Database Development and Digitization using GeoMapperPH; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 7: Climate and Disaster Risk Assessment using GeoAnalyticsPH Pro','Enhanced Housing Sub-sector','Enhanced Housing Sub-sector; Guidelines on the Conduct of Baseline Study for the Housing Sub-sector/LSP; LSP/Housing Sub-sector Data Collection Tool','Establish Development Thrust and Spatial Strategies; Preparation of Land Use Plan, Land Use Schemes, and Policies; Drafting of the Zoning Ordinance; Conduct of Public Hearing; Communication Plan','Green Growth, RUDD, & UPDCR','Introduction to Ecosystem Analysis, Resource Mapping, and the Forest Ecosystem; Introduction to Special Area Studies and Ancestral Domain','Introduction to GIS: Basic Concepts and Map Appreciation; Introduction to QGIS; Installation and Familiarization of QGIS; Understanding Coordinate System and Projections; Georeferencing;  Creating and Editing Shapefiles, Digitizing; Creating and Editing Shapefiles, Digitizing; Map Symbology; Basemapping; Introduction to Advance GIS; Working with Attribute Tables; Creating Population Density Map; Hazard Mapping; Existing Land Use Mapping; Geospatial Data Collection; Data Collection Using KoboToolbox','Mainstreaming CCA & DRRM into the 12-Step CLUP Process','Open Space Development','Overview of the 5-Step CDRA Process & Mainstreaming into the CLUP','Reclassification and Rezoning','Review, Adopt and Approve the CLUP and ZO','Understanding Fundamental Concepts, Terminologies, and Principles (Hazards and Climate Change); Overview on CDRA; Collection and Organization of Climate Change and Hazard Information;  Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities','Zoning Jurisprudence; Rezoning and Reclassification; Implementation of the CLUP and ZO','Zoning Ordinance; Zoning Enforcement & Administration'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
+                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:100px; max-width:160px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
+                                <option value="">Select...</option>`;
+                        topics.forEach(t => html += `<option value="${t}" ${t === value ? 'selected' : ''}>${t}</option>`);
+                        html += `</select></td>`;
+                    } else if (col.key === 'Start Date of Training Conducted' || col.key === 'End Date of Training Conducted') {
+                        let d = value;
+                        if (/^\d{2}\/\d{2}\/\d{4}$/.test(d)) { const p = d.split('/'); d = p[2]+'-'+p[0]+'-'+p[1]; }
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;">
+                            <input type="date" name="${fieldName}" data-key="${col.key}" value="${d}" style="width:100%; min-width:70px; max-width:95px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">
+                        </td>`;
+                    } else if (col.key === 'No. of Participants') {
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; text-align:center;">
+                            <input type="number" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:50px; max-width:60px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; text-align:center;">
+                        </td>`;
                     } else {
-                        html += `<td><input type="text" name="${fieldName}" data-key="${col.key}" value="${value}"></td>`;
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;">
+                            <input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; max-width:120px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">
+                        </td>`;
                     }
                 } else {
-                    if (value.length > 20) {
-                        value = value.substring(0, 20) + '...';
-                    }
-                    html += `<td>${value}</td>`;
+                    if (value.length > 18) value = value.substring(0,18)+'…';
+                    html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${value}</td>`;
                 }
             });
 
-            html += `<td class="action-cell">`;
+            html += `<td class="action-cell" style="padding:0.2rem 0.2rem; border-bottom:1px solid #f1f5f9; white-space:nowrap;">`;
             if (isEditing) {
-                html += `<button class="btn-action btn-save-edit" onclick="saveEditRow(${actualRow})" id="saveBtn_${actualRow}">
-                    <i class="fas fa-save"></i>
-                    <span class="btn-spinner"></span>
-                </button>`;
-                html += `<button class="btn-action btn-cancel-edit" onclick="cancelEditRow()">
-                    <i class="fas fa-times"></i>
-                </button>`;
+                html += `<button class="btn-action btn-save-edit" onclick="saveEditRow(${actualRow})" id="saveBtn_${actualRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#10b981; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-save"></i><span class="btn-spinner"></span></button>`;
+                html += `<button class="btn-action btn-cancel-edit" onclick="cancelEditRow()" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#6b7280; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-times"></i></button>`;
             } else {
-                html += `<button class="btn-action btn-edit" onclick="startEditRow(${actualRow})">
-                    <i class="fas fa-pen"></i>
-                </button>`;
-                html += `<button class="btn-action btn-delete" onclick="deleteRecord(${actualRow})" id="deleteBtn_${actualRow}">
-                    <i class="fas fa-trash"></i>
-                    <span class="btn-spinner"></span>
-                </button>`;
+                html += `<button class="btn-action btn-edit" onclick="startEditRow(${actualRow})" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#f59e0b; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-pen"></i></button>`;
+                html += `<button class="btn-action btn-delete" onclick="deleteRecord(${actualRow})" id="deleteBtn_${actualRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#ef4444; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-trash"></i><span class="btn-spinner"></span></button>`;
             }
-            html += `</td>`;
-            html += `</tr>`;
+            html += `</td></tr>`;
         });
 
         html += `</tbody></table>`;
-        modalBody.innerHTML = html;
+        modalBodyContent.innerHTML = html;
         displayCount.textContent = records.length;
     }
 
-    window.startEditRow = function(rowNumber) {
-        editingRowNumber = rowNumber;
-        applyRecordFilters();
-    };
-
-    window.cancelEditRow = function() {
-        editingRowNumber = null;
-        applyRecordFilters();
-    };
+    window.startEditRow = function(rowNumber) { editingRowNumber = rowNumber; applyRecordFilters(); };
+    window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
 
     window.saveEditRow = async function(rowNumber) {
+        const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
+        if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
         const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
-        if (!row) {
-            setStatus('❌ Error: Row not found', 'error');
-            return;
-        }
-
+        if (!row) { showToast('❌ Error', 'Row not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
         const inputs = row.querySelectorAll('input, select, textarea');
         const updatedData = {};
-        inputs.forEach(input => {
-            const key = input.dataset.key;
-            if (key) {
-                updatedData[key] = input.value;
-            }
-        });
-
+        inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
         const recordIndex = rowNumber - 2;
-        if (recordIndex < 0 || recordIndex >= filteredRecords.length) {
-            setStatus('❌ Error: Record not found', 'error');
-            return;
-        }
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
         const originalRecord = filteredRecords[recordIndex];
-
         const payload = {
             action: 'updateRecord',
             rowNumber: rowNumber,
-            formType: currentFormType,
+            formType: 'Training_CLUP/ZO',
             data: {
-                psgc: updatedData['PSGC'] || originalRecord['PSGC'] || '',
                 region: updatedData['Region'] || originalRecord['Region'] || '',
                 province: updatedData['Province'] || originalRecord['Province'] || '',
                 cityMun: updatedData['City/Municipality'] || originalRecord['City/Municipality'] || '',
-                queryDetails: updatedData['Query / TA Details'] || originalRecord['Query / TA Details'] || '',
-                assistanceType: updatedData['Type of Assistance Provided'] || originalRecord['Type of Assistance Provided'] || '',
-                taCategory: updatedData['TA Category'] || originalRecord['TA Category'] || '',
-                plannedRequested: updatedData['Planned / Requested'] || originalRecord['Planned / Requested'] || '',
-                dateConducted: updatedData['Date Conducted'] || originalRecord['Date Conducted'] || '',
+                trainingTitle: updatedData['Training Title'] || originalRecord['Training Title'] || '',
+                trainingTopics: updatedData['Training Topics'] || originalRecord['Training Topics'] || '',
+                trainingCategory: updatedData['Training Category'] || originalRecord['Training Category'] || '',
+                startDate: updatedData['Start Date of Training Conducted'] || originalRecord['Start Date of Training Conducted'] || '',
+                endDate: updatedData['End Date of Training Conducted'] || originalRecord['End Date of Training Conducted'] || '',
+                participants: updatedData['No. of Participants'] || originalRecord['No. of Participants'] || 0,
+                budget: updatedData['Budget / Funding Source'] || originalRecord['Budget / Funding Source'] || '',
+                partner: updatedData['Partner Agency / Organization'] || originalRecord['Partner Agency / Organization'] || '',
                 reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
                 remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
                 linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
                 personnelInCharge: updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || ''
             }
         };
-
         try {
-            setStatus('⏳ Updating record...', 'info');
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            setStatus('✅ Record updated! Please refresh to see changes.', 'success');
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            showToast('✅ Success', 'Record updated!', 'success');
             editingRowNumber = null;
             await loadRecords();
-        } catch (error) {
-            setStatus('❌ Error updating record: ' + error.message, 'error');
-        }
+        } catch (error) { showToast('❌ Error', 'Failed: ' + error.message, 'error'); }
+        finally { if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } }
     };
 
     window.deleteRecord = async function(rowNumber) {
-        if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
-            return;
-        }
+        if (!confirm('Delete this record? This cannot be undone.')) return;
+        const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
+        if (deleteBtn) { deleteBtn.classList.add('loading'); deleteBtn.disabled = true; }
         try {
-            setStatus('⏳ Deleting record...', 'info');
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'deleteRecord',
-                    rowNumber: rowNumber,
-                    formType: currentFormType
-                })
-            });
-            setStatus('🗑️ Record deleted! Please refresh to see changes.', 'success');
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'Training_CLUP/ZO' }) });
+            showToast('🗑️ Deleted', 'Record deleted.', 'success');
             editingRowNumber = null;
             await loadRecords();
-        } catch (error) {
-            setStatus('❌ Error deleting record: ' + error.message, 'error');
-        }
+        } catch (error) { showToast('❌ Error', 'Failed: ' + error.message, 'error'); }
+        finally { if (deleteBtn) { deleteBtn.classList.remove('loading'); deleteBtn.disabled = false; } }
     };
 
     searchInput.addEventListener('input', function() {
         const term = this.value.trim().toLowerCase();
-        if (!term) {
-            applyRecordFilters();
-            return;
-        }
+        if (!term) { applyRecordFilters(); return; }
         const filtered = filteredRecords.filter(r => {
-            const psgc = (r.PSGC || '').toLowerCase();
-            const province = (r.Province || '').toLowerCase();
-            const city = (r['City/Municipality'] || '').toLowerCase();
-            const pic = (r['Personnel In-Charge'] || '').toLowerCase();
-            return psgc.includes(term) || province.includes(term) || city.includes(term) || pic.includes(term);
+            return (r.Province||'').toLowerCase().includes(term) ||
+                   (r['City/Municipality']||'').toLowerCase().includes(term) ||
+                   (r['Training Title']||'').toLowerCase().includes(term);
         });
         renderTable(filtered);
         displayCount.textContent = filtered.length;
@@ -2867,29 +2438,13 @@
     // ============================================
     const chartModal = document.getElementById('chartModal');
 
-    function closeChartModal() {
-        chartModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
-    }
-
-    function openChartModal() {
-        chartModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        document.getElementById('chartModalTitle').textContent = 'CLUP and ZO TA Analytics Dashboard';
-        updateCategoryFilter();
-        updatePICFilters();
-        loadChartData();
-    }
+    function closeChartModal() { chartModal.classList.remove('active'); document.body.style.overflow = 'auto'; if (chartInstance) { chartInstance.destroy(); chartInstance = null; } }
+    function openChartModal() { chartModal.classList.add('active'); document.body.style.overflow = 'hidden'; document.getElementById('chartModalTitle').textContent = 'Training Analytics'; updatePICFilters(); loadChartData(); }
 
     document.getElementById('closeChartBtn').addEventListener('click', closeChartModal);
     document.getElementById('closeChartBtn2').addEventListener('click', closeChartModal);
-    chartModal.addEventListener('click', function(e) {
-        if (e.target === chartModal) closeChartModal();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeChartModal();
-    });
+    chartModal.addEventListener('click', function(e) { if (e.target === chartModal) closeChartModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeChartModal(); });
 
     document.querySelectorAll('.chart-type-selector button').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -2900,127 +2455,94 @@
         });
     });
 
-    function updateCategoryFilter() {
-        const select = document.getElementById('chartCategoryFilter');
-        select.innerHTML = '<option value="all">All Categories</option>';
-        const categories = currentFormType === 'CLUP' ?
-            ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
-        categories.forEach(cat => {
-            const opt = document.createElement('option');
-            opt.value = cat;
-            opt.textContent = cat;
-            select.appendChild(opt);
-        });
-    }
-
     async function loadChartData() {
         const container = document.getElementById('chartContainer');
         container.innerHTML = `<div class="chart-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading chart data...</p></div>`;
         document.getElementById('chartSummary').style.display = 'none';
-
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=' + currentFormType, { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Training_CLUP/ZO');
             const result = await response.json();
-            if (result.result === 'success') {
-                const records = result.records || [];
-                renderChart(records);
-            } else {
-                container.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error loading data: ${result.message}</div>`;
-            }
+            if (result.result === 'success') renderChart(result.records || []);
+            else container.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error: ${result.message}</div>`;
         } catch (error) {
-            container.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load data: ${error.message}</div>`;
+            container.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed: ${error.message}</div>`;
         }
     }
 
     function renderChart(records) {
         const container = document.getElementById('chartContainer');
         const summary = document.getElementById('chartSummary');
-
         const monthFilter = document.getElementById('chartMonthFilter').value;
         const yearFilter = document.getElementById('chartYearFilter').value;
         const categoryFilter = document.getElementById('chartCategoryFilter').value;
-        const plannedFilter = document.getElementById('chartPlannedFilter').value;
         const provinceFilter = document.getElementById('chartProvinceFilter').value;
         const picFilter = document.getElementById('chartPICFilter')?.value || 'all';
 
         let filtered = records;
         if (monthFilter !== 'all') filtered = filtered.filter(r => (r['Reporting Month'] || '') === monthFilter);
-        if (yearFilter) filtered = filtered.filter(r => (r['Date Conducted'] || '').includes(yearFilter));
-        if (categoryFilter !== 'all') filtered = filtered.filter(r => (r['TA Category'] || '') === categoryFilter);
-        if (plannedFilter !== 'all') filtered = filtered.filter(r => (r['Planned / Requested'] || '') === plannedFilter);
+        if (yearFilter) filtered = filtered.filter(r => (r['Start Date of Training Conducted'] || '').includes(yearFilter));
+        if (categoryFilter !== 'all') filtered = filtered.filter(r => (r['Training Category'] || '') === categoryFilter);
         if (provinceFilter !== 'all') filtered = filtered.filter(r => (r['Province'] || '') === provinceFilter);
         if (picFilter !== 'all') filtered = filtered.filter(r => (r['Personnel In-Charge'] || '') === picFilter);
 
         if (filtered.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding: 3rem; color: #94a3b8;"><i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i><p>No data found for the selected filters.</p><p style="font-size: 0.85rem; margin-top: 0.5rem;">Try adjusting your filter criteria.</p></div>`;
+            container.innerHTML = `<div style="text-align:center; padding: 3rem; color: #94a3b8;"><i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i><p>No data for selected filters.</p></div>`;
             summary.style.display = 'none';
             return;
         }
 
-        let plannedCount = filtered.filter(r => (r['Planned / Requested'] || '') === 'Planned').length;
-        let requestedCount = filtered.filter(r => (r['Planned / Requested'] || '') === 'Requested').length;
         const months = new Set(filtered.map(r => r['Reporting Month']).filter(Boolean));
+        let totalParticipants = 0;
+        filtered.forEach(r => { const p = parseInt(r['No. of Participants']) || 0; totalParticipants += p; });
 
         document.getElementById('statTotal').textContent = filtered.length;
-        document.getElementById('statPlanned').textContent = plannedCount;
-        document.getElementById('statRequested').textContent = requestedCount;
         document.getElementById('statMonths').textContent = months.size;
+        document.getElementById('statParticipants').textContent = totalParticipants;
 
         let labels, data, chartTitle, datasetLabel;
 
         if (currentChartType === 'category') {
-            const categoryCounts = {};
-            const categories = currentFormType === 'CLUP' ?
-                ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
-            categories.forEach(cat => categoryCounts[cat] = 0);
-            filtered.forEach(r => {
-                const cat = r['TA Category'] || 'Other';
-                if (categoryCounts.hasOwnProperty(cat)) categoryCounts[cat]++;
-                else categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-            });
-            labels = Object.keys(categoryCounts).filter(k => categoryCounts[k] > 0);
-            data = labels.map(k => categoryCounts[k]);
-            chartTitle = currentFormType + ' - TA Category Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '') + (yearFilter ? ' - ' + yearFilter : '');
-            datasetLabel = 'Number of Requests';
+            const catCounts = {};
+            const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD'];
+            cats.forEach(c => catCounts[c] = 0);
+            filtered.forEach(r => { const cat = r['Training Category'] || 'Other'; if (catCounts.hasOwnProperty(cat)) catCounts[cat]++; else catCounts[cat] = 1; });
+            labels = Object.keys(catCounts).filter(k => catCounts[k] > 0);
+            data = labels.map(k => catCounts[k]);
+            chartTitle = 'Training Category Distribution';
+            datasetLabel = 'Number of Trainings';
             document.getElementById('statCategories').textContent = labels.length;
             let topCat = '-', topCount = 0;
-            labels.forEach((cat, i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
+            labels.forEach((cat,i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
             document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
             renderBarChart(container, labels, data, chartTitle, datasetLabel);
             summary.style.display = 'grid';
             return;
-        } else if (currentChartType === 'planned') {
-            const monthOrder = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const plannedData = {}, requestedData = {};
-            monthOrder.forEach(m => { plannedData[m] = 0; requestedData[m] = 0; });
-            filtered.forEach(r => {
-                const month = r['Reporting Month'] || '';
-                const status = r['Planned / Requested'] || '';
-                if (status === 'Planned') plannedData[month] = (plannedData[month] || 0) + 1;
-                else if (status === 'Requested') requestedData[month] = (requestedData[month] || 0) + 1;
-            });
-            labels = monthOrder.filter(m => plannedData[m] > 0 || requestedData[m] > 0);
-            chartTitle = currentFormType + ' - Planned vs Requested by Month' + (yearFilter ? ' - ' + yearFilter : '');
-            document.getElementById('statCategories').textContent = '2 (Planned/Requested)';
-            document.getElementById('statTopCategory').textContent = plannedCount > requestedCount ? 'Planned (' + plannedCount + ')' : 'Requested (' + requestedCount + ')';
-            renderGroupedChart(container, labels, plannedData, requestedData, chartTitle);
-            summary.style.display = 'grid';
-            return;
-        } else if (currentChartType === 'province') {
-            const cityData = {};
-            filtered.forEach(r => {
-                const city = r['City/Municipality'] || 'Unknown';
-                cityData[city] = (cityData[city] || 0) + 1;
-            });
-            labels = Object.keys(cityData).sort((a, b) => cityData[b] - cityData[a]);
-            data = labels.map(k => cityData[k]);
-            chartTitle = currentFormType + ' - Requests by City/Municipality' + (monthFilter !== 'all' ? ' - ' + monthFilter : '') + (yearFilter ? ' - ' + yearFilter : '');
-            datasetLabel = 'Number of Requests';
+        } else if (currentChartType === 'monthly') {
+            const monthOrder = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const monthlyCounts = {};
+            monthOrder.forEach(m => monthlyCounts[m] = 0);
+            filtered.forEach(r => { const m = r['Reporting Month'] || ''; if (monthlyCounts.hasOwnProperty(m)) monthlyCounts[m]++; });
+            labels = monthOrder.filter(m => monthlyCounts[m] > 0);
+            data = labels.map(m => monthlyCounts[m]);
+            chartTitle = 'Monthly Training Trend' + (yearFilter ? ' - ' + yearFilter : '');
+            datasetLabel = 'Number of Trainings';
             document.getElementById('statCategories').textContent = labels.length;
             let topCat = '-', topCount = 0;
-            labels.forEach((cat, i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
+            labels.forEach((cat,i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
+            document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
+            renderBarChart(container, labels, data, chartTitle, datasetLabel);
+            summary.style.display = 'grid';
+            return;
+        } else if (currentChartType === 'city') {
+            const cityData = {};
+            filtered.forEach(r => { const city = r['City/Municipality'] || 'Unknown'; cityData[city] = (cityData[city] || 0) + 1; });
+            labels = Object.keys(cityData).sort((a,b) => cityData[b] - cityData[a]);
+            data = labels.map(k => cityData[k]);
+            chartTitle = 'Trainings by City/Municipality';
+            datasetLabel = 'Number of Trainings';
+            document.getElementById('statCategories').textContent = labels.length;
+            let topCat = '-', topCount = 0;
+            labels.forEach((cat,i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
             document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
             renderBarChart(container, labels, data, chartTitle, datasetLabel);
             summary.style.display = 'grid';
@@ -3029,70 +2551,20 @@
     }
 
     function renderBarChart(container, labels, data, chartTitle, datasetLabel) {
-        const colors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#6366f1'];
-        const backgroundColors = labels.map((_, i) => colors[i % colors.length]);
-
+        const colors = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316','#14b8a6','#6366f1'];
+        const backgroundColors = labels.map((_,i) => colors[i % colors.length]);
         container.innerHTML = `<div class="chart-container"><canvas id="chartCanvas"></canvas></div>`;
         const ctx = document.getElementById('chartCanvas').getContext('2d');
-
         if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
-
         chartInstance = new Chart(ctx, {
             type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: datasetLabel,
-                    data: data,
-                    backgroundColor: backgroundColors,
-                    borderColor: backgroundColors.map(c => c + '99'),
-                    borderWidth: 2,
-                    borderRadius: 6,
-                }]
-            },
+            data: { labels, datasets: [{ label: datasetLabel, data, backgroundColor: backgroundColors, borderColor: backgroundColors.map(c=>c+'99'), borderWidth: 2, borderRadius: 6 }] },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' },
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' request(s)'; } } }
-                },
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Requests', font: { weight: 'bold' } } },
-                    x: { title: { display: true, text: currentChartType === 'category' ? 'TA Category' : 'City/Municipality', font: { weight: 'bold' } } }
-                }
-            }
-        });
-    }
-
-    function renderGroupedChart(container, labels, plannedData, requestedData, chartTitle) {
-        container.innerHTML = `<div class="chart-container"><canvas id="chartCanvas"></canvas></div>`;
-        const ctx = document.getElementById('chartCanvas').getContext('2d');
-
-        if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
-
-        chartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: 'Planned', data: labels.map(m => plannedData[m] || 0), backgroundColor: '#2563eb', borderColor: '#2563eb99', borderWidth: 2, borderRadius: 4 },
-                    { label: 'Requested', data: labels.map(m => requestedData[m] || 0), backgroundColor: '#f59e0b', borderColor: '#f59e0b99', borderWidth: 2, borderRadius: 4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' },
-                    legend: { position: 'top', labels: { font: { weight: 'bold' } } },
-                    tooltip: { callbacks: { label: function(context) { return context.dataset.label + ': ' + context.parsed.y + ' request(s)'; } } }
-                },
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Requests', font: { weight: 'bold' } } },
-                    x: { title: { display: true, text: 'Month', font: { weight: 'bold' } } }
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' }, legend: { display: false },
+                tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' training(s)'; } } } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Count', font: { weight: 'bold' } } },
+                x: { title: { display: true, text: '', font: { weight: 'bold' } } } }
             }
         });
     }
@@ -3102,7 +2574,6 @@
         document.getElementById('chartMonthFilter').value = 'all';
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
         document.getElementById('chartCategoryFilter').value = 'all';
-        document.getElementById('chartPlannedFilter').value = 'all';
         document.getElementById('chartProvinceFilter').value = 'all';
         document.getElementById('chartPICFilter').value = 'all';
         loadChartData();
@@ -3115,21 +2586,12 @@
     document.getElementById('chartBtn').addEventListener('click', openChartModal);
     document.getElementById('sheetBtn').addEventListener('click', function() {
         window.open(GOOGLE_SHEET_URL, '_blank');
-        setStatus('📊 Opening Google Sheet in new tab...', 'info');
+        showToast('📊 Info', 'Opening Google Sheet...', 'info');
     });
 
     // ============================================
-    // PERSONNEL IN-CHARGE BUTTON EVENTS
+    // NAVIGATION (from Techsamp.html)
     // ============================================
-    document.getElementById('clup_addPic').addEventListener('click', function() { openAddPersonModal('clup'); });
-    document.getElementById('pdpfp_addPic').addEventListener('click', function() { openAddPersonModal('pdpfp'); });
-    document.getElementById('clup_deletePic').addEventListener('click', function() { deleteSelectedPerson('clup'); });
-    document.getElementById('pdpfp_deletePic').addEventListener('click', function() { deleteSelectedPerson('pdpfp'); });
-
-    // ============================================
-    // NAVIGATION (from index.html)
-    // ============================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
     let currentUser = null;
 
     function checkSession() {
@@ -3165,7 +2627,7 @@
         return "viewer";
     }
 
-      function renderMainNavigation() {
+   function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
         let navHtml = `<a href="index.html">Home</a>`;
@@ -3179,29 +2641,31 @@
                     <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
                 </div></div>
                 <a href="Techsamp.html">Technical Assistance</a>
-                <a href="training.html">CLUP/ZO Training</a>
+                <a href="index.html">CLUP/ZO Training</a>
                 <a href="lgu-info.html">LGU Information</a>
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>`;
-      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
-      container.innerHTML = navHtml;
-      setTimeout(() => {
-        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const submenu = trigger.closest(".dropdown-submenu");
-            if (submenu) submenu.classList.toggle("open");
-          });
-        });
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".dropdown-submenu")) {
-            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-          }
-        });
-      }, 10);
+        } else {
+            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+        }
+        container.innerHTML = navHtml;
+        setTimeout(() => {
+            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+                trigger.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const submenu = trigger.closest(".dropdown-submenu");
+                    if (submenu) submenu.classList.toggle("open");
+                });
+            });
+            document.addEventListener("click", function (e) {
+                if (!e.target.closest(".dropdown-submenu")) {
+                    document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+                }
+            });
+        }, 10);
     }
 
     function renderUserMenu() {
@@ -3233,8 +2697,8 @@
             const logoutBtn = document.getElementById("logoutDropdownBtn");
             if (logoutBtn) logoutBtn.addEventListener("click", () => {
                 localStorage.removeItem("dhsud_session");
-                showToastMessage("Logged out successfully.", "success");
-                setTimeout(() => { window.location.href = "Techsamp.html"; }, 700);
+                showToast("Logged out successfully.", "success");
+                setTimeout(() => { window.location.href = "index.html"; }, 700);
             });
         } else {
             container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
@@ -3244,16 +2708,6 @@
     function escapeHtml(s) {
         if (!s) return "";
         return String(s).replace(/[&<>]/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" })[m]);
-    }
-
-    function showToastMessage(msg, type = "info") {
-        let t = document.querySelector(".toast-msg");
-        if (t) t.remove();
-        let toast = document.createElement("div");
-        toast.className = "toast-msg" + (type === "error" ? " error" : type === "success" ? " success" : "");
-        toast.innerText = msg;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
     }
 
     function openLoginModal() {
@@ -3277,7 +2731,7 @@
             const users = await resp.json();
             const user = users.find((u) => u.email?.toLowerCase() === email);
             if (!user) {
-                showToastMessage("Account not found.", "error");
+                showToast("Account not found.", "error");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 return false;
@@ -3285,14 +2739,14 @@
             if (user.password === btoa(password)) {
                 const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
                 localStorage.setItem("dhsud_session", JSON.stringify(session));
-                showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+                showToast(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
                 closeLoginModal();
                 setTimeout(() => window.location.reload(), 1000);
             } else {
-                showToastMessage("Invalid password.", "error");
+                showToast("Invalid password.", "error");
             }
         } catch (error) {
-            showToastMessage("Connection error.", "error");
+            showToast("Connection error.", "error");
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -3305,16 +2759,10 @@
     // ============================================
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('clup_dateConducted').value = today;
-        document.getElementById('pdpfp_dateConducted').value = today;
-
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const currentMonth = monthNames[new Date().getMonth()];
-        document.getElementById('clup_reportingMonth').value = currentMonth;
-        document.getElementById('pdpfp_reportingMonth').value = currentMonth;
-
-        document.getElementById('clup_region').value = 'Region 6';
-        document.getElementById('pdpfp_region').value = 'Region 6';
+        document.getElementById('training_startDate').value = today;
+        document.getElementById('training_endDate').value = today;
+        document.getElementById('training_region').value = 'Region_06';
+        document.getElementById('training_reportingMonth').value = ['January','February','March','April','May','June','July','August','September','October','November','December'][new Date().getMonth()];
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
 
         checkSession();
@@ -3325,7 +2773,7 @@
         if (form) form.addEventListener("submit", handleModalLogin);
 
         loadPICNamesFromSheet();
-        setStatus('📋 All set · select CLUP or PDPFP', 'info');
+        setStatus('📋 All set · fill in all required fields', 'info');
     });
 
     window.openLoginModal = openLoginModal;
