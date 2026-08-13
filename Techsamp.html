@@ -1464,7 +1464,7 @@
                     </div>
                     <div>
                         <h1>
-                            ELUPDD Technical Assistance
+                            Technical Assistance
                             <small>Technical Assistance Management Information System</small>
                         </h1>
                     </div>
@@ -1801,7 +1801,7 @@
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">CLUP and ZO TA Analytics Dashboard</span></h2>
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Technical Assistance</span></h2>
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-filters">
@@ -2526,7 +2526,7 @@
     }
 
     // ============================================
-    // RECORDS MODAL - UPDATED WITH PIC FILTER
+    // RECORDS MODAL
     // ============================================
     const recordsModal = document.getElementById('recordsModal');
     const modalBody = document.getElementById('modalBody');
@@ -2549,7 +2549,7 @@
     function openRecordsModal() {
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        document.getElementById('recordsModalTitle').textContent = 'CLUP and ZO TA Analytics Dashboard';
+        document.getElementById('recordsModalTitle').textContent = currentFormType + ' Technical Assistance';
         updatePICFilters();
         loadRecords();
     }
@@ -3175,9 +3175,7 @@
           <a href="lc.html">Locational Clearance</a>
           <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <!-- CLUP & ZO submenu -->
             <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-            <!-- PDPFP submenu with Inventory & Status -->
             <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
           </div></div>
           <a href="Techsamp.html">Technical Assistance</a>
