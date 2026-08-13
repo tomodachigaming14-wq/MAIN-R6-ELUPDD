@@ -1801,7 +1801,7 @@
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">All Records</span></h2>
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">CLUP and ZO TA Analytics Dashboard</span></h2>
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-filters">
@@ -1869,7 +1869,7 @@
 <div class="modal-overlay" id="chartModal">
     <div class="modal-box" style="max-width: 1100px;">
         <div class="modal-header">
-            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">Monthly Analytics Dashboard</span></h2>
+            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">CLUP and ZO TA Analytics Dashboard</span></h2>
             <button class="close-btn" id="closeChartBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="chartModalBody">
@@ -2549,7 +2549,7 @@
     function openRecordsModal() {
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        document.getElementById('recordsModalTitle').textContent = currentFormType + ' Records';
+        document.getElementById('recordsModalTitle').textContent = 'CLUP and ZO TA Analytics Dashboard';
         updatePICFilters();
         loadRecords();
     }
@@ -2876,7 +2876,7 @@
     function openChartModal() {
         chartModal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        document.getElementById('chartModalTitle').textContent = currentFormType + ' Analytics Dashboard';
+        document.getElementById('chartModalTitle').textContent = 'CLUP and ZO TA Analytics Dashboard';
         updateCategoryFilter();
         updatePICFilters();
         loadChartData();
@@ -3171,9 +3171,9 @@
       let navHtml = `<a href="index.html">Home</a>`;
       if (currentUser) {
         navHtml += 
-		 `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-		  <a href="lc.html">Locational Clearance</a>
-		  <a href="SZC.html">Site Zoning Certification</a></div></div>
+         `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+          <a href="lc.html">Locational Clearance</a>
+          <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
             <!-- CLUP & ZO submenu -->
             <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
