@@ -1587,10 +1587,17 @@ footer {
               <div class="form-group"><label>Corporation Address</label><input type="text" id="locCorpAddress" class="form-control"></div>
               <div class="form-group"><label>Type of Project *</label><input type="text" id="locProjectType" class="form-control" required></div>
               
-              <!-- Area and Location field with smaller map button just below it -->
+              <!-- Area and Location field with Lot No. -->
               <div class="form-group full-width">
     <label>Area and Location *</label>
     <div style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Lot No. field -->
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div style="flex: 1;">
+                <label style="font-size: 0.75rem; color: #54708f;">Lot No.</label>
+                <input type="text" id="locLotNo" class="form-control" placeholder="e.g., 999, Gssm-06-000003">
+            </div>
+        </div>
         <div style="display: flex; gap: 15px; flex-wrap: wrap;">
             <div style="flex: 1;">
                 <label style="font-size: 0.75rem; color: #54708f;">Lot Area (sq.m.)</label>
@@ -1611,6 +1618,7 @@ footer {
                     <option value="Capiz">Capiz</option>
                     <option value="Guimaras">Guimaras</option>
                     <option value="Iloilo">Iloilo</option>
+                    <option value="Negros Occidental">Negros Occidental</option>
                 </select>
             </div>
             <div style="flex: 1;">
@@ -1623,7 +1631,6 @@ footer {
         <div style="display: flex; gap: 15px; flex-wrap: wrap;">
             <div style="flex: 1;">
                 <label style="font-size: 0.75rem; color: #54708f;">Barangay</label>
-                <!-- Changed from select to input for free typing -->
                 <input type="text" id="locBarangay" class="form-control" placeholder="Type barangay name">
             </div>
         </div>
@@ -2233,6 +2240,9 @@ function validateDecisionNo(decNo) {
             }
         }
         
+        // Get Lot No. from the new field
+        const lotNo = document.getElementById("locLotNo").value.trim();
+        
         const record = {
             id: id,
             applicationNo: applicationNo,
@@ -2245,6 +2255,7 @@ function validateDecisionNo(decNo) {
             corpAddress: document.getElementById("locCorpAddress").value.trim(),
             projectType: document.getElementById("locProjectType").value.trim(),
             areaLocation: document.getElementById("locAreaLocation").value.trim(),
+            lotNo: lotNo, // Add lotNo to the record
             decision: document.getElementById("locDecision").value,
             rightOverLand: document.getElementById("locRightOverLand").value.trim(),
             conditions: document.getElementById("locConditions").value.trim(),
@@ -2392,6 +2403,7 @@ function validateDecisionNo(decNo) {
     document.getElementById("locCorpAddress").value = r.corpAddress || "";
     document.getElementById("locProjectType").value = r.projectType || "";
     document.getElementById("locAreaLocation").value = r.areaLocation || "";
+    document.getElementById("locLotNo").value = r.lotNo || ""; // Set Lot No.
     document.getElementById("locDecision").value = r.decision || "";
     document.getElementById("locRightOverLand").value = r.rightOverLand || "";
     document.getElementById("locConditions").value = r.conditions || "";
@@ -2399,8 +2411,88 @@ function validateDecisionNo(decNo) {
     document.getElementById("locAmountPaid").value = r.amountPaid || "";
     document.getElementById("locOrDate").value = r.orDate || "";
     
+    // Parse areaLocation to extract lot area, floor area, and location details
+    if (r.areaLocation) {
+        const areaLocation = r.areaLocation;
+        
+        // Extract lot area (e.g., "196 sq.m. (lot area)")
+        const lotMatch = areaLocation.match(/(\d+(?:\.\d+)?)\s*sq\.m\.\s*\(lot area\)/);
+        if (lotMatch) {
+            document.getElementById("locLotArea").value = lotMatch[1];
+        }
+        
+        // Extract floor area
+        const floorMatch = areaLocation.match(/(\d+(?:\.\d+)?)\s*sq\.m\.\s*\(floor area of proposed structure\)/);
+        if (floorMatch) {
+            document.getElementById("locFloorArea").value = floorMatch[1];
+        }
+        
+        // Extract location (after " - ")
+        const locationMatch = areaLocation.match(/-\s*(.+)$/);
+        if (locationMatch) {
+            const location = locationMatch[1];
+            const parts = location.split(', ').map(p => p.trim());
+            
+            // Try to match province
+            const provinces = ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'];
+            let provinceFound = '';
+            let remainingParts = [...parts];
+            
+            for (let i = 0; i < remainingParts.length; i++) {
+                if (provinces.includes(remainingParts[i])) {
+                    provinceFound = remainingParts[i];
+                    remainingParts.splice(i, 1);
+                    break;
+                }
+            }
+            
+            if (provinceFound) {
+                document.getElementById("locProvince").value = provinceFound;
+                populateCities(); // Load cities for this province
+                
+                // Try to match city (after province is set)
+                setTimeout(() => {
+                    const cities = philippineLocations[provinceFound]?.cities || [];
+                    let cityFound = '';
+                    let barangayParts = [...remainingParts];
+                    
+                    for (let i = 0; i < barangayParts.length; i++) {
+                        if (cities.includes(barangayParts[i])) {
+                            cityFound = barangayParts[i];
+                            barangayParts.splice(i, 1);
+                            break;
+                        }
+                    }
+                    
+                    if (cityFound) {
+                        document.getElementById("locCity").value = cityFound;
+                    }
+                    
+                    // Barangay is now a text input, just set its value
+                    let barangayName = barangayParts.join(', ');
+                    if (barangayName) {
+                        barangayName = barangayName.replace(/^(Barangay|Brgy\.?)\s/i, '');
+                        document.getElementById("locBarangay").value = barangayName;
+                    }
+                }, 50);
+            } else {
+                // No province found, set barangay directly
+                let barangayName = location;
+                barangayName = barangayName.replace(/^(Barangay|Brgy\.?)\s/i, '');
+                document.getElementById("locBarangay").value = barangayName;
+            }
+        }
+    }
+    
+    // Set number parts
+    if (r.applicationNo) setNumberParts('app', r.applicationNo);
+    if (r.decisionNo) setNumberParts('dec', r.decisionNo);
+    
     // Make the numbers editable when editing
     makeNumberEditable();
+    
+    // Update the hidden area location field
+    updateAreaLocation();
     
     showToastMessage(`Editing: ${r.applicationNo}`);
 }
@@ -2408,8 +2500,19 @@ function validateDecisionNo(decNo) {
     document.getElementById("locationalForm").reset();
     currentEditingId = null;
     
+    // Clear location fields including Lot No.
+    document.getElementById("locLotNo").value = "";
+    document.getElementById("locLotArea").value = "";
+    document.getElementById("locFloorArea").value = "";
+    document.getElementById("locProvince").value = "";
+    document.getElementById("locCity").innerHTML = '<option value="">-- Select City/Municipality --</option>';
+    document.getElementById("locBarangay").value = "";
+    
     // Load latest numbers for new record
     refreshLatestNumbersDisplay();
+    
+    // Update hidden field
+    updateAreaLocation();
     
     // Clear other fields
     document.getElementById("locDateReceipt").value = "";
@@ -2419,10 +2522,8 @@ function validateDecisionNo(decNo) {
     document.getElementById("locApplicantAddress").value = "";
     document.getElementById("locCorpAddress").value = "";
     document.getElementById("locProjectType").value = "";
-    document.getElementById("locAreaLocation").value = "";
     document.getElementById("locDecision").value = "";
     document.getElementById("locRightOverLand").value = "";
-    document.getElementById("locConditions").value = "";
     document.getElementById("locOrNo").value = "";
     document.getElementById("locAmountPaid").value = "";
     document.getElementById("locOrDate").value = "";
@@ -2455,6 +2556,7 @@ function validateDecisionNo(decNo) {
                 "Date Issued": r.dateIssue,
                 Decision: r.decision,
                 "Amount Paid": r.amountPaid,
+                "Lot No.": r.lotNo || "",
             }))
         );
         const wb = XLSX.utils.book_new();
@@ -2482,12 +2584,68 @@ function printRecord(id) {
     const dateIssued = formatDateLong(r.dateIssue);
     const orDate = r.orDate ? formatDateLong(r.orDate) : "";
     
+    // Format area and location with bullet points - compact format
+    let areaLocationDisplay = r.areaLocation || "";
+    
+    // If we have lotNo, format with compact bullet points
+    if (r.lotNo) {
+        // Extract parts from areaLocation
+        let lotArea = "";
+        let floorArea = "";
+        let location = "";
+        
+        // Try to extract existing values from areaLocation
+        const lotAreaMatch = areaLocationDisplay.match(/(\d+(?:\.\d+)?)\s*sq\.m\.\s*\(lot area\)/);
+        if (lotAreaMatch) lotArea = lotAreaMatch[1];
+        
+        const floorAreaMatch = areaLocationDisplay.match(/(\d+(?:\.\d+)?)\s*sq\.m\.\s*\(floor area of proposed structure\)/);
+        if (floorAreaMatch) floorArea = floorAreaMatch[1];
+        
+        const locationMatch = areaLocationDisplay.match(/•\s*(.+)$/m);
+        if (locationMatch) location = locationMatch[1];
+        
+        // Build with bullet points - compact format
+        let lines = [];
+        
+        // Check if lotNo already contains the full description
+        if (r.lotNo.includes('equivalent to') || r.lotNo.includes('Cad.')) {
+            // Full lot description - use as is with bullet
+            lines.push(`• ${r.lotNo}`);
+        } else {
+            lines.push(`• Lot No. ${r.lotNo}`);
+        }
+        
+        // Build the area line - compact
+        let areaLine = `• ${lotArea || '___'} sq.m. (lot area)`;
+        if (floorArea) {
+            areaLine += ` / ${floorArea} sq.m. (floor area of proposed structure)`;
+        }
+        lines.push(areaLine);
+        
+        if (location) {
+            lines.push(`• ${location}`);
+        }
+        
+        areaLocationDisplay = lines.join('\n');
+    } else {
+        // If no lotNo, try to format existing areaLocation with bullet points
+        if (areaLocationDisplay && !areaLocationDisplay.includes('•')) {
+            // Split by new lines or dashes
+            let lines = areaLocationDisplay.split('\n').filter(line => line.trim());
+            if (lines.length === 0) {
+                lines = areaLocationDisplay.split('-').filter(part => part.trim());
+            }
+            // Add bullet points
+            areaLocationDisplay = lines.map(line => `• ${line.trim()}`).join('\n');
+        }
+    }
+    
     // Get conditions
     let conditionsHtml = '';
     if (r.conditions && r.conditions.trim()) {
         const conditionsList = r.conditions.split('\n').filter(c => c.trim());
         if (conditionsList.length > 0) {
-            conditionsHtml = '<ul style="margin: 5px 0 5px 20px;">';
+            conditionsHtml = '<ul style="margin: 5px 0 5px 20px; list-style-type: disc; padding-left: 0;">';
             conditionsList.forEach(cond => {
                 conditionsHtml += `<li>${escapeHtml(cond)}</li>`;
             });
@@ -2503,7 +2661,7 @@ function printRecord(id) {
         decisionText = 'Locational Clearance Granted';
     }
     
-    // Build the print HTML matching error28.JPG exactly
+    // Build the print HTML matching error1.JPG with compact box
     const printHtml = `
     <div class="print-document">
         
@@ -2539,7 +2697,7 @@ function printRecord(id) {
     </div>
 </div>
         
-        <!-- Main Table - 4 columns exactly like the image -->
+        <!-- Main Table - 4 columns with compact AREA AND LOCATION cell -->
         <table class="print-main-table">
             <!-- Row 1: APPLICANT and NAME OF CORPORATION -->
 <tr>
@@ -2555,12 +2713,12 @@ function printRecord(id) {
     <td class="print-label">ADDRESS:</td>
     <td class="print-value"><strong>${escapeHtml(r.corpAddress || '')}</strong></td>
 </tr>
-<!-- Row 3: TYPE OF PROJECT and AREA AND LOCATION -->
+<!-- Row 3: TYPE OF PROJECT and AREA AND LOCATION (compact) -->
 <tr>
     <td class="print-label">TYPE OF PROJECT:</td>
     <td class="print-value"><strong>${escapeHtml(r.projectType || '')}</strong></td>
     <td class="print-label">AREA AND LOCATION:</td>
-    <td class="print-value"><strong>${escapeHtml(r.areaLocation || '')}</strong></td>
+    <td class="print-value" style="white-space: pre-line; font-size: 8pt; padding: 4px 8px; line-height: 1.3;"><strong>${escapeHtml(areaLocationDisplay || '')}</strong></td>
 </tr>
 <!-- Row 4: DECISION and RIGHT OVER LAND -->
 <tr>
@@ -2576,10 +2734,10 @@ function printRecord(id) {
         <strong>CONDITIONS:</strong>
         </div>
         
-        <!-- Standard Conditions -->
+        <!-- Standard Conditions with bullet points -->
         <div class="conditions-box">
           <div class="print-standard-conditions">
-            <ul>
+            <ul style="list-style-type: disc; margin: 5px 0 5px 20px; padding-left: 0;">
                 <li>All conditions stipulated herein and in all the representations of the applicant form part of this decision and are subject to monitoring.</li>
                 <li>Non-compliance therewith shall be a cause for cancellation or legal action.</li>
                 <li>The applicable requirements of other government agencies and applicable provisions of existing laws shall be complied with.</li>
@@ -2657,10 +2815,9 @@ function printRecord(id) {
         line-height: 1.2;
     }
     /* Header with Application and Decision Numbers */
-    /* Add spacing around the header section */
     .print-number-header {
-        margin-top: 20px; /* Space on top */
-        margin-bottom: 0px; /* Space on bottom */
+        margin-top: 20px;
+        margin-bottom: 0px;
         display: flex;
         justify-content: space-evenly;
         font-size: 11pt;
@@ -2674,18 +2831,18 @@ function printRecord(id) {
     .print-number-left div,
     .print-number-right div {
         display: flex;
-        justify-content: space-evenly; /* Space between label and value */
+        justify-content: space-evenly;
         margin-bottom: 8px;
     }
 
     .print-number-left div strong,
     .print-number-right div strong {
-        min-width: 120px; /* Fixed width for labels */
+        min-width: 120px;
     }
 
     .print-number-left div span,
     .print-number-right div span {
-        text-align: left; /* Align values to the right */
+        text-align: left;
         flex: 1;
     }
 
@@ -2695,49 +2852,52 @@ function printRecord(id) {
         font-size: 14pt;
         font-weight: bold;
         margin: 15px 0;
-        letter-spacing: 3px; /* Adds space between letters */
+        letter-spacing: 3px;
     }
+    
     .print-main-table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
-        table-layout: fixed; /* Helps control widths */
+        table-layout: fixed;
     }
 
     .print-main-table td {
         border: 1px solid #000;
-        padding: 6px 8px; /* Change padding: smaller = tighter */
+        padding: 4px 6px;
         vertical-align: top;
     }
+    
     /* Label columns (1st and 3rd) - NO BOLD */
     .print-main-table td:first-child,
     .print-main-table td:nth-child(3) {
-        width: 20%;
+        width: 18%;
         white-space: normal;
         word-wrap: break-word;
         word-break: break-word;
         vertical-align: top;
-        padding: 10px 8px;
+        padding: 6px 6px;
         background: #f5f5f5;
         font-weight: normal !important;
+        font-size: 8pt;
     }
 
     /* Value columns (2nd and 4th) */
     .print-main-table td:nth-child(2),
     .print-main-table td:nth-child(4) {
-        width: 30%; /* 30% for each value column */
-        padding: 10px 12px;
+        width: 32%;
+        padding: 6px 8px;
         vertical-align: top;
+        font-size: 8.5pt;
     }
 
-    /* For labels that need wrapping */
     .print-label {
         white-space: normal;
-        line-height: 1.3;
+        line-height: 1.2;
         font-weight: normal !important;
+        font-size: 8pt;
     }
 
-    /* Specific fix for NAME OF CORPORATION */
     .print-main-table td:nth-child(3) {
         white-space: normal;
         word-break: break-word;
@@ -2745,55 +2905,64 @@ function printRecord(id) {
 
     .print-main-table .print-value {
         width: 10%;
-        font-size: 11pt;
+        font-size: 8.5pt;
+        white-space: pre-line;
     }
+    
+    /* Compact AREA AND LOCATION cell */
+    .print-main-table td:nth-child(4) {
+        padding: 4px 6px;
+        font-size: 7.5pt;
+        line-height: 1.2;
+    }
+    
     /* Conditions */
     .print-conditions {
-        margin-top: 30px;
+        margin-top: 20px;
         margin-bottom: 2px;
     }
     .print-conditions strong {
-        font-size: 10pt;
+        font-size: 9pt;
         display: block;
         margin-bottom: 2px;
     }
     .print-standard-conditions {
-        margin: 15px 0;
+        margin: 10px 0;
     }
     .print-standard-conditions ul {
-        margin: 5px 0 5px 25px;
+        margin: 3px 0 3px 20px;
         padding-left: 0;
+        list-style-type: disc;
     }
     .print-standard-conditions li {
-        margin: 5px 0;
+        margin: 3px 0;
+        font-size: 8pt;
+        line-height: 1.2;
     }
+    
     /* Signature */
     .print-signature {
-        margin-top: 30px; /* Generous space from conditions */
-        margin-bottom: 5px; /* Space before footer */
+        margin-top: 20px;
+        margin-bottom: 5px;
         text-align: right;
     }
 
     .signature-name {
         border-top: 1px solid #000;
-        padding-top: 1px; /* Space between line and name */
+        padding-top: 2px;
         display: inline-block;
         font-weight: bold;
         min-width: 80px;
         letter-spacing: 0.5px;
+        font-size: 9pt;
     }
 
     .print-signature div:last-child {
-        margin-top: 5px;
+        margin-top: 3px;
         font-size: 9pt;
         font-style: normal;
     }
-    /* Footer */
-    .print-footer {
-        margin-top: 20px;
-        border-top: 1px solid #000;
-        padding-top: 10px;
-    }
+    
     /* Office Address - Sticky Footer */
     .print-office {
         position: absolute;
@@ -2801,77 +2970,79 @@ function printRecord(id) {
         left: 0;
         right: 0;
         text-align: center;
-        padding: 12px 0 8px 0;
+        padding: 8px 0 6px 0;
         border-top: 1px solid #ccc;
         background: white;
-        font-size: 7pt;
-        margin-top: 80px;
+        font-size: 6pt;
+        margin-top: 40px;
     }
 
     .office-logo {
-        margin-bottom: 3px;
+        margin-bottom: 2px;
     }
 
     .office-logo img {
         display: inline-block;
-        height: 25px;
+        height: 20px;
         width: auto;
     }
 
     .office-text {
-        font-size: 6pt;
+        font-size: 5.5pt;
         color: #1e3a8a;
-        line-height: 1.2;
+        line-height: 1.1;
     }
+    
     @page {
         size: A4;
-        margin: 1cm;
-        margin-top: 0.5cm;
-        margin-bottom: 0.5cm;
+        margin: 0.8cm;
+        margin-top: 0.3cm;
+        margin-bottom: 0.3cm;
     }
-    /* Conditions Box */
 
     .conditions-box {
         padding: 2px 2px;
         width: 100%;
         max-width: 100%;
-        font-size: 10pt;
-        margin-top: 0px; /* Space on top */
-        margin-bottom: 5px; /* Space on bottom */
+        font-size: 9pt;
+        margin-top: 0px;
+        margin-bottom: 3px;
     }
 
     .conditions-box ul {
         margin: 0;
-        padding-left: 20px;
+        padding-left: 18px;
+        list-style-type: disc;
     }
 
     .conditions-box li {
         margin-top: 0px;
-        margin-bottom: 5px; /* Space between each condition line */
-        line-height: 1;
-        text-align: justify; /* Makes text look cleaner */
+        margin-bottom: 3px;
+        line-height: 1.1;
+        text-align: justify;
+        font-size: 7.5pt;
     }
 
     .conditions-box li:last-child {
-        margin-bottom: 0; /* Remove margin from last item */
+        margin-bottom: 0;
     }
 
     /* Republic Header - Blue text */
     .print-republic-header {
         text-align: center;
-        margin-bottom: 5px; /* Reduced from 10px */
+        margin-bottom: 3px;
         color: #1e3a8a;
         font-family: "Arial", "Helvetica", sans-serif;
     }
     .print-republic-header div:first-child {
-        font-size: 6pt; /* Reduced from 14pt */
+        font-size: 6pt;
     }
     .print-republic-header div:nth-child(2) {
-        font-size: 9pt; /* Reduced from 11pt */
+        font-size: 9pt;
         font-weight: bold;
     }
     .print-republic-header div:nth-child(3) {
-        font-size: 6pt; /* Reduced from 7pt */
+        font-size: 6pt;
         font-style: italic;
     }
 
@@ -2880,29 +3051,28 @@ function printRecord(id) {
         align-items: center;
         justify-content: space-evenly;
         width: 100%;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .print-logo-left,
     .print-logo-right {
-        flex: 0 0 auto; /* Logos keep their size */
-        width: 100px; /* Fixed width for logo areas */
+        flex: 0 0 auto;
+        width: 80px;
     }
 
     .print-republic-header {
-        flex: 1; /* Takes remaining space */
+        flex: 1;
         text-align: center;
-        margin: 0 15px;
+        margin: 0 10px;
     }
 
     .print-logo-left img,
     .print-logo-right img {
-        height: 60px;
+        height: 50px;
         width: auto;
         display: block;
     }
 
-    /* For equal logo areas */
     .print-logo-left {
         text-align: right;
     }
@@ -2914,21 +3084,24 @@ function printRecord(id) {
     .print-label {
         background: #f5f5f5;
         white-space: normal;
-        font-size: 9pt;
+        font-size: 8pt;
         font-weight: normal !important;
     }
 
-    /* Footer Images - Centered */
-
     .print-footer-images {
         text-align: center;
-        margin: 5px 0 8px 0;
+        margin: 3px 0 5px 0;
     }
     .print-footer-images img {
         display: inline-block;
-        height: 25px; /* Reduced from 40px */
+        height: 20px;
         width: auto;
-        margin: 0 10px;
+        margin: 0 8px;
+    }
+    
+    /* Preserve line breaks in AREA AND LOCATION */
+    .print-value {
+        white-space: pre-line;
     }
 </style>
 
@@ -4311,8 +4484,9 @@ async function deleteRecord(id) {
     }
 }
 
-// Combine lot area, floor area, province, and barangay into one string
+// Combine lot area, floor area, Lot No., province, and barangay into one string with bullet points
 function updateAreaLocation() {
+    const lotNo = document.getElementById('locLotNo').value.trim();
     const lotArea = document.getElementById('locLotArea').value;
     const floorArea = document.getElementById('locFloorArea').value;
     const province = document.getElementById('locProvince').value;
@@ -4322,33 +4496,41 @@ function updateAreaLocation() {
     // Format barangay to include "Brgy." prefix if not already present
     if (barangay && barangay.trim() !== '') {
         barangay = barangay.trim();
-        // Check if it already starts with "Barangay" or "Brgy" (case insensitive)
         const barangayPrefixPattern = /^(Barangay|Brgy\.?)\s/i;
         if (!barangayPrefixPattern.test(barangay)) {
             barangay = `Brgy. ${barangay}`;
         }
     }
     
-    let areaParts = [];
+    // Build area location with bullet points
+    let lines = [];
     
-    // Add lot area if provided
+    // Add Lot No. if provided
+    if (lotNo && lotNo !== '') {
+        // Check if lotNo already contains the full description
+        if (lotNo.includes('equivalent to') || lotNo.includes('Cad.')) {
+            lines.push(`• ${lotNo}`);
+        } else {
+            lines.push(`• Lot No. ${lotNo}`);
+        }
+    }
+    
+    // Build the area line
+    let lotAreaStr = '___';
     if (lotArea && lotArea !== '') {
-        areaParts.push(`${lotArea} sq.m. (lot area)`);
-    } else {
-        areaParts.push(`___ sq.m. (lot area)`);
+        lotAreaStr = `${lotArea}`;
     }
     
-    // Add floor area if provided
+    let areaLine = `• ${lotAreaStr} sq.m. (lot area)`;
+    
+    let floorAreaStr = '';
     if (floorArea && floorArea !== '') {
-        areaParts.push(`${floorArea} sq.m. (floor area of proposed structure)`);
-    } else {
-        areaParts.push(`___ sq.m. (floor area of proposed structure)`);
+        floorAreaStr = ` / ${floorArea} sq.m. (floor area of proposed structure)`;
     }
+    areaLine += floorAreaStr;
+    lines.push(areaLine);
     
-    // Combine lot and floor area
-    let areaLocation = areaParts.join(' / ');
-    
-    // Add location parts - now barangay already has "Barangay" prefix
+    // Add location parts
     let locationParts = [];
     if (barangay && barangay !== '') {
         locationParts.push(barangay);
@@ -4361,15 +4543,16 @@ function updateAreaLocation() {
     }
     
     if (locationParts.length > 0) {
-        areaLocation += ` - ${locationParts.join(', ')}`;
+        lines.push(`• ${locationParts.join(', ')}`);
     }
     
-    document.getElementById('locAreaLocation').value = areaLocation;
+    // Join with newlines - this will display as bullet points with line breaks
+    document.getElementById('locAreaLocation').value = lines.join('\n');
 }
 
 // Initialize event listeners
 function initAreaLocationListeners() {
-    const fields = ['locLotArea', 'locFloorArea', 'locProvince', 'locCity', 'locBarangay'];
+    const fields = ['locLotNo', 'locLotArea', 'locFloorArea', 'locProvince', 'locCity', 'locBarangay'];
     fields.forEach(fieldId => {
         const element = document.getElementById(fieldId);
         if (element) {
@@ -4396,147 +4579,6 @@ function initAreaLocationListeners() {
     }
     
     updateAreaLocation();
-}
-
-function editRecord(id) {
-    const r = locationalRecords.find(r => r.id === id);
-    if (!r) return;
-    currentEditingId = id;
-    switchView("dataEntry");
-    
-    // Set basic fields
-    document.getElementById("locDateReceipt").value = r.dateReceipt || "";
-    document.getElementById("locDateIssue").value = r.dateIssue || "";
-    document.getElementById("locApplicant").value = r.applicant || "";
-    document.getElementById("locCorporation").value = r.corporation || "";
-    document.getElementById("locApplicantAddress").value = r.applicantAddress || "";
-    document.getElementById("locCorpAddress").value = r.corpAddress || "";
-    document.getElementById("locProjectType").value = r.projectType || "";
-    document.getElementById("locDecision").value = r.decision || "";
-    document.getElementById("locRightOverLand").value = r.rightOverLand || "";
-    document.getElementById("locConditions").value = r.conditions || "";
-    document.getElementById("locOrNo").value = r.orNo || "";
-    document.getElementById("locAmountPaid").value = r.amountPaid || "";
-    document.getElementById("locOrDate").value = r.orDate || "";
-    
-    // Set number parts
-    if (r.applicationNo) setNumberParts('app', r.applicationNo);
-    if (r.decisionNo) setNumberParts('dec', r.decisionNo);
-    
-    // Parse areaLocation into separate fields
-    if (r.areaLocation) {
-        const areaLocation = r.areaLocation;
-        
-        // Extract lot area (e.g., "5000 sq.m. (lot area)")
-        const lotMatch = areaLocation.match(/(\d+(?:\.\d+)?)\s*sq\.m\.\s*\(lot area\)/);
-        if (lotMatch) {
-            document.getElementById("locLotArea").value = lotMatch[1];
-        }
-        
-        // Extract floor area
-        const floorMatch = areaLocation.match(/(\d+(?:\.\d+)?)\s*sq\.m\.\s*\(floor area of proposed structure\)/);
-        if (floorMatch) {
-            document.getElementById("locFloorArea").value = floorMatch[1];
-        }
-        
-        // Extract location (after " - ")
-        const locationMatch = areaLocation.match(/-\s*(.+)$/);
-        if (locationMatch) {
-            const location = locationMatch[1];
-            const parts = location.split(', ').map(p => p.trim());
-            
-            // Try to match province
-            const provinces = ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'];
-            let provinceFound = '';
-            let remainingParts = [...parts];
-            
-            for (let i = 0; i < remainingParts.length; i++) {
-                if (provinces.includes(remainingParts[i])) {
-                    provinceFound = remainingParts[i];
-                    remainingParts.splice(i, 1);
-                    break;
-                }
-            }
-            
-            if (provinceFound) {
-                document.getElementById("locProvince").value = provinceFound;
-                populateCities(); // Load cities for this province
-                
-                // Try to match city (after province is set)
-                setTimeout(() => {
-                    const cities = philippineLocations[provinceFound]?.cities || [];
-                    let cityFound = '';
-                    let barangayParts = [...remainingParts];
-                    
-                    for (let i = 0; i < barangayParts.length; i++) {
-                        if (cities.includes(barangayParts[i])) {
-                            cityFound = barangayParts[i];
-                            barangayParts.splice(i, 1);
-                            break;
-                        }
-                    }
-                    
-                    if (cityFound) {
-                        document.getElementById("locCity").value = cityFound;
-                    }
-                    
-                    // Barangay is now a text input, just set its value
-                    // Remove "Barangay" prefix for display in input field (clean version)
-                    let barangayName = barangayParts.join(', ');
-                    if (barangayName) {
-                        // Remove "Barangay" prefix for display in input field
-                        barangayName = barangayName.replace(/^(Barangay|Brgy\.?)\s/i, '');
-                        document.getElementById("locBarangay").value = barangayName;
-                    }
-                }, 50);
-            } else {
-                // No province found, set barangay directly as text (remove prefix for display)
-                let barangayName = location;
-                barangayName = barangayName.replace(/^(Barangay|Brgy\.?)\s/i, '');
-                document.getElementById("locBarangay").value = barangayName;
-            }
-        }
-    }
-    
-    // Make the numbers editable when editing
-    makeNumberEditable();
-    
-    // Update the hidden area location field
-    updateAreaLocation();
-    
-    showToastMessage(`Editing: ${r.applicationNo}`);
-}
-
-function clearForm() {
-    document.getElementById("locationalForm").reset();
-    currentEditingId = null;
-    
-    // Clear location fields
-    document.getElementById("locLotArea").value = "";
-    document.getElementById("locFloorArea").value = "";
-    document.getElementById("locProvince").value = "";
-    document.getElementById("locCity").innerHTML = '<option value="">-- Select City/Municipality --</option>';
-    document.getElementById("locBarangay").value = ""; // Clear text input
-    
-    // Load latest numbers for new record
-    refreshLatestNumbersDisplay();
-    
-    // Update hidden field
-    updateAreaLocation();
-    
-    // Clear other fields
-    document.getElementById("locDateReceipt").value = "";
-    document.getElementById("locDateIssue").value = "";
-    document.getElementById("locApplicant").value = "";
-    document.getElementById("locCorporation").value = "";
-    document.getElementById("locApplicantAddress").value = "";
-    document.getElementById("locCorpAddress").value = "";
-    document.getElementById("locProjectType").value = "";
-    document.getElementById("locDecision").value = "";
-    document.getElementById("locRightOverLand").value = "";
-    document.getElementById("locOrNo").value = "";
-    document.getElementById("locAmountPaid").value = "";
-    document.getElementById("locOrDate").value = "";
 }
 
 // Initialize area location listeners
