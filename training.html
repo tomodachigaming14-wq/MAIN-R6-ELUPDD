@@ -647,7 +647,7 @@
             z-index: 99999;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 1rem;
             animation: fadeIn 0.3s ease;
         }
         .modal-overlay.active { display: flex; }
@@ -655,40 +655,42 @@
         .modal-box {
             background: white;
             border-radius: 24px;
-            max-width: 1200px;
+            max-width: 95vw;
             width: 100%;
-            max-height: 90vh;
+            max-height: 92vh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.3s ease;
+            overflow: hidden;
         }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
+            padding: 1.2rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.5rem;
+            flex-shrink: 0;
         }
         .modal-header h2 {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #1e3a8a;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .modal-header h2 i { color: #2563eb; }
         .modal-header .close-btn {
             background: #f1f5f9;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -696,39 +698,42 @@
             justify-content: center;
             color: #475569;
         }
-        .modal-header .close-btn:hover { background: #fee2e2; color: #dc2626; }
+        .modal-header .close-btn:hover { background: #fee2e2; color: #dc2626; transform: rotate(90deg); }
+
         .modal-filters {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             align-items: center;
             background: #f8fafc;
+            flex-shrink: 0;
         }
         .modal-filters .filter-group {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
             flex-wrap: wrap;
         }
         .modal-filters label {
             font-weight: 600;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #334155;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
         .modal-filters select, .modal-filters input {
-            padding: 0.4rem 0.8rem;
+            padding: 0.3rem 0.6rem;
             border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
             outline: none;
             background: white;
             transition: all 0.3s ease;
-            min-width: 100px;
+            min-width: 80px;
+            max-width: 140px;
         }
         .modal-filters select:focus, .modal-filters input:focus {
             border-color: #2563eb;
@@ -737,33 +742,36 @@
         .modal-filters .filter-btn {
             background: #2563eb;
             border: none;
-            padding: 0.4rem 1.2rem;
+            padding: 0.3rem 1rem;
             border-radius: 30px;
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
-        .modal-filters .filter-btn:hover { background: #1d4ed8; }
+        .modal-filters .filter-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .modal-filters .filter-btn:active { transform: scale(0.95); }
         .modal-filters .filter-btn.reset-btn { background: #64748b; }
-        .modal-filters .filter-btn.reset-btn:hover { background: #475569; }
+        .modal-filters .filter-btn.reset-btn:hover { background: #475569; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
+
         .modal-search {
-            padding: 1rem 2rem;
+            padding: 0.6rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             align-items: center;
-            background: #f8fafc;
+            background: #fafbfc;
+            flex-shrink: 0;
         }
         .modal-search input {
             flex: 1;
-            min-width: 200px;
-            padding: 0.6rem 1rem;
+            min-width: 150px;
+            padding: 0.4rem 0.8rem;
             border: 1.5px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
             outline: none;
             transition: all 0.3s ease;
         }
@@ -772,40 +780,71 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
         .modal-search .search-info {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #64748b;
             white-space: nowrap;
         }
         .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
-        .modal-body {
-            padding: 1.5rem 2rem;
-            overflow-y: auto;
+
+        /* ===== SCROLLABLE TABLE WRAPPER ===== */
+        .table-wrapper {
+            overflow: auto;
             flex: 1;
+            padding: 0.5rem 0;
+            position: relative;
+            max-height: calc(92vh - 320px);
+            min-height: 200px;
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .modal-body {
+            padding: 0 1.5rem;
+            overflow: visible;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         .modal-body table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
+            min-width: 1200px;
         }
         .modal-body table th {
             background: #f1f5f9;
             color: #1e3a8a;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 0.8rem 0.8rem;
+            letter-spacing: 0.3px;
+            padding: 0.4rem 0.3rem;
             text-align: left;
             border-bottom: 2px solid #e2e8f0;
             position: sticky;
             top: 0;
             z-index: 10;
+            white-space: nowrap;
         }
         .modal-body table td {
-            padding: 0.7rem 0.8rem;
+            padding: 0.3rem 0.3rem;
             border-bottom: 1px solid #f1f5f9;
             color: #334155;
-            max-width: 150px;
+            max-width: 120px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -813,101 +852,128 @@
         .modal-body table tr:hover td { background: #f8fafc; }
         .modal-body table .no-records td {
             text-align: center;
-            padding: 3rem 0;
+            padding: 2rem 0;
             color: #94a3b8;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .modal-body .action-cell {
             display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
+            gap: 3px;
+            flex-wrap: nowrap;
         }
         .modal-body .action-cell .btn-action {
-            padding: 0.3rem 0.7rem;
+            padding: 0.15rem 0.4rem;
             border: none;
-            border-radius: 8px;
-            font-size: 0.65rem;
+            border-radius: 6px;
+            font-size: 0.6rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             display: inline-flex !important;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
-        .modal-body .action-cell .btn-action:hover { transform: translateY(-2px) scale(1.05); }
-        .modal-body .action-cell .btn-action:active { transform: scale(0.9); }
-        .modal-body .action-cell .btn-edit { background: #f59e0b; color: white; }
-        .modal-body .action-cell .btn-edit:hover { background: #d97706; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
-        .modal-body .action-cell .btn-delete { background: #ef4444; color: white; }
-        .modal-body .action-cell .btn-delete:hover { background: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
-        .modal-body .action-cell .btn-save-edit { background: #10b981; color: white; }
-        .modal-body .action-cell .btn-save-edit:hover { background: #059669; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
-        .modal-body .action-cell .btn-cancel-edit { background: #6b7280; color: white; }
-        .modal-body .action-cell .btn-cancel-edit:hover { background: #4b5563; box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4); }
-        .modal-body .action-cell .btn-action .btn-spinner {
-            display: none;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        .modal-body .action-cell .btn-action.loading .btn-spinner { display: inline-block; }
-        .modal-body .action-cell .btn-action.loading i { display: none; }
-        .modal-body .action-cell .btn-action.loading { opacity: 0.7; pointer-events: none; }
-        .modal-body .editing-row td { background: #fef3c7 !important; }
-        .modal-body .editing-row .action-cell .btn-edit,
-        .modal-body .editing-row .action-cell .btn-delete { display: none !important; }
-        .modal-body .editing-row .action-cell .btn-save-edit,
-        .modal-body .editing-row .action-cell .btn-cancel-edit { display: inline-flex !important; }
-        .modal-body .editing-row input,
-        .modal-body .editing-row select,
-        .modal-body .editing-row textarea {
+        .modal-body .editing td { background: #fef3c7 !important; }
+        .modal-body .editing input,
+        .modal-body .editing select,
+        .modal-body .editing textarea {
             background: white;
             border: 1.5px solid #f59e0b;
-            border-radius: 6px;
-            padding: 0.2rem 0.4rem;
-            font-size: 0.75rem;
+            border-radius: 4px;
+            padding: 0.1rem 0.2rem;
+            font-size: 0.65rem;
             width: 100%;
             outline: none;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            min-width: 50px;
         }
-        .modal-body .editing-row input:focus,
-        .modal-body .editing-row select:focus,
-        .modal-body .editing-row textarea:focus {
+        .modal-body .editing input:focus,
+        .modal-body .editing select:focus,
+        .modal-body .editing textarea:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
         }
+
+        /* ===== FIX FOR DROPDOWNS IN EDIT MODE ===== */
+        .modal-body table select {
+            appearance: auto !important;
+            -webkit-appearance: auto !important;
+            -moz-appearance: auto !important;
+            z-index: 100 !important;
+            position: relative !important;
+            overflow: visible !important;
+            min-height: 28px !important;
+            padding: 2px 6px !important;
+            font-size: 0.65rem !important;
+            background-color: white !important;
+            border: 2px solid #f59e0b !important;
+            border-radius: 4px !important;
+            color: #0f172a !important;
+            cursor: pointer !important;
+            max-width: 130px !important;
+        }
+
+        .modal-body table select option {
+            display: block !important;
+            padding: 4px 8px !important;
+            min-height: 28px !important;
+            height: auto !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            background: white !important;
+            color: #0f172a !important;
+            font-size: 0.65rem !important;
+        }
+
+        .modal-body table td {
+            overflow: visible !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        .modal-body table tr.editing-row td {
+            overflow: visible !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+
+        .modal-body table tr.editing-row td select {
+            z-index: 1000 !important;
+            position: relative !important;
+            min-height: 28px !important;
+        }
+
         .modal-footer {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.8rem;
             background: #f8fafc;
             border-radius: 0 0 24px 24px;
+            flex-shrink: 0;
         }
         .modal-footer .record-count {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #475569;
         }
         .modal-footer .record-count span { font-weight: 700; color: #1e3a8a; }
         .modal-footer .btn-close-modal {
             background: #2563eb;
             border: none;
-            padding: 0.5rem 1.5rem;
+            padding: 0.4rem 1.2rem;
             border-radius: 40px;
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
-        .modal-footer .btn-close-modal:hover { background: #1d4ed8; }
+        .modal-footer .btn-close-modal:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .modal-footer .btn-close-modal:active { transform: scale(0.95); }
 
         /* ===== CHART STYLES ===== */
         .chart-filters {
@@ -961,9 +1027,10 @@
             font-size: 0.75rem;
             white-space: nowrap;
         }
-        .chart-filters .filter-btn:hover { background: #1d4ed8; }
+        .chart-filters .filter-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .chart-filters .filter-btn:active { transform: scale(0.95); }
         .chart-filters .filter-btn.reset-btn { background: #64748b; }
-        .chart-filters .filter-btn.reset-btn:hover { background: #475569; }
+        .chart-filters .filter-btn.reset-btn:hover { background: #475569; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
         .chart-filters .filter-divider {
             width: 1px;
             height: 30px;
@@ -1000,7 +1067,8 @@
             background: #2563eb;
             color: white;
         }
-        .chart-type-selector button:hover { border-color: #2563eb; }
+        .chart-type-selector button:hover { border-color: #2563eb; transform: translateY(-1px); }
+        .chart-type-selector button:active { transform: scale(0.95); }
         .chart-container {
             position: relative;
             height: 400px;
@@ -1055,7 +1123,8 @@
             font-size: 1rem;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .add-person-modal .btn-add-person:hover { background: #059669; }
+        .add-person-modal .btn-add-person:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .add-person-modal .btn-add-person:active { transform: scale(0.97); }
         .add-person-modal .btn-add-person:disabled { opacity: 0.6; cursor: not-allowed; }
         .add-person-modal .error-msg {
             color: #dc2626;
@@ -1064,19 +1133,28 @@
             display: none;
         }
         .add-person-modal .error-msg.show { display: block; }
-        .col-region { min-width: 70px; max-width: 90px; }
-        .col-province { min-width: 80px; max-width: 100px; }
-        .col-city { min-width: 100px; max-width: 130px; }
-        .col-title { min-width: 120px; max-width: 160px; }
-        .col-topics { min-width: 120px; max-width: 160px; }
-        .col-category { min-width: 80px; max-width: 110px; }
-        .col-date { min-width: 80px; max-width: 95px; }
-        .col-participants { min-width: 50px; max-width: 70px; text-align: center; }
-        .col-budget { min-width: 70px; max-width: 90px; }
-        .col-partner { min-width: 80px; max-width: 100px; }
-        .col-month { min-width: 80px; max-width: 100px; }
-        .col-personnel { min-width: 90px; max-width: 120px; }
-        .col-actions { min-width: 70px; max-width: 80px; }
+
+        .editing-row td { background: #fef3c7 !important; }
+        .editing-row .action-cell .btn-action { display: none; }
+        .editing-row .action-cell .btn-save-edit,
+        .editing-row .action-cell .btn-cancel-edit { display: inline-flex !important; }
+        .action-cell .btn-save-edit,
+        .action-cell .btn-cancel-edit { display: none !important; }
+
+        /* ===== COLUMN WIDTHS ===== */
+        .col-region { min-width: 60px; max-width: 80px; }
+        .col-province { min-width: 70px; max-width: 90px; }
+        .col-city { min-width: 90px; max-width: 120px; }
+        .col-title { min-width: 110px; max-width: 150px; }
+        .col-topics { min-width: 110px; max-width: 150px; }
+        .col-category { min-width: 70px; max-width: 100px; }
+        .col-date { min-width: 75px; max-width: 90px; }
+        .col-participants { min-width: 50px; max-width: 65px; text-align: center; }
+        .col-budget { min-width: 65px; max-width: 85px; }
+        .col-partner { min-width: 75px; max-width: 95px; }
+        .col-month { min-width: 75px; max-width: 95px; }
+        .col-personnel { min-width: 85px; max-width: 115px; }
+        .col-actions { min-width: 65px; max-width: 75px; }
 
         /* ===== LOGIN MODAL ===== */
         .login-modal {
@@ -1267,18 +1345,19 @@
             .pic-container { flex-direction: column; }
             .pic-container select { width: 100%; }
             .pic-btn { width: 100%; justify-content: center; }
-            .modal-box { max-height: 95vh; }
-            .modal-header { padding: 1rem; }
-            .modal-filters { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; }
-            .modal-filters select, .modal-filters input { min-width: 100%; }
-            .modal-search { padding: 0.8rem 1rem; flex-direction: column; }
+            .modal-box { max-width: 100vw; max-height: 98vh; border-radius: 16px; }
+            .modal-header { padding: 0.8rem 1rem; }
+            .modal-filters { padding: 0.6rem 1rem; flex-direction: column; align-items: stretch; }
+            .modal-filters select, .modal-filters input { min-width: 100%; max-width: 100%; }
+            .modal-search { padding: 0.6rem 1rem; flex-direction: column; }
             .modal-search input { width: 100%; min-width: unset; }
-            .modal-body { padding: 1rem; }
-            .modal-body table { font-size: 0.65rem; }
-            .modal-body table th, .modal-body table td { padding: 0.3rem 0.3rem; }
-            .modal-body .action-cell { flex-direction: column; }
-            .modal-footer { padding: 0.8rem 1rem; flex-direction: column; text-align: center; }
-            .modal-overlay { padding: 1rem; }
+            .modal-body { padding: 0 0.8rem; }
+            .table-wrapper { max-height: calc(92vh - 350px); }
+            .modal-body table { font-size: 0.55rem; min-width: 900px; }
+            .modal-body table th, .modal-body table td { padding: 0.15rem 0.15rem; }
+            .modal-body .action-cell .btn-action { font-size: 0.5rem; padding: 0.1rem 0.3rem; }
+            .modal-footer { padding: 0.6rem 1rem; flex-direction: column; text-align: center; }
+            .modal-overlay { padding: 0.3rem; }
             .chart-filters { flex-direction: column; align-items: stretch; }
             .chart-filters select, .chart-filters input { min-width: 100%; }
             .chart-filters .filter-divider { display: none; }
@@ -1304,7 +1383,7 @@
         <div class="top-bar">
             <div class="logo-area-header">
                 <div class="header-logo-img">
-                    <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px" />
+                    <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px">
                     <span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
                 </div>
             </div>
@@ -1318,7 +1397,7 @@
     </div>
 </header>
 
-<!-- ===== MAIN CONTENT (from index.html, loading removed) ===== -->
+<!-- ===== MAIN CONTENT ===== -->
 <main>
     <div class="container">
         <div class="card" id="mainCard">
@@ -1368,54 +1447,15 @@
                                 <option value="">Select City/Municipality...</option>
                             </select>
                         </div>
+                        <!-- TRAINING TITLE - Changed to Input Text -->
                         <div class="field-group full-width">
                             <label><i class="fas fa-chalkboard-teacher"></i> Training Title <span class="required">*</span></label>
-                            <select id="training_title" required>
-                                <option value="">Select Training Title...</option>
-                                <option value="Basic and Advance GIS Training">Basic and Advance GIS Training</option>
-                                <option value="CLUP Module 1 Training">CLUP Module 1 Training</option>
-                                <option value="CLUP Module 2 Training">CLUP Module 2 Training</option>
-                                <option value="Enhanced Climate and Disaster Risk Assessment (CDRA)">Enhanced Climate and Disaster Risk Assessment (CDRA)</option>
-                                <option value="Inter-Agency Consultative Conference on Land Reclassification and Conversion">Inter-Agency Consultative Conference on Land Reclassification and Conversion</option>
-                                <option value="LGU Cuartero, Capiz - CLUP Formulation and Sectoral Workshop">LGU Cuartero, Capiz - CLUP Formulation and Sectoral Workshop</option>
-                                <option value="LGU Nueva Valencia, Guimaras - Enhanced Climate and Disaster Risk Assessment (CDRA) Training">LGU Nueva Valencia, Guimaras - Enhanced Climate and Disaster Risk Assessment (CDRA) Training</option>
-                                <option value="Orientation on CLUP and ZO Formulation">Orientation on CLUP and ZO Formulation</option>
-                                <option value="Orientation on CLUP and ZO Updating for LGU San Joaquin, Iloilo">Orientation on CLUP and ZO Updating for LGU San Joaquin, Iloilo</option>
-                                <option value="Orientation on the Comprehensive Land Use Plan and Zoning ordinance Procedure and Data Gathering">Orientation on the Comprehensive Land Use Plan and Zoning ordinance Procedure and Data Gathering</option>
-                                <option value="Orientation on the LSP/Housing Sub-sector and Data Collection Tools for LGUs">Orientation on the LSP/Housing Sub-sector and Data Collection Tools for LGUs</option>
-                                <option value="Orientation on the Updating of CLUP and ZO">Orientation on the Updating of CLUP and ZO</option>
-                                <option value="Orientation on Zoning Administration and Enforcement for LGU Janiuay, Iloilo">Orientation on Zoning Administration and Enforcement for LGU Janiuay, Iloilo</option>
-                                <option value="PlanSmart for Sustainable Human Settlements: Harmonized Ecological Profile and Climate and Disaster Risk Assessment (EP-CDRA) for Resilience Rollout Training - Visayas Cluster">PlanSmart for Sustainable Human Settlements: Harmonized Ecological Profile and Climate and Disaster Risk Assessment (EP-CDRA) for Resilience Rollout Training - Visayas Cluster</option>
-                            </select>
+                            <input type="text" id="training_title" placeholder="Enter Training Title..." required>
                         </div>
+                        <!-- TRAINING TOPICS - Changed to Input Text -->
                         <div class="field-group full-width">
                             <label><i class="fas fa-list-ul"></i> Training Topics <span class="required">*</span></label>
-                            <select id="training_topics" required>
-                                <option value="">Select Training Topic...</option>
-                                <option value="12-Step Process and Brief CDRA Process">12-Step Process and Brief CDRA Process</option>
-                                <option value="Basic Requirements on the CLUP and ZO Formulation">Basic Requirements on the CLUP and ZO Formulation</option>
-                                <option value="CLUP & ZO Legal Mandates; Introduction to Zoning Administration and Enforcement; Processing and Issuance of Locational Clearance, Composition and Functions of the Local Zoning Board of Appeals (LZBA), Mitigating Devices; Composition and Functions of the Local Zoning Review Committee (LZRC); The Rezoning & Reclassification Process">CLUP & ZO Legal Mandates; Introduction to Zoning Administration and Enforcement; Processing and Issuance of Locational Clearance, Composition and Functions of the Local Zoning Board of Appeals (LZBA), Mitigating Devices; Composition and Functions of the Local Zoning Review Committee (LZRC); The Rezoning & Reclassification Process</option>
-                                <option value="CLUP 12-Step Process; CLUP Steps 1 & 2">CLUP 12-Step Process; CLUP Steps 1 & 2</option>
-                                <option value="CLUP Legal Mandates and Enabling Policy Environment, CLUP 12-Step Process, CCA-DRR Mainstreaming, and Zoning Administration and Enforcement">CLUP Legal Mandates and Enabling Policy Environment, CLUP 12-Step Process, CCA-DRR Mainstreaming, and Zoning Administration and Enforcement</option>
-                                <option value="CLUP Step 4 - Situational Analysis">CLUP Step 4 - Situational Analysis</option>
-                                <option value="Collection & Organization of Climate Change & Hazard Information; Workshop 1: Changes in Climate Variables, Inventory of Hazards, Records of Previous Disasters, and Barangay Level Hazard Inventory; Demonstration: Exposure and Risk Analysis (Population – without CBMS)">Collection & Organization of Climate Change & Hazard Information; Workshop 1: Changes in Climate Variables, Inventory of Hazards, Records of Previous Disasters, and Barangay Level Hazard Inventory; Demonstration: Exposure and Risk Analysis (Population – without CBMS)</option>
-                                <option value="Collection and Organization of Climate Change and Hazard Information; Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities">Collection and Organization of Climate Change and Hazard Information; Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities</option>
-                                <option value="DRREALL TA Project: Building resilience and empowering local governments for a safer future; Session 1: Background and Rationale for Harmonizing and Digitizing the Ecological Profile (EP) and the Climate and Disaster Risk Assessment (CDRA); Session 2: The Philippine Disaster Risk Landscape; GeoRisk PH Initiative; Session 3: Getting Started with the EP-CDRA Module using GeoAnalyticsPH Pro; Session 4: EP-CDRA Prework (GeoAnalyticsPH Pro); Session 5: CDRA Exposure Database Development and Digitization using GeoMapperPH; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 7: Climate and Disaster Risk Assessment using GeoAnalyticsPH Pro">DRREALL TA Project: Building resilience and empowering local governments for a safer future; Session 1: Background and Rationale for Harmonizing and Digitizing the Ecological Profile (EP) and the Climate and Disaster Risk Assessment (CDRA); Session 2: The Philippine Disaster Risk Landscape; GeoRisk PH Initiative; Session 3: Getting Started with the EP-CDRA Module using GeoAnalyticsPH Pro; Session 4: EP-CDRA Prework (GeoAnalyticsPH Pro); Session 5: CDRA Exposure Database Development and Digitization using GeoMapperPH; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 7: Climate and Disaster Risk Assessment using GeoAnalyticsPH Pro</option>
-                                <option value="Enhanced Housing Sub-sector">Enhanced Housing Sub-sector</option>
-                                <option value="Enhanced Housing Sub-sector; Guidelines on the Conduct of Baseline Study for the Housing Sub-sector/LSP; LSP/Housing Sub-sector Data Collection Tool">Enhanced Housing Sub-sector; Guidelines on the Conduct of Baseline Study for the Housing Sub-sector/LSP; LSP/Housing Sub-sector Data Collection Tool</option>
-                                <option value="Establish Development Thrust and Spatial Strategies; Preparation of Land Use Plan, Land Use Schemes, and Policies; Drafting of the Zoning Ordinance; Conduct of Public Hearing; Communication Plan">Establish Development Thrust and Spatial Strategies; Preparation of Land Use Plan, Land Use Schemes, and Policies; Drafting of the Zoning Ordinance; Conduct of Public Hearing; Communication Plan</option>
-                                <option value="Green Growth, RUDD, & UPDCR">Green Growth, RUDD, & UPDCR</option>
-                                <option value="Introduction to Ecosystem Analysis, Resource Mapping, and the Forest Ecosystem; Introduction to Special Area Studies and Ancestral Domain">Introduction to Ecosystem Analysis, Resource Mapping, and the Forest Ecosystem; Introduction to Special Area Studies and Ancestral Domain</option>
-                                <option value="Introduction to GIS: Basic Concepts and Map Appreciation; Introduction to QGIS; Installation and Familiarization of QGIS; Understanding Coordinate System and Projections; Georeferencing;  Creating and Editing Shapefiles, Digitizing; Creating and Editing Shapefiles, Digitizing; Map Symbology; Basemapping; Introduction to Advance GIS; Working with Attribute Tables; Creating Population Density Map; Hazard Mapping; Existing Land Use Mapping; Geospatial Data Collection; Data Collection Using KoboToolbox">Introduction to GIS: Basic Concepts and Map Appreciation; Introduction to QGIS; Installation and Familiarization of QGIS; Understanding Coordinate System and Projections; Georeferencing;  Creating and Editing Shapefiles, Digitizing; Creating and Editing Shapefiles, Digitizing; Map Symbology; Basemapping; Introduction to Advance GIS; Working with Attribute Tables; Creating Population Density Map; Hazard Mapping; Existing Land Use Mapping; Geospatial Data Collection; Data Collection Using KoboToolbox</option>
-                                <option value="Mainstreaming CCA & DRRM into the 12-Step CLUP Process">Mainstreaming CCA & DRRM into the 12-Step CLUP Process</option>
-                                <option value="Open Space Development">Open Space Development</option>
-                                <option value="Overview of the 5-Step CDRA Process & Mainstreaming into the CLUP">Overview of the 5-Step CDRA Process & Mainstreaming into the CLUP</option>
-                                <option value="Reclassification and Rezoning">Reclassification and Rezoning</option>
-                                <option value="Review, Adopt and Approve the CLUP and ZO">Review, Adopt and Approve the CLUP and ZO</option>
-                                <option value="Understanding Fundamental Concepts, Terminologies, and Principles (Hazards and Climate Change); Overview on CDRA; Collection and Organization of Climate Change and Hazard Information;  Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities">Understanding Fundamental Concepts, Terminologies, and Principles (Hazards and Climate Change); Overview on CDRA; Collection and Organization of Climate Change and Hazard Information;  Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities</option>
-                                <option value="Zoning Jurisprudence; Rezoning and Reclassification; Implementation of the CLUP and ZO">Zoning Jurisprudence; Rezoning and Reclassification; Implementation of the CLUP and ZO</option>
-                                <option value="Zoning Ordinance; Zoning Enforcement & Administration">Zoning Ordinance; Zoning Enforcement & Administration</option>
-                            </select>
+                            <input type="text" id="training_topics" placeholder="Enter Training Topics..." required>
                         </div>
                         <div class="field-group">
                             <label><i class="fas fa-tag"></i> Training Category <span class="required">*</span></label>
@@ -1444,23 +1484,15 @@
                             <label><i class="fas fa-users"></i> No. of Participants <span class="required">*</span></label>
                             <input type="number" id="training_participants" min="0" placeholder="e.g. 25" required>
                         </div>
+                        <!-- BUDGET - Changed to Input Text -->
                         <div class="field-group">
                             <label><i class="fas fa-coins"></i> Budget/Funding Source <span class="required">*</span></label>
-                            <select id="training_budget" required>
-                                <option value="">Select Source...</option>
-                                <option value="DRREALL-TA">DRREALL-TA</option>
-                                <option value="LGU">LGU</option>
-                                <option value="N/A">N/A</option>
-                            </select>
+                            <input type="text" id="training_budget" placeholder="Enter Budget/Funding Source..." required>
                         </div>
+                        <!-- PARTNER AGENCY - Changed to Input Text -->
                         <div class="field-group">
                             <label><i class="fas fa-handshake"></i> Partner Agency <span class="required">*</span></label>
-                            <select id="training_partner" required>
-                                <option value="">Select Partner...</option>
-                                <option value="DILG; DOST-PHIVOLCS; DOF">DILG; DOST-PHIVOLCS; DOF</option>
-                                <option value="LLPDV-WV, Inc">LLPDV-WV, Inc</option>
-                                <option value="N/A">N/A</option>
-                            </select>
+                            <input type="text" id="training_partner" placeholder="Enter Partner Agency..." required>
                         </div>
                         <div class="field-group">
                             <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
@@ -1617,6 +1649,22 @@
                     <option value="October">October</option>
                     <option value="November">November</option>
                     <option value="December">December</option>
+                </select>
+            </div>
+            <!-- NEW: Training Category Filter -->
+            <div class="filter-group">
+                <label for="filterCategory">Training Category:</label>
+                <select id="filterCategory">
+                    <option value="all">All Categories</option>
+                    <option value="CDRA">CDRA</option>
+                    <option value="Formulation or Updating">Formulation or Updating</option>
+                    <option value="GIS">GIS</option>
+                    <option value="Housing Subsector">Housing Subsector</option>
+                    <option value="Implementation and Monitoring">Implementation and Monitoring</option>
+                    <option value="OSD">OSD</option>
+                    <option value="PlanSmart for SHS">PlanSmart for SHS</option>
+                    <option value="Review and Approval">Review and Approval</option>
+                    <option value="RUDD">RUDD</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -2042,6 +2090,9 @@
     let editingRowNumber = null;
     const modalBodyContent = document.getElementById('modalBodyContent');
 
+    // ===== NEW: Training Category Filter =====
+    const filterCategory = document.getElementById('filterCategory');
+
     function setStatus(message, type = 'info') {
         statusText.textContent = message;
         statusDiv.className = 'status-message';
@@ -2092,7 +2143,7 @@
     }
 
     // ============================================
-    // GET FORM DATA
+    // GET FORM DATA - Updated with input fields
     // ============================================
     function getFormData() {
         const getVal = (id) => document.getElementById('training_'+id).value.trim();
@@ -2182,10 +2233,13 @@
     function applyRecordFilters() {
         const provinceFilter = filterProvince.value;
         const monthFilter = filterReportingMonth.value;
+        const categoryFilter = filterCategory.value;
         const picFilter = filterPIC.value;
+        
         filteredRecords = allRecords.filter(record => {
             if (provinceFilter !== 'all' && (record.Province || '') !== provinceFilter) return false;
             if (monthFilter !== 'all' && (record['Reporting Month'] || '') !== monthFilter) return false;
+            if (categoryFilter !== 'all' && (record['Training Category'] || '') !== categoryFilter) return false;
             if (picFilter !== 'all' && (record['Personnel In-Charge'] || '') !== picFilter) return false;
             return true;
         });
@@ -2199,6 +2253,7 @@
     document.getElementById('resetRecordFilter').addEventListener('click', function() {
         filterProvince.value = 'all';
         filterReportingMonth.value = 'all';
+        filterCategory.value = 'all';
         filterPIC.value = 'all';
         applyRecordFilters();
     });
@@ -2299,43 +2354,8 @@
                                 <option value="">Select...</option>`;
                         cats.forEach(c => html += `<option value="${c}" ${c === value ? 'selected' : ''}>${c}</option>`);
                         html += `</select></td>`;
-                    } else if (col.key === 'Budget / Funding Source') {
-                        const sources = ['DRREALL-TA','LGU','N/A'];
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:60px; max-width:90px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">`;
-                        sources.forEach(s => html += `<option value="${s}" ${s === value ? 'selected' : ''}>${s}</option>`);
-                        html += `</select></td>`;
-                    } else if (col.key === 'Partner Agency / Organization') {
-                        const partners = ['DILG; DOST-PHIVOLCS; DOF','LLPDV-WV, Inc','N/A'];
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">`;
-                        partners.forEach(p => html += `<option value="${p}" ${p === value ? 'selected' : ''}>${p}</option>`);
-                        html += `</select></td>`;
-                    } else if (col.key === 'Training Title') {
-                        const titles = ['Basic and Advance GIS Training','CLUP Module 1 Training','CLUP Module 2 Training','Enhanced Climate and Disaster Risk Assessment (CDRA)','Inter-Agency Consultative Conference on Land Reclassification and Conversion','LGU Cuartero, Capiz - CLUP Formulation and Sectoral Workshop','LGU Nueva Valencia, Guimaras - Enhanced Climate and Disaster Risk Assessment (CDRA) Training','Orientation on CLUP and ZO Formulation','Orientation on CLUP and ZO Updating for LGU San Joaquin, Iloilo','Orientation on the Comprehensive Land Use Plan and Zoning ordinance Procedure and Data Gathering','Orientation on the LSP/Housing Sub-sector and Data Collection Tools for LGUs','Orientation on the Updating of CLUP and ZO','Orientation on Zoning Administration and Enforcement for LGU Janiuay, Iloilo','PlanSmart for Sustainable Human Settlements: Harmonized Ecological Profile and Climate and Disaster Risk Assessment (EP-CDRA) for Resilience Rollout Training - Visayas Cluster'];
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:100px; max-width:160px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
-                                <option value="">Select...</option>`;
-                        titles.forEach(t => html += `<option value="${t}" ${t === value ? 'selected' : ''}>${t}</option>`);
-                        html += `</select></td>`;
-                    } else if (col.key === 'Training Topics') {
-                        const topics = ['12-Step Process and Brief CDRA Process','Basic Requirements on the CLUP and ZO Formulation','CLUP & ZO Legal Mandates; Introduction to Zoning Administration and Enforcement; Processing and Issuance of Locational Clearance, Composition and Functions of the Local Zoning Board of Appeals (LZBA), Mitigating Devices; Composition and Functions of the Local Zoning Review Committee (LZRC); The Rezoning & Reclassification Process','CLUP 12-Step Process; CLUP Steps 1 & 2','CLUP Legal Mandates and Enabling Policy Environment, CLUP 12-Step Process, CCA-DRR Mainstreaming, and Zoning Administration and Enforcement','CLUP Step 4 - Situational Analysis','Collection & Organization of Climate Change & Hazard Information; Workshop 1: Changes in Climate Variables, Inventory of Hazards, Records of Previous Disasters, and Barangay Level Hazard Inventory; Demonstration: Exposure and Risk Analysis (Population – without CBMS)','Collection and Organization of Climate Change and Hazard Information; Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities','DRREALL TA Project: Building resilience and empowering local governments for a safer future; Session 1: Background and Rationale for Harmonizing and Digitizing the Ecological Profile (EP) and the Climate and Disaster Risk Assessment (CDRA); Session 2: The Philippine Disaster Risk Landscape; GeoRisk PH Initiative; Session 3: Getting Started with the EP-CDRA Module using GeoAnalyticsPH Pro; Session 4: EP-CDRA Prework (GeoAnalyticsPH Pro); Session 5: CDRA Exposure Database Development and Digitization using GeoMapperPH; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 6: Uploading CDRA Survey Tool Results using GeoAnalyticsPH Pro; Session 7: Climate and Disaster Risk Assessment using GeoAnalyticsPH Pro','Enhanced Housing Sub-sector','Enhanced Housing Sub-sector; Guidelines on the Conduct of Baseline Study for the Housing Sub-sector/LSP; LSP/Housing Sub-sector Data Collection Tool','Establish Development Thrust and Spatial Strategies; Preparation of Land Use Plan, Land Use Schemes, and Policies; Drafting of the Zoning Ordinance; Conduct of Public Hearing; Communication Plan','Green Growth, RUDD, & UPDCR','Introduction to Ecosystem Analysis, Resource Mapping, and the Forest Ecosystem; Introduction to Special Area Studies and Ancestral Domain','Introduction to GIS: Basic Concepts and Map Appreciation; Introduction to QGIS; Installation and Familiarization of QGIS; Understanding Coordinate System and Projections; Georeferencing;  Creating and Editing Shapefiles, Digitizing; Creating and Editing Shapefiles, Digitizing; Map Symbology; Basemapping; Introduction to Advance GIS; Working with Attribute Tables; Creating Population Density Map; Hazard Mapping; Existing Land Use Mapping; Geospatial Data Collection; Data Collection Using KoboToolbox','Mainstreaming CCA & DRRM into the 12-Step CLUP Process','Open Space Development','Overview of the 5-Step CDRA Process & Mainstreaming into the CLUP','Reclassification and Rezoning','Review, Adopt and Approve the CLUP and ZO','Understanding Fundamental Concepts, Terminologies, and Principles (Hazards and Climate Change); Overview on CDRA; Collection and Organization of Climate Change and Hazard Information;  Understanding PAGASA Climate Projection Data and Climate Impact Chain; Exposure Database Development; Risk Analysis; Summarize Findings; Identification of Priority Decision Areas; Mainstreaming CCA-DRR into Land Use Plan; Post-Mainstreaming Activities','Zoning Jurisprudence; Rezoning and Reclassification; Implementation of the CLUP and ZO','Zoning Ordinance; Zoning Enforcement & Administration'];
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:100px; max-width:160px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
-                                <option value="">Select...</option>`;
-                        topics.forEach(t => html += `<option value="${t}" ${t === value ? 'selected' : ''}>${t}</option>`);
-                        html += `</select></td>`;
-                    } else if (col.key === 'Start Date of Training Conducted' || col.key === 'End Date of Training Conducted') {
-                        let d = value;
-                        if (/^\d{2}\/\d{2}\/\d{4}$/.test(d)) { const p = d.split('/'); d = p[2]+'-'+p[0]+'-'+p[1]; }
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;">
-                            <input type="date" name="${fieldName}" data-key="${col.key}" value="${d}" style="width:100%; min-width:70px; max-width:95px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">
-                        </td>`;
-                    } else if (col.key === 'No. of Participants') {
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; text-align:center;">
-                            <input type="number" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:50px; max-width:60px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; text-align:center;">
-                        </td>`;
                     } else {
+                        // For text fields (Training Title, Topics, Budget, Partner)
                         html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;">
                             <input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; max-width:120px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">
                         </td>`;
