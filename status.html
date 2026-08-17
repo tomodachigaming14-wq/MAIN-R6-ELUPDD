@@ -685,6 +685,7 @@
     <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
     <select id="filterProvince"><option value="">All Provinces</option></select>
     <select id="filterLgu"><option value="">All LGUs</option></select>
+    <select id="filterYear"><option value="">All Years</option></select>
     <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
@@ -1216,6 +1217,20 @@
     return value;
   }
 
+  // ========== EXTRACT YEAR FROM APPROVAL DATE ==========
+  function extractYearFromApproval(record) {
+    const approvalDate = getField(record, "Approval date of the Latest plan (MM/DD/YYYY)");
+    if (!approvalDate || approvalDate === "—" || approvalDate === "") return null;
+    
+    // Try to extract 4-digit year
+    const yearMatch = String(approvalDate).match(/\b(19|20)\d{2}\b/);
+    if (yearMatch) {
+      return parseInt(yearMatch[0]);
+    }
+    
+    return null;
+  }
+
   // ========== DERIVE CLUP STATUS WITH RA DETECTION ==========
   function deriveClupStatus(record){
     let status = getField(record, "CLUP Status");
@@ -1348,6 +1363,19 @@
     return records.filter(r => {
       const supportValue = getField(r, "Support from Other Institutions");
       return supportValue === category;
+    });
+  }
+
+  // ========== FILTER BY YEAR ==========
+  function filterByYear(records, year) {
+    if (!year || year === 'all' || year === '') return records;
+    
+    const targetYear = parseInt(year);
+    if (isNaN(targetYear)) return records;
+    
+    return records.filter(r => {
+      const extractedYear = extractYearFromApproval(r);
+      return extractedYear === targetYear;
     });
   }
 
@@ -2074,34 +2102,47 @@
   function populateFilters(records){
     const provinceSet = new Set();
     const lguSet = new Set();
+    const yearSet = new Set();
+    
     records.forEach(r => {
       const p = getField(r, "Province") || "—";
       const m = getField(r, "City/Municipality") || "—";
       if (p !== "—") provinceSet.add(p);
       if (m !== "—") lguSet.add(m);
+      
+      const year = extractYearFromApproval(r);
+      if (year) yearSet.add(year);
     });
     
     const provSelect = document.getElementById("filterProvince");
     const lguSelect = document.getElementById("filterLgu");
+    const yearSelect = document.getElementById("filterYear");
     const stackedProvSelect = document.getElementById("filterStackedProvince");
     
     const currentProv = provSelect.value;
     const currentLgu = lguSelect.value;
+    const currentYear = yearSelect.value;
     const currentStackedProv = stackedProvSelect.value;
     
     const sortedProvinces = [...provinceSet].sort();
     provSelect.innerHTML = `<option value="">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
     lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
+    
+    const sortedYears = [...yearSet].sort((a, b) => b - a); // Descending order (latest first)
+    yearSelect.innerHTML = `<option value="">All Years</option>` + sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
+    
     stackedProvSelect.innerHTML = `<option value="all">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
     
     if (currentProv) provSelect.value = currentProv;
     if (currentLgu) lguSelect.value = currentLgu;
+    if (currentYear) yearSelect.value = currentYear;
     if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
   }
 
   function applyFilters(){
     const prov = document.getElementById("filterProvince").value;
     const lgu = document.getElementById("filterLgu").value;
+    const year = document.getElementById("filterYear").value;
     const barMode = document.getElementById("barChartDropdown").value || 'all';
     const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
     const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
@@ -2110,6 +2151,7 @@
     let filtered = rawLguData;
     if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
     if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
+    if (year) filtered = filterByYear(filtered, year);
     
     filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
     
@@ -2155,6 +2197,15 @@
     }
   }
 
+  // ========== FALLBACK DATA ==========
+  function getFallbackData() {
+    return [
+      { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Remarks": "" },
+      { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Remarks": "Needs updating" },
+      { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Remarks": "" }
+    ];
+  }
+
   // ========== INIT ==========
   document.addEventListener('DOMContentLoaded', async function(){
     checkSession(); renderMainNavigation(); renderUserMenu();
@@ -2174,6 +2225,7 @@
 
     document.getElementById("filterProvince").addEventListener('change', applyFilters);
     document.getElementById("filterLgu").addEventListener('change', applyFilters);
+    document.getElementById("filterYear").addEventListener('change', applyFilters);
     document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
     document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
     document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
@@ -2181,6 +2233,7 @@
     document.getElementById("resetFiltersBtn").addEventListener('click', function(){
       document.getElementById("filterProvince").value = "";
       document.getElementById("filterLgu").value = "";
+      document.getElementById("filterYear").value = "";
       document.getElementById("filterClupStatus").value = "all";
       document.getElementById("barChartDropdown").value = "all";
       document.getElementById("filterStackedProvince").value = "all";
