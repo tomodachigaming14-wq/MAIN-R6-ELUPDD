@@ -265,6 +265,21 @@
       color: #1e293b;
     }
     .filter-bar .reset-btn:hover { background: #e2e8f0; }
+    .filter-bar .filter-year-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .filter-bar .filter-year-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      white-space: nowrap;
+    }
+    .filter-bar .filter-year-group select {
+      min-width: 140px;
+    }
 
     .chart-grid {
       display: grid;
@@ -640,6 +655,10 @@
       .edit-form-row { grid-template-columns: 1fr; }
       .detail-label { width: 140px; }
       .modal-content { padding: 20px; }
+      .filter-bar .filter-year-group {
+        margin-left: 0;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -685,7 +704,13 @@
     <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
     <select id="filterProvince"><option value="">All Provinces</option></select>
     <select id="filterLgu"><option value="">All LGUs</option></select>
-    <select id="filterYear"><option value="">All Years</option></select>
+    
+    <!-- Year of Approval - aligned to the right -->
+    <div class="filter-year-group">
+      <label for="filterYear">Year of Approval :</label>
+      <select id="filterYear"><option value="">(All Years)</option></select>
+    </div>
+    
     <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
     <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
   </div>
@@ -2129,7 +2154,7 @@
     lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
     
     const sortedYears = [...yearSet].sort((a, b) => b - a); // Descending order (latest first)
-    yearSelect.innerHTML = `<option value="">All Years</option>` + sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
+    yearSelect.innerHTML = `<option value="">(All Years)</option>` + sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
     
     stackedProvSelect.innerHTML = `<option value="all">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
     
