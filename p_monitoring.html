@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <base target="_top">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>DHSUD VI | CLUP/ZO Trainings</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>DHSUD VI | ELUPDD - Plan Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* ===== GLOBAL ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            font-family: "Inter", sans-serif;
             background: #f4f9fe;
             color: #0a2540;
             line-height: 1.5;
+            scroll-behavior: smooth;
             min-height: 100vh;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -94,25 +94,31 @@
         .main-nav-links a,
         .dropbtn {
             text-decoration: none;
-            font-weight: normal;
+            font-weight: 500;
             font-size: 0.85rem;
             color: #1f3a5f;
             padding: 0.5rem 0;
             transition: 0.2s;
             letter-spacing: -0.2px;
-            background: none;
-            border: none;
-            font-family: inherit;
-            cursor: pointer;
         }
         .main-nav-links a:hover,
         .dropbtn:hover {
             color: #2563eb;
             transform: translateY(-1px);
         }
+        .main-nav-links a.active {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+        }
         .dropdown {
             position: relative;
             display: inline-block;
+        }
+        .dropbtn {
+            background: none;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
         }
         .dropbtn::after {
             content: " ▾";
@@ -244,8 +250,77 @@
             background: #f8fafc;
         }
 
-        /* ===== CARD (from index) ===== */
-        .card {
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: auto;
+            background: white;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transform: translateX(120%);
+            animation: slideIn 0.5s ease forwards;
+            border-left: 5px solid #2563eb;
+            min-height: 60px;
+        }
+        .toast.hiding { animation: slideOut 0.4s ease forwards; }
+        .toast-success { border-left-color: #10b981; }
+        .toast-error { border-left-color: #ef4444; }
+        .toast-info { border-left-color: #2563eb; }
+        .toast-warning { border-left-color: #f59e0b; }
+        .toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .toast-success .toast-icon { background: #d1fae5; color: #059669; }
+        .toast-error .toast-icon { background: #fee2e2; color: #dc2626; }
+        .toast-info .toast-icon { background: #dbeafe; color: #2563eb; }
+        .toast-warning .toast-icon { background: #fef3c7; color: #d97706; }
+        .toast-content { flex: 1; }
+        .toast-title { font-weight: 700; font-size: 0.9rem; color: #0f172a; }
+        .toast-message { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+        .toast-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px;
+            transition: color 0.3s ease;
+            flex-shrink: 0;
+        }
+        .toast-close:hover { color: #475569; }
+        @keyframes slideIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(120%); opacity: 0; }
+        }
+
+        /* ===== PLAN MONITORING CARD ===== */
+        .pm-card {
             max-width: 880px;
             width: 100%;
             background: white;
@@ -257,7 +332,7 @@
             position: relative;
             z-index: 1;
         }
-        .header {
+        .pm-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -267,12 +342,12 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .header-left {
+        .pm-header-left {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        .header-icon {
+        .pm-header-icon {
             width: 52px;
             height: 52px;
             background: linear-gradient(135deg, #1e3a8a, #2563eb);
@@ -284,13 +359,13 @@
             color: white;
             box-shadow: 0 8px 24px rgba(26, 115, 232, 0.3);
         }
-        .header h1 {
+        .pm-header h1 {
             font-size: 1.6rem;
             font-weight: 700;
             color: #1e3a8a;
             letter-spacing: -0.5px;
         }
-        .header h1 small {
+        .pm-header h1 small {
             display: block;
             font-size: 0.7rem;
             font-weight: 400;
@@ -299,7 +374,7 @@
             text-transform: uppercase;
             margin-top: 2px;
         }
-        .header-badge {
+        .pm-header-badge {
             background: rgba(0, 200, 150, 0.15);
             border: 1px solid rgba(0, 200, 150, 0.2);
             padding: 0.4rem 1rem;
@@ -313,20 +388,21 @@
             align-items: center;
             gap: 6px;
         }
-        .form-grid {
+
+        .pm-form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.2rem 1.8rem;
         }
-        .full-width {
+        .pm-full-width {
             grid-column: 1 / -1;
         }
-        .field-group {
+        .pm-field-group {
             display: flex;
             flex-direction: column;
             gap: 0.4rem;
         }
-        .field-group label {
+        .pm-field-group label {
             font-weight: 700;
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -336,23 +412,18 @@
             align-items: center;
             gap: 8px;
         }
-        .field-group label i {
+        .pm-field-group label i {
             color: #2563eb;
             font-size: 0.75rem;
             width: 16px;
         }
-        .field-group label .required {
+        .pm-field-group label .required {
             color: #dc2626;
             font-size: 0.6rem;
         }
-        .field-group input:read-only {
-            background: #f1f5f9;
-            cursor: not-allowed;
-            color: #475569;
-        }
-        .field-group input,
-        .field-group select,
-        .field-group textarea {
+        .pm-field-group input,
+        .pm-field-group select,
+        .pm-field-group textarea {
             background: #ffffff;
             border: 1.5px solid #cbd5e1;
             border-radius: 16px;
@@ -365,14 +436,14 @@
             font-weight: 400;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .field-group input:focus,
-        .field-group select:focus,
-        .field-group textarea:focus {
+        .pm-field-group input:focus,
+        .pm-field-group select:focus,
+        .pm-field-group textarea:focus {
             border-color: #2563eb;
             background: #ffffff;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
-        .field-group select {
+        .pm-field-group select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -381,7 +452,7 @@
             color: #0f172a;
             min-height: 50px;
         }
-        .field-group select option {
+        .pm-field-group select option {
             background: #ffffff;
             color: #0f172a;
             white-space: normal !important;
@@ -391,21 +462,22 @@
             min-height: 30px !important;
             height: auto !important;
         }
-        .field-group textarea {
+        .pm-field-group textarea {
             resize: vertical;
             min-height: 60px;
         }
-        .pic-container {
+
+        .pm-pic-container {
             display: flex;
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
-        .pic-container select {
+        .pm-pic-container select {
             flex: 1;
             min-width: 200px;
         }
-        .pic-btn {
+        .pm-pic-btn {
             padding: 0.5rem 1rem;
             border: none;
             border-radius: 12px;
@@ -419,28 +491,27 @@
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             white-space: nowrap;
         }
-        .pic-btn-add {
+        .pm-pic-btn-add {
             background: #10b981;
             color: white;
         }
-        .pic-btn-add:hover {
+        .pm-pic-btn-add:hover {
             background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transform: translateY(-1px);
         }
-        .pic-btn-add:active { transform: scale(0.95); }
-        .pic-btn-delete {
+        .pm-pic-btn-delete {
             background: #ef4444;
             color: white;
         }
-        .pic-btn-delete:hover {
+        .pm-pic-btn-delete:hover {
             background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            transform: translateY(-1px);
         }
-        .pic-btn-delete:active { transform: scale(0.95); }
-        .pic-btn i { font-size: 0.7rem; }
-        .btn-submit {
+        .pm-pic-btn i {
+            font-size: 0.7rem;
+        }
+
+        .pm-btn-submit {
             background: linear-gradient(135deg, #2563eb, #1e3a8a);
             border: none;
             padding: 1rem 2rem;
@@ -462,7 +533,7 @@
             overflow: hidden;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .btn-submit::before {
+        .pm-btn-submit::before {
             content: "";
             position: absolute;
             top: 0;
@@ -472,18 +543,39 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             transition: left 0.6s ease;
         }
-        .btn-submit:hover::before { left: 100%; }
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        .pm-btn-submit:hover::before {
+            left: 100%;
         }
-        .btn-submit:active { transform: scale(0.97); }
-        .btn-submit:disabled {
+        .pm-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.35);
+        }
+        .pm-btn-submit:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none !important;
         }
-        .btn-test {
+        .pm-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pm-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .pm-btn-test {
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
             padding: 0.5rem 1rem;
@@ -495,54 +587,45 @@
             transition: all 0.3s ease;
             flex: 1;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            text-align: center;
+            text-decoration: none;
         }
-        .btn-test:hover {
+        .pm-btn-test:hover {
             background: #e2e8f0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
         }
-        .btn-test:active { transform: scale(0.97); }
-        .btn-test i { margin-right: 4px; }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
+        .pm-btn-test i {
+            margin-right: 4px;
         }
-        .btn-view-all {
+        .pm-btn-view-all {
             background: #1e3a8a;
             border: 1px solid #1e3a8a;
             color: white;
         }
-        .btn-view-all:hover {
+        .pm-btn-view-all:hover {
             background: #2563eb;
             border-color: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
         }
-        .btn-chart {
+        .pm-btn-chart {
             background: #059669;
             border: 1px solid #059669;
             color: white;
         }
-        .btn-chart:hover {
+        .pm-btn-chart:hover {
             background: #047857;
             border-color: #047857;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
-        .btn-sheet {
+        .pm-btn-sheet {
             background: #0f9d58;
             border: 1px solid #0f9d58;
             color: white;
         }
-        .btn-sheet:hover {
+        .pm-btn-sheet:hover {
             background: #0b7e48;
             border-color: #0b7e48;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
         }
-        .status-message {
+
+        .pm-status-message {
             margin-top: 1.2rem;
             padding: 0.8rem 1.2rem;
             border-radius: 16px;
@@ -556,24 +639,28 @@
             font-size: 0.85rem;
             min-height: 52px;
         }
-        .status-message i {
+        .pm-status-message i {
             font-size: 1rem;
             color: #2563eb;
             flex-shrink: 0;
         }
-        .status-message.success {
+        .pm-status-message.success {
             background: #f0fdf4;
             border-color: #86efac;
             color: #166534;
         }
-        .status-message.success i { color: #10b981; }
-        .status-message.error {
+        .pm-status-message.success i {
+            color: #10b981;
+        }
+        .pm-status-message.error {
             background: #fef2f2;
             border-color: #fca5a5;
             color: #991b1b;
         }
-        .status-message.error i { color: #dc2626; }
-        .footer-note {
+        .pm-status-message.error i {
+            color: #dc2626;
+        }
+        .pm-footer-note {
             margin-top: 1.5rem;
             font-size: 0.65rem;
             color: #94a3b8;
@@ -582,59 +669,8 @@
             padding-top: 1.2rem;
             letter-spacing: 0.5px;
         }
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .logo-image {
-            height: 50px;
-            width: auto;
-            display: block;
-        }
-        .header-icon, .header-logo { display: flex; align-items: center; }
 
-        /* ===== BUTTON ANIMATIONS ===== */
-        .btn-action {
-            transition: all 0.25s ease !important;
-            position: relative;
-            overflow: hidden;
-            display: inline-flex !important;
-            align-items: center;
-            gap: 4px;
-        }
-        .btn-action:hover { transform: translateY(-2px) scale(1.05); }
-        .btn-action:active { transform: scale(0.9); }
-        .btn-action.btn-edit { background: #f59e0b; color: white; }
-        .btn-action.btn-edit:hover { background: #d97706; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
-        .btn-action.btn-delete { background: #ef4444; color: white; }
-        .btn-action.btn-delete:hover { background: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
-        .btn-action.btn-save-edit { background: #10b981; color: white; }
-        .btn-action.btn-save-edit:hover { background: #059669; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
-        .btn-action.btn-cancel-edit { background: #6b7280; color: white; }
-        .btn-action.btn-cancel-edit:hover { background: #4b5563; box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4); }
-        .btn-action .btn-spinner {
-            display: none;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        .btn-action.loading .btn-spinner { display: inline-block; }
-        .btn-action.loading i { display: none; }
-        .btn-action.loading { opacity: 0.7; pointer-events: none; }
-
-        /* ===== MODAL STYLES ===== */
+        /* ===== MODALS ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -647,50 +683,58 @@
             z-index: 99999;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
+            padding: 2rem;
             animation: fadeIn 0.3s ease;
         }
-        .modal-overlay.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-overlay.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         .modal-box {
             background: white;
             border-radius: 24px;
-            max-width: 95vw;
+            max-width: 1200px;
             width: 100%;
-            max-height: 92vh;
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.3s ease;
-            overflow: hidden;
         }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.2rem 1.5rem;
+            padding: 1.5rem 2rem;
             border-bottom: 1px solid #e2e8f0;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            flex-shrink: 0;
+            gap: 1rem;
         }
         .modal-header h2 {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #1e3a8a;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
-        .modal-header h2 i { color: #2563eb; }
+        .modal-header h2 i {
+            color: #2563eb;
+        }
         .modal-header .close-btn {
             background: #f1f5f9;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -698,80 +742,85 @@
             justify-content: center;
             color: #475569;
         }
-        .modal-header .close-btn:hover { background: #fee2e2; color: #dc2626; transform: rotate(90deg); }
-
+        .modal-header .close-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
         .modal-filters {
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 0.8rem;
+            gap: 1rem;
             flex-wrap: wrap;
             align-items: center;
             background: #f8fafc;
-            flex-shrink: 0;
         }
         .modal-filters .filter-group {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.4rem;
             flex-wrap: wrap;
         }
         .modal-filters label {
             font-weight: 600;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             color: #334155;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
-        .modal-filters select, .modal-filters input {
-            padding: 0.3rem 0.6rem;
+        .modal-filters select,
+        .modal-filters input {
+            padding: 0.4rem 0.8rem;
             border: 1.5px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 0.75rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
             outline: none;
             background: white;
             transition: all 0.3s ease;
-            min-width: 80px;
-            max-width: 140px;
+            min-width: 100px;
         }
-        .modal-filters select:focus, .modal-filters input:focus {
+        .modal-filters select:focus,
+        .modal-filters input:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
         .modal-filters .filter-btn {
             background: #2563eb;
             border: none;
-            padding: 0.3rem 1rem;
+            padding: 0.4rem 1.2rem;
             border-radius: 30px;
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
         }
-        .modal-filters .filter-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .modal-filters .filter-btn:active { transform: scale(0.95); }
-        .modal-filters .filter-btn.reset-btn { background: #64748b; }
-        .modal-filters .filter-btn.reset-btn:hover { background: #475569; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
-
+        .modal-filters .filter-btn:hover {
+            background: #1d4ed8;
+        }
+        .modal-filters .filter-btn.reset-btn {
+            background: #64748b;
+        }
+        .modal-filters .filter-btn.reset-btn:hover {
+            background: #475569;
+        }
         .modal-search {
-            padding: 0.6rem 1.5rem;
+            padding: 1rem 2rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 0.8rem;
+            gap: 1rem;
             flex-wrap: wrap;
             align-items: center;
-            background: #fafbfc;
-            flex-shrink: 0;
+            background: #f8fafc;
         }
         .modal-search input {
             flex: 1;
-            min-width: 150px;
-            padding: 0.4rem 0.8rem;
+            min-width: 200px;
+            padding: 0.6rem 1rem;
             border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
             outline: none;
             transition: all 0.3s ease;
         }
@@ -780,200 +829,197 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
         .modal-search .search-info {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #64748b;
             white-space: nowrap;
         }
-        .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
-
-        /* ===== SCROLLABLE TABLE WRAPPER ===== */
-        .table-wrapper {
-            overflow: auto;
-            flex: 1;
-            padding: 0.5rem 0;
-            position: relative;
-            max-height: calc(92vh - 320px);
-            min-height: 200px;
+        .modal-search .search-info span {
+            font-weight: 700;
+            color: #1e3a8a;
         }
-
-        .table-wrapper::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        .table-wrapper::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-        .table-wrapper::-webkit-scrollbar-thumb {
-            background: #94a3b8;
-            border-radius: 4px;
-        }
-        .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-
         .modal-body {
-            padding: 0 1.5rem;
-            overflow: visible;
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
             flex: 1;
-            display: flex;
-            flex-direction: column;
         }
         .modal-body table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.7rem;
-            min-width: 1200px;
+            font-size: 0.85rem;
         }
         .modal-body table th {
             background: #f1f5f9;
             color: #1e3a8a;
             font-weight: 700;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            padding: 0.4rem 0.3rem;
+            letter-spacing: 0.5px;
+            padding: 0.8rem 0.8rem;
             text-align: left;
             border-bottom: 2px solid #e2e8f0;
             position: sticky;
             top: 0;
             z-index: 10;
-            white-space: nowrap;
         }
         .modal-body table td {
-            padding: 0.3rem 0.3rem;
+            padding: 0.7rem 0.8rem;
             border-bottom: 1px solid #f1f5f9;
             color: #334155;
-            max-width: 120px;
+            max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .modal-body table tr:hover td { background: #f8fafc; }
+        .modal-body table tr:hover td {
+            background: #f8fafc;
+        }
         .modal-body table .no-records td {
             text-align: center;
-            padding: 2rem 0;
+            padding: 3rem 0;
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
         .modal-body .action-cell {
             display: flex;
-            gap: 3px;
-            flex-wrap: nowrap;
+            gap: 4px;
+            flex-wrap: wrap;
         }
         .modal-body .action-cell .btn-action {
-            padding: 0.15rem 0.4rem;
+            padding: 0.3rem 0.7rem;
             border: none;
-            border-radius: 6px;
-            font-size: 0.6rem;
+            border-radius: 8px;
+            font-size: 0.65rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             display: inline-flex !important;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
         }
-        .modal-body .editing td { background: #fef3c7 !important; }
-        .modal-body .editing input,
-        .modal-body .editing select,
-        .modal-body .editing textarea {
+        .modal-body .action-cell .btn-action:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+        .modal-body .action-cell .btn-action:active {
+            transform: scale(0.9);
+        }
+        .modal-body .action-cell .btn-edit {
+            background: #f59e0b;
+            color: white;
+        }
+        .modal-body .action-cell .btn-edit:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+        .modal-body .action-cell .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        .modal-body .action-cell .btn-delete:hover {
+            background: #dc2626;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+        .modal-body .action-cell .btn-save-edit {
+            background: #10b981;
+            color: white;
+        }
+        .modal-body .action-cell .btn-save-edit:hover {
+            background: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        .modal-body .action-cell .btn-cancel-edit {
+            background: #6b7280;
+            color: white;
+        }
+        .modal-body .action-cell .btn-cancel-edit:hover {
+            background: #4b5563;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+        }
+        .modal-body .action-cell .btn-action .btn-spinner {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        .modal-body .action-cell .btn-action.loading .btn-spinner {
+            display: inline-block;
+        }
+        .modal-body .action-cell .btn-action.loading i {
+            display: none;
+        }
+        .modal-body .action-cell .btn-action.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .modal-body .editing-row td {
+            background: #fef3c7 !important;
+        }
+        .modal-body .editing-row .action-cell .btn-edit,
+        .modal-body .editing-row .action-cell .btn-delete {
+            display: none !important;
+        }
+        .modal-body .editing-row .action-cell .btn-save-edit,
+        .modal-body .editing-row .action-cell .btn-cancel-edit {
+            display: inline-flex !important;
+        }
+        .modal-body .editing-row input,
+        .modal-body .editing-row select,
+        .modal-body .editing-row textarea {
             background: white;
             border: 1.5px solid #f59e0b;
-            border-radius: 4px;
-            padding: 0.1rem 0.2rem;
-            font-size: 0.65rem;
+            border-radius: 6px;
+            padding: 0.2rem 0.4rem;
+            font-size: 0.75rem;
             width: 100%;
             outline: none;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
-            min-width: 50px;
         }
-        .modal-body .editing input:focus,
-        .modal-body .editing select:focus,
-        .modal-body .editing textarea:focus {
+        .modal-body .editing-row input:focus,
+        .modal-body .editing-row select:focus,
+        .modal-body .editing-row textarea:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
         }
-
-        /* ===== FIX FOR DROPDOWNS IN EDIT MODE ===== */
-        .modal-body table select {
-            appearance: auto !important;
-            -webkit-appearance: auto !important;
-            -moz-appearance: auto !important;
-            z-index: 100 !important;
-            position: relative !important;
-            overflow: visible !important;
-            min-height: 28px !important;
-            padding: 2px 6px !important;
-            font-size: 0.65rem !important;
-            background-color: white !important;
-            border: 2px solid #f59e0b !important;
-            border-radius: 4px !important;
-            color: #0f172a !important;
-            cursor: pointer !important;
-            max-width: 130px !important;
+        .modal-body .editing-row textarea {
+            min-height: 30px;
+            resize: vertical;
         }
-
-        .modal-body table select option {
-            display: block !important;
-            padding: 4px 8px !important;
-            min-height: 28px !important;
-            height: auto !important;
-            white-space: normal !important;
-            word-wrap: break-word !important;
-            background: white !important;
-            color: #0f172a !important;
-            font-size: 0.65rem !important;
-        }
-
-        .modal-body table td {
-            overflow: visible !important;
-            position: relative !important;
-            z-index: 1 !important;
-        }
-
-        .modal-body table tr.editing-row td {
-            overflow: visible !important;
-            position: relative !important;
-            z-index: 10 !important;
-        }
-
-        .modal-body table tr.editing-row td select {
-            z-index: 1000 !important;
-            position: relative !important;
-            min-height: 28px !important;
-        }
-
         .modal-footer {
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.8rem;
+            gap: 1rem;
             background: #f8fafc;
             border-radius: 0 0 24px 24px;
-            flex-shrink: 0;
         }
         .modal-footer .record-count {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #475569;
         }
-        .modal-footer .record-count span { font-weight: 700; color: #1e3a8a; }
+        .modal-footer .record-count span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
         .modal-footer .btn-close-modal {
             background: #2563eb;
             border: none;
-            padding: 0.4rem 1.2rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 40px;
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
-        .modal-footer .btn-close-modal:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .modal-footer .btn-close-modal:active { transform: scale(0.95); }
+        .modal-footer .btn-close-modal:hover {
+            background: #1d4ed8;
+        }
 
         /* ===== CHART STYLES ===== */
         .chart-filters {
@@ -1001,7 +1047,8 @@
             letter-spacing: 0.3px;
             white-space: nowrap;
         }
-        .chart-filters select, .chart-filters input {
+        .chart-filters select,
+        .chart-filters input {
             padding: 0.4rem 0.8rem;
             border: 1.5px solid #cbd5e1;
             border-radius: 10px;
@@ -1011,7 +1058,8 @@
             transition: all 0.3s ease;
             min-width: 120px;
         }
-        .chart-filters select:focus, .chart-filters input:focus {
+        .chart-filters select:focus,
+        .chart-filters input:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
@@ -1027,10 +1075,15 @@
             font-size: 0.75rem;
             white-space: nowrap;
         }
-        .chart-filters .filter-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .chart-filters .filter-btn:active { transform: scale(0.95); }
-        .chart-filters .filter-btn.reset-btn { background: #64748b; }
-        .chart-filters .filter-btn.reset-btn:hover { background: #475569; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
+        .chart-filters .filter-btn:hover {
+            background: #1d4ed8;
+        }
+        .chart-filters .filter-btn.reset-btn {
+            background: #64748b;
+        }
+        .chart-filters .filter-btn.reset-btn:hover {
+            background: #475569;
+        }
         .chart-filters .filter-divider {
             width: 1px;
             height: 30px;
@@ -1067,14 +1120,18 @@
             background: #2563eb;
             color: white;
         }
-        .chart-type-selector button:hover { border-color: #2563eb; transform: translateY(-1px); }
-        .chart-type-selector button:active { transform: scale(0.95); }
+        .chart-type-selector button:hover {
+            border-color: #2563eb;
+        }
         .chart-container {
             position: relative;
             height: 400px;
             margin-top: 0.5rem;
         }
-        .chart-container canvas { width: 100% !important; height: 100% !important; }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
         .chart-summary {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -1085,7 +1142,9 @@
             border-radius: 12px;
             border: 1px solid #e2e8f0;
         }
-        .chart-summary .stat-item { text-align: center; }
+        .chart-summary .stat-item {
+            text-align: center;
+        }
         .chart-summary .stat-item .stat-value {
             font-size: 1.3rem;
             font-weight: 700;
@@ -1107,9 +1166,15 @@
             margin-bottom: 1rem;
         }
 
-        .add-person-modal .modal-box { max-width: 500px; }
-        .add-person-modal .modal-body { padding: 2rem; }
-        .add-person-modal .field-group { margin-bottom: 1rem; }
+        .add-person-modal .modal-box {
+            max-width: 500px;
+        }
+        .add-person-modal .modal-body {
+            padding: 2rem;
+        }
+        .add-person-modal .pm-field-group {
+            margin-bottom: 1rem;
+        }
         .add-person-modal .btn-add-person {
             background: #10b981;
             border: none;
@@ -1123,38 +1188,22 @@
             font-size: 1rem;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .add-person-modal .btn-add-person:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-        .add-person-modal .btn-add-person:active { transform: scale(0.97); }
-        .add-person-modal .btn-add-person:disabled { opacity: 0.6; cursor: not-allowed; }
+        .add-person-modal .btn-add-person:hover {
+            background: #059669;
+        }
+        .add-person-modal .btn-add-person:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .add-person-modal .error-msg {
             color: #dc2626;
             font-size: 0.8rem;
             margin-top: 0.3rem;
             display: none;
         }
-        .add-person-modal .error-msg.show { display: block; }
-
-        .editing-row td { background: #fef3c7 !important; }
-        .editing-row .action-cell .btn-action { display: none; }
-        .editing-row .action-cell .btn-save-edit,
-        .editing-row .action-cell .btn-cancel-edit { display: inline-flex !important; }
-        .action-cell .btn-save-edit,
-        .action-cell .btn-cancel-edit { display: none !important; }
-
-        /* ===== COLUMN WIDTHS ===== */
-        .col-region { min-width: 60px; max-width: 80px; }
-        .col-province { min-width: 70px; max-width: 90px; }
-        .col-city { min-width: 90px; max-width: 120px; }
-        .col-title { min-width: 110px; max-width: 150px; }
-        .col-topics { min-width: 110px; max-width: 150px; }
-        .col-category { min-width: 70px; max-width: 100px; }
-        .col-date { min-width: 75px; max-width: 90px; }
-        .col-participants { min-width: 50px; max-width: 65px; text-align: center; }
-        .col-budget { min-width: 65px; max-width: 85px; }
-        .col-partner { min-width: 75px; max-width: 95px; }
-        .col-month { min-width: 75px; max-width: 95px; }
-        .col-personnel { min-width: 85px; max-width: 115px; }
-        .col-actions { min-width: 65px; max-width: 75px; }
+        .add-person-modal .error-msg.show {
+            display: block;
+        }
 
         /* ===== LOGIN MODAL ===== */
         .login-modal {
@@ -1167,7 +1216,9 @@
             justify-content: center;
             z-index: 10000;
         }
-        .login-modal.active { display: flex; }
+        .login-modal.active {
+            display: flex;
+        }
         .login-modal-content {
             background: white;
             border-radius: 2.5rem;
@@ -1199,7 +1250,9 @@
             margin-bottom: 0.8rem;
             transition: transform 0.2s;
         }
-        .login-modal-brand img:hover { transform: scale(1.02); }
+        .login-modal-brand img:hover {
+            transform: scale(1.02);
+        }
         .login-modal-brand h3 {
             font-size: 1.6rem;
             font-weight: 800;
@@ -1225,7 +1278,10 @@
             transition: 0.2s;
             z-index: 10;
         }
-        .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
+        .login-modal-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
         .login-modal-body {
             padding: 2rem 1.8rem 1.8rem;
         }
@@ -1300,7 +1356,6 @@
         }
         .toast-msg.success { background: #166534; }
         .toast-msg.error { background: #b91c1c; }
-        .toast-msg.info { background: #1e3a8a; }
 
         /* ===== FOOTER ===== */
         .footer-new {
@@ -1334,30 +1389,30 @@
             margin-bottom: 12px;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 800px) {
-            .card { padding: 1.5rem; }
-            .form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
-            .full-width { grid-column: 1; }
-            .header h1 { font-size: 1.2rem; }
-            .header-icon { width: 42px; height: 42px; font-size: 1.2rem; }
-            .header-badge { display: none; }
-            .btn-group { flex-direction: column; }
-            .pic-container { flex-direction: column; }
-            .pic-container select { width: 100%; }
-            .pic-btn { width: 100%; justify-content: center; }
-            .modal-box { max-width: 100vw; max-height: 98vh; border-radius: 16px; }
-            .modal-header { padding: 0.8rem 1rem; }
-            .modal-filters { padding: 0.6rem 1rem; flex-direction: column; align-items: stretch; }
-            .modal-filters select, .modal-filters input { min-width: 100%; max-width: 100%; }
-            .modal-search { padding: 0.6rem 1rem; flex-direction: column; }
+            .pm-card { padding: 1.5rem; border-radius: 2rem; }
+            .pm-form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+            .pm-full-width { grid-column: 1; }
+            .pm-header h1 { font-size: 1.2rem; }
+            .pm-header-icon { width: 42px; height: 42px; font-size: 1.2rem; }
+            .pm-header-badge { display: none; }
+            .pm-btn-group { flex-direction: column; }
+            .pm-pic-container { flex-direction: column; }
+            .pm-pic-container select { width: 100%; }
+            .pm-pic-btn { width: 100%; justify-content: center; }
+            .modal-box { max-height: 95vh; }
+            .modal-header { padding: 1rem; }
+            .modal-filters { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; }
+            .modal-filters select, .modal-filters input { min-width: 100%; }
+            .modal-search { padding: 0.8rem 1rem; flex-direction: column; }
             .modal-search input { width: 100%; min-width: unset; }
-            .modal-body { padding: 0 0.8rem; }
-            .table-wrapper { max-height: calc(92vh - 350px); }
-            .modal-body table { font-size: 0.55rem; min-width: 900px; }
-            .modal-body table th, .modal-body table td { padding: 0.15rem 0.15rem; }
-            .modal-body .action-cell .btn-action { font-size: 0.5rem; padding: 0.1rem 0.3rem; }
-            .modal-footer { padding: 0.6rem 1rem; flex-direction: column; text-align: center; }
-            .modal-overlay { padding: 0.3rem; }
+            .modal-body { padding: 1rem; }
+            .modal-body table { font-size: 0.65rem; }
+            .modal-body table th, .modal-body table td { padding: 0.3rem 0.3rem; }
+            .modal-body .action-cell { flex-direction: column; }
+            .modal-footer { padding: 0.8rem 1rem; flex-direction: column; text-align: center; }
+            .modal-overlay { padding: 1rem; }
             .chart-filters { flex-direction: column; align-items: stretch; }
             .chart-filters select, .chart-filters input { min-width: 100%; }
             .chart-filters .filter-divider { display: none; }
@@ -1367,8 +1422,8 @@
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
         }
         @media (max-width: 400px) {
-            .card { padding: 1rem; }
-            .field-group input, .field-group select, .field-group textarea {
+            .pm-card { padding: 1rem; }
+            .pm-field-group input, .pm-field-group select, .pm-field-group textarea {
                 padding: 0.6rem 0.9rem;
                 font-size: 0.85rem;
             }
@@ -1377,13 +1432,16 @@
 </head>
 <body>
 
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
 <!-- ===== HEADER ===== -->
 <header>
     <div class="container">
         <div class="top-bar">
             <div class="logo-area-header">
                 <div class="header-logo-img">
-                    <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px">
+                    <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px" />
                     <span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
                 </div>
             </div>
@@ -1400,166 +1458,169 @@
 <!-- ===== MAIN CONTENT ===== -->
 <main>
     <div class="container">
-        <div class="card" id="mainCard">
-            <div class="header">
-                <div class="header-left">
-                    <div class="header-logo">
-                        <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" class="logo-image" onerror="this.style.display='none'">
+        <div class="pm-card" id="mainCard">
+            <div class="pm-header">
+                <div class="pm-header-left">
+                    <div class="pm-header-icon">
+                        <i class="fas fa-clipboard-list"></i>
                     </div>
                     <div>
                         <h1>
-                            CLUP/ZO Trainings
-                            <small>Training Management System</small>
+                            Plan Monitoring
+                            <small>Plan Monitoring Management Information System</small>
                         </h1>
                     </div>
                 </div>
-                <div class="header-badge">
+                <div class="pm-header-badge">
                     <i class="fas fa-circle" style="font-size: 0.4rem; color: #00c896;"></i>
                     <span>Live</span>
                 </div>
             </div>
 
-            <!-- SINGLE FORM -->
-            <div class="form-type active" id="formTraining">
-                <form id="trainingForm">
-                    <div class="form-grid">
-                        <div class="field-group">
-                            <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
-                            <select id="training_region" required>
-                                <option value="Region_06">Region_06</option>
+            <!-- ===== SINGLE FORM ===== -->
+            <form id="planForm">
+                <div class="pm-form-grid">
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
+                        <select id="plan_region" required>
+                            <option value="Region_06">Region_06</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
+                        <select id="plan_province" required>
+                            <option value="">Select Province...</option>
+                            <option value="Aklan">Aklan</option>
+                            <option value="Antique">Antique</option>
+                            <option value="Capiz">Capiz</option>
+                            <option value="Guimaras">Guimaras</option>
+                            <option value="Iloilo">Iloilo</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-city"></i> City/Municipality <span class="required">*</span></label>
+                        <select id="plan_cityMun" required>
+                            <option value="">Select City/Municipality...</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-clipboard-list"></i> Type of Monitoring <span class="required">*</span></label>
+                        <select id="plan_typeMonitoring" required>
+                            <option value="">Select Type...</option>
+                            <option value="Table">Table</option>
+                            <option value="Field">Field</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group">
+                        <label><i class="fas fa-flag"></i> Initial Status <span class="required">*</span></label>
+                        <select id="plan_initialStatus" required>
+                            <option value="">Select Status...</option>
+                            <option value="Pre-Phase">Pre-Phase</option>
+                            <option value="Phase 1">Phase 1</option>
+                            <option value="Phase 2">Phase 2</option>
+                            <option value="Phase 3">Phase 3</option>
+                            <option value="Phase 4">Phase 4</option>
+                            <option value="Phase 5">Phase 5</option>
+                            <option value="RA1">RA1</option>
+                            <option value="RA2">RA2</option>
+                            <option value="RA3">RA3</option>
+                            <option value="RA4">RA4</option>
+                            <option value="RA5">RA5</option>
+                            <option value="RA6">RA6</option>
+                            <option value="RA7">RA7</option>
+                            <option value="None Indicated">None Indicated</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group">
+                        <label><i class="fas fa-sync-alt"></i> Updated Status <span class="required">*</span></label>
+                        <select id="plan_updatedStatus" required>
+                            <option value="">Select Status...</option>
+                            <option value="Pre-Phase">Pre-Phase</option>
+                            <option value="Phase 1">Phase 1</option>
+                            <option value="Phase 2">Phase 2</option>
+                            <option value="Phase 3">Phase 3</option>
+                            <option value="Phase 4">Phase 4</option>
+                            <option value="Phase 5">Phase 5</option>
+                            <option value="RA1">RA1</option>
+                            <option value="RA2">RA2</option>
+                            <option value="RA3">RA3</option>
+                            <option value="RA4">RA4</option>
+                            <option value="RA5">RA5</option>
+                            <option value="RA6">RA6</option>
+                            <option value="RA7">RA7</option>
+                            <option value="None Indicated">None Indicated</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group">
+                        <label><i class="fas fa-calendar-alt"></i> Date of Monitoring Conducted <span class="required">*</span></label>
+                        <input type="date" id="plan_dateConducted" required>
+                    </div>
+                    <div class="pm-field-group">
+                        <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
+                        <select id="plan_reportingMonth" required>
+                            <option value="">Select Month...</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-pencil-alt"></i> Remarks</label>
+                        <input type="text" id="plan_remarks" placeholder="N/A or additional notes">
+                    </div>
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-link"></i> Link to MOV</label>
+                        <input type="url" id="plan_linkMov" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="pm-field-group pm-full-width">
+                        <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
+                        <div class="pm-pic-container">
+                            <select id="plan_pic" required>
+                                <option value="">Select Person...</option>
                             </select>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
-                            <select id="training_province" required>
-                                <option value="">Select Province...</option>
-                                <option value="Aklan">Aklan</option>
-                                <option value="Antique">Antique</option>
-                                <option value="Capiz">Capiz</option>
-                                <option value="Guimaras">Guimaras</option>
-                                <option value="Iloilo">Iloilo</option>
-                            </select>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-city"></i> City/Municipality <span class="required">*</span></label>
-                            <select id="training_cityMun" required>
-                                <option value="">Select City/Municipality...</option>
-                            </select>
-                        </div>
-                        <!-- TRAINING TITLE - Changed to Input Text -->
-                        <div class="field-group full-width">
-                            <label><i class="fas fa-chalkboard-teacher"></i> Training Title <span class="required">*</span></label>
-                            <input type="text" id="training_title" placeholder="Enter Training Title..." required>
-                        </div>
-                        <!-- TRAINING TOPICS - Changed to Input Text -->
-                        <div class="field-group full-width">
-                            <label><i class="fas fa-list-ul"></i> Training Topics <span class="required">*</span></label>
-                            <input type="text" id="training_topics" placeholder="Enter Training Topics..." required>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-tag"></i> Training Category <span class="required">*</span></label>
-                            <select id="training_category" required>
-                                <option value="">Select Category...</option>
-                                <option value="CDRA">CDRA</option>
-                                <option value="Formulation or Updating">Formulation or Updating</option>
-                                <option value="GIS">GIS</option>
-                                <option value="Housing Subsector">Housing Subsector</option>
-                                <option value="Implementation and Monitoring">Implementation and Monitoring</option>
-                                <option value="OSD">OSD</option>
-                                <option value="PlanSmart for SHS">PlanSmart for SHS</option>
-                                <option value="Review and Approval">Review and Approval</option>
-                                <option value="RUDD">RUDD</option>
-                            </select>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-calendar-alt"></i> Start Date <span class="required">*</span></label>
-                            <input type="date" id="training_startDate" required>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-calendar-alt"></i> End Date <span class="required">*</span></label>
-                            <input type="date" id="training_endDate" required>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-users"></i> No. of Participants <span class="required">*</span></label>
-                            <input type="number" id="training_participants" min="0" placeholder="e.g. 25" required>
-                        </div>
-                        <!-- BUDGET - Changed to Input Text -->
-                        <div class="field-group">
-                            <label><i class="fas fa-coins"></i> Budget/Funding Source <span class="required">*</span></label>
-                            <input type="text" id="training_budget" placeholder="Enter Budget/Funding Source..." required>
-                        </div>
-                        <!-- PARTNER AGENCY - Changed to Input Text -->
-                        <div class="field-group">
-                            <label><i class="fas fa-handshake"></i> Partner Agency <span class="required">*</span></label>
-                            <input type="text" id="training_partner" placeholder="Enter Partner Agency..." required>
-                        </div>
-                        <div class="field-group">
-                            <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
-                            <select id="training_reportingMonth" required>
-                                <option value="">Select Month...</option>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
-                        </div>
-                        <div class="field-group full-width">
-                            <label><i class="fas fa-pencil-alt"></i> Remarks</label>
-                            <input type="text" id="training_remarks" placeholder="N/A or additional notes">
-                        </div>
-                        <div class="field-group full-width">
-                            <label><i class="fas fa-link"></i> Link to MOV</label>
-                            <input type="url" id="training_linkMov" placeholder="https://drive.google.com/...">
-                        </div>
-                        <div class="field-group full-width">
-                            <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
-                            <div class="pic-container">
-                                <select id="training_pic" required>
-                                    <option value="">Select Person...</option>
-                                </select>
-                                <button type="button" class="pic-btn pic-btn-add" id="training_addPic">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                                <button type="button" class="pic-btn pic-btn-delete" id="training_deletePic">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
+                            <button type="button" class="pm-pic-btn pm-pic-btn-add" id="plan_addPic">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                            <button type="button" class="pm-pic-btn pm-pic-btn-delete" id="plan_deletePic">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     </div>
-                    <button type="submit" class="btn-submit" id="training_submitBtn">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Google Sheet (Training_CLUP/ZO)</span>
-                    </button>
-                </form>
-            </div>
+                </div>
+                <button type="submit" class="pm-btn-submit" id="plan_submitBtn">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Save to Google Sheet</span>
+                </button>
+            </form>
 
-            <!-- Buttons -->
-            <div class="btn-group">
-                <button type="button" class="btn-test btn-view-all" id="viewAllBtn">
+            <!-- ===== BUTTONS ===== -->
+            <div class="pm-btn-group">
+                <button type="button" class="pm-btn-test pm-btn-view-all" id="viewAllBtn">
                     <i class="fas fa-database"></i> View All Records
                 </button>
-                <button type="button" class="btn-test btn-chart" id="chartBtn">
+                <button type="button" class="pm-btn-test pm-btn-chart" id="chartBtn">
                     <i class="fas fa-chart-bar"></i> View Chart
                 </button>
-                <button type="button" class="btn-test btn-sheet" id="sheetBtn">
+                <button type="button" class="pm-btn-test pm-btn-sheet" id="sheetBtn">
                     <i class="fas fa-external-link-alt"></i> View Google Sheet
                 </button>
             </div>
 
-            <div id="statusMessage" class="status-message">
+            <div id="statusMessage" class="pm-status-message">
                 <i class="fas fa-info-circle"></i>
                 <span id="statusText">Ready · fill in all required fields</span>
             </div>
 
-            <div class="footer-note">
+            <div class="pm-footer-note">
                 <i class="fas fa-database"></i> Data saved directly to Google Sheets via Apps Script
             </div>
         </div>
@@ -1571,7 +1632,7 @@
     <div class="container">
         <div class="footer-grid">
             <div>
-                <img src="DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
+                <img src="img/DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
                 <strong>DHSUD Region VI</strong><br />ELUPDD – CLUP & ZO Platform<br />Geospatial Innovation for Resilience
             </div>
             <div>
@@ -1591,7 +1652,7 @@
     <div class="login-modal-content">
         <div class="login-modal-brand">
             <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
-            <img src="DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
             <h3>DHSUD Region VI</h3>
             <p>ELUPDD · CLUP & ZO Platform</p>
         </div>
@@ -1616,7 +1677,7 @@
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Training Records</span></h2>
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Plan Monitoring Records</span></h2>
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-filters">
@@ -1649,22 +1710,6 @@
                     <option value="December">December</option>
                 </select>
             </div>
-            <!-- NEW: Training Category Filter -->
-            <div class="filter-group">
-                <label for="filterCategory">Training Category:</label>
-                <select id="filterCategory">
-                    <option value="all">All Categories</option>
-                    <option value="CDRA">CDRA</option>
-                    <option value="Formulation or Updating">Formulation or Updating</option>
-                    <option value="GIS">GIS</option>
-                    <option value="Housing Subsector">Housing Subsector</option>
-                    <option value="Implementation and Monitoring">Implementation and Monitoring</option>
-                    <option value="OSD">OSD</option>
-                    <option value="PlanSmart for SHS">PlanSmart for SHS</option>
-                    <option value="Review and Approval">Review and Approval</option>
-                    <option value="RUDD">RUDD</option>
-                </select>
-            </div>
             <div class="filter-group">
                 <label for="filterPIC">Personnel:</label>
                 <select id="filterPIC">
@@ -1675,17 +1720,13 @@
             <button class="filter-btn reset-btn" id="resetRecordFilter"><i class="fas fa-undo"></i> Reset</button>
         </div>
         <div class="modal-search">
-            <input type="text" id="searchInput" placeholder="🔍 Search by Province, City/Municipality, Training Title...">
+            <input type="text" id="searchInput" placeholder="🔍 Search by Province, City/Municipality...">
             <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
         </div>
-        <div class="modal-body">
-            <div class="table-wrapper" id="tableWrapper">
-                <div id="modalBodyContent">
-                    <div style="text-align:center; padding: 2rem; color: #94a3b8;">
-                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
-                        <p style="margin-top: 1rem;">Loading records...</p>
-                    </div>
-                </div>
+        <div class="modal-body" id="modalBody">
+            <div style="text-align:center; padding: 2rem; color: #94a3b8;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                <p style="margin-top: 1rem;">Loading records...</p>
             </div>
         </div>
         <div class="modal-footer">
@@ -1699,15 +1740,15 @@
 <div class="modal-overlay" id="chartModal">
     <div class="modal-box" style="max-width: 1100px;">
         <div class="modal-header">
-            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">Training Analytics Dashboard</span></h2>
+            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">Plan Monitoring Analytics</span></h2>
             <button class="close-btn" id="closeChartBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="chartModalBody">
             <div class="chart-filters" style="border-bottom: none; margin-bottom: 0.5rem; background: transparent; padding: 0 0 0.5rem 0;">
                 <div class="chart-type-selector">
                     <label>Chart Type:</label>
-                    <button class="active" data-chart="category">Training Category</button>
-                    <button data-chart="monthly">Monthly Trend</button>
+                    <button class="active" data-chart="status">Status Distribution</button>
+                    <button data-chart="type">Monitoring Type</button>
                     <button data-chart="city">By City/Municipality</button>
                 </div>
             </div>
@@ -1735,22 +1776,6 @@
                     <input type="number" id="chartYearFilter" placeholder="e.g. 2026" style="width: 100px; min-width: 80px;">
                 </div>
                 <div class="filter-group">
-                    <label for="chartCategoryFilter">Training Category:</label>
-                    <select id="chartCategoryFilter">
-                        <option value="all">All Categories</option>
-                        <option value="CDRA">CDRA</option>
-                        <option value="Formulation or Updating">Formulation or Updating</option>
-                        <option value="GIS">GIS</option>
-                        <option value="Housing Subsector">Housing Subsector</option>
-                        <option value="Implementation and Monitoring">Implementation and Monitoring</option>
-                        <option value="OSD">OSD</option>
-                        <option value="PlanSmart for SHS">PlanSmart for SHS</option>
-                        <option value="Review and Approval">Review and Approval</option>
-                        <option value="RUDD">RUDD</option>
-                    </select>
-                </div>
-                <div class="filter-divider"></div>
-                <div class="filter-group">
                     <label for="chartProvinceFilter">Province:</label>
                     <select id="chartProvinceFilter">
                         <option value="all">All Provinces</option>
@@ -1763,7 +1788,7 @@
                 </div>
                 <div class="filter-divider"></div>
                 <div class="filter-group">
-                    <label for="chartPICFilter">Personnel In-Charge:</label>
+                    <label for="chartPICFilter">Personnel:</label>
                     <select id="chartPICFilter">
                         <option value="all">All Personnel</option>
                     </select>
@@ -1781,15 +1806,14 @@
                 </div>
             </div>
             <div id="chartSummary" class="chart-summary" style="display: none;">
-                <div class="stat-item"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Trainings</div></div>
-                <div class="stat-item"><div class="stat-value" id="statCategories">0</div><div class="stat-label">Categories</div></div>
-                <div class="stat-item"><div class="stat-value" id="statTopCategory">-</div><div class="stat-label">Top Category</div></div>
+                <div class="stat-item"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Records</div></div>
+                <div class="stat-item"><div class="stat-value" id="statStatuses">0</div><div class="stat-label">Statuses</div></div>
+                <div class="stat-item"><div class="stat-value" id="statTopStatus">-</div><div class="stat-label">Top Status</div></div>
                 <div class="stat-item"><div class="stat-value" id="statMonths">0</div><div class="stat-label">Months</div></div>
-                <div class="stat-item"><div class="stat-value" id="statParticipants">0</div><div class="stat-label">Total Participants</div></div>
             </div>
         </div>
         <div class="modal-footer">
-            <span class="record-count">📊 Analytics Dashboard</span>
+            <span class="record-count">📊 Plan Monitoring Dashboard</span>
             <button class="btn-close-modal" id="closeChartBtn2">Close</button>
         </div>
     </div>
@@ -1803,7 +1827,7 @@
             <button class="close-btn" id="closeAddPersonBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <div class="field-group">
+            <div class="pm-field-group">
                 <label>Full Name <span class="required">*</span></label>
                 <input type="text" id="newPersonName" placeholder="Enter full name..." style="padding: 0.75rem 1.1rem; border: 1.5px solid #cbd5e1; border-radius: 16px; font-size: 0.9rem; width: 100%; outline: none; font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;">
                 <div class="error-msg" id="personError">Please enter a name.</div>
@@ -1817,88 +1841,112 @@
 
 <script>
     // ============================================
-    // TOAST NOTIFICATION SYSTEM
+    // TOAST
     // ============================================
     function showToast(title, message, type = 'info', duration = 4000) {
+        const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
-        toast.className = `toast-msg ${type}`;
-        toast.innerText = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), duration);
+        toast.className = `toast toast-${type}`;
+        const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+        toast.innerHTML = `
+            <div class="toast-icon"><i class="fas ${icons[type] || icons.info}"></i></div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('hiding');
+            setTimeout(() => toast.remove(), 400);
+        }, duration);
+        return toast;
     }
 
     // ============================================
     // CONFIG
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw8LItzmPsoJ4Ysrk7Ms2HNVM_Q0QSm5VusdPxby7mm1GTWx7Sfj3qyRH9FqBVhKyEGqw/exec';
-    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/16fN6OsGQtUno_KPCc2W1A1VktolQTN1oYnSFG4MybbQ/edit?usp=sharing';
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzgG0t-90T7nz-dwEW7J4NR6z1iUa77JAWRQAgeQ3xNLSObdlt1Cs7huA2AmbM8KA9FFA/exec';
+    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1AgNv7ljgvnsZ1SVd0xxxNi2WopiifdYIcVNgX9Yr82w/edit?usp=sharing';
 
     // ============================================
-    // PERSONNEL IN-CHARGE DATA
+    // PERSONNEL MANAGEMENT
     // ============================================
     let picNames = [];
 
     async function loadPICNamesFromSheet() {
         try {
-            const response = await fetch(WEB_APP_URL + '?action=getPIC');
+            const response = await fetch(WEB_APP_URL + '?action=getPIC', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success' && result.names && result.names.length > 0) {
                 picNames = result.names;
             } else {
                 picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
-                await savePICNamesToSheet(picNames);
+                savePICNamesToSheet(picNames);
             }
-        } catch (error) {
-            console.error('Error loading PIC names:', error);
+        } catch (e) {
+            console.error('Error loading PIC names:', e);
             picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
         }
         populatePicDropdowns();
         updatePICFilters();
-        return picNames;
     }
 
     async function savePICNamesToSheet(names) {
         try {
-            const encodedNames = encodeURIComponent(JSON.stringify(names));
-            await fetch(WEB_APP_URL + '?action=savePIC&names=' + encodedNames, { method: 'GET', mode: 'no-cors' });
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'savePIC',
+                    names: names
+                })
+            });
             return true;
-        } catch (error) { return false; }
+        } catch (e) {
+            console.error('Error saving PIC names:', e);
+            return false;
+        }
     }
 
     function populatePicDropdowns() {
-        const select = document.getElementById('training_pic');
-        if (!select) return;
-        const currentValue = select.value;
-        select.innerHTML = '<option value="">Select Person...</option>';
-        picNames.forEach(name => {
-            const opt = document.createElement('option');
-            opt.value = name;
-            opt.textContent = name;
-            select.appendChild(opt);
-        });
-        if (currentValue && picNames.includes(currentValue)) select.value = currentValue;
-    }
-
-    function updatePICFilters() {
-        ['filterPIC', 'chartPICFilter'].forEach(id => {
-            const sel = document.getElementById(id);
-            if (!sel) return;
-            const curr = sel.value;
-            sel.innerHTML = '<option value="all">All Personnel</option>';
+        const select = document.getElementById('plan_pic');
+        if (select) {
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">Select Person...</option>';
             picNames.forEach(name => {
                 const opt = document.createElement('option');
                 opt.value = name;
                 opt.textContent = name;
-                sel.appendChild(opt);
+                select.appendChild(opt);
             });
-            if (curr && picNames.includes(curr)) sel.value = curr;
-            else sel.value = 'all';
+            if (currentValue && picNames.includes(currentValue)) {
+                select.value = currentValue;
+            }
+        }
+    }
+
+    function updatePICFilters() {
+        ['filterPIC', 'chartPICFilter'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const current = el.value;
+            el.innerHTML = '<option value="all">All Personnel</option>';
+            picNames.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                el.appendChild(opt);
+            });
+            if (current && picNames.includes(current)) el.value = current;
+            else el.value = 'all';
         });
     }
 
     // ============================================
-    // ADD PERSON MODAL
+    // ADD / DELETE PERSON
     // ============================================
     const addPersonModal = document.getElementById('addPersonModal');
     const newPersonName = document.getElementById('newPersonName');
@@ -1910,15 +1958,25 @@
         addPersonModal.classList.add('active');
         setTimeout(() => newPersonName.focus(), 100);
     }
-    function closeAddPersonModal() { addPersonModal.classList.remove('active'); }
+
+    function closeAddPersonModal() {
+        addPersonModal.classList.remove('active');
+    }
 
     document.getElementById('closeAddPersonBtn').addEventListener('click', closeAddPersonModal);
-    addPersonModal.addEventListener('click', function(e) { if (e.target === addPersonModal) closeAddPersonModal(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAddPersonModal(); });
+    addPersonModal.addEventListener('click', function(e) {
+        if (e.target === addPersonModal) closeAddPersonModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeAddPersonModal();
+    });
 
     document.getElementById('confirmAddPerson').addEventListener('click', async function() {
         const name = newPersonName.value.trim();
-        if (!name) { personError.classList.add('show'); return; }
+        if (!name) {
+            personError.classList.add('show');
+            return;
+        }
         personError.classList.remove('show');
         if (picNames.includes(name)) {
             personError.textContent = 'This name already exists.';
@@ -1926,38 +1984,45 @@
             return;
         }
         picNames.push(name);
+        await savePICNamesToSheet(picNames);
         populatePicDropdowns();
         updatePICFilters();
-        await savePICNamesToSheet(picNames);
-        document.getElementById('training_pic').value = name;
+        document.getElementById('plan_pic').value = name;
         showToast('✅ Success', `"${name}" added to Personnel In-Charge list.`, 'success');
         closeAddPersonModal();
     });
 
     newPersonName.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('confirmAddPerson').click(); }
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('confirmAddPerson').click();
+        }
     });
 
-    // ============================================
-    // DELETE PERSON
-    // ============================================
     async function deleteSelectedPerson() {
-        const select = document.getElementById('training_pic');
-        const selectedName = select.value;
-        if (!selectedName) { showToast('⚠️ Warning', 'Please select a person to delete.', 'warning'); return; }
-        if (!confirm('Are you sure you want to remove "' + selectedName + '" from the list?')) return;
-        const index = picNames.indexOf(selectedName);
-        if (index > -1) {
-            picNames.splice(index, 1);
+        const select = document.getElementById('plan_pic');
+        const selected = select.value;
+        if (!selected) {
+            showToast('⚠️ Warning', 'Please select a person to delete.', 'warning');
+            return;
+        }
+        if (!confirm('Remove "' + selected + '" from list?')) return;
+
+        const idx = picNames.indexOf(selected);
+        if (idx > -1) {
+            picNames.splice(idx, 1);
+            await savePICNamesToSheet(picNames);
             populatePicDropdowns();
             updatePICFilters();
-            await savePICNamesToSheet(picNames);
-            showToast('🗑️ Removed', `"${selectedName}" removed.`, 'info');
+            document.getElementById('plan_pic').value = '';
+            showToast('🗑️ Removed', `"${selected}" removed from personnel list.`, 'success');
+        } else {
+            showToast('❌ Error', 'Person not found in list.', 'error');
         }
     }
 
-    document.getElementById('training_addPic').addEventListener('click', openAddPersonModal);
-    document.getElementById('training_deletePic').addEventListener('click', deleteSelectedPerson);
+    document.getElementById('plan_addPic').addEventListener('click', openAddPersonModal);
+    document.getElementById('plan_deletePic').addEventListener('click', deleteSelectedPerson);
 
     // ============================================
     // PSGC DATA
@@ -2075,116 +2140,69 @@
     }
 
     // ============================================
-    // DOM REFS & STATE
+    // FORM HANDLING
     // ============================================
-    const trainingForm = document.getElementById('trainingForm');
+    const planForm = document.getElementById('planForm');
     const statusDiv = document.getElementById('statusMessage');
     const statusText = document.getElementById('statusText');
-    let allRecords = [];
-    let filteredRecords = [];
-    let chartInstance = null;
-    let currentChartType = 'category';
-    let editingRowNumber = null;
-    const modalBodyContent = document.getElementById('modalBodyContent');
 
-    // ===== NEW: Training Category Filter =====
-    const filterCategory = document.getElementById('filterCategory');
-
-    function setStatus(message, type = 'info') {
-        statusText.textContent = message;
-        statusDiv.className = 'status-message';
+    function setStatus(msg, type = 'info') {
+        statusText.textContent = msg;
+        statusDiv.className = 'pm-status-message';
         const icon = statusDiv.querySelector('i');
         if (type === 'success') { statusDiv.classList.add('success'); icon.className = 'fas fa-check-circle'; }
         else if (type === 'error') { statusDiv.classList.add('error'); icon.className = 'fas fa-exclamation-circle'; }
         else { icon.className = 'fas fa-info-circle'; }
     }
 
-    // City dependency
-    const trainingProvince = document.getElementById('training_province');
-    const trainingCity = document.getElementById('training_cityMun');
+    const planProvince = document.getElementById('plan_province');
+    const planCity = document.getElementById('plan_cityMun');
 
-    trainingProvince.addEventListener('change', function() {
+    planProvince.addEventListener('change', function() {
         const province = this.value;
-        trainingCity.innerHTML = '<option value="">Select City/Municipality...</option>';
+        planCity.innerHTML = '<option value="">Select City/Municipality...</option>';
         if (!province) return;
         const cities = getCitiesByProvince(province);
         cities.forEach(({ city }) => {
             const opt = document.createElement('option');
             opt.value = city;
             opt.textContent = city;
-            trainingCity.appendChild(opt);
+            planCity.appendChild(opt);
         });
     });
 
     // ============================================
-    // FORMAT DATE HELPER
+    // SUBMIT
     // ============================================
-    function formatDate(dateValue) {
-        if (!dateValue) return '-';
-        if (typeof dateValue === 'number') {
-            const d = new Date((dateValue - 25569) * 86400 * 1000);
-            return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();
-        }
-        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) return dateValue;
-        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-            const p = dateValue.split('-');
-            return p[1]+'/'+p[2]+'/'+p[0];
-        }
-        try {
-            const d = new Date(dateValue);
-            if (!isNaN(d.getTime())) {
-                return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();
-            }
-        } catch(e) {}
-        return dateValue || '-';
-    }
-
-    // ============================================
-    // GET FORM DATA - Updated with input fields
-    // ============================================
-    function getFormData() {
-        const getVal = (id) => document.getElementById('training_'+id).value.trim();
-        return {
-            formType: 'Training_CLUP/ZO',
-            region: getVal('region'),
-            province: getVal('province'),
-            cityMun: getVal('cityMun'),
-            trainingTitle: getVal('title'),
-            trainingTopics: getVal('topics'),
-            trainingCategory: getVal('category'),
-            startDate: getVal('startDate'),
-            endDate: getVal('endDate'),
-            participants: getVal('participants'),
-            budget: getVal('budget'),
-            partner: getVal('partner'),
-            reportingMonth: getVal('reportingMonth'),
-            remarks: getVal('remarks') || 'N/A',
-            linkMov: getVal('linkMov') || '',
-            personnelInCharge: getVal('pic')
-        };
-    }
-
-    // ============================================
-    // VALIDATE & SUBMIT
-    // ============================================
-    function validateForm(payload) {
-        const required = ['region','province','cityMun','trainingTitle','trainingTopics','trainingCategory','startDate','endDate','participants','budget','partner','reportingMonth','personnelInCharge'];
-        for (const f of required) {
-            if (!payload[f]) {
-                showToast('❌ Validation Error', 'Please fill in all required fields.', 'error');
-                return false;
-            }
-        }
-        return true;
-    }
-
-    trainingForm.addEventListener('submit', async function(e) {
+    planForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const payload = getFormData();
-        if (!validateForm(payload)) return;
-        const btn = document.getElementById('training_submitBtn');
+        const payload = {
+            formType: 'Plan_Monitoring',
+            region: document.getElementById('plan_region').value,
+            province: document.getElementById('plan_province').value,
+            cityMun: document.getElementById('plan_cityMun').value,
+            typeMonitoring: document.getElementById('plan_typeMonitoring').value,
+            initialStatus: document.getElementById('plan_initialStatus').value,
+            updatedStatus: document.getElementById('plan_updatedStatus').value,
+            dateConducted: document.getElementById('plan_dateConducted').value,
+            reportingMonth: document.getElementById('plan_reportingMonth').value,
+            remarks: document.getElementById('plan_remarks').value || 'N/A',
+            linkMov: document.getElementById('plan_linkMov').value || '',
+            personnelInCharge: document.getElementById('plan_pic').value
+        };
+
+        const required = ['region','province','cityMun','typeMonitoring','initialStatus','updatedStatus','dateConducted','reportingMonth','personnelInCharge'];
+        for (const f of required) {
+            if (!payload[f]) { 
+                showToast('❌ Validation Error', 'Please fill in all required fields.', 'error'); 
+                return; 
+            }
+        }
+
+        const btn = document.getElementById('plan_submitBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span> Saving...';
+        btn.innerHTML = '<span class="pm-spinner"></span> Saving...';
+
         try {
             await fetch(WEB_APP_URL, {
                 method: 'POST',
@@ -2192,119 +2210,138 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            showToast('✅ Success', 'Training record saved to Google Sheet!', 'success');
-            trainingForm.reset();
-            document.getElementById('training_startDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('training_endDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('training_region').value = 'Region_06';
-            document.getElementById('training_province').value = '';
-            document.getElementById('training_cityMun').innerHTML = '<option value="">Select City/Municipality...</option>';
-        } catch (error) {
-            showToast('❌ Error', 'Failed to save: ' + error.message, 'error');
+            showToast('✅ Success', 'Record saved to Google Sheet!', 'success');
+            planForm.reset();
+            document.getElementById('plan_dateConducted').value = new Date().toISOString().split('T')[0];
+            document.getElementById('plan_region').value = 'Region_06';
+            planCity.innerHTML = '<option value="">Select City/Municipality...</option>';
+            document.getElementById('plan_reportingMonth').value = new Date().toLocaleString('default', { month: 'long' });
+            
+            if (recordsModal.classList.contains('active')) {
+                await loadRecords();
+            }
+        } catch (err) {
+            console.error('Save error:', err);
+            showToast('❌ Error', 'Failed to save. Please check your connection.', 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet (Training_CLUP/ZO)</span>';
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet</span>';
         }
     });
 
     // ============================================
-    // RECORDS MODAL
+    // MODALS
     // ============================================
+    let allRecords = [];
+    let filteredRecords = [];
+    let editingRowNumber = null;
+    let chartInstance = null;
+    let currentChartType = 'status';
+
     const recordsModal = document.getElementById('recordsModal');
-    const searchInput = document.getElementById('searchInput');
-    const displayCount = document.getElementById('displayCount');
-    const totalCount = document.getElementById('totalCount');
-    const footerTotalCount = document.getElementById('footerTotalCount');
-    const filterProvince = document.getElementById('filterProvince');
-    const filterReportingMonth = document.getElementById('filterReportingMonth');
-    const filterPIC = document.getElementById('filterPIC');
+    const modalBody = document.getElementById('modalBody');
 
     function closeRecordsModal() { recordsModal.classList.remove('active'); document.body.style.overflow = 'auto'; editingRowNumber = null; }
-    function openRecordsModal() { recordsModal.classList.add('active'); document.body.style.overflow = 'hidden'; document.getElementById('recordsModalTitle').textContent = 'Training Records'; loadRecords(); }
+    function openRecordsModal() { recordsModal.classList.add('active'); document.body.style.overflow = 'hidden'; loadRecords(); }
 
     document.getElementById('closeModalBtn').addEventListener('click', closeRecordsModal);
     document.getElementById('closeModalBtn2').addEventListener('click', closeRecordsModal);
     recordsModal.addEventListener('click', function(e) { if (e.target === recordsModal) closeRecordsModal(); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeRecordsModal(); });
 
-    function applyRecordFilters() {
-        const provinceFilter = filterProvince.value;
-        const monthFilter = filterReportingMonth.value;
-        const categoryFilter = filterCategory.value;
-        const picFilter = filterPIC.value;
-        
-        filteredRecords = allRecords.filter(record => {
-            if (provinceFilter !== 'all' && (record.Province || '') !== provinceFilter) return false;
-            if (monthFilter !== 'all' && (record['Reporting Month'] || '') !== monthFilter) return false;
-            if (categoryFilter !== 'all' && (record['Training Category'] || '') !== categoryFilter) return false;
-            if (picFilter !== 'all' && (record['Personnel In-Charge'] || '') !== picFilter) return false;
-            return true;
-        });
-        renderTable(filteredRecords);
-        displayCount.textContent = filteredRecords.length;
-        footerTotalCount.textContent = filteredRecords.length;
-        editingRowNumber = null;
-    }
-
-    document.getElementById('applyRecordFilter').addEventListener('click', applyRecordFilters);
-    document.getElementById('resetRecordFilter').addEventListener('click', function() {
-        filterProvince.value = 'all';
-        filterReportingMonth.value = 'all';
-        filterCategory.value = 'all';
-        filterPIC.value = 'all';
-        applyRecordFilters();
-    });
-
     async function loadRecords() {
-        modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;">
+        modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;">
             <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
             <p style="margin-top: 1rem;">Loading records...</p>
         </div>`;
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=Training_CLUP/ZO');
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') {
                 allRecords = result.records || [];
                 filteredRecords = [...allRecords];
-                totalCount.textContent = allRecords.length;
-                footerTotalCount.textContent = allRecords.length;
-                renderTable(allRecords);
-                displayCount.textContent = allRecords.length;
+                document.getElementById('totalCount').textContent = allRecords.length;
+                document.getElementById('footerTotalCount').textContent = allRecords.length;
+                await renderTable(allRecords);
+                document.getElementById('displayCount').textContent = allRecords.length;
                 editingRowNumber = null;
             } else {
-                throw new Error(result.message || 'Failed to load records');
+                modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">
+                    Error: ${result.message || 'Failed to load records'}
+                </div>`;
             }
-        } catch (error) {
-            modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">
-                <i class="fas fa-exclamation-circle" style="font-size: 2rem;"></i>
-                <p style="margin-top: 1rem;">Failed to load records: ${error.message}</p>
-                <button onclick="loadRecords()" style="margin-top: 1rem; padding: 0.5rem 1.5rem; border-radius: 30px; background: #2563eb; color: white; border: none; cursor: pointer;">
+        } catch (e) {
+            console.error('Load records error:', e);
+            modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">
+                Failed to load records. Please refresh and try again.
+                <br><br>
+                <button onclick="loadRecords()" style="padding:0.5rem 1.5rem; border:none; border-radius:8px; background:#2563eb; color:white; cursor:pointer;">
                     <i class="fas fa-sync"></i> Retry
                 </button>
             </div>`;
         }
     }
 
-    // ===== RENDER TABLE =====
-    function renderTable(records) {
+    // ============================================
+    // FORMAT DATE
+    // ============================================
+    function formatDate(dateValue) {
+        if (!dateValue) return '-';
+        
+        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) {
+            return dateValue;
+        }
+        
+        if (typeof dateValue === 'number') {
+            const d = new Date((dateValue - 25569) * 86400 * 1000);
+            return String(d.getMonth() + 1).padStart(2, '0') + '/' + 
+                   String(d.getDate()).padStart(2, '0') + '/' + 
+                   d.getFullYear();
+        }
+        
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            const parts = dateValue.split('-');
+            return parts[1] + '/' + parts[2] + '/' + parts[0];
+        }
+        
+        if (dateValue instanceof Date) {
+            return String(dateValue.getMonth() + 1).padStart(2, '0') + '/' + 
+                   String(dateValue.getDate()).padStart(2, '0') + '/' + 
+                   dateValue.getFullYear();
+        }
+        
+        try {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                return String(d.getMonth() + 1).padStart(2, '0') + '/' + 
+                       String(d.getDate()).padStart(2, '0') + '/' + 
+                       d.getFullYear();
+            }
+        } catch (e) {}
+        
+        return dateValue || '-';
+    }
+
+    // ============================================
+    // RENDER TABLE
+    // ============================================
+    async function renderTable(records) {
+        if (picNames.length === 0) await loadPICNamesFromSheet();
+        if (picNames.length === 0) picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+
         if (!records || records.length === 0) {
-            modalBodyContent.innerHTML = `<table><thead><tr><th>#</th><th class="col-region">Region</th><th class="col-province">Province</th><th class="col-city">City/Municipality</th><th class="col-title">Training Title</th><th class="col-topics">Training Topics</th><th class="col-category">Category</th><th class="col-date">Start Date</th><th class="col-date">End Date</th><th class="col-participants">Participants</th><th class="col-budget">Budget</th><th class="col-partner">Partner</th><th class="col-month">Reporting Month</th><th class="col-personnel">Personnel</th><th class="col-actions">Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="15">📭 No training records found.</td></tr></tbody></table>`;
-            displayCount.textContent = '0';
+            modalBody.innerHTML = `<table><thead><tr><th>#</th><th class="col-province">Province</th><th class="col-city">City/Municipality</th><th class="col-type">Type</th><th class="col-status">Initial</th><th class="col-status">Updated</th><th class="col-date">Date Conducted</th><th class="col-month">Reporting Month</th><th class="col-personnel">Personnel</th><th class="col-actions">Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="10">📭 No records found.</td></tr></tbody></table>`;
+            document.getElementById('displayCount').textContent = '0';
             return;
         }
 
         const columns = [
-            { key: 'Region', label: 'Region', cls: 'col-region' },
             { key: 'Province', label: 'Province', cls: 'col-province' },
             { key: 'City/Municipality', label: 'City/Municipality', cls: 'col-city' },
-            { key: 'Training Title', label: 'Training Title', cls: 'col-title' },
-            { key: 'Training Topics', label: 'Training Topics', cls: 'col-topics' },
-            { key: 'Training Category', label: 'Category', cls: 'col-category' },
-            { key: 'Start Date of Training Conducted', label: 'Start Date', cls: 'col-date' },
-            { key: 'End Date of Training Conducted', label: 'End Date', cls: 'col-date' },
-            { key: 'No. of Participants', label: 'Participants', cls: 'col-participants' },
-            { key: 'Budget / Funding Source', label: 'Budget', cls: 'col-budget' },
-            { key: 'Partner Agency / Organization', label: 'Partner', cls: 'col-partner' },
+            { key: 'Type of Monitoring', label: 'Type', cls: 'col-type' },
+            { key: 'Initial Status', label: 'Initial', cls: 'col-status' },
+            { key: 'Updated Status', label: 'Updated', cls: 'col-status' },
+            { key: 'Date of Monitoring Conducted (MM/DD/YYYY)', label: 'Date Conducted', cls: 'col-date' },
             { key: 'Reporting Month', label: 'Reporting Month', cls: 'col-month' },
             { key: 'Personnel In-Charge', label: 'Personnel', cls: 'col-personnel' }
         ];
@@ -2318,47 +2355,57 @@
             const actualRow = index + 2;
             const isEditing = editingRowNumber === actualRow;
 
-            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" style="${isEditing ? 'background:#fef3c7 !important;' : ''}">`;
+            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" data-record-index="${index}">`;
             html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; text-align:center;">${rowNum}</td>`;
 
             columns.forEach(col => {
                 let value = record[col.key] || '-';
-                if (col.key === 'Start Date of Training Conducted' || col.key === 'End Date of Training Conducted') {
+                
+                if (col.key === 'Date of Monitoring Conducted (MM/DD/YYYY)') {
                     value = formatDate(value);
                 }
 
                 if (isEditing) {
-                    const fieldName = col.key.replace(/ /g,'_').replace(/\//g,'_').replace(/\(/g,'').replace(/\)/g,'').replace(/"/g,'');
-
-                    if (col.key === 'Personnel In-Charge') {
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50; min-width:90px;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:80px; max-width:120px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
-                                <option value="">Select...</option>`;
-                        picNames.forEach(name => {
-                            html += `<option value="${name}" ${name === value ? 'selected' : ''}>${name}</option>`;
-                        });
+                    const fieldName = col.key.replace(/ /g, '_').replace(/\//g, '_').replace(/\(/g, '').replace(/\)/g, '');
+                    
+                    if (col.key === 'Province') {
+                        const provinces = ['Aklan','Antique','Capiz','Guimaras','Iloilo'];
+                        html += `<td style="position:relative; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; z-index:1000; position:relative;">`;
+                        provinces.forEach(p => { html += `<option value="${p}" ${p === value ? 'selected' : ''}>${p}</option>`; });
+                        html += `</select></td>`;
+                    } else if (col.key === 'City/Municipality') {
+                        html += `<td><input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:80px; max-width:130px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;"></td>`;
+                    } else if (col.key === 'Type of Monitoring') {
+                        html += `<td style="position:relative; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; z-index:1000; position:relative;">
+                            <option value="Table" ${value === 'Table' ? 'selected' : ''}>Table</option>
+                            <option value="Field" ${value === 'Field' ? 'selected' : ''}>Field</option>
+                        </select></td>`;
+                    } else if (col.key === 'Initial Status' || col.key === 'Updated Status') {
+                        const statuses = ['Pre-Phase','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
+                        html += `<td style="position:relative; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:80px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; z-index:1000; position:relative;">`;
+                        statuses.forEach(s => { html += `<option value="${s}" ${s === value ? 'selected' : ''}>${s}</option>`; });
                         html += `</select></td>`;
                     } else if (col.key === 'Reporting Month') {
                         const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">`;
-                        months.forEach(m => html += `<option value="${m}" ${m === value ? 'selected' : ''}>${m}</option>`);
+                        html += `<td style="position:relative; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; z-index:1000; position:relative;">`;
+                        months.forEach(m => { html += `<option value="${m}" ${m === value ? 'selected' : ''}>${m}</option>`; });
                         html += `</select></td>`;
-                    } else if (col.key === 'Training Category') {
-                        const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD'];
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
-                            <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:110px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
-                                <option value="">Select...</option>`;
-                        cats.forEach(c => html += `<option value="${c}" ${c === value ? 'selected' : ''}>${c}</option>`);
+                    } else if (col.key === 'Date of Monitoring Conducted (MM/DD/YYYY)') {
+                        let d = value;
+                        if (/^\d{2}\/\d{2}\/\d{4}$/.test(d)) {
+                            const parts = d.split('/');
+                            d = parts[2] + '-' + parts[0] + '-' + parts[1];
+                        }
+                        html += `<td><input type="date" name="${fieldName}" data-key="${col.key}" value="${d}" style="width:100%; min-width:70px; max-width:95px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;"></td>`;
+                    } else if (col.key === 'Personnel In-Charge') {
+                        html += `<td style="position:relative; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:80px; max-width:120px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; z-index:1000; position:relative;"><option value="">Select...</option>`;
+                        picNames.forEach(n => { html += `<option value="${n}" ${n === value ? 'selected' : ''}>${n}</option>`; });
                         html += `</select></td>`;
                     } else {
-                        // For text fields (Training Title, Topics, Budget, Partner)
-                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;">
-                            <input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; max-width:120px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">
-                        </td>`;
+                        html += `<td><input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; max-width:130px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;"></td>`;
                     }
                 } else {
-                    if (value.length > 18) value = value.substring(0,18)+'…';
+                    if (value.length > 18) value = value.substring(0, 18) + '…';
                     html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${value}</td>`;
                 }
             });
@@ -2375,88 +2422,198 @@
         });
 
         html += `</tbody></table>`;
-        modalBodyContent.innerHTML = html;
-        displayCount.textContent = records.length;
+        modalBody.innerHTML = html;
+        document.getElementById('displayCount').textContent = records.length;
     }
 
-    window.startEditRow = function(rowNumber) { editingRowNumber = rowNumber; applyRecordFilters(); };
+    window.startEditRow = function(row) { editingRowNumber = row; applyRecordFilters(); };
     window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
 
     window.saveEditRow = async function(rowNumber) {
         const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
-        if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
+        if (saveBtn) { 
+            saveBtn.classList.add('loading'); 
+            saveBtn.disabled = true; 
+        }
+        
         const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
-        if (!row) { showToast('❌ Error', 'Row not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
+        if (!row) { 
+            showToast('❌ Error', 'Row not found.', 'error'); 
+            if (saveBtn) { 
+                saveBtn.classList.remove('loading'); 
+                saveBtn.disabled = false; 
+            } 
+            return; 
+        }
+
         const inputs = row.querySelectorAll('input, select, textarea');
         const updatedData = {};
-        inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
-        const recordIndex = rowNumber - 2;
-        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
-        const originalRecord = filteredRecords[recordIndex];
+        inputs.forEach(input => { 
+            const key = input.dataset.key; 
+            if (key) updatedData[key] = input.value; 
+        });
+
+        const recordIndex = parseInt(row.dataset.recordIndex);
+        if (isNaN(recordIndex) || recordIndex < 0 || recordIndex >= filteredRecords.length) { 
+            showToast('❌ Error', 'Record not found in list.', 'error'); 
+            if (saveBtn) { 
+                saveBtn.classList.remove('loading'); 
+                saveBtn.disabled = false; 
+            } 
+            return; 
+        }
+
+        const original = filteredRecords[recordIndex];
+        const sheetRowNumber = recordIndex + 2;
+
         const payload = {
             action: 'updateRecord',
-            rowNumber: rowNumber,
-            formType: 'Training_CLUP/ZO',
+            rowNumber: sheetRowNumber,
+            formType: 'Plan_Monitoring',
             data: {
-                region: updatedData['Region'] || originalRecord['Region'] || '',
-                province: updatedData['Province'] || originalRecord['Province'] || '',
-                cityMun: updatedData['City/Municipality'] || originalRecord['City/Municipality'] || '',
-                trainingTitle: updatedData['Training Title'] || originalRecord['Training Title'] || '',
-                trainingTopics: updatedData['Training Topics'] || originalRecord['Training Topics'] || '',
-                trainingCategory: updatedData['Training Category'] || originalRecord['Training Category'] || '',
-                startDate: updatedData['Start Date of Training Conducted'] || originalRecord['Start Date of Training Conducted'] || '',
-                endDate: updatedData['End Date of Training Conducted'] || originalRecord['End Date of Training Conducted'] || '',
-                participants: updatedData['No. of Participants'] || originalRecord['No. of Participants'] || 0,
-                budget: updatedData['Budget / Funding Source'] || originalRecord['Budget / Funding Source'] || '',
-                partner: updatedData['Partner Agency / Organization'] || originalRecord['Partner Agency / Organization'] || '',
-                reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
-                remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
-                linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
-                personnelInCharge: updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || ''
+                province: updatedData['Province'] || original['Province'] || '',
+                cityMun: updatedData['City/Municipality'] || original['City/Municipality'] || '',
+                typeMonitoring: updatedData['Type of Monitoring'] || original['Type of Monitoring'] || '',
+                initialStatus: updatedData['Initial Status'] || original['Initial Status'] || '',
+                updatedStatus: updatedData['Updated Status'] || original['Updated Status'] || '',
+                dateConducted: updatedData['Date of Monitoring Conducted (MM/DD/YYYY)'] || original['Date of Monitoring Conducted (MM/DD/YYYY)'] || '',
+                reportingMonth: updatedData['Reporting Month'] || original['Reporting Month'] || '',
+                remarks: updatedData['Remarks'] || original['Remarks'] || 'N/A',
+                linkMov: updatedData['Link to MOV'] || original['Link to MOV'] || '',
+                personnelInCharge: updatedData['Personnel In-Charge'] || original['Personnel In-Charge'] || ''
             }
         };
+
         try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
             showToast('✅ Success', 'Record updated!', 'success');
             editingRowNumber = null;
             await loadRecords();
-        } catch (error) { showToast('❌ Error', 'Failed: ' + error.message, 'error'); }
-        finally { if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } }
+        } catch (e) { 
+            console.error('Update error:', e);
+            showToast('❌ Error', 'Failed to update: ' + e.message, 'error'); 
+        }
+        finally { 
+            if (saveBtn) { 
+                saveBtn.classList.remove('loading'); 
+                saveBtn.disabled = false; 
+            } 
+        }
     };
 
     window.deleteRecord = async function(rowNumber) {
-        if (!confirm('Delete this record? This cannot be undone.')) return;
+        if (!confirm('Delete this record permanently?')) return;
+        
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
-        if (deleteBtn) { deleteBtn.classList.add('loading'); deleteBtn.disabled = true; }
+        if (deleteBtn) { 
+            deleteBtn.classList.add('loading'); 
+            deleteBtn.disabled = true; 
+        }
+        
+        const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
+        if (!row) {
+            showToast('❌ Error', 'Row not found.', 'error');
+            if (deleteBtn) {
+                deleteBtn.classList.remove('loading');
+                deleteBtn.disabled = false;
+            }
+            return;
+        }
+
+        const recordIndex = parseInt(row.dataset.recordIndex);
+        if (isNaN(recordIndex) || recordIndex < 0 || recordIndex >= filteredRecords.length) {
+            showToast('❌ Error', 'Record not found.', 'error');
+            if (deleteBtn) {
+                deleteBtn.classList.remove('loading');
+                deleteBtn.disabled = false;
+            }
+            return;
+        }
+
+        const sheetRowNumber = recordIndex + 2;
+        
         try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'Training_CLUP/ZO' }) });
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    action: 'deleteRecord', 
+                    rowNumber: sheetRowNumber, 
+                    formType: 'Plan_Monitoring' 
+                })
+            });
+            
             showToast('🗑️ Deleted', 'Record deleted.', 'success');
             editingRowNumber = null;
             await loadRecords();
-        } catch (error) { showToast('❌ Error', 'Failed: ' + error.message, 'error'); }
-        finally { if (deleteBtn) { deleteBtn.classList.remove('loading'); deleteBtn.disabled = false; } }
+        } catch (e) { 
+            console.error('Delete error:', e);
+            showToast('❌ Error', 'Delete failed: ' + e.message, 'error'); 
+        }
+        finally { 
+            if (deleteBtn) { 
+                deleteBtn.classList.remove('loading'); 
+                deleteBtn.disabled = false; 
+            } 
+        }
     };
 
-    searchInput.addEventListener('input', function() {
+    // ============================================
+    // FILTERS & SEARCH
+    // ============================================
+    async function applyRecordFilters() {
+        const provinceFilter = document.getElementById('filterProvince').value;
+        const monthFilter = document.getElementById('filterReportingMonth').value;
+        const picFilter = document.getElementById('filterPIC').value;
+
+        filteredRecords = allRecords.filter(r => {
+            if (provinceFilter !== 'all' && (r.Province || '') !== provinceFilter) return false;
+            if (monthFilter !== 'all' && (r['Reporting Month'] || '') !== monthFilter) return false;
+            if (picFilter !== 'all' && (r['Personnel In-Charge'] || '') !== picFilter) return false;
+            return true;
+        });
+
+        await renderTable(filteredRecords);
+        document.getElementById('displayCount').textContent = filteredRecords.length;
+        document.getElementById('footerTotalCount').textContent = filteredRecords.length;
+        editingRowNumber = null;
+    }
+
+    document.getElementById('applyRecordFilter').addEventListener('click', applyRecordFilters);
+    document.getElementById('resetRecordFilter').addEventListener('click', function() {
+        document.getElementById('filterProvince').value = 'all';
+        document.getElementById('filterReportingMonth').value = 'all';
+        document.getElementById('filterPIC').value = 'all';
+        applyRecordFilters();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
         const term = this.value.trim().toLowerCase();
         if (!term) { applyRecordFilters(); return; }
         const filtered = filteredRecords.filter(r => {
-            return (r.Province||'').toLowerCase().includes(term) ||
-                   (r['City/Municipality']||'').toLowerCase().includes(term) ||
-                   (r['Training Title']||'').toLowerCase().includes(term);
+            const province = (r.Province || '').toLowerCase();
+            const city = (r['City/Municipality'] || '').toLowerCase();
+            return province.includes(term) || city.includes(term);
         });
         renderTable(filtered);
-        displayCount.textContent = filtered.length;
+        document.getElementById('displayCount').textContent = filtered.length;
         editingRowNumber = null;
     });
 
     // ============================================
-    // CHART MODAL
+    // CHART
     // ============================================
     const chartModal = document.getElementById('chartModal');
 
     function closeChartModal() { chartModal.classList.remove('active'); document.body.style.overflow = 'auto'; if (chartInstance) { chartInstance.destroy(); chartInstance = null; } }
-    function openChartModal() { chartModal.classList.add('active'); document.body.style.overflow = 'hidden'; document.getElementById('chartModalTitle').textContent = 'Training Analytics'; updatePICFilters(); loadChartData(); }
+    function openChartModal() { chartModal.classList.add('active'); document.body.style.overflow = 'hidden'; loadChartData(); }
 
     document.getElementById('closeChartBtn').addEventListener('click', closeChartModal);
     document.getElementById('closeChartBtn2').addEventListener('click', closeChartModal);
@@ -2477,111 +2634,113 @@
         container.innerHTML = `<div class="chart-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading chart data...</p></div>`;
         document.getElementById('chartSummary').style.display = 'none';
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=Training_CLUP/ZO');
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') renderChart(result.records || []);
-            else container.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error: ${result.message}</div>`;
-        } catch (error) {
-            container.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed: ${error.message}</div>`;
+            else container.innerHTML = `<div style="text-align:center; padding:2rem; color:#dc2626;">Error: ${result.message}</div>`;
+        } catch (e) {
+            container.innerHTML = `<div style="text-align:center; padding:2rem; color:#dc2626;">Failed: ${e.message}</div>`;
         }
     }
 
     function renderChart(records) {
         const container = document.getElementById('chartContainer');
         const summary = document.getElementById('chartSummary');
+
         const monthFilter = document.getElementById('chartMonthFilter').value;
         const yearFilter = document.getElementById('chartYearFilter').value;
-        const categoryFilter = document.getElementById('chartCategoryFilter').value;
         const provinceFilter = document.getElementById('chartProvinceFilter').value;
-        const picFilter = document.getElementById('chartPICFilter')?.value || 'all';
+        const picFilter = document.getElementById('chartPICFilter').value;
 
         let filtered = records;
         if (monthFilter !== 'all') filtered = filtered.filter(r => (r['Reporting Month'] || '') === monthFilter);
-        if (yearFilter) filtered = filtered.filter(r => (r['Start Date of Training Conducted'] || '').includes(yearFilter));
-        if (categoryFilter !== 'all') filtered = filtered.filter(r => (r['Training Category'] || '') === categoryFilter);
+        if (yearFilter) filtered = filtered.filter(r => (r['Date of Monitoring Conducted (MM/DD/YYYY)'] || '').includes(yearFilter));
         if (provinceFilter !== 'all') filtered = filtered.filter(r => (r['Province'] || '') === provinceFilter);
         if (picFilter !== 'all') filtered = filtered.filter(r => (r['Personnel In-Charge'] || '') === picFilter);
 
         if (filtered.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding: 3rem; color: #94a3b8;"><i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i><p>No data for selected filters.</p></div>`;
+            container.innerHTML = `<div style="text-align:center; padding:3rem; color:#94a3b8;"><i class="fas fa-chart-pie" style="font-size:3rem; margin-bottom:1rem;"></i><p>No data for selected filters.</p></div>`;
             summary.style.display = 'none';
             return;
         }
 
         const months = new Set(filtered.map(r => r['Reporting Month']).filter(Boolean));
-        let totalParticipants = 0;
-        filtered.forEach(r => { const p = parseInt(r['No. of Participants']) || 0; totalParticipants += p; });
-
         document.getElementById('statTotal').textContent = filtered.length;
         document.getElementById('statMonths').textContent = months.size;
-        document.getElementById('statParticipants').textContent = totalParticipants;
 
         let labels, data, chartTitle, datasetLabel;
+        const statuses = ['Pre-Phase','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
 
-        if (currentChartType === 'category') {
-            const catCounts = {};
-            const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD'];
-            cats.forEach(c => catCounts[c] = 0);
-            filtered.forEach(r => { const cat = r['Training Category'] || 'Other'; if (catCounts.hasOwnProperty(cat)) catCounts[cat]++; else catCounts[cat] = 1; });
-            labels = Object.keys(catCounts).filter(k => catCounts[k] > 0);
-            data = labels.map(k => catCounts[k]);
-            chartTitle = 'Training Category Distribution';
-            datasetLabel = 'Number of Trainings';
-            document.getElementById('statCategories').textContent = labels.length;
-            let topCat = '-', topCount = 0;
-            labels.forEach((cat,i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
-            document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
-            renderBarChart(container, labels, data, chartTitle, datasetLabel);
+        if (currentChartType === 'status') {
+            const counts = {};
+            statuses.forEach(s => counts[s] = 0);
+            filtered.forEach(r => {
+                const s = r['Updated Status'] || 'None Indicated';
+                if (counts.hasOwnProperty(s)) counts[s]++;
+                else counts[s] = 1;
+            });
+            labels = Object.keys(counts).filter(k => counts[k] > 0);
+            data = labels.map(k => counts[k]);
+            chartTitle = 'Status Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '');
+            datasetLabel = 'Count';
+            document.getElementById('statStatuses').textContent = labels.length;
+            let top = '-', topCount = 0;
+            labels.forEach((l,i) => { if (data[i] > topCount) { topCount = data[i]; top = l; } });
+            document.getElementById('statTopStatus').textContent = top + ' (' + topCount + ')';
+            renderBarChart(container, labels, data, chartTitle, datasetLabel, '#8b5cf6');
             summary.style.display = 'grid';
-            return;
-        } else if (currentChartType === 'monthly') {
-            const monthOrder = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-            const monthlyCounts = {};
-            monthOrder.forEach(m => monthlyCounts[m] = 0);
-            filtered.forEach(r => { const m = r['Reporting Month'] || ''; if (monthlyCounts.hasOwnProperty(m)) monthlyCounts[m]++; });
-            labels = monthOrder.filter(m => monthlyCounts[m] > 0);
-            data = labels.map(m => monthlyCounts[m]);
-            chartTitle = 'Monthly Training Trend' + (yearFilter ? ' - ' + yearFilter : '');
-            datasetLabel = 'Number of Trainings';
-            document.getElementById('statCategories').textContent = labels.length;
-            let topCat = '-', topCount = 0;
-            labels.forEach((cat,i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
-            document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
-            renderBarChart(container, labels, data, chartTitle, datasetLabel);
+        } else if (currentChartType === 'type') {
+            const counts = { Table: 0, Field: 0 };
+            filtered.forEach(r => {
+                const t = r['Type of Monitoring'] || 'Table';
+                if (counts.hasOwnProperty(t)) counts[t]++;
+                else counts[t] = 1;
+            });
+            labels = Object.keys(counts);
+            data = labels.map(k => counts[k]);
+            chartTitle = 'Monitoring Type Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '');
+            datasetLabel = 'Count';
+            document.getElementById('statStatuses').textContent = labels.length;
+            let top = '-', topCount = 0;
+            labels.forEach((l,i) => { if (data[i] > topCount) { topCount = data[i]; top = l; } });
+            document.getElementById('statTopStatus').textContent = top + ' (' + topCount + ')';
+            renderBarChart(container, labels, data, chartTitle, datasetLabel, '#10b981');
             summary.style.display = 'grid';
-            return;
         } else if (currentChartType === 'city') {
-            const cityData = {};
-            filtered.forEach(r => { const city = r['City/Municipality'] || 'Unknown'; cityData[city] = (cityData[city] || 0) + 1; });
-            labels = Object.keys(cityData).sort((a,b) => cityData[b] - cityData[a]);
-            data = labels.map(k => cityData[k]);
-            chartTitle = 'Trainings by City/Municipality';
-            datasetLabel = 'Number of Trainings';
-            document.getElementById('statCategories').textContent = labels.length;
-            let topCat = '-', topCount = 0;
-            labels.forEach((cat,i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
-            document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
-            renderBarChart(container, labels, data, chartTitle, datasetLabel);
+            const cityCounts = {};
+            filtered.forEach(r => {
+                const c = r['City/Municipality'] || 'Unknown';
+                cityCounts[c] = (cityCounts[c] || 0) + 1;
+            });
+            labels = Object.keys(cityCounts).sort((a,b) => cityCounts[b] - cityCounts[a]);
+            data = labels.map(k => cityCounts[k]);
+            chartTitle = 'By City/Municipality' + (monthFilter !== 'all' ? ' - ' + monthFilter : '');
+            datasetLabel = 'Count';
+            document.getElementById('statStatuses').textContent = labels.length;
+            let top = '-', topCount = 0;
+            labels.forEach((l,i) => { if (data[i] > topCount) { topCount = data[i]; top = l; } });
+            document.getElementById('statTopStatus').textContent = top + ' (' + topCount + ')';
+            renderBarChart(container, labels, data, chartTitle, datasetLabel, '#f59e0b');
             summary.style.display = 'grid';
-            return;
         }
     }
 
-    function renderBarChart(container, labels, data, chartTitle, datasetLabel) {
-        const colors = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316','#14b8a6','#6366f1'];
-        const backgroundColors = labels.map((_,i) => colors[i % colors.length]);
+    function renderBarChart(container, labels, data, chartTitle, datasetLabel, color) {
         container.innerHTML = `<div class="chart-container"><canvas id="chartCanvas"></canvas></div>`;
         const ctx = document.getElementById('chartCanvas').getContext('2d');
         if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+        const colors = labels.map((_, i) => {
+            const hues = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316'];
+            return hues[i % hues.length];
+        });
         chartInstance = new Chart(ctx, {
             type: 'bar',
-            data: { labels, datasets: [{ label: datasetLabel, data, backgroundColor: backgroundColors, borderColor: backgroundColors.map(c=>c+'99'), borderWidth: 2, borderRadius: 6 }] },
+            data: { labels, datasets: [{ label: datasetLabel, data, backgroundColor: colors, borderColor: colors.map(c => c + '99'), borderWidth: 2, borderRadius: 6 }] },
             options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' }, legend: { display: false },
-                tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' training(s)'; } } } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Count', font: { weight: 'bold' } } },
-                x: { title: { display: true, text: '', font: { weight: 'bold' } } } }
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' }, legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + ' record(s)' } } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Records', font: { weight: 'bold' } } }, x: { title: { display: true, text: '', font: { weight: 'bold' } } } }
             }
         });
     }
@@ -2590,7 +2749,6 @@
     document.getElementById('resetChartFilter').addEventListener('click', function() {
         document.getElementById('chartMonthFilter').value = 'all';
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
-        document.getElementById('chartCategoryFilter').value = 'all';
         document.getElementById('chartProvinceFilter').value = 'all';
         document.getElementById('chartPICFilter').value = 'all';
         loadChartData();
@@ -2607,8 +2765,9 @@
     });
 
     // ============================================
-    // NAVIGATION (from Techsamp.html)
+    // NAVIGATION & LOGIN (from Techsamp.html)
     // ============================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
     let currentUser = null;
 
     function checkSession() {
@@ -2644,7 +2803,7 @@
         return "viewer";
     }
 
-   function renderMainNavigation() {
+    function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
         let navHtml = `<a href="index.html">Home</a>`;
@@ -2658,15 +2817,16 @@
                     <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
                 </div></div>
                 <a href="Techsamp.html">Technical Assistance</a>
-                <a href="index.html">CLUP/ZO Trainings</a>
+                <a href="training.html">CLUP/ZO Trainings</a>
+				<a href="p_monitoring.html">Plan Monitoring</a>
                 <a href="lgu-info.html">LGU Information</a>
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>`;
-        } else {
-            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+        } else { 
+            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; 
         }
         container.innerHTML = navHtml;
         setTimeout(() => {
@@ -2714,7 +2874,7 @@
             const logoutBtn = document.getElementById("logoutDropdownBtn");
             if (logoutBtn) logoutBtn.addEventListener("click", () => {
                 localStorage.removeItem("dhsud_session");
-                showToast("Logged out successfully.", "success");
+                showToast("👋 Logout", "Logged out successfully.", "success");
                 setTimeout(() => { window.location.href = "index.html"; }, 700);
             });
         } else {
@@ -2748,7 +2908,7 @@
             const users = await resp.json();
             const user = users.find((u) => u.email?.toLowerCase() === email);
             if (!user) {
-                showToast("Account not found.", "error");
+                showToast("❌ Error", "Account not found.", "error");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 return false;
@@ -2756,14 +2916,14 @@
             if (user.password === btoa(password)) {
                 const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
                 localStorage.setItem("dhsud_session", JSON.stringify(session));
-                showToast(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+                showToast("✅ Welcome", `Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
                 closeLoginModal();
                 setTimeout(() => window.location.reload(), 1000);
             } else {
-                showToast("Invalid password.", "error");
+                showToast("❌ Error", "Invalid password.", "error");
             }
         } catch (error) {
-            showToast("Connection error.", "error");
+            showToast("❌ Error", "Connection error. Please try again.", "error");
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -2776,10 +2936,9 @@
     // ============================================
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('training_startDate').value = today;
-        document.getElementById('training_endDate').value = today;
-        document.getElementById('training_region').value = 'Region_06';
-        document.getElementById('training_reportingMonth').value = ['January','February','March','April','May','June','July','August','September','October','November','December'][new Date().getMonth()];
+        document.getElementById('plan_dateConducted').value = today;
+        document.getElementById('plan_region').value = 'Region_06';
+        document.getElementById('plan_reportingMonth').value = new Date().toLocaleString('default', { month: 'long' });
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
 
         checkSession();
@@ -2795,6 +2954,7 @@
 
     window.openLoginModal = openLoginModal;
     window.closeLoginModal = closeLoginModal;
+    window.loadRecords = loadRecords;
 </script>
 </body>
 </html>
