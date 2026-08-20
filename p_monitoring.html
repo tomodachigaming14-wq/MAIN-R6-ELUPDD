@@ -633,17 +633,251 @@
             border: 1px solid #e2e8f0;
             color: #475569;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             transition: all 0.3s ease;
             font-size: 0.85rem;
             min-height: 52px;
+            flex-direction: column;
         }
         .pm-status-message i {
             font-size: 1rem;
             color: #2563eb;
             flex-shrink: 0;
+            margin-top: 2px;
         }
+        .pm-status-message .status-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .pm-status-message .status-icon span {
+            font-weight: 500;
+        }
+        .pm-status-message .activity-log {
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            color: #334155;
+            padding-left: 4px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 8px;
+            margin-top: 4px;
+        }
+        .pm-status-message .activity-log::-webkit-scrollbar {
+            width: 4px;
+        }
+        .pm-status-message .activity-log::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .pm-status-message .activity-log::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .pm-status-message .activity-log .log-entry {
+            padding: 3px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            gap: 6px;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+        .pm-status-message .activity-log .log-entry:last-child {
+            border-bottom: none;
+        }
+        .pm-status-message .activity-log .log-time {
+            color: #94a3b8;
+            font-size: 0.6rem;
+            font-weight: 500;
+            min-width: 70px;
+        }
+        .pm-status-message .activity-log .log-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            min-width: 50px;
+            text-align: center;
+        }
+        .log-badge.added { background: #d1fae5; color: #059669; }
+        .log-badge.updated { background: #dbeafe; color: #2563eb; }
+        .log-badge.deleted { background: #fee2e2; color: #dc2626; }
+        .pm-status-message .activity-log .log-detail {
+            color: #1e293b;
+        }
+        .pm-status-message .activity-log .log-detail strong {
+            color: #0f172a;
+        }
+
+        .pm-monthly-activity-section {
+            margin-top: 1rem;
+            width: 100%;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 1rem;
+        }
+        .pm-monthly-activity-section .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .pm-monthly-activity-section .section-header h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pm-monthly-activity-section .section-header h3 i {
+            color: #2563eb;
+        }
+        .pm-monthly-activity-section .month-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .pm-monthly-activity-section .month-filters label {
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .pm-monthly-activity-section .month-filters select {
+            padding: 0.3rem 0.8rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            outline: none;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        .pm-monthly-activity-section .month-filters select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .pm-monthly-activity-section .month-filters .filter-btn {
+            background: #2563eb;
+            border: none;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+        .pm-monthly-activity-section .month-filters .filter-btn:hover {
+            background: #1d4ed8;
+        }
+        .pm-monthly-activity-section .month-filters .filter-btn.reset-btn {
+            background: #64748b;
+        }
+        .pm-monthly-activity-section .month-filters .filter-btn.reset-btn:hover {
+            background: #475569;
+        }
+        .pm-monthly-activity-section .monthly-table-wrapper {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+        }
+        .pm-monthly-activity-section .monthly-table-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+        .pm-monthly-activity-section .monthly-table-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .pm-monthly-activity-section .monthly-table-wrapper::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .pm-monthly-activity-section table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+        }
+        .pm-monthly-activity-section table th {
+            background: #f1f5f9;
+            color: #1e3a8a;
+            font-weight: 700;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 0.4rem 0.6rem;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            white-space: nowrap;
+        }
+        .pm-monthly-activity-section table td {
+            padding: 0.3rem 0.6rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .pm-monthly-activity-section table td:first-child {
+            cursor: pointer;
+        }
+        .pm-monthly-activity-section table tr:hover td {
+            background: #f0f7ff;
+        }
+        .pm-monthly-activity-section table tr.clickable-row td {
+            cursor: pointer;
+        }
+        .pm-monthly-activity-section table tr.clickable-row:hover td {
+            background: #e8f0fe;
+        }
+        .pm-monthly-activity-section table .no-records td {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            cursor: default;
+        }
+        .pm-monthly-activity-section table .no-records:hover td {
+            background: transparent;
+        }
+        .pm-monthly-activity-section .record-count-small {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 0.4rem;
+            text-align: right;
+        }
+        .pm-monthly-activity-section .record-count-small span {
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .info-badge {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        .info-badge.initial-updated { background: #dbeafe; color: #1e40af; }
+        .info-badge.status-updated { background: #d1fae5; color: #065f46; }
+        .info-badge.record-removed { background: #fee2e2; color: #991b1b; }
+        .info-badge.record-added { background: #fef3c7; color: #92400e; }
+        .info-badge.record-updated { background: #e0e7ff; color: #3730a3; }
+
         .pm-status-message.success {
             background: #f0fdf4;
             border-color: #86efac;
@@ -683,7 +917,7 @@
             z-index: 99999;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 1rem;
             animation: fadeIn 0.3s ease;
         }
         .modal-overlay.active {
@@ -696,13 +930,14 @@
         .modal-box {
             background: white;
             border-radius: 24px;
-            max-width: 1200px;
+            max-width: 95vw;
             width: 100%;
-            max-height: 90vh;
+            max-height: 92vh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: slideUp 0.3s ease;
+            overflow: hidden;
         }
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
@@ -712,18 +947,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
+            padding: 1.2rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.5rem;
+            flex-shrink: 0;
         }
         .modal-header h2 {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #1e3a8a;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .modal-header h2 i {
             color: #2563eb;
@@ -731,10 +967,10 @@
         .modal-header .close-btn {
             background: #f1f5f9;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -745,25 +981,28 @@
         .modal-header .close-btn:hover {
             background: #fee2e2;
             color: #dc2626;
+            transform: rotate(90deg);
         }
+
         .modal-filters {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             align-items: center;
             background: #f8fafc;
+            flex-shrink: 0;
         }
         .modal-filters .filter-group {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
             flex-wrap: wrap;
         }
         .modal-filters label {
             font-weight: 600;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #334155;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -771,14 +1010,15 @@
         }
         .modal-filters select,
         .modal-filters input {
-            padding: 0.4rem 0.8rem;
+            padding: 0.3rem 0.6rem;
             border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
             outline: none;
             background: white;
             transition: all 0.3s ease;
-            min-width: 100px;
+            min-width: 80px;
+            max-width: 140px;
         }
         .modal-filters select:focus,
         .modal-filters input:focus {
@@ -788,13 +1028,13 @@
         .modal-filters .filter-btn {
             background: #2563eb;
             border: none;
-            padding: 0.4rem 1.2rem;
+            padding: 0.3rem 1rem;
             border-radius: 30px;
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
         .modal-filters .filter-btn:hover {
             background: #1d4ed8;
@@ -805,22 +1045,24 @@
         .modal-filters .filter-btn.reset-btn:hover {
             background: #475569;
         }
+
         .modal-search {
-            padding: 1rem 2rem;
+            padding: 0.6rem 1.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             align-items: center;
-            background: #f8fafc;
+            background: #fafbfc;
+            flex-shrink: 0;
         }
         .modal-search input {
             flex: 1;
-            min-width: 200px;
-            padding: 0.6rem 1rem;
+            min-width: 150px;
+            padding: 0.4rem 0.8rem;
             border: 1.5px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
             outline: none;
             transition: all 0.3s ease;
         }
@@ -829,7 +1071,7 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
         .modal-search .search-info {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #64748b;
             white-space: nowrap;
         }
@@ -837,35 +1079,64 @@
             font-weight: 700;
             color: #1e3a8a;
         }
-        .modal-body {
-            padding: 1.5rem 2rem;
-            overflow-y: auto;
+
+        .table-wrapper {
+            overflow: auto;
             flex: 1;
+            padding: 0.5rem 0;
+            position: relative;
+            max-height: calc(92vh - 300px);
+            min-height: 200px;
+        }
+        .table-wrapper::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .modal-body {
+            padding: 0 1.5rem;
+            overflow: visible;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         .modal-body table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
+            min-width: 1200px;
         }
         .modal-body table th {
             background: #f1f5f9;
             color: #1e3a8a;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 0.8rem 0.8rem;
+            letter-spacing: 0.3px;
+            padding: 0.4rem 0.3rem;
             text-align: left;
             border-bottom: 2px solid #e2e8f0;
             position: sticky;
             top: 0;
             z-index: 10;
+            white-space: nowrap;
         }
         .modal-body table td {
-            padding: 0.7rem 0.8rem;
+            padding: 0.3rem 0.3rem;
             border-bottom: 1px solid #f1f5f9;
             color: #334155;
-            max-width: 150px;
+            max-width: 120px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -875,131 +1146,107 @@
         }
         .modal-body table .no-records td {
             text-align: center;
-            padding: 3rem 0;
+            padding: 2rem 0;
             color: #94a3b8;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .modal-body .action-cell {
             display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
+            gap: 3px;
+            flex-wrap: nowrap;
         }
         .modal-body .action-cell .btn-action {
-            padding: 0.3rem 0.7rem;
+            padding: 0.15rem 0.4rem;
             border: none;
-            border-radius: 8px;
-            font-size: 0.65rem;
+            border-radius: 6px;
+            font-size: 0.6rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.25s ease;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             display: inline-flex !important;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
-        .modal-body .action-cell .btn-action:hover {
-            transform: translateY(-2px) scale(1.05);
-        }
-        .modal-body .action-cell .btn-action:active {
-            transform: scale(0.9);
-        }
-        .modal-body .action-cell .btn-edit {
-            background: #f59e0b;
-            color: white;
-        }
-        .modal-body .action-cell .btn-edit:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-        .modal-body .action-cell .btn-delete {
-            background: #ef4444;
-            color: white;
-        }
-        .modal-body .action-cell .btn-delete:hover {
-            background: #dc2626;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-        }
-        .modal-body .action-cell .btn-save-edit {
-            background: #10b981;
-            color: white;
-        }
-        .modal-body .action-cell .btn-save-edit:hover {
-            background: #059669;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-        .modal-body .action-cell .btn-cancel-edit {
-            background: #6b7280;
-            color: white;
-        }
-        .modal-body .action-cell .btn-cancel-edit:hover {
-            background: #4b5563;
-            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
-        }
-        .modal-body .action-cell .btn-action .btn-spinner {
-            display: none;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        .modal-body .action-cell .btn-action.loading .btn-spinner {
-            display: inline-block;
-        }
-        .modal-body .action-cell .btn-action.loading i {
-            display: none;
-        }
-        .modal-body .action-cell .btn-action.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        .modal-body .editing-row td {
+        .modal-body .editing td {
             background: #fef3c7 !important;
         }
-        .modal-body .editing-row .action-cell .btn-edit,
-        .modal-body .editing-row .action-cell .btn-delete {
-            display: none !important;
-        }
-        .modal-body .editing-row .action-cell .btn-save-edit,
-        .modal-body .editing-row .action-cell .btn-cancel-edit {
-            display: inline-flex !important;
-        }
-        .modal-body .editing-row input,
-        .modal-body .editing-row select,
-        .modal-body .editing-row textarea {
+        .modal-body .editing input,
+        .modal-body .editing select,
+        .modal-body .editing textarea {
             background: white;
             border: 1.5px solid #f59e0b;
-            border-radius: 6px;
-            padding: 0.2rem 0.4rem;
-            font-size: 0.75rem;
+            border-radius: 4px;
+            padding: 0.1rem 0.2rem;
+            font-size: 0.65rem;
             width: 100%;
             outline: none;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            min-width: 50px;
         }
-        .modal-body .editing-row input:focus,
-        .modal-body .editing-row select:focus,
-        .modal-body .editing-row textarea:focus {
+        .modal-body .editing input:focus,
+        .modal-body .editing select:focus,
+        .modal-body .editing textarea:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
         }
-        .modal-body .editing-row textarea {
-            min-height: 30px;
-            resize: vertical;
+        .modal-body table select {
+            appearance: auto !important;
+            -webkit-appearance: auto !important;
+            -moz-appearance: auto !important;
+            z-index: 100 !important;
+            position: relative !important;
+            overflow: visible !important;
+            min-height: 28px !important;
+            padding: 2px 6px !important;
+            font-size: 0.65rem !important;
+            background-color: white !important;
+            border: 2px solid #f59e0b !important;
+            border-radius: 4px !important;
+            color: #0f172a !important;
+            cursor: pointer !important;
+            max-width: 130px !important;
+        }
+        .modal-body table select option {
+            display: block !important;
+            padding: 4px 8px !important;
+            min-height: 28px !important;
+            height: auto !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            background: white !important;
+            color: #0f172a !important;
+            font-size: 0.65rem !important;
+        }
+        .modal-body table td {
+            overflow: visible !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        .modal-body table tr.editing-row td {
+            overflow: visible !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+        .modal-body table tr.editing-row td select {
+            z-index: 1000 !important;
+            position: relative !important;
+            min-height: 28px !important;
         }
         .modal-footer {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.8rem;
             background: #f8fafc;
             border-radius: 0 0 24px 24px;
+            flex-shrink: 0;
         }
         .modal-footer .record-count {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #475569;
         }
         .modal-footer .record-count span {
@@ -1009,13 +1256,13 @@
         .modal-footer .btn-close-modal {
             background: #2563eb;
             border: none;
-            padding: 0.5rem 1.5rem;
+            padding: 0.4rem 1.2rem;
             border-radius: 40px;
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .modal-footer .btn-close-modal:hover {
             background: #1d4ed8;
@@ -1166,6 +1413,33 @@
             margin-bottom: 1rem;
         }
 
+        /* ===== DETAIL MODAL ===== */
+        .detail-modal .modal-box {
+            max-width: 600px;
+        }
+        .detail-modal .modal-body {
+            padding: 1.5rem 2rem;
+        }
+        .detail-modal .detail-row {
+            display: flex;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .detail-modal .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-modal .detail-label {
+            font-weight: 600;
+            color: #475569;
+            min-width: 140px;
+            font-size: 0.8rem;
+        }
+        .detail-modal .detail-value {
+            color: #0f172a;
+            font-size: 0.8rem;
+        }
+
+        /* ===== ADD PERSON MODAL ===== */
         .add-person-modal .modal-box {
             max-width: 500px;
         }
@@ -1342,20 +1616,6 @@
             border-top: 1px solid #eef2ff;
             margin: 0 1.8rem;
         }
-        .toast-msg {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1e293b;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 40px;
-            z-index: 9999;
-            font-size: 0.8rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .toast-msg.success { background: #166534; }
-        .toast-msg.error { background: #b91c1c; }
 
         /* ===== FOOTER ===== */
         .footer-new {
@@ -1389,6 +1649,30 @@
             margin-bottom: 12px;
         }
 
+        .editing-row td {
+            background: #fef3c7 !important;
+        }
+        .editing-row .action-cell .btn-action {
+            display: none;
+        }
+        .editing-row .action-cell .btn-save-edit,
+        .editing-row .action-cell .btn-cancel-edit {
+            display: inline-flex !important;
+        }
+        .action-cell .btn-save-edit,
+        .action-cell .btn-cancel-edit {
+            display: none !important;
+        }
+
+        .col-province { min-width: 80px; max-width: 100px; }
+        .col-city { min-width: 100px; max-width: 130px; }
+        .col-type { min-width: 80px; max-width: 100px; }
+        .col-status { min-width: 80px; max-width: 100px; }
+        .col-date { min-width: 80px; max-width: 95px; }
+        .col-month { min-width: 80px; max-width: 100px; }
+        .col-personnel { min-width: 90px; max-width: 120px; }
+        .col-actions { min-width: 70px; max-width: 80px; }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 800px) {
             .pm-card { padding: 1.5rem; border-radius: 2rem; }
@@ -1401,18 +1685,19 @@
             .pm-pic-container { flex-direction: column; }
             .pm-pic-container select { width: 100%; }
             .pm-pic-btn { width: 100%; justify-content: center; }
-            .modal-box { max-height: 95vh; }
-            .modal-header { padding: 1rem; }
-            .modal-filters { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; }
-            .modal-filters select, .modal-filters input { min-width: 100%; }
-            .modal-search { padding: 0.8rem 1rem; flex-direction: column; }
+            .modal-box { max-width: 100vw; max-height: 98vh; border-radius: 16px; }
+            .modal-header { padding: 0.8rem 1rem; }
+            .modal-filters { padding: 0.6rem 1rem; flex-direction: column; align-items: stretch; }
+            .modal-filters select, .modal-filters input { min-width: 100%; max-width: 100%; }
+            .modal-search { padding: 0.6rem 1rem; flex-direction: column; }
             .modal-search input { width: 100%; min-width: unset; }
-            .modal-body { padding: 1rem; }
-            .modal-body table { font-size: 0.65rem; }
-            .modal-body table th, .modal-body table td { padding: 0.3rem 0.3rem; }
-            .modal-body .action-cell { flex-direction: column; }
-            .modal-footer { padding: 0.8rem 1rem; flex-direction: column; text-align: center; }
-            .modal-overlay { padding: 1rem; }
+            .modal-body { padding: 0 0.8rem; }
+            .table-wrapper { max-height: calc(92vh - 350px); }
+            .modal-body table { font-size: 0.55rem; min-width: 900px; }
+            .modal-body table th, .modal-body table td { padding: 0.15rem 0.15rem; }
+            .modal-body .action-cell .btn-action { font-size: 0.5rem; padding: 0.1rem 0.3rem; }
+            .modal-footer { padding: 0.6rem 1rem; flex-direction: column; text-align: center; }
+            .modal-overlay { padding: 0.3rem; }
             .chart-filters { flex-direction: column; align-items: stretch; }
             .chart-filters select, .chart-filters input { min-width: 100%; }
             .chart-filters .filter-divider { display: none; }
@@ -1420,6 +1705,15 @@
             .chart-summary { grid-template-columns: repeat(3, 1fr); }
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+            .pm-monthly-activity-section .section-header { flex-direction: column; align-items: stretch; }
+            .pm-monthly-activity-section .month-filters { flex-wrap: wrap; }
+            .pm-monthly-activity-section .month-filters select { min-width: 100%; }
+            .pm-monthly-activity-section table { font-size: 0.6rem; }
+            .pm-monthly-activity-section table th,
+            .pm-monthly-activity-section table td { padding: 0.2rem 0.3rem; }
+            .detail-modal .detail-row { flex-direction: column; }
+            .detail-modal .detail-label { min-width: auto; }
+            .toast-container { top: 10px; right: 10px; left: 10px; max-width: 100%; }
         }
         @media (max-width: 400px) {
             .pm-card { padding: 1rem; }
@@ -1616,8 +1910,76 @@
             </div>
 
             <div id="statusMessage" class="pm-status-message">
-                <i class="fas fa-info-circle"></i>
-                <span id="statusText">Ready · fill in all required fields</span>
+                <div class="status-icon">
+                    <i class="fas fa-clock"></i>
+                    <span id="statusText">Recent Activity</span>
+                </div>
+                <div class="activity-log" id="activityLog">
+                    <div class="log-entry" style="color:#94a3b8; font-style:italic;">Loading activities...</div>
+                </div>
+
+                <div class="pm-monthly-activity-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Monthly Activity Record</h3>
+                        <div class="month-filters">
+                            <div class="filter-label-group">
+                                <label for="monthlyFilterMonth">Month:</label>
+                                <select id="monthlyFilterMonth">
+                                    <option value="all">All Months</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+                            <div class="filter-label-group">
+                                <label for="monthlyFilterYear">Year:</label>
+                                <select id="monthlyFilterYear">
+                                    <option value="all">All Years</option>
+                                </select>
+                            </div>
+                            <div class="filter-label-group">
+                                <label for="monthlyFilterProvince">Province:</label>
+                                <select id="monthlyFilterProvince">
+                                    <option value="all">All Provinces</option>
+                                    <option value="Aklan">Aklan</option>
+                                    <option value="Antique">Antique</option>
+                                    <option value="Capiz">Capiz</option>
+                                    <option value="Guimaras">Guimaras</option>
+                                    <option value="Iloilo">Iloilo</option>
+                                </select>
+                            </div>
+                            <button class="filter-btn" id="applyMonthlyFilter"><i class="fas fa-filter"></i> Apply</button>
+                            <button class="filter-btn reset-btn" id="resetMonthlyFilter"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </div>
+                    <div class="monthly-table-wrapper" id="monthlyTableWrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Province</th>
+                                    <th>City/Municipality</th>
+                                    <th>Initial Status</th>
+                                    <th>Updated Status</th>
+                                    <th>Latest Information</th>
+                                    <th>Date & Time Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthlyTableBody">
+                                <tr class="no-records"><td colspan="6">Loading records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="record-count-small">Showing <span id="monthlyCount">0</span> record(s)</div>
+                </div>
             </div>
 
             <div class="pm-footer-note">
@@ -1627,49 +1989,22 @@
     </div>
 </main>
 
-<!-- ===== FOOTER ===== -->
-<footer class="footer-new">
-    <div class="container">
-        <div class="footer-grid">
-            <div>
-                <img src="img/DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
-                <strong>DHSUD Region VI</strong><br />ELUPDD – CLUP & ZO Platform<br />Geospatial Innovation for Resilience
-            </div>
-            <div>
-                <strong>Our Social Networks</strong><br />Follow us for updates<br />
-                <div class="social-icons">
-                    <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-                    <i class="fab fa-instagram"></i><i class="fab fa-twitter"></i>
-                </div>
+<!-- ===== DETAIL VIEW MODAL ===== -->
+<div class="modal-overlay detail-modal" id="detailModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-info-circle"></i> Record Details</h2>
+            <button class="close-btn" id="closeDetailModalBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="detailModalBody">
+            <div id="detailContent">
+                <div style="text-align:center; padding:1rem; color:#94a3b8;">Loading details...</div>
             </div>
         </div>
-        <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
-    </div>
-</footer>
-
-<!-- ===== LOGIN MODAL ===== -->
-<div id="loginModal" class="login-modal">
-    <div class="login-modal-content">
-        <div class="login-modal-brand">
-            <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
-            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
-            <h3>DHSUD Region VI</h3>
-            <p>ELUPDD · CLUP & ZO Platform</p>
+        <div class="modal-footer">
+            <span class="record-count">Activity Details</span>
+            <button class="btn-close-modal" id="closeDetailModalBtn2">Close</button>
         </div>
-        <div class="login-modal-body">
-            <form id="modalLoginForm">
-                <div class="input-group">
-                    <label><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
-                </div>
-                <div class="input-group">
-                    <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-                </div>
-                <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
-            </form>
-        </div>
-        <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
     </div>
 </div>
 
@@ -1677,7 +2012,7 @@
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Plan Monitoring Records</span></h2>
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">All Records</span></h2>
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-filters">
@@ -1723,10 +2058,14 @@
             <input type="text" id="searchInput" placeholder="🔍 Search by Province, City/Municipality...">
             <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
         </div>
-        <div class="modal-body" id="modalBody">
-            <div style="text-align:center; padding: 2rem; color: #94a3b8;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
-                <p style="margin-top: 1rem;">Loading records...</p>
+        <div class="modal-body">
+            <div class="table-wrapper" id="tableWrapper">
+                <div id="modalBodyContent">
+                    <div style="text-align:center; padding: 2rem; color: #94a3b8;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                        <p style="margin-top: 1rem;">Loading records...</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -1839,6 +2178,52 @@
     </div>
 </div>
 
+<!-- ===== LOGIN MODAL ===== -->
+<div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+        <div class="login-modal-brand">
+            <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <h3>DHSUD Region VI</h3>
+            <p>ELUPDD · CLUP & ZO Platform</p>
+        </div>
+        <div class="login-modal-body">
+            <form id="modalLoginForm">
+                <div class="input-group">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+                </div>
+                <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
+            </form>
+        </div>
+        <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer-new">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <img src="img/DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
+                <strong>DHSUD Region VI</strong><br />ELUPDD – CLUP & ZO Platform<br />Geospatial Innovation for Resilience
+            </div>
+            <div>
+                <strong>Our Social Networks</strong><br />Follow us for updates<br />
+                <div class="social-icons">
+                    <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+                    <i class="fab fa-instagram"></i><i class="fab fa-twitter"></i>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
+    </div>
+</footer>
+
 <script>
     // ============================================
     // TOAST
@@ -1865,9 +2250,547 @@
     }
 
     // ============================================
+    // ACTIVITY LOG - PERSISTENT (localStorage + Sheet sync)
+    // ============================================
+    let activityLog = [];
+    let monthlyRecords = [];
+
+    function loadActivityLogFromStorage() {
+        try {
+            const stored = localStorage.getItem('planActivityLog');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed) && parsed.length) {
+                    activityLog = parsed;
+                    monthlyRecords = parsed;
+                    return true;
+                }
+            }
+        } catch (e) {}
+        return false;
+    }
+
+    function saveActivityLogToStorage() {
+        try {
+            localStorage.setItem('planActivityLog', JSON.stringify(activityLog));
+        } catch (e) {}
+    }
+
+    async function loadActivityLogFromSheet() {
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=getMonthlyActivity', { method: 'GET' });
+            const result = await response.json();
+            if (result.result === 'success' && result.activities && result.activities.length) {
+                activityLog = result.activities.map(a => ({
+                    time: a.time,
+                    action: a.action,
+                    province: a.province,
+                    city: a.city,
+                    details: a.details
+                }));
+                monthlyRecords = result.activities;
+                saveActivityLogToStorage();
+                return true;
+            }
+        } catch (e) {
+            console.error('Error loading activity log from sheet:', e);
+        }
+        return false;
+    }
+
+    async function loadActivityLog() {
+        const hasLocal = loadActivityLogFromStorage();
+        const fromSheet = await loadActivityLogFromSheet();
+        if (!fromSheet && !hasLocal) {
+            activityLog = [];
+            monthlyRecords = [];
+        }
+        populateYearFilter();
+        renderActivityLog();
+        renderMonthlyTable();
+    }
+
+    async function addActivityLog(action, province, city, details = '') {
+        const time = new Date().toISOString();
+        const entry = { time, action, province, city, details };
+        
+        try {
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'addActivity',
+                    entry: entry
+                })
+            });
+        } catch (e) {
+            console.error('Error saving activity to sheet:', e);
+        }
+        
+        activityLog.unshift(entry);
+        if (activityLog.length > 200) activityLog.pop();
+        monthlyRecords = [...activityLog];
+        saveActivityLogToStorage();
+        
+        populateYearFilter();
+        renderActivityLog();
+        renderMonthlyTable();
+    }
+
+    // ============================================
+    // RENDER ACTIVITY LOG
+    // ============================================
+    function renderActivityLog() {
+        const log = document.getElementById('activityLog');
+        if (!activityLog.length) {
+            log.innerHTML = `<div class="log-entry" style="color:#94a3b8; font-style:italic;">No recent activity yet</div>`;
+            return;
+        }
+        log.innerHTML = activityLog.slice(0, 20).map(e => {
+            const badgeClass = e.action === 'Added' ? 'added' : e.action === 'Updated' ? 'updated' : 'deleted';
+            
+            let displayText = '';
+            if (e.province) displayText += e.province;
+            if (e.city) displayText += (displayText ? ' · ' : '') + e.city;
+            
+            if (e.action === 'Added') {
+                // Just province and city
+            } else if (e.action === 'Deleted') {
+                displayText += ' - Record removed';
+            } else if (e.action === 'Updated' && e.details) {
+                displayText += ' - ' + e.details;
+            }
+            
+            if (!displayText) displayText = e.details || 'Activity recorded';
+            
+            let timeStr = '';
+            try {
+                const d = new Date(e.time);
+                timeStr = d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            } catch (err) {
+                timeStr = e.time || '';
+            }
+            return `<div class="log-entry">
+                <span class="log-time">${timeStr}</span>
+                <span class="log-badge ${badgeClass}">${e.action}</span>
+                <span class="log-detail">${displayText}</span>
+            </div>`;
+        }).join('');
+    }
+
+    function populateYearFilter() {
+        const yearSelect = document.getElementById('monthlyFilterYear');
+        const years = new Set();
+        monthlyRecords.forEach(r => {
+            try {
+                const d = new Date(r.time);
+                if (!isNaN(d.getTime())) {
+                    years.add(d.getFullYear());
+                }
+            } catch (e) {}
+        });
+        
+        const currentYear = new Date().getFullYear();
+        years.add(currentYear);
+        
+        const sortedYears = Array.from(years).sort((a, b) => b - a);
+        
+        const currentVal = yearSelect.value;
+        yearSelect.innerHTML = '<option value="all">All Years</option>';
+        sortedYears.forEach(year => {
+            const opt = document.createElement('option');
+            opt.value = year;
+            opt.textContent = year;
+            yearSelect.appendChild(opt);
+        });
+        if (currentVal && sortedYears.includes(parseInt(currentVal))) {
+            yearSelect.value = currentVal;
+        }
+    }
+
+    // ============================================
+    // MONTHLY ACTIVITY TABLE
+    // ============================================
+    function renderMonthlyTable() {
+        const tbody = document.getElementById('monthlyTableBody');
+        const monthFilter = document.getElementById('monthlyFilterMonth').value;
+        const yearFilter = document.getElementById('monthlyFilterYear').value;
+        const provinceFilter = document.getElementById('monthlyFilterProvince').value;
+        
+        let filtered = monthlyRecords;
+        
+        if (monthFilter !== 'all') {
+            filtered = filtered.filter(r => {
+                try {
+                    const d = new Date(r.time);
+                    return d.toLocaleString('default', { month: 'long' }) === monthFilter;
+                } catch (e) {
+                    return false;
+                }
+            });
+        }
+        
+        if (yearFilter !== 'all') {
+            filtered = filtered.filter(r => {
+                try {
+                    const d = new Date(r.time);
+                    return d.getFullYear() === parseInt(yearFilter);
+                } catch (e) {
+                    return false;
+                }
+            });
+        }
+        
+        if (provinceFilter !== 'all') {
+            filtered = filtered.filter(r => (r.province || '') === provinceFilter);
+        }
+        
+        if (!filtered.length) {
+            tbody.innerHTML = `<tr class="no-records"><td colspan="6">No records found</td></tr>`;
+            document.getElementById('monthlyCount').textContent = '0';
+            return;
+        }
+        
+        filtered.sort((a, b) => new Date(b.time) - new Date(a.time));
+        
+        tbody.innerHTML = filtered.slice(0, 50).map((r, idx) => {
+            let dateStr = '';
+            try {
+                const d = new Date(r.time);
+                dateStr = (d.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+                          d.getDate().toString().padStart(2, '0') + '/' + 
+                          d.getFullYear() + ' ' +
+                          d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                dateStr = r.time || '';
+            }
+            
+            let initialStatus = '-';
+            let updatedStatus = '-';
+            let latestInfo = '';
+            let infoBadgeClass = '';
+            
+            if (r.action === 'Added') {
+                initialStatus = '-';
+                updatedStatus = '-';
+                
+                if (r.details) {
+                    const match = r.details.match(/Initial\s*Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                    if (match) {
+                        initialStatus = match[1].trim();
+                        updatedStatus = match[2].trim();
+                    } else {
+                        const statusMatch = r.details.match(/(Pre-Phase|Phase \d|RA\d|None Indicated)/gi);
+                        if (statusMatch) {
+                            if (statusMatch.length === 1) {
+                                updatedStatus = statusMatch[0];
+                            } else if (statusMatch.length >= 2) {
+                                initialStatus = statusMatch[0];
+                                updatedStatus = statusMatch[statusMatch.length - 1];
+                            }
+                        }
+                    }
+                }
+                
+                latestInfo = 'Added new record';
+                infoBadgeClass = 'record-added';
+            } else if (r.action === 'Deleted') {
+                initialStatus = '-';
+                updatedStatus = '-';
+                latestInfo = 'Record removed';
+                infoBadgeClass = 'record-removed';
+            } else if (r.action === 'Updated') {
+                if (r.details) {
+                    const initialMatch = r.details.match(/Initial\s*Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                    if (initialMatch) {
+                        initialStatus = initialMatch[2].trim();
+                    }
+                    
+                    const updatedMatch = r.details.match(/Updated\s*Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                    if (updatedMatch) {
+                        updatedStatus = updatedMatch[2].trim();
+                    }
+                    
+                    if (!updatedMatch) {
+                        const simpleMatch = r.details.match(/Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                        if (simpleMatch) {
+                            if (!initialStatus || initialStatus === '-') {
+                                initialStatus = simpleMatch[1].trim();
+                            }
+                            updatedStatus = simpleMatch[2].trim();
+                        }
+                    }
+                    
+                    if (!initialStatus || initialStatus === '-') {
+                        const statuses = ['Pre-Phase','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
+                        const foundStatuses = [];
+                        statuses.forEach(s => {
+                            if (r.details.includes(s)) {
+                                foundStatuses.push(s);
+                            }
+                        });
+                        if (foundStatuses.length >= 2) {
+                            initialStatus = foundStatuses[foundStatuses.length - 2] || foundStatuses[0];
+                            updatedStatus = foundStatuses[foundStatuses.length - 1];
+                        } else if (foundStatuses.length === 1) {
+                            updatedStatus = foundStatuses[0];
+                        }
+                    }
+                    
+                    if (r.details.includes('Initial Status:') && r.details.includes('Updated Status:')) {
+                        latestInfo = 'Updated Initial & Updated Status';
+                        infoBadgeClass = 'initial-updated';
+                    } else if (r.details.includes('Initial Status:') || r.details.includes('Status:')) {
+                        if (r.details.includes('Updated Status:')) {
+                            latestInfo = 'Updated Updated Status';
+                            infoBadgeClass = 'status-updated';
+                        } else {
+                            latestInfo = 'Updated Initial Status';
+                            infoBadgeClass = 'initial-updated';
+                        }
+                    } else {
+                        latestInfo = 'Record updated';
+                        infoBadgeClass = 'record-updated';
+                    }
+                }
+                if (!latestInfo) {
+                    latestInfo = 'Record updated';
+                    infoBadgeClass = 'record-updated';
+                }
+            } else {
+                latestInfo = r.details || 'Activity performed';
+                infoBadgeClass = 'record-updated';
+            }
+            
+            return `<tr class="clickable-row" data-index="${idx}" onclick="showDetail(${idx})">
+                <td>${r.province || '-'}</td>
+                <td>${r.city || '-'}</td>
+                <td>${initialStatus}</td>
+                <td>${updatedStatus}</td>
+                <td><span class="info-badge ${infoBadgeClass}">${latestInfo}</span></td>
+                <td>${dateStr}</td>
+            </tr>`;
+        }).join('');
+        
+        document.getElementById('monthlyCount').textContent = filtered.length;
+    }
+
+    // ============================================
+    // DETAIL VIEW
+    // ============================================
+    function showDetail(index) {
+        const records = monthlyRecords;
+        if (index < 0 || index >= records.length) {
+            showToast('❌ Error', 'Record not found.', 'error');
+            return;
+        }
+        
+        const r = records[index];
+        const detailModal = document.getElementById('detailModal');
+        const detailContent = document.getElementById('detailContent');
+        
+        let dateStr = '';
+        try {
+            const d = new Date(r.time);
+            dateStr = d.toLocaleString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        } catch (e) {
+            dateStr = r.time || '';
+        }
+        
+        let initialStatus = '-';
+        let updatedStatus = '-';
+        let displayDetails = r.details || 'No additional details';
+        let initialChange = '';
+        let updatedChange = '';
+        
+        if (r.details) {
+            if (r.action === 'Added') {
+                const match = r.details.match(/Initial\s*Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                if (match) {
+                    initialStatus = match[1].trim();
+                    updatedStatus = match[2].trim();
+                    displayDetails = initialStatus + ' - ' + updatedStatus;
+                } else {
+                    const statuses = ['Pre-Phase','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
+                    const found = [];
+                    statuses.forEach(s => {
+                        if (r.details.includes(s)) {
+                            found.push(s);
+                        }
+                    });
+                    if (found.length >= 2) {
+                        initialStatus = found[0];
+                        updatedStatus = found[found.length - 1];
+                        displayDetails = initialStatus + ' - ' + updatedStatus;
+                    } else if (found.length === 1) {
+                        updatedStatus = found[0];
+                        displayDetails = updatedStatus;
+                    }
+                }
+            } else if (r.action === 'Updated') {
+                let initialOld = '', initialNew = '', updatedOld = '', updatedNew = '';
+                
+                const initialMatch = r.details.match(/Initial\s*Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                if (initialMatch) {
+                    initialOld = initialMatch[1].trim();
+                    initialNew = initialMatch[2].trim();
+                    initialStatus = initialNew;
+                    initialChange = initialOld + ' → ' + initialNew;
+                }
+                
+                const updatedMatch = r.details.match(/Updated\s*Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                if (updatedMatch) {
+                    updatedOld = updatedMatch[1].trim();
+                    updatedNew = updatedMatch[2].trim();
+                    updatedStatus = updatedNew;
+                    updatedChange = updatedOld + ' → ' + updatedNew;
+                }
+                
+                if (!updatedMatch) {
+                    const simpleMatch = r.details.match(/Status:\s*([^→]+)\s*→\s*([^,]+)/i);
+                    if (simpleMatch) {
+                        if (!initialOld && !initialNew) {
+                            initialOld = simpleMatch[1].trim();
+                            initialNew = simpleMatch[2].trim();
+                            initialStatus = initialNew;
+                            initialChange = initialOld + ' → ' + initialNew;
+                        } else {
+                            updatedOld = simpleMatch[1].trim();
+                            updatedNew = simpleMatch[2].trim();
+                            updatedStatus = updatedNew;
+                            updatedChange = updatedOld + ' → ' + updatedNew;
+                        }
+                    }
+                }
+                
+                if (!initialOld && !updatedOld) {
+                    const statuses = ['Pre-Phase','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
+                    const found = [];
+                    statuses.forEach(s => {
+                        if (r.details.includes(s)) {
+                            found.push(s);
+                        }
+                    });
+                    if (found.length >= 2) {
+                        if (!initialOld) {
+                            initialOld = found[found.length - 2];
+                            initialNew = found[found.length - 1];
+                            initialStatus = initialNew;
+                            initialChange = initialOld + ' → ' + initialNew;
+                        }
+                    } else if (found.length === 1) {
+                        if (!updatedOld) {
+                            updatedOld = found[0];
+                            updatedNew = found[0];
+                            updatedStatus = updatedNew;
+                            updatedChange = updatedOld + ' → ' + updatedNew;
+                        }
+                    }
+                }
+                
+                let detailLines = [];
+                if (initialChange) {
+                    detailLines.push('Initial Status: ' + initialChange);
+                }
+                if (updatedChange && updatedChange !== initialChange) {
+                    detailLines.push('Updated Status: ' + updatedChange);
+                }
+                if (detailLines.length === 0 && r.details) {
+                    displayDetails = r.details;
+                } else if (detailLines.length > 0) {
+                    displayDetails = detailLines.join('\n');
+                }
+                
+                if (r.details && !r.details.includes('Initial Status:') && !r.details.includes('Updated Status:')) {
+                    const simpleMatch = r.details.match(/(Pre-Phase|Phase \d|RA\d|None Indicated)\s*→\s*(Pre-Phase|Phase \d|RA\d|None Indicated)/i);
+                    if (simpleMatch) {
+                        const oldVal = simpleMatch[1];
+                        const newVal = simpleMatch[2];
+                        if (!initialChange && !updatedChange) {
+                            initialChange = oldVal + ' → ' + newVal;
+                            initialStatus = newVal;
+                            displayDetails = 'Status: ' + initialChange;
+                        }
+                    }
+                }
+            } else if (r.action === 'Deleted') {
+                displayDetails = r.details || 'Record removed';
+            }
+        }
+        
+        let html = `
+            <div class="detail-row">
+                <div class="detail-label">Action</div>
+                <div class="detail-value"><span class="log-badge ${r.action === 'Added' ? 'added' : r.action === 'Updated' ? 'updated' : 'deleted'}">${r.action}</span></div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Province</div>
+                <div class="detail-value">${r.province || '-'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">City/Municipality</div>
+                <div class="detail-value">${r.city || '-'}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Initial Status</div>
+                <div class="detail-value"><strong>${initialStatus}</strong></div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Updated Status</div>
+                <div class="detail-value"><strong>${updatedStatus}</strong></div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Date & Time</div>
+                <div class="detail-value">${dateStr}</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Details</div>
+                <div class="detail-value" style="white-space: pre-wrap;">${displayDetails}</div>
+            </div>
+        `;
+        
+        detailContent.innerHTML = html;
+        detailModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailModal() {
+        document.getElementById('detailModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('closeDetailModalBtn').addEventListener('click', closeDetailModal);
+    document.getElementById('closeDetailModalBtn2').addEventListener('click', closeDetailModal);
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDetailModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeDetailModal();
+    });
+
+    document.getElementById('applyMonthlyFilter').addEventListener('click', renderMonthlyTable);
+    document.getElementById('monthlyFilterMonth').addEventListener('change', renderMonthlyTable);
+    document.getElementById('monthlyFilterYear').addEventListener('change', renderMonthlyTable);
+    document.getElementById('monthlyFilterProvince').addEventListener('change', renderMonthlyTable);
+    
+    document.getElementById('resetMonthlyFilter').addEventListener('click', function() {
+        document.getElementById('monthlyFilterMonth').value = 'all';
+        document.getElementById('monthlyFilterYear').value = 'all';
+        document.getElementById('monthlyFilterProvince').value = 'all';
+        renderMonthlyTable();
+    });
+
+    // ============================================
     // CONFIG
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxb4dztZFseqP1w79O_QgaQgoyUztgpWd0oWgvLkGEUBXTaG6FL_i17y5XQJwDUPwrC/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyp2uNfcisfrEZVoZBnPeHZYooln0e_7faSk7tp98UjuP-sK41_qJdzajMBVNTx2wNTYQ/exec';
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1AgNv7ljgvnsZ1SVd0xxxNi2WopiifdYIcVNgX9Yr82w/edit?usp=sharing';
 
     // ============================================
@@ -2143,18 +3066,6 @@
     // FORM HANDLING
     // ============================================
     const planForm = document.getElementById('planForm');
-    const statusDiv = document.getElementById('statusMessage');
-    const statusText = document.getElementById('statusText');
-
-    function setStatus(msg, type = 'info') {
-        statusText.textContent = msg;
-        statusDiv.className = 'pm-status-message';
-        const icon = statusDiv.querySelector('i');
-        if (type === 'success') { statusDiv.classList.add('success'); icon.className = 'fas fa-check-circle'; }
-        else if (type === 'error') { statusDiv.classList.add('error'); icon.className = 'fas fa-exclamation-circle'; }
-        else { icon.className = 'fas fa-info-circle'; }
-    }
-
     const planProvince = document.getElementById('plan_province');
     const planCity = document.getElementById('plan_cityMun');
 
@@ -2204,25 +3115,59 @@
         btn.innerHTML = '<span class="pm-spinner"></span> Saving...';
 
         try {
-            await fetch(WEB_APP_URL, {
+            const response = await fetch(WEB_APP_URL, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            showToast('✅ Success', 'Record saved to Google Sheet!', 'success');
-            planForm.reset();
-            document.getElementById('plan_dateConducted').value = new Date().toISOString().split('T')[0];
-            document.getElementById('plan_region').value = 'Region_06';
-            planCity.innerHTML = '<option value="">Select City/Municipality...</option>';
-            document.getElementById('plan_reportingMonth').value = new Date().toLocaleString('default', { month: 'long' });
             
-            if (recordsModal.classList.contains('active')) {
-                await loadRecords();
+            let result;
+            try {
+                result = await response.json();
+            } catch (e) {
+                result = { result: 'success' };
+            }
+            
+            if (result.result === 'success') {
+                showToast('✅ Success', 'Record saved to Google Sheet!', 'success');
+                const detailMsg = 'Initial Status: ' + payload.initialStatus + ' → ' + payload.updatedStatus;
+                await addActivityLog('Added', payload.province, payload.cityMun, detailMsg);
+                
+                planForm.reset();
+                document.getElementById('plan_dateConducted').value = new Date().toISOString().split('T')[0];
+                document.getElementById('plan_region').value = 'Region_06';
+                planCity.innerHTML = '<option value="">Select City/Municipality...</option>';
+                document.getElementById('plan_reportingMonth').value = new Date().toLocaleString('default', { month: 'long' });
+                
+                if (recordsModal.classList.contains('active')) {
+                    await loadRecords();
+                }
+            } else {
+                showToast('❌ Error', result.message || 'Failed to save record.', 'error');
             }
         } catch (err) {
             console.error('Save error:', err);
-            showToast('❌ Error', 'Failed to save. Please check your connection.', 'error');
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                showToast('✅ Success', 'Record saved to Google Sheet!', 'success');
+                const detailMsg = 'Initial Status: ' + payload.initialStatus + ' → ' + payload.updatedStatus;
+                await addActivityLog('Added', payload.province, payload.cityMun, detailMsg);
+                planForm.reset();
+                document.getElementById('plan_dateConducted').value = new Date().toISOString().split('T')[0];
+                document.getElementById('plan_region').value = 'Region_06';
+                planCity.innerHTML = '<option value="">Select City/Municipality...</option>';
+                document.getElementById('plan_reportingMonth').value = new Date().toLocaleString('default', { month: 'long' });
+                if (recordsModal.classList.contains('active')) {
+                    await loadRecords();
+                }
+            } catch (fallbackErr) {
+                showToast('❌ Error', 'Failed to save. Please check your connection.', 'error');
+            }
         } finally {
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet</span>';
@@ -2230,7 +3175,7 @@
     });
 
     // ============================================
-    // MODALS
+    // RECORDS MODAL FUNCTIONS
     // ============================================
     let allRecords = [];
     let filteredRecords = [];
@@ -2239,7 +3184,7 @@
     let currentChartType = 'status';
 
     const recordsModal = document.getElementById('recordsModal');
-    const modalBody = document.getElementById('modalBody');
+    const modalBodyContent = document.getElementById('modalBodyContent');
 
     function closeRecordsModal() { recordsModal.classList.remove('active'); document.body.style.overflow = 'auto'; editingRowNumber = null; }
     function openRecordsModal() { recordsModal.classList.add('active'); document.body.style.overflow = 'hidden'; loadRecords(); }
@@ -2250,7 +3195,7 @@
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeRecordsModal(); });
 
     async function loadRecords() {
-        modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;">
+        modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;">
             <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
             <p style="margin-top: 1rem;">Loading records...</p>
         </div>`;
@@ -2266,13 +3211,13 @@
                 document.getElementById('displayCount').textContent = allRecords.length;
                 editingRowNumber = null;
             } else {
-                modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">
+                modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color:#dc2626;">
                     Error: ${result.message || 'Failed to load records'}
                 </div>`;
             }
         } catch (e) {
             console.error('Load records error:', e);
-            modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">
+            modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color:#dc2626;">
                 Failed to load records. Please refresh and try again.
                 <br><br>
                 <button onclick="loadRecords()" style="padding:0.5rem 1.5rem; border:none; border-radius:8px; background:#2563eb; color:white; cursor:pointer;">
@@ -2287,29 +3232,24 @@
     // ============================================
     function formatDate(dateValue) {
         if (!dateValue) return '-';
-        
         if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) {
             return dateValue;
         }
-        
         if (typeof dateValue === 'number') {
             const d = new Date((dateValue - 25569) * 86400 * 1000);
             return String(d.getMonth() + 1).padStart(2, '0') + '/' + 
                    String(d.getDate()).padStart(2, '0') + '/' + 
                    d.getFullYear();
         }
-        
         if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
             const parts = dateValue.split('-');
             return parts[1] + '/' + parts[2] + '/' + parts[0];
         }
-        
         if (dateValue instanceof Date) {
             return String(dateValue.getMonth() + 1).padStart(2, '0') + '/' + 
                    String(dateValue.getDate()).padStart(2, '0') + '/' + 
                    dateValue.getFullYear();
         }
-        
         try {
             const d = new Date(dateValue);
             if (!isNaN(d.getTime())) {
@@ -2318,7 +3258,6 @@
                        d.getFullYear();
             }
         } catch (e) {}
-        
         return dateValue || '-';
     }
 
@@ -2330,7 +3269,7 @@
         if (picNames.length === 0) picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
 
         if (!records || records.length === 0) {
-            modalBody.innerHTML = `<table><thead><tr><th>#</th><th class="col-province">Province</th><th class="col-city">City/Municipality</th><th class="col-type">Type</th><th class="col-status">Initial</th><th class="col-status">Updated</th><th class="col-date">Date Conducted</th><th class="col-month">Reporting Month</th><th class="col-personnel">Personnel</th><th class="col-actions">Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="10">📭 No records found.</td></tr></tbody></table>`;
+            modalBodyContent.innerHTML = `<table><thead><tr><th>#</th><th class="col-province">Province</th><th class="col-city">City/Municipality</th><th class="col-type">Type</th><th class="col-status">Initial</th><th class="col-status">Updated</th><th class="col-date">Date Conducted</th><th class="col-month">Reporting Month</th><th class="col-personnel">Personnel</th><th class="col-actions">Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="10">📭 No records found.</td></tr></tbody></table>`;
             document.getElementById('displayCount').textContent = '0';
             return;
         }
@@ -2352,10 +3291,25 @@
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
-            const actualRow = index + 2;
-            const isEditing = editingRowNumber === actualRow;
+            let actualSheetRow = -1;
+            
+            for (let i = 0; i < allRecords.length; i++) {
+                const rec = allRecords[i];
+                if (rec['Province'] === record['Province'] && 
+                    rec['City/Municipality'] === record['City/Municipality'] &&
+                    rec['Date of Monitoring Conducted (MM/DD/YYYY)'] === record['Date of Monitoring Conducted (MM/DD/YYYY)']) {
+                    actualSheetRow = i + 2;
+                    break;
+                }
+            }
+            
+            if (actualSheetRow === -1) {
+                actualSheetRow = index + 2;
+            }
+            
+            const isEditing = editingRowNumber === actualSheetRow;
 
-            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" data-record-index="${index}">`;
+            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualSheetRow}" data-record-index="${index}">`;
             html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; text-align:center;">${rowNum}</td>`;
 
             columns.forEach(col => {
@@ -2412,23 +3366,33 @@
 
             html += `<td class="action-cell" style="padding:0.2rem 0.2rem; border-bottom:1px solid #f1f5f9; white-space:nowrap;">`;
             if (isEditing) {
-                html += `<button class="btn-action btn-save-edit" onclick="saveEditRow(${actualRow})" id="saveBtn_${actualRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#10b981; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-save"></i><span class="btn-spinner"></span></button>`;
+                html += `<button class="btn-action btn-save-edit" onclick="saveEditRow(${actualSheetRow})" id="saveBtn_${actualSheetRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#10b981; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-save"></i><span class="btn-spinner"></span></button>`;
                 html += `<button class="btn-action btn-cancel-edit" onclick="cancelEditRow()" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#6b7280; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-times"></i></button>`;
             } else {
-                html += `<button class="btn-action btn-edit" onclick="startEditRow(${actualRow})" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#f59e0b; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-pen"></i></button>`;
-                html += `<button class="btn-action btn-delete" onclick="deleteRecord(${actualRow})" id="deleteBtn_${actualRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#ef4444; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-trash"></i><span class="btn-spinner"></span></button>`;
+                html += `<button class="btn-action btn-edit" onclick="startEditRow(${actualSheetRow})" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#f59e0b; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-pen"></i></button>`;
+                html += `<button class="btn-action btn-delete" onclick="deleteRecord(${actualSheetRow})" id="deleteBtn_${actualSheetRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#ef4444; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-trash"></i><span class="btn-spinner"></span></button>`;
             }
             html += `</td></tr>`;
         });
 
         html += `</tbody></table>`;
-        modalBody.innerHTML = html;
+        modalBodyContent.innerHTML = html;
         document.getElementById('displayCount').textContent = records.length;
     }
 
-    window.startEditRow = function(row) { editingRowNumber = row; applyRecordFilters(); };
-    window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
+    window.startEditRow = function(row) { 
+        editingRowNumber = row; 
+        applyRecordFilters(); 
+    };
+    
+    window.cancelEditRow = function() { 
+        editingRowNumber = null; 
+        applyRecordFilters(); 
+    };
 
+    // ============================================
+    // SAVE EDIT ROW
+    // ============================================
     window.saveEditRow = async function(rowNumber) {
         const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
         if (saveBtn) { 
@@ -2453,9 +3417,18 @@
             if (key) updatedData[key] = input.value; 
         });
 
-        const recordIndex = parseInt(row.dataset.recordIndex);
-        if (isNaN(recordIndex) || recordIndex < 0 || recordIndex >= filteredRecords.length) { 
-            showToast('❌ Error', 'Record not found in list.', 'error'); 
+        let originalRecord = null;
+        let originalIndex = -1;
+        for (let i = 0; i < allRecords.length; i++) {
+            if (i + 2 === rowNumber) {
+                originalRecord = allRecords[i];
+                originalIndex = i;
+                break;
+            }
+        }
+        
+        if (!originalRecord) { 
+            showToast('❌ Error', 'Record not found in database.', 'error'); 
             if (saveBtn) { 
                 saveBtn.classList.remove('loading'); 
                 saveBtn.disabled = false; 
@@ -2463,41 +3436,106 @@
             return; 
         }
 
-        const original = filteredRecords[recordIndex];
-        const sheetRowNumber = recordIndex + 2;
+        const newProvince = updatedData['Province'] || originalRecord['Province'] || '';
+        const newCity = updatedData['City/Municipality'] || originalRecord['City/Municipality'] || '';
+        const newInitialStatus = updatedData['Initial Status'] || originalRecord['Initial Status'] || '';
+        const newUpdatedStatus = updatedData['Updated Status'] || originalRecord['Updated Status'] || '';
+        const newType = updatedData['Type of Monitoring'] || originalRecord['Type of Monitoring'] || '';
+        const newReportingMonth = updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '';
+        const newPersonnel = updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || '';
+        const newDate = updatedData['Date of Monitoring Conducted (MM/DD/YYYY)'] || originalRecord['Date of Monitoring Conducted (MM/DD/YYYY)'] || '';
+        
+        const detailParts = [];
+        
+        const oldInitial = originalRecord['Initial Status'] || '';
+        if (oldInitial && newInitialStatus && oldInitial !== newInitialStatus) {
+            detailParts.push(`Initial Status: ${oldInitial} → ${newInitialStatus}`);
+        }
+        
+        const oldUpdated = originalRecord['Updated Status'] || '';
+        if (oldUpdated && newUpdatedStatus && oldUpdated !== newUpdatedStatus) {
+            detailParts.push(`Updated Status: ${oldUpdated} → ${newUpdatedStatus}`);
+        }
+        
+        const oldType = originalRecord['Type of Monitoring'] || '';
+        if (oldType && newType && oldType !== newType) {
+            detailParts.push(`Type of Monitoring: ${oldType} → ${newType}`);
+        }
+        
+        const oldMonth = originalRecord['Reporting Month'] || '';
+        if (oldMonth && newReportingMonth && oldMonth !== newReportingMonth) {
+            detailParts.push(`Reporting Month: ${oldMonth} → ${newReportingMonth}`);
+        }
+        
+        const oldPersonnel = originalRecord['Personnel In-Charge'] || '';
+        if (oldPersonnel && newPersonnel && oldPersonnel !== newPersonnel) {
+            detailParts.push(`Personnel In-Charge: ${oldPersonnel} → ${newPersonnel}`);
+        }
+        
+        const oldCity = originalRecord['City/Municipality'] || '';
+        if (oldCity && newCity && oldCity !== newCity) {
+            detailParts.push(`City/Municipality: ${oldCity} → ${newCity}`);
+        }
+        
+        const detail = detailParts.length ? detailParts.join(', ') : 'Updated record';
 
         const payload = {
             action: 'updateRecord',
-            rowNumber: sheetRowNumber,
+            rowNumber: rowNumber,
             formType: 'Plan_Monitoring',
             data: {
-                province: updatedData['Province'] || original['Province'] || '',
-                cityMun: updatedData['City/Municipality'] || original['City/Municipality'] || '',
-                typeMonitoring: updatedData['Type of Monitoring'] || original['Type of Monitoring'] || '',
-                initialStatus: updatedData['Initial Status'] || original['Initial Status'] || '',
-                updatedStatus: updatedData['Updated Status'] || original['Updated Status'] || '',
-                dateConducted: updatedData['Date of Monitoring Conducted (MM/DD/YYYY)'] || original['Date of Monitoring Conducted (MM/DD/YYYY)'] || '',
-                reportingMonth: updatedData['Reporting Month'] || original['Reporting Month'] || '',
-                remarks: updatedData['Remarks'] || original['Remarks'] || 'N/A',
-                linkMov: updatedData['Link to MOV'] || original['Link to MOV'] || '',
-                personnelInCharge: updatedData['Personnel In-Charge'] || original['Personnel In-Charge'] || ''
+                region: originalRecord['Region'] || '',
+                province: newProvince,
+                cityMun: newCity,
+                typeMonitoring: newType,
+                initialStatus: newInitialStatus,
+                updatedStatus: newUpdatedStatus,
+                dateConducted: newDate,
+                reportingMonth: newReportingMonth,
+                remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
+                linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
+                personnelInCharge: newPersonnel
             }
         };
 
         try {
-            await fetch(WEB_APP_URL, {
+            const response = await fetch(WEB_APP_URL, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
             
-            showToast('✅ Success', 'Record updated!', 'success');
-            editingRowNumber = null;
-            await loadRecords();
+            let result;
+            try {
+                result = await response.json();
+            } catch (e) {
+                result = { result: 'success' };
+            }
+            
+            if (result.result === 'success') {
+                showToast('✅ Success', 'Record updated!', 'success');
+                await addActivityLog('Updated', newProvince, newCity, detail);
+                editingRowNumber = null;
+                await loadRecords();
+            } else {
+                showToast('❌ Error', result.message || 'Update failed.', 'error');
+            }
         } catch (e) { 
             console.error('Update error:', e);
-            showToast('❌ Error', 'Failed to update: ' + e.message, 'error'); 
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                showToast('✅ Success', 'Record updated!', 'success');
+                await addActivityLog('Updated', newProvince, newCity, detail);
+                editingRowNumber = null;
+                await loadRecords();
+            } catch (fallbackErr) {
+                showToast('❌ Error', 'Failed to update: ' + fallbackErr.message, 'error');
+            }
         }
         finally { 
             if (saveBtn) { 
@@ -2507,6 +3545,9 @@
         }
     };
 
+    // ============================================
+    // DELETE RECORD
+    // ============================================
     window.deleteRecord = async function(rowNumber) {
         if (!confirm('Delete this record permanently?')) return;
         
@@ -2515,47 +3556,65 @@
             deleteBtn.classList.add('loading'); 
             deleteBtn.disabled = true; 
         }
-        
-        const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
-        if (!row) {
-            showToast('❌ Error', 'Row not found.', 'error');
-            if (deleteBtn) {
-                deleteBtn.classList.remove('loading');
-                deleteBtn.disabled = false;
-            }
-            return;
-        }
 
-        const recordIndex = parseInt(row.dataset.recordIndex);
-        if (isNaN(recordIndex) || recordIndex < 0 || recordIndex >= filteredRecords.length) {
-            showToast('❌ Error', 'Record not found.', 'error');
-            if (deleteBtn) {
-                deleteBtn.classList.remove('loading');
-                deleteBtn.disabled = false;
+        let province = '', city = '';
+        for (let i = 0; i < allRecords.length; i++) {
+            if (i + 2 === rowNumber) {
+                const rec = allRecords[i];
+                province = rec['Province'] || '';
+                city = rec['City/Municipality'] || '';
+                break;
             }
-            return;
         }
-
-        const sheetRowNumber = recordIndex + 2;
         
         try {
-            await fetch(WEB_APP_URL, {
+            const payload = { 
+                action: 'deleteRecord', 
+                rowNumber: rowNumber, 
+                formType: 'Plan_Monitoring' 
+            };
+            
+            const response = await fetch(WEB_APP_URL, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    action: 'deleteRecord', 
-                    rowNumber: sheetRowNumber, 
-                    formType: 'Plan_Monitoring' 
-                })
+                body: JSON.stringify(payload)
             });
             
-            showToast('🗑️ Deleted', 'Record deleted.', 'success');
-            editingRowNumber = null;
-            await loadRecords();
+            let result;
+            try {
+                result = await response.json();
+            } catch (e) {
+                result = { result: 'success' };
+            }
+            
+            if (result.result === 'success') {
+                showToast('🗑️ Deleted', 'Record deleted.', 'success');
+                await addActivityLog('Deleted', province, city, 'Record removed');
+                editingRowNumber = null;
+                await loadRecords();
+            } else {
+                showToast('❌ Error', result.message || 'Delete failed.', 'error');
+            }
         } catch (e) { 
             console.error('Delete error:', e);
-            showToast('❌ Error', 'Delete failed: ' + e.message, 'error'); 
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: 'deleteRecord', 
+                        rowNumber: rowNumber, 
+                        formType: 'Plan_Monitoring' 
+                    })
+                });
+                showToast('🗑️ Deleted', 'Record deleted.', 'success');
+                await addActivityLog('Deleted', province, city, 'Record removed');
+                editingRowNumber = null;
+                await loadRecords();
+            } catch (fallbackErr) {
+                showToast('❌ Error', 'Delete failed: ' + fallbackErr.message, 'error');
+            }
         }
         finally { 
             if (deleteBtn) { 
@@ -2566,7 +3625,7 @@
     };
 
     // ============================================
-    // FILTERS & SEARCH
+    // APPLY RECORD FILTERS
     // ============================================
     async function applyRecordFilters() {
         const provinceFilter = document.getElementById('filterProvince').value;
@@ -2608,7 +3667,7 @@
     });
 
     // ============================================
-    // CHART
+    // CHART FUNCTIONS
     // ============================================
     const chartModal = document.getElementById('chartModal');
 
@@ -2675,11 +3734,12 @@
             const counts = {};
             statuses.forEach(s => counts[s] = 0);
             filtered.forEach(r => {
-                const s = r['Updated Status'] || 'None Indicated';
+                let s = r['Updated Status'] || r['Initial Status'] || 'None Indicated';
+                if (s === 'Pre-phase') s = 'Pre-Phase';
                 if (counts.hasOwnProperty(s)) counts[s]++;
                 else counts[s] = 1;
             });
-            labels = Object.keys(counts).filter(k => counts[k] > 0);
+            labels = statuses.filter(k => counts[k] > 0);
             data = labels.map(k => counts[k]);
             chartTitle = 'Status Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '');
             datasetLabel = 'Count';
@@ -2730,7 +3790,7 @@
         const ctx = document.getElementById('chartCanvas').getContext('2d');
         if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
         const colors = labels.map((_, i) => {
-            const hues = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316'];
+            const hues = ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316','#6366f1','#14b8a6','#f43f5e','#8b5cf6','#eab308','#94a3b8'];
             return hues[i % hues.length];
         });
         chartInstance = new Chart(ctx, {
@@ -2739,8 +3799,15 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' }, legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + ' record(s)' } } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Records', font: { weight: 'bold' } } }, x: { title: { display: true, text: '', font: { weight: 'bold' } } } }
+                plugins: { 
+                    title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' }, 
+                    legend: { display: false }, 
+                    tooltip: { callbacks: { label: ctx => ctx.parsed.y + ' record(s)' } } 
+                },
+                scales: { 
+                    y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Records', font: { weight: 'bold' } } }, 
+                    x: { title: { display: true, text: '', font: { weight: 'bold' } } } 
+                }
             }
         });
     }
@@ -2818,7 +3885,7 @@
                 </div></div>
                 <a href="Techsamp.html">Technical Assistance</a>
                 <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
+                <a href="p_monitoring.html">Plan Monitoring</a>
                 <a href="lgu-info.html">LGU Information</a>
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
@@ -2949,7 +4016,7 @@
         if (form) form.addEventListener("submit", handleModalLogin);
 
         loadPICNamesFromSheet();
-        setStatus('📋 All set · fill in all required fields', 'info');
+        loadActivityLog();
     });
 
     window.openLoginModal = openLoginModal;
