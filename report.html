@@ -1223,99 +1223,108 @@
       }
     }
 
-function printClupFormulationDetail(lguData) {
-  const now = new Date();
-  const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
-  const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
-  
-  const city = lguData["City/Municipality"] || lguData["city"] || lguData["City"] || "";
-  const province = lguData["Province"] || lguData["province"] || "";
-  const incomeClass = lguData["Income Class"] || lguData["incomeClass"] || "";
-  
-  // Find matching LGU record for additional info
-  const lguMatch = lguRecordsData.find(l => {
-    const lProvince = l["Province"] || l["province"] || "";
-    const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
-    return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
-  });
-  
-  // Status
-  const clupStatus = lguData["CLUP Status"] || lguData["CLUPStatus"] || lguData["status"] || "";
-  let statusDisplay = "OTHER";
-  if (clupStatus) {
-    const sl = String(clupStatus).toLowerCase().trim();
-    if (sl.includes("updated") || sl === "updated") statusDisplay = "UPDATED";
-    else if (sl.includes("for updating") || sl === "for updating") statusDisplay = "FOR UPDATING";
-    else if (sl.includes("under review") || sl === "under review") statusDisplay = "UNDER REVIEW";
-    else statusDisplay = clupStatus.toUpperCase();
-  }
-  
-  const clupUpdates = lguData["CLUPStatus/Updates"] || lguData["updates"] || "";
-  const phaseInfo = getPhaseDisplay(clupUpdates);
-  let specificStatusText = "None Indicated";
-  if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
-    specificStatusText = phaseInfo.display;
-  } else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") {
-    specificStatusText = clupUpdates;
-  }
-  
-  const shelterPlan = lguData["LGU with Local Shelter Plan"] || "";
-  const housingSubsector = lguData["LGU with Integrated Housing Subsector"] || "";
-  const commPlan = lguData["LGU with Integrated Communications Plan"] || "";
-  
-  const startYear = lguData["Start Year"] || "";
-  const endYear = lguData["End Year"] || "";
-  const resolutionNo = lguData["Resolution Number of the Latest Plan"] || "";
-  const approvalDate = lguData["Approval date of the Latest plan (MM/DD/YYYY)"] || "";
-  const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
-  
-  // C/MPDC Info - from LGU record if available
-  let mpdcName = lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "";
-  // Keep original formatting with line breaks for multi-line display
-  
-  let mpdcEmail = lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "";
-  // Keep original formatting with line breaks
-  
-  let mpdcMobile = lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "";
-  // Keep original formatting with line breaks
-  
-  // Local Chief Executive
-  let mayor = lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "";
-  mayor = mayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  let mayorMobile = lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "";
-  mayorMobile = mayorMobile.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  let viceMayor = lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "";
-  viceMayor = viceMayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  const statusClass = statusDisplay === "UPDATED" ? "status-Updated" : 
-                     statusDisplay === "FOR UPDATING" ? "status-For-Updating" : 
-                     statusDisplay === "UNDER REVIEW" ? "status-Under-Review" : "status-Other";
-  
-  // Get region - default to "WESTERN VISAYAS" and clean up any "REGION_06" values
-  let region = lguData["Region"] || lguData["region"] || "WESTERN VISAYAS";
-  if (region.toUpperCase().includes("REGION_06") || region.toUpperCase().includes("REGION 06") || region.toUpperCase().includes("REGION6")) {
-    region = "WESTERN VISAYAS";
-  }
-  if (region.trim() === "06" || region.trim() === "6") {
-    region = "WESTERN VISAYAS";
-  }
-  
-  // Helper function to format multi-line text with proper spacing
-  function formatMultiLine(text) {
-    if (!text || text.trim() === '') return '<span style="color: #1e293b; font-weight: 500;">—</span>';
-    const lines = text.split('\n').filter(line => line.trim() !== '');
-    if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
-    
-    let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
-    for (let i = 1; i < lines.length; i++) {
-      html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
-    }
-    return html;
-  }
-  
-  const printHtml = `
+    function printClupFormulationDetail(lguData) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" });
+        const timeStr = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+
+        const city = lguData["City/Municipality"] || lguData["city"] || lguData["City"] || "";
+        const province = lguData["Province"] || lguData["province"] || "";
+        const incomeClass = lguData["Income Class"] || lguData["incomeClass"] || "";
+
+        // Find matching LGU record for additional info
+        const lguMatch = lguRecordsData.find((l) => {
+            const lProvince = l["Province"] || l["province"] || "";
+            const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
+            return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
+        });
+
+        // Status
+        const clupStatus = lguData["CLUP Status"] || lguData["CLUPStatus"] || lguData["status"] || "";
+        let statusDisplay = "OTHER";
+        if (clupStatus) {
+            const sl = String(clupStatus).toLowerCase().trim();
+            if (sl.includes("updated") || sl === "updated") statusDisplay = "UPDATED";
+            else if (sl.includes("for updating") || sl === "for updating") statusDisplay = "FOR UPDATING";
+            else if (sl.includes("under review") || sl === "under review") statusDisplay = "UNDER REVIEW";
+            else statusDisplay = clupStatus.toUpperCase();
+        }
+
+        const clupUpdates = lguData["CLUPStatus/Updates"] || lguData["updates"] || "";
+        const phaseInfo = getPhaseDisplay(clupUpdates);
+        let specificStatusText = "None Indicated";
+        if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
+            specificStatusText = phaseInfo.display;
+        } else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") {
+            specificStatusText = clupUpdates;
+        }
+
+        const shelterPlan = lguData["LGU with Local Shelter Plan"] || "";
+        const housingSubsector = lguData["LGU with Integrated Housing Subsector"] || "";
+        const commPlan = lguData["LGU with Integrated Communications Plan"] || "";
+
+        const startYear = lguData["Start Year"] || "";
+        const endYear = lguData["End Year"] || "";
+        const resolutionNo = lguData["Resolution Number of the Latest Plan"] || "";
+        const approvalDate = lguData["Approval date of the Latest plan (MM/DD/YYYY)"] || "";
+        const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
+
+        // C/MPDC Info - from LGU record if available
+        let mpdcName = lguMatch ? lguMatch["Name of C/M/PPDC"] || "" : "";
+        // Keep original formatting with line breaks for multi-line display
+
+        let mpdcEmail = lguMatch ? lguMatch["C/M/PPDO Email Address"] || "" : "";
+        // Keep original formatting with line breaks
+
+        let mpdcMobile = lguMatch ? lguMatch["C/M/PPDO Contact Number"] || "" : "";
+        // Keep original formatting with line breaks
+
+        // Local Chief Executive
+        let mayor = lguMatch ? lguMatch["Name of Local Chief Executive"] || "" : "";
+        mayor = mayor.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
+
+        let mayorMobile = lguMatch ? lguMatch["Official Phone/Landline Number of LGU"] || "" : "";
+        mayorMobile = mayorMobile.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
+
+        let viceMayor = lguMatch ? lguMatch["Name of Vice Governor/Mayor"] || "" : "";
+        viceMayor = viceMayor.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
+
+        const statusClass =
+            statusDisplay === "UPDATED"
+                ? "status-Updated"
+                : statusDisplay === "FOR UPDATING"
+                  ? "status-For-Updating"
+                  : statusDisplay === "UNDER REVIEW"
+                    ? "status-Under-Review"
+                    : "status-Other";
+
+        // Get region - default to "WESTERN VISAYAS" and clean up any "REGION_06" values
+        let region = lguData["Region"] || lguData["region"] || "WESTERN VISAYAS";
+        if (
+            region.toUpperCase().includes("REGION_06") ||
+            region.toUpperCase().includes("REGION 06") ||
+            region.toUpperCase().includes("REGION6")
+        ) {
+            region = "WESTERN VISAYAS";
+        }
+        if (region.trim() === "06" || region.trim() === "6") {
+            region = "WESTERN VISAYAS";
+        }
+
+        // Helper function to format multi-line text with proper spacing
+        function formatMultiLine(text) {
+            if (!text || text.trim() === "") return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+            const lines = text.split("\n").filter((line) => line.trim() !== "");
+            if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+
+            let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
+            for (let i = 1; i < lines.length; i++) {
+                html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
+            }
+            return html;
+        }
+
+        const printHtml = `
     <html>
     <head>
       <style>
@@ -1388,13 +1397,13 @@ function printClupFormulationDetail(lguData) {
           text-align: right;
         }
         .lgu-right .lgu-region { 
-          font-size: 12pt; 
-          font-weight: 500; 
+          font-size: 14pt; 
+          font-weight: 700; 
           color: #1e3a8a !important; 
           text-transform: uppercase;
         }
         .lgu-right .lgu-income { 
-          font-size: 10pt; 
+          font-size: 9pt; 
           font-weight: 400; 
           color: #475569 !important; 
         }
@@ -1504,7 +1513,7 @@ function printClupFormulationDetail(lguData) {
         }
         .two-col-section .field-label {
           font-weight: 700;
-          color: #1e293b;
+          color: #000000;
           font-size: 9.5pt;
           display: block;
           margin-bottom: 1px;
@@ -1512,7 +1521,7 @@ function printClupFormulationDetail(lguData) {
         }
         .two-col-section .field-value {
           color: #1e293b;
-          font-weight: 600;
+          font-weight: 500;
           font-size: 9.5pt;
           display: block;
           padding-left: 0px;
@@ -1522,7 +1531,7 @@ function printClupFormulationDetail(lguData) {
         .two-col-section .field-value .line {
           display: block;
           color: #1e293b;
-          font-weight: 600;
+          font-weight: 500;
           text-align: left;
         }
         .two-col-section .full-width {
@@ -1579,16 +1588,16 @@ function printClupFormulationDetail(lguData) {
       
       <div class="info-grid">
         <div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText)}</span></div>
-        <div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || '—')}</span></div>
-        <div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>
-        <div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>
+        <div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || "—")}</span></div>
+        <div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || "—")}</span></div>
+        <div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || "—")}</span></div>
       </div>
       
       <div class="section-title">Latest CLUP</div>
       <div class="info-grid">
-        <div class="info-item"><span class="label">Planning Period :</span><span class="value">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span></div>
-        <div class="info-item"><span class="label">Date Approved :</span><span class="value">${escapeHtml(approvalDisplay || '—')}</span></div>
-        <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || '—')}</span></div>
+        <div class="info-item"><span class="label">Planning Period :</span><span class="value">${startYear && endYear ? `${startYear}-${endYear}` : startYear || endYear || "—"}</span></div>
+        <div class="info-item"><span class="label">Date Approved :</span><span class="value">${escapeHtml(approvalDisplay || "—")}</span></div>
+        <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || "—")}</span></div>
       </div>
       
       <!-- C/MPDC Section - Two column layout: Name | Email, Mobile spans full width -->
@@ -1597,19 +1606,19 @@ function printClupFormulationDetail(lguData) {
       <div class="two-col-section">
         <!-- Left Column: Name -->
         <div class="field">
-          <span class="field-label">Name</span>
+          <span class="field-label">Name:</span>
           <span class="field-value">${formatMultiLine(mpdcName)}</span>
         </div>
         
         <!-- Right Column: Email (left-aligned) -->
         <div class="field">
-          <span class="field-label">Email</span>
+          <span class="field-label">Email:</span>
           <span class="field-value">${formatMultiLine(mpdcEmail)}</span>
         </div>
         
         <!-- Mobile - spans full width -->
         <div class="field full-width">
-          <span class="field-label">Mobile</span>
+          <span class="field-label">Mobile:</span>
           <span class="field-value">${formatMultiLine(mpdcMobile)}</span>
         </div>
       </div>
@@ -1620,35 +1629,37 @@ function printClupFormulationDetail(lguData) {
       <div class="two-col-section">
         <!-- Left Column: Mayor -->
         <div class="field">
-          <span class="field-label">Mayor</span>
-          <span class="field-value">${escapeHtml(mayor || '—')}</span>
+          <span class="field-label">Mayor:</span>
+          <span class="field-value">${escapeHtml(mayor || "—")}</span>
         </div>
         
         <!-- Right Column: Vice Mayor (left-aligned) -->
         <div class="field">
-          <span class="field-label">Vice Mayor</span>
-          <span class="field-value">${escapeHtml(viceMayor || '—')}</span>
+          <span class="field-label">Vice Mayor:</span>
+          <span class="field-value">${escapeHtml(viceMayor || "—")}</span>
         </div>
         
         <!-- Mobile - spans full width -->
-        ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ''}
+        ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile:</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ""}
       </div>
       
       <div class="footer">Generated on ${dateStr} at ${timeStr}</div>
     </body>
     </html>
   `;
-  
-  const win = window.open("", "_blank", "width=900,height=800");
-  if (win) {
-    win.document.write(printHtml);
-    win.document.close();
-    win.focus();
-    setTimeout(function() { win.print(); }, 500);
-  } else {
-    showToastMessage("Please allow popups to print.", "error");
-  }
-}
+
+        const win = window.open("", "_blank", "width=900,height=800");
+        if (win) {
+            win.document.write(printHtml);
+            win.document.close();
+            win.focus();
+            setTimeout(function () {
+                win.print();
+            }, 500);
+        } else {
+            showToastMessage("Please allow popups to print.", "error");
+        }
+    }
 
     // ============================================
     // CLUP SUMMARY PRINT (existing)
