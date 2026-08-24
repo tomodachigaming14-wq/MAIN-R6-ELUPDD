@@ -1269,17 +1269,17 @@ function printClupFormulationDetail(lguData) {
   const approvalDate = lguData["Approval date of the Latest plan (MM/DD/YYYY)"] || "";
   const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
   
-  // C/MPDC Info - from LGU record if available - Clean up to single lines
+  // C/MPDC Info - from LGU record if available
   let mpdcName = lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "";
-  mpdcName = mpdcName.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+  // Keep original formatting with line breaks for multi-line display
   
   let mpdcEmail = lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "";
-  mpdcEmail = mpdcEmail.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+  // Keep original formatting with line breaks
   
   let mpdcMobile = lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "";
-  mpdcMobile = mpdcMobile.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+  // Keep original formatting with line breaks
   
-  // Local Chief Executive - with mobile from Landline
+  // Local Chief Executive
   let mayor = lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "";
   mayor = mayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
   
@@ -1300,6 +1300,19 @@ function printClupFormulationDetail(lguData) {
   }
   if (region.trim() === "06" || region.trim() === "6") {
     region = "WESTERN VISAYAS";
+  }
+  
+  // Helper function to format multi-line text with proper spacing
+  function formatMultiLine(text) {
+    if (!text || text.trim() === '') return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+    const lines = text.split('\n').filter(line => line.trim() !== '');
+    if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+    
+    let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
+    for (let i = 1; i < lines.length; i++) {
+      html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
+    }
+    return html;
   }
   
   const printHtml = `
@@ -1389,7 +1402,7 @@ function printClupFormulationDetail(lguData) {
           display: flex; 
           align-items: center; 
           gap: 12px; 
-          margin: 4px 0 10px 0;
+          margin: 4px 0 12px 0;
           padding: 4px 0;
           border-bottom: 1px dashed #d1d5db;
         }
@@ -1436,9 +1449,6 @@ function printClupFormulationDetail(lguData) {
           white-space: normal;
           word-break: break-word;
         }
-        .info-item.full-width {
-          grid-column: 1 / -1;
-        }
         .section-title { 
           font-size: 10pt; 
           font-weight: 700; 
@@ -1446,50 +1456,78 @@ function printClupFormulationDetail(lguData) {
           text-transform: uppercase; 
           border-bottom: 1px solid #d1d5db; 
           padding-bottom: 3px; 
-          margin-top: 12px; 
-          margin-bottom: 6px; 
+          margin-top: 14px; 
+          margin-bottom: 8px; 
           letter-spacing: 0.5px;
         }
-        /* Local Chief Executive Section - Fixed Alignment using Table */
-        .ceo-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 4px 0;
-          font-size: 9.5pt;
+        
+        /* Section with bold labels and values on separate lines */
+        .info-section {
+          margin-top: 2px;
+          margin-bottom: 2px;
         }
-        .ceo-table td {
-          padding: 3px 4px;
-          border: none;
-          vertical-align: baseline;
-          color: #000000 !important;
+        .info-section .field {
+          margin-bottom: 6px;
         }
-        .ceo-table .label-cell {
-          font-weight: 600;
-          color: #475569;
-          white-space: nowrap;
-        }
-        .ceo-table .value-cell {
-          font-weight: 500;
+        .info-section .field-label {
+          font-weight: 700;
           color: #1e293b;
+          font-size: 9.5pt;
+          display: block;
+          margin-bottom: 1px;
         }
-        .ceo-table .mayor-label {
-          width: 70px;
+        .info-section .field-value {
+          color: #1e293b;
+          font-weight: 500;
+          font-size: 9.5pt;
+          display: block;
+          padding-left: 0px;
+          line-height: 1.5;
         }
-        .ceo-table .mayor-value {
-          width: 35%;
+        .info-section .field-value .line {
+          display: block;
+          color: #1e293b;
+          font-weight: 500;
         }
-        .ceo-table .vice-label {
-          width: 90px;
+        
+        /* Two column layout for C/MPDC and Local Chief Executive - ALL LEFT ALIGNED */
+        .two-col-section {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0px 40px;
+          margin-top: 2px;
+          margin-bottom: 2px;
         }
-        .ceo-table .vice-value {
-          width: 35%;
+        .two-col-section .field {
+          margin-bottom: 6px;
         }
-        .ceo-table .mobile-row .label-cell {
-          width: 180px;
+        .two-col-section .field-label {
+          font-weight: 700;
+          color: #1e293b;
+          font-size: 9.5pt;
+          display: block;
+          margin-bottom: 1px;
+          text-align: left;
         }
-        .ceo-table .mobile-row .value-cell {
-          width: auto;
+        .two-col-section .field-value {
+          color: #1e293b;
+          font-weight: 500;
+          font-size: 9.5pt;
+          display: block;
+          padding-left: 0px;
+          line-height: 1.5;
+          text-align: left;
         }
+        .two-col-section .field-value .line {
+          display: block;
+          color: #1e293b;
+          font-weight: 500;
+          text-align: left;
+        }
+        .two-col-section .full-width {
+          grid-column: 1 / -1;
+        }
+        
         .footer { 
           margin-top: 20px; 
           padding-top: 10px; 
@@ -1509,7 +1547,8 @@ function printClupFormulationDetail(lguData) {
           .status-For-Updating { background: #fef3c7 !important; color: #92400e !important; }
           .status-Under-Review { background: #dbeafe !important; color: #1e40af !important; }
           .status-Other { background: #e2e8f0 !important; color: #475569 !important; }
-          .ceo-table td { color: #000000 !important; }
+          .two-col-section .field-label { color: #1e293b !important; }
+          .two-col-section .field-value { color: #1e293b !important; }
         }
         @page { margin: 12mm 15mm; }
       </style>
@@ -1551,23 +1590,48 @@ function printClupFormulationDetail(lguData) {
         <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || '—')}</span></div>
       </div>
       
+      <!-- C/MPDC Section - Two column layout: Name | Email, Mobile spans full width -->
       <div class="section-title">City/Municipal Planning and Development Coordinator (C/MPDC)</div>
-      <div class="info-grid">
-        <div class="info-item"><span class="label">Name :</span><span class="value">${escapeHtml(mpdcName || '—')}</span></div>
-        <div class="info-item"><span class="label">Email :</span><span class="value">${escapeHtml(mpdcEmail || '—')}</span></div>
-        <div class="info-item"><span class="label">Mobile :</span><span class="value">${escapeHtml(mpdcMobile || '—')}</span></div>
+      
+      <div class="two-col-section">
+        <!-- Left Column: Name -->
+        <div class="field">
+          <span class="field-label">Name</span>
+          <span class="field-value">${formatMultiLine(mpdcName)}</span>
+        </div>
+        
+        <!-- Right Column: Email (left-aligned) -->
+        <div class="field">
+          <span class="field-label">Email</span>
+          <span class="field-value">${formatMultiLine(mpdcEmail)}</span>
+        </div>
+        
+        <!-- Mobile - spans full width -->
+        <div class="field full-width">
+          <span class="field-label">Mobile</span>
+          <span class="field-value">${formatMultiLine(mpdcMobile)}</span>
+        </div>
       </div>
       
+      <!-- Local Chief Executive Section - Two column layout: Mayor | Vice Mayor, Mobile spans full width -->
       <div class="section-title">Local Chief Executive</div>
-      <table class="ceo-table">
-        <tr>
-          <td class="label-cell mayor-label">Mayor :</td>
-          <td class="value-cell mayor-value">${escapeHtml(mayor || '—')}</td>
-          <td class="label-cell vice-label">Vice Mayor :</td>
-          <td class="value-cell vice-value">${escapeHtml(viceMayor || '—')}</td>
-        </tr>
-        ${mayorMobile ? `<tr class="mobile-row"><td class="label-cell">Mobile :</td><td class="value-cell" colspan="3">${escapeHtml(mayorMobile)}</td></tr>` : ''}
-      </table>
+      
+      <div class="two-col-section">
+        <!-- Left Column: Mayor -->
+        <div class="field">
+          <span class="field-label">Mayor</span>
+          <span class="field-value">${escapeHtml(mayor || '—')}</span>
+        </div>
+        
+        <!-- Right Column: Vice Mayor (left-aligned) -->
+        <div class="field">
+          <span class="field-label">Vice Mayor</span>
+          <span class="field-value">${escapeHtml(viceMayor || '—')}</span>
+        </div>
+        
+        <!-- Mobile - spans full width -->
+        ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ''}
+      </div>
       
       <div class="footer">Generated on ${dateStr} at ${timeStr}</div>
     </body>
