@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DHSUD VI | CONTACT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
+    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
+    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
+    .logo-area-header { display: flex; align-items: center; gap: 16px; }
+    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
+    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
+    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
+    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
+    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
+    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
+    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
+    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
+    .dropdown:hover .dropdown-content { display: block; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
+    .dropdown-content a:hover { background: #eff6ff; }
+    .dropdown-submenu { position: relative; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
+    .submenu-trigger:hover { background: #eff6ff; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
+    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
+    .dropdown-submenu:hover .submenu-content { display: block; }
+    .submenu-content a { padding: 0.7rem 1.2rem; }
+    .contact-section { background: #0a2540; color: white; border-radius: 2rem; padding: 2.5rem; margin: 2rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .contact-info h3, .contact-form h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+    .contact-details { margin: 1.2rem 0; }
+    .contact-details div { margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+    .contact-details i { width: 24px; color: #3b82f6; }
+    .map-container { margin-top: 1.2rem; border-radius: 20px; overflow: hidden; border: 2px solid #ffffff20; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .map-container iframe { width: 100%; height: 250px; border: none; display: block; }
+    .contact-form input, .contact-form textarea { width: 100%; padding: 12px; border-radius: 28px; border: none; margin-bottom: 12px; background: #ffffff20; color: white; }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: #cbd5e1; }
+    .contact-form button { background: #2563eb; margin-top: 0.5rem; border: none; padding: 0.8rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.25s; box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2); color: white; }
+    .contact-form button:hover { background: #1d4ed8; transform: translateY(-3px); box-shadow: 0 12px 20px -8px #2563eb70; }
+    .btn-primary { background: #2563eb; color: white; border: none; padding: 0.8rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.25s; box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2); }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-3px); box-shadow: 0 12px 20px -8px #2563eb70; }
+    .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
+    .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
+    .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+    .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
+    .login-modal.active { display: flex; }
+    .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
+    .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
+    .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; transition: transform 0.2s; }
+    .login-modal-brand img:hover { transform: scale(1.02); }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
+    .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
+    .login-modal-body .input-group { margin-bottom: 1.3rem; }
+    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
+    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+    .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
+    .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+    .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.4rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
+    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
+    .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
+    .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .toast-msg.success { background: #166534; }
+    .toast-msg.error { background: #b91c1c; }
+    .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
+    .user-name { font-size: 0.7rem; font-weight: 500; }
+    .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
+    .role-badge-header.admin { background: #dcfce7; color: #166534; }
+    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
+    .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
+    .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
+    .user-dropdown-item:hover { background: #f8fafc; }
+    .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
+    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
+    @media (max-width: 800px) { .contact-section { grid-template-columns: 1fr; } .map-container iframe { height: 200px; } .top-bar { flex-direction: column; align-items: stretch; } .header-logo-img span { white-space: normal; font-size: 0.7rem; } .login-modal-brand img { width: 100px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="top-bar">
+        <div class="logo-area-header">
+          <div class="header-logo-img">
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px" /><span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
+          </div>
+        </div>
+        <div class="nav-right" id="userMenuContainer"></div>
+      </div>
+    </div>
+    <div class="nav-bottom">
+      <div class="container"><div class="main-nav-links" id="mainNavContainer"></div></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- CONTACT SECTION (standalone) -->
+      <div class="contact-section scroll-reveal" id="contact">
+        <div class="contact-info">
+          <h3><i class="fas fa-headset"></i> CONTACT US</h3>
+          <p style="margin:0.8rem 0">Have a question, comment or suggestion? We'd love to hear from you!</p>
+          <div class="contact-details">
+            <div><i class="fas fa-map-pin"></i> <strong>Location:</strong> Senator Benigno S. Aquino Jr. Ave, Mandurriao, Iloilo City, Iloilo</div>
+            <div><i class="fas fa-envelope"></i> <strong>Email:</strong> elupdd.region6@dhsud.gov.ph</div>
+            <div><i class="fas fa-phone-alt"></i> <strong>Call:</strong> +63 (033) 123-4567</div>
+          </div>
+          <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d773.179403259934!2d122.5530314!3d10.7097803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33aefaab96770b99%3A0x5c2b7b8bed82d2c9!2sGaisano%20Iloilo%20City%20Center%20Mall!5e1!3m2!1sen!2sph!4v1749480000000!5m2!1sen!2sph" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <p style="font-size:0.7rem; margin-top:0.5rem; opacity:0.7"><i class="fas fa-external-link-alt"></i> <a href="https://www.google.com/maps/place/Gaisano+Iloilo+City+Center+Mall/@10.7097803,122.5530314,276m/data=!3m1!1e3!4m15!1m8!3m7!1s0x33aee56fe538d781:0xe8250cd6bc30a488!2sIloilo+City,+Iloilo!3b1!8m2!3d10.7301854!4d122.5591148!16zL20vMDR3ZGIx!3m5!1s0x33aefaab96770b99:0x5c2b7b8bed82d2c9!8m2!3d10.7097803!4d122.5536751!16s%2Fg%2F11b6dpplyw?entry=ttu" target="_blank" style="color:#3b82f6">Open in Google Maps →</a></p>
+        </div>
+        <div class="contact-form">
+          <form id="contactFormSim" onsubmit="alert('Message sent (demo). Thank you!'); return false;">
+            <input type="text" placeholder="Name" required />
+            <input type="email" placeholder="Email" required />
+            <input type="text" placeholder="Subject" />
+            <textarea placeholder="Message" rows="3"></textarea>
+            <button type="submit" class="btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-new">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD<br  />
+        </div>
+        <div>
+          <strong>Our Social Networks</strong><br />Follow us for updates<br />
+          <div class="social-icons">
+            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
+    </div>
+  </footer>
+
+  <!-- MODALS (login + video) -->
+  <div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+      <div class="login-modal-brand">
+        <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+        <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+        <h3>DHSUD Region VI</h3>
+        <p>ELUPDD · CLUP & ZO Platform</p>
+      </div>
+      <div class="login-modal-body">
+        <form id="modalLoginForm">
+          <div class="input-group">
+            <label><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
+        </form>
+      </div>
+      <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+  </div>
+
+  <div id="videoModal" class="video-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); backdrop-filter:blur(8px); align-items:center; justify-content:center; z-index:20000;">
+    <div class="video-modal-content" style="position:relative; width:90%; max-width:1000px; background:black; border-radius:20px; overflow:hidden;">
+      <button class="close-video-modal" onclick="closeVideoModal()" style="position:absolute; top:-40px; right:0; background:none; border:none; color:white; font-size:30px; cursor:pointer; padding:10px;">&times;</button>
+      <iframe id="videoIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:500px; border:none;"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
+    let currentUser = null;
+
+    function escapeHtml(s) { if (!s) return ""; return String(s).replace(/[&<>]/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" })[m]); }
+    function showToastMessage(msg, type = "info") { let t = document.querySelector(".toast-msg"); if (t) t.remove(); let toast = document.createElement("div"); toast.className = "toast-msg" + (type === "error" ? " error" : type === "success" ? " success" : ""); toast.innerText = msg; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+    function encodePassword(p) { return btoa(p); }
+
+    function checkSession() { const raw = localStorage.getItem("dhsud_session"); if (raw) { try { const s = JSON.parse(raw); const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60); if (diff < 12 && s.email) { currentUser = s; return true; } else localStorage.removeItem("dhsud_session"); } catch(e) { localStorage.removeItem("dhsud_session"); } } currentUser = null; return false; }
+    function getUserInitials(n) { if (!n) return "U"; let p = n.split(" "); if (p.length >= 2) return (p[0][0] + p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
+    function getRoleLabel(r) { if (r === "admin") return "👑 Admin"; if (r === "encoder" || r === "staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
+    function getRoleClass(r) { if (r === "admin") return "admin"; if (r === "encoder" || r === "staff") return "staff"; return "viewer"; }
+
+   function renderMainNavigation() {
+        const container = document.getElementById("mainNavContainer");
+        if (!container) return;
+        let navHtml = `<a href="index.html">Home</a>`;
+        if (currentUser) {
+            navHtml +=
+                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+                    <a href="lc.html">Locational Clearance</a>
+                    <a href="SZC.html">Site Zoning Certification</a></div></div>
+                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
+                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
+                </div></div>
+                <a href="Techsamp.html">Technical Assistance</a>
+                <a href="training.html">CLUP/ZO Trainings</a>
+				<a href="p_monitoring.html">Plan Monitoring</a>
+                <a href="lgu-info.html">LGU Information</a>
+                <a href="report.html">Reports</a>
+                <a href="calendar.html">Calendar of Activities</a>
+                <a href="issuance.html">Issuances</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>`;
+      } else { navHtml += `<a href="#about">About</a><a href="contact.html">Contact</a>`; }
+      container.innerHTML = navHtml;
+      setTimeout(() => {
+        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const submenu = trigger.closest(".dropdown-submenu");
+            if (submenu) submenu.classList.toggle("open");
+          });
+        });
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".dropdown-submenu")) {
+            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+          }
+        });
+      }, 10);
+    }
+
+    function renderUserMenu() {
+      const container = document.getElementById("userMenuContainer");
+      if (!container) return;
+      if (currentUser) {
+        const initials = getUserInitials(currentUser.fullName);
+        const firstName = currentUser.fullName?.split(" ")[0] || "User";
+        const isAdmin = currentUser.role === "admin";
+        const roleLabel = getRoleLabel(currentUser.role);
+        const roleClass = getRoleClass(currentUser.role);
+        container.innerHTML = `<div class="user-menu" id="userMenuDropdown" style="position:relative;"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
+        const userDiv = document.getElementById("userMenuDropdown");
+        if (userDiv) { userDiv.addEventListener("click", (e) => { e.stopPropagation(); const menu = userDiv.querySelector(".user-dropdown-menu"); if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; }); document.addEventListener("click", () => { const menu = userDiv?.querySelector(".user-dropdown-menu"); if (menu) menu.style.display = "none"; }); }
+        if (isAdmin) { const adminBtn = document.getElementById("adminConsoleLink"); if (adminBtn) adminBtn.addEventListener("click", () => (window.location.href = "admin.html")); }
+        const logoutBtn = document.getElementById("logoutDropdownBtn");
+        if (logoutBtn) logoutBtn.addEventListener("click", () => { localStorage.removeItem("dhsud_session"); showToastMessage("Logged out successfully.", "success"); setTimeout(() => { window.location.href = "index.html"; }, 700); });
+      } else {
+        container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
+      }
+    }
+
+    function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
+    function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
+    function closeVideoModal() { document.getElementById("videoModal").style.display = "none"; const iframe = document.getElementById("videoIframe"); iframe.src = ""; }
+
+    async function handleModalLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("modalLoginPassword").value;
+      const btn = document.getElementById("loginModalBtn");
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = "⏳ Authenticating...";
+      try {
+        const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=users&_=${Date.now()}`);
+        const users = await resp.json();
+        const user = users.find((u) => u.email?.toLowerCase() === email);
+        if (!user) { showToastMessage("Account not found.", "error"); btn.innerHTML = originalText; btn.disabled = false; return false; }
+        if (user.password === encodePassword(password)) {
+          const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
+          localStorage.setItem("dhsud_session", JSON.stringify(session));
+          showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+          closeLoginModal();
+          setTimeout(() => window.location.reload(), 1000);
+        } else { showToastMessage("Invalid password.", "error"); }
+      } catch (error) { showToastMessage("Connection error.", "error"); }
+      finally { btn.innerHTML = originalText; btn.disabled = false; }
+      return false;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("modalLoginForm");
+      if (form) form.addEventListener("submit", handleModalLogin);
+    });
+
+    function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.scroll-reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } });
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+      revealElements.forEach(el => observer.observe(el));
+    }
+
+    function init() {
+      checkSession();
+      renderMainNavigation();
+      renderUserMenu();
+      initScrollReveal();
+      window.openLoginModal = openLoginModal;
+      window.closeLoginModal = closeLoginModal;
+      window.closeVideoModal = closeVideoModal;
+      window.onclick = function (e) {
+        const modal = document.getElementById("loginModal");
+        if (e.target === modal) closeLoginModal();
+        const videoModal = document.getElementById("videoModal");
+        if (e.target === videoModal) { videoModal.style.display = "none"; const iframe = document.getElementById("videoIframe"); iframe.src = ""; }
+      };
+    }
+    init();
+  </script>
+</body>
+</html>

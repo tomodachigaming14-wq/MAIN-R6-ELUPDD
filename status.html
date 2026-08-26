@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DHSUD · CLUP/ZO Dashboard</title>
+  <title>DHSUD VI | STATUS CLUP/ZO </title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
@@ -1117,8 +1117,8 @@
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>`;
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>`;
     } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
     container.innerHTML = navHtml;
     setTimeout(() => {
@@ -1137,22 +1137,24 @@
     }, 10);
   }
   
-  function renderUserMenu(){
-    const c=document.getElementById("userMenuContainer"); if(!c) return;
-    if(currentUser){
-      const initials=getUserInitials(currentUser.fullName);
-      const firstName=currentUser.fullName?.split(" ")[0]||"User";
-      const roleLabel=getRoleLabel(currentUser.role);
-      const roleClass=getRoleClass(currentUser.role);
-      c.innerHTML=`<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div><div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
-      const ud=document.getElementById("userMenuDropdown");
-      if(ud){ ud.addEventListener("click",(e)=>{ e.stopPropagation(); const m=ud.querySelector(".user-dropdown-menu"); if(m) m.style.display=m.style.display==="block"?"none":"block"; }); document.addEventListener("click",()=>{ const m=ud.querySelector(".user-dropdown-menu"); if(m) m.style.display="none"; }); }
-      const logoutBtn=document.getElementById("logoutDropdownBtn");
-      if(logoutBtn) logoutBtn.addEventListener("click",()=>{ localStorage.removeItem("dhsud_session"); showToast("Logged out","info"); setTimeout(()=>window.location.reload(),700); });
-    } else {
-      c.innerHTML=`<div class="login-prompt" onclick="document.getElementById('loginModal').classList.add('active')">🔐 Sign In</div>`;
+  function renderUserMenu() {
+      const container = document.getElementById("userMenuContainer"); if(!container) return;
+      if (currentUser) {
+        const initials = getUserInitials(currentUser.fullName);
+        const firstName = currentUser.fullName?.split(" ")[0] || "User";
+        const isAdmin = currentUser.role === "admin";
+        const roleLabel = getRoleLabel(currentUser.role);
+        const roleClass = getRoleClass(currentUser.role);
+        container.innerHTML = `<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
+        const userDiv = document.getElementById("userMenuDropdown");
+        if (userDiv) { userDiv.addEventListener("click", (e) => { e.stopPropagation(); const menu = userDiv.querySelector(".user-dropdown-menu"); if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; }); document.addEventListener("click", () => { const menu = userDiv.querySelector(".user-dropdown-menu"); if(menu) menu.style.display = "none"; }); }
+        if (isAdmin) { const adminBtn = document.getElementById("adminConsoleLink"); if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); }
+        const logoutBtn = document.getElementById("logoutDropdownBtn");
+        if(logoutBtn) logoutBtn.addEventListener("click", () => { localStorage.removeItem("dhsud_session"); showToastMessage("Logged out successfully.", "info"); setTimeout(() => window.location.reload(), 700); });
+      } else {
+        container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
+      }
     }
-  }
 
   // ========== DASHBOARD LOGIC ==========
   let rawLguData = [];

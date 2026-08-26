@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DHSUD VI | ABOUT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
+    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
+    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
+    .logo-area-header { display: flex; align-items: center; gap: 16px; }
+    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
+    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
+    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
+    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
+    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
+    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
+    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
+    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
+    .dropdown:hover .dropdown-content { display: block; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
+    .dropdown-content a:hover { background: #eff6ff; }
+    .dropdown-submenu { position: relative; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
+    .submenu-trigger:hover { background: #eff6ff; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
+    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
+    .dropdown-submenu:hover .submenu-content { display: block; }
+    .submenu-content a { padding: 0.7rem 1.2rem; }
+
+    /* About page specific */
+    .page-title-block { padding: 2.5rem 0 1rem; }
+    .page-title-block h1 { font-size: 2.6rem; font-weight: 800; color: #0f2b3a; letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
+    .page-title-block h1 i { color: #2563eb; font-size: 2.2rem; }
+    .page-title-block p { color: #4a627a; font-size: 1rem; max-width: 700px; margin-top: 0.25rem; }
+
+    .values-section { margin: 1.5rem 0 3rem; }
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    .value-card { background: white; border-radius: 28px; padding: 2rem 1.5rem; text-align: center; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); border: 1px solid #e4edf5; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+    .value-card:hover { transform: translateY(-8px); box-shadow: 0 22px 35px -12px rgba(0, 0, 0, 0.15); border-color: #cbdff2; }
+    .value-icon { width: 70px; height: 70px; background: linear-gradient(135deg, #eef5ff, #dbeafe); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; }
+    .value-icon i { font-size: 2rem; color: #2563eb; }
+    .value-card h3 { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 1rem; }
+    .value-card p { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+    .core-values-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 1rem 0; }
+    .value-tag { background: #dbeafe; color: #1e40af; padding: 0.4rem 1rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
+    .core-values-note { font-size: 0.75rem; font-style: italic; color: #64748b; margin-top: 0.8rem; }
+
+    .mandate-card { background: white; border-radius: 28px; padding: 2rem; border: 1px solid #e4edf5; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin: 1.5rem 0; }
+    .mandate-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid #2563eb; }
+    .mandate-header i { font-size: 1.8rem; color: #2563eb; }
+    .mandate-header h3 { font-size: 1.3rem; font-weight: 700; color: #1e3a8a; }
+    .mandate-content p, .mandate-content li { font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 0.8rem; }
+    .mandate-content ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+    .mandate-content li { margin-bottom: 0.5rem; }
+
+    .section-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 1.8rem; border-left: 6px solid #2563eb; padding-left: 1rem; }
+    .section-header h2 { font-size: 1.8rem; font-weight: 700; color: #0f2b3a; }
+
+    .about-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
+    .about-card { background: white; border-radius: 28px; padding: 1.8rem; border: 1px solid #e4edf5; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+    .about-card h3 { font-size: 1.3rem; font-weight: 700; color: #1e3a8a; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+    .about-card h3 i { color: #2563eb; font-size: 1.2rem; }
+    .about-card p, .about-card li { font-size: 0.9rem; color: #334155; line-height: 1.6; }
+    .about-card ul { list-style: none; padding: 0; }
+    .about-card ul li { padding: 0.4rem 0; border-bottom: 1px solid #f1f5f9; display: flex; gap: 0.6rem; }
+    .about-card ul li i { color: #2563eb; width: 18px; margin-top: 0.2rem; }
+    .badge-pill-about { background: #dbeafe; color: #1e40af; padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.7rem; font-weight: 600; display: inline-block; }
+
+    .dev-card { background: white; border-radius: 28px; padding: 2rem; border: 1px solid #e4edf5; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin: 1.5rem 0; }
+    .dev-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+    .dev-header i { font-size: 2.2rem; color: #2563eb; }
+    .dev-header h3 { font-size: 1.5rem; font-weight: 700; color: #0f2b3a; }
+    .dev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .dev-person { background: #f8fcff; padding: 1.2rem; border-radius: 20px; border: 1px solid #eef2ff; }
+    .dev-person .name { font-weight: 700; font-size: 1.1rem; color: #0a2540; }
+    .dev-person .role { font-size: 0.8rem; color: #2563eb; font-weight: 600; }
+    .dev-person .desc { font-size: 0.85rem; color: #475569; margin-top: 0.3rem; }
+    .dev-person i { color: #2563eb; margin-right: 4px; }
+
+    /* User Dropdown Menu Styles - FIXED */
+    .user-menu { position: relative; cursor: pointer; }
+    .user-dropdown-menu { 
+      display: none; 
+      position: absolute; 
+      top: 48px; 
+      right: 0; 
+      background: white; 
+      border-radius: 20px; 
+      min-width: 200px; 
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); 
+      border: 1px solid #eef2ff; 
+      overflow: hidden; 
+      z-index: 2000; 
+    }
+    .user-dropdown-menu.show { display: block; }
+    .user-dropdown-item { 
+      padding: 0.8rem 1.2rem; 
+      border-bottom: 1px solid #f1f5f9; 
+      cursor: pointer; 
+      font-size: 0.8rem; 
+      transition: background 0.15s;
+      color: #1e293b;
+    }
+    .user-dropdown-item:hover { background: #f8fafc; }
+    .user-dropdown-item:last-child { border-bottom: none; }
+    .user-dropdown-item.danger { color: #dc2626; }
+    .user-dropdown-item.danger:hover { background: #fef2f2; }
+    
+    .user-avatar { 
+      width: 28px; 
+      height: 28px; 
+      background: #2563eb; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: white; 
+      font-weight: 700; 
+      font-size: 0.75rem; 
+      flex-shrink: 0;
+    }
+    .user-name { font-size: 0.7rem; font-weight: 500; }
+    .role-badge-header { 
+      padding: 0.15rem 0.5rem; 
+      border-radius: 20px; 
+      font-size: 0.6rem; 
+      font-weight: 600; 
+      margin-left: 0.3rem; 
+    }
+    .role-badge-header.admin { background: #dcfce7; color: #166534; }
+    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
+    .role-badge-header.viewer { background: #f1f5f9; color: #475569; }
+
+    @media (max-width: 800px) { 
+      .about-grid-2 { grid-template-columns: 1fr; } 
+      .dev-grid { grid-template-columns: 1fr; } 
+      .top-bar { flex-direction: column; align-items: stretch; } 
+      .header-logo-img span { white-space: normal; font-size: 0.7rem; } 
+    }
+
+    /* reuse footer, modal styles from index */
+    .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
+    .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
+    .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+
+    .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
+    .login-modal.active { display: flex; }
+    .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
+    .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
+    .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; }
+    .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
+    .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
+    .login-modal-body .input-group { margin-bottom: 1.3rem; }
+    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
+    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
+    .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
+    .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
+    .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
+    .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.8rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
+    .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .toast-msg.success { background: #166534; }
+    .toast-msg.error { background: #b91c1c; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="top-bar">
+        <div class="logo-area-header">
+          <div class="header-logo-img">
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px" /><span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
+          </div>
+        </div>
+        <div class="nav-right" id="userMenuContainer"></div>
+      </div>
+    </div>
+    <div class="nav-bottom">
+      <div class="container"><div class="main-nav-links" id="mainNavContainer"></div></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- PAGE TITLE -->
+
+
+      <!-- OUR FOUNDATION (moved from index) -->
+      <div class="values-section scroll-reveal">
+        <div class="section-header"><h2><i class="fas fa-bullseye"></i> OUR FOUNDATION</h2></div>
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-eye"></i></div>
+            <h3>Vision</h3>
+            <p>A strong institution and catalyst for the provision of adequate and affordable housing, inclusive human settlements and well-planned communities for every Filipino family.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-rocket"></i></div>
+            <h3>Mission</h3>
+            <p>To improve the lives of the Filipino people as the primary government agency in the management of housing, human settlements and urban development.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-gem"></i></div>
+            <h3>Core Values</h3>
+            <div class="core-values-list">
+              <span class="value-tag">Dynamism</span><span class="value-tag">Honesty</span>
+              <span class="value-tag">Service Excellence</span><span class="value-tag">Unity of Purpose</span><span class="value-tag">Education</span>
+            </div>
+            <p class="core-values-note">DHSUD - D.E.H.S.U. | Driven by Excellence, Honesty, Service, Unity</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANDATE (from index) -->
+      <div class="mandate-card scroll-reveal">
+        <div class="mandate-header">
+          <i class="fas fa-gavel"></i>
+          <h3>Our Mandate</h3>
+        </div>
+        <div class="mandate-content">
+          <p><strong>1.</strong> Act as the primary national government entity responsible for the management of housing, human settlements and urban development.</p>
+          <p><strong>2.</strong> Be the sole and main planning and policy-making, regulatory, program coordination, and performance monitoring entity for all housing, human settlement and urban development concerns, primarily focusing on the access to and the affordability of basic human needs. For this purpose, the following functions of HLURB are hereby transferred to the Department:</p>
+          <ul><li>The land use planning and monitoring function, including the imposition of penalties for noncompliance to ensure that LGUs will follow the planning guidelines and implement their CLUPs and ZOs;</li>
+          <li>The regulatory function, including the formulation, promulgation, and enforcement of rules, standards and guidelines over subdivisions, condominiums and similar real estate developments, and imposition of fines and other administrative sanctions for violations;</li>
+          <li>The registration, regulation and supervision of HOAs, including the imposition of fines for violations.</li></ul>
+          <p><strong>3.</strong> Develop and adopt a national strategy to immediately address the provision of adequate and affordable housing to all Filipinos, and ensure the alignment of the policies, programs, and projects of all its attached agencies to facilitate the achievement of this objective.</p>
+        </div>
+      </div>
+
+      <!-- DHSUD & ELUPDD DETAILS (new) -->
+      <div class="about-grid-2 scroll-reveal">
+        <div class="about-card">
+          <h3><i class="fas fa-building"></i> DHSUD – Region 6 (Western Visayas)</h3>
+          <p>The Department of Human Settlements and Urban Development (DHSUD) operates as the primary government entity responsible for management, policy-making, and housing regulation in the Philippines. DHSUD Region 6 serves as the regional executive arm covering the provinces of Aklan, Antique, Capiz, Guimaras, Iloilo, and Negros Occidental. Based in Iloilo City, the regional office translates national housing and spatial policies into localized development.</p>
+          <br>
+          <h4 style="font-weight:700; font-size:1rem; color:#1e3a8a; margin-bottom:0.3rem;"><i class="fas fa-tasks" style="color:#2563eb;"></i> Core Responsibilities:</h4>
+          <ul>
+            <li><i class="fas fa-home"></i> <strong>Regional Housing Program Management:</strong> Coordinates the implementation of national government housing projects (such as socialized and economic housing) tailored to Western Visayas.</li>
+            <li><i class="fas fa-handshake"></i> <strong>Local Governance Support:</strong> Assists Local Government Units (LGUs) across Region 6 in establishing local housing boards and updating spatial planning frameworks.</li>
+            <li><i class="fas fa-gavel"></i> <strong>Regulatory Services:</strong> Handles the licensing and regulation of real estate developers, subdivisions, condominiums, and Homeowners Associations (HOAs) within the region.</li>
+            <li><i class="fas fa-shield-alt"></i> <strong>Disaster Resilience Planning:</strong> Ensures regional urban planning incorporates climate resilience and risk reduction measures, particularly critical given Western Visayas' exposure to natural disasters.</li>
+          </ul>
+        </div>
+        <div class="about-card">
+          <h3><i class="fas fa-map-marked-alt"></i> Environmental, Land Use and Urban Planning and Development Division (ELUPDD)</h3>
+          <p>ELUPDD is a core division within DHSUD regional offices (operating under the broader technical umbrella of the national ELUPD Bureau). It handles spatial planning, environmental integration, and land utilization.</p>
+          <br>
+          <h4 style="font-weight:700; font-size:1rem; color:#1e3a8a; margin-bottom:0.3rem;"><i class="fas fa-table" style="color:#2563eb;"></i> Key Responsibilities:</h4>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.8rem; background:#fafdff; border-radius:16px; overflow:hidden;">
+              <thead style="background:#eef5ff; color:#1e3a8a;">
+                <tr><th style="padding:0.5rem; text-align:left;">Area</th><th style="padding:0.5rem; text-align:left;">Primary Functions</th></tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e4edf5;"><td style="padding:0.5rem;"><strong>CLUP Review & Assistance</strong></td><td style="padding:0.5rem;">Reviews and provides technical assistance for LGUs' Comprehensive Land Use Plans (CLUPs) and Zoning Ordinances (ZOs) to ensure alignment with national standards.</td></tr>
+                <tr style="border-bottom:1px solid #e4edf5;"><td style="padding:0.5rem;"><strong>CDRA Integration</strong></td><td style="padding:0.5rem;">Oversees the integration of Climate Change Adaptation and Disaster Risk Reduction Assessment (CDRA) into local land use policies.</td></tr>
+                <tr style="border-bottom:1px solid #e4edf5;"><td style="padding:0.5rem;"><strong>Urban Policy & GIS</strong></td><td style="padding:0.5rem;">Conducts spatial analyses, mapping (GIS), and policy formulation to promote sustainable urban expansion and land use efficiency.</td></tr>
+                <tr><td style="padding:0.5rem;"><strong>LGU Capacity Building</strong></td><td style="padding:0.5rem;">Conducts trainings and workshops for local planners and officers to ensure effective spatial planning and zoning enforcement.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVELOPERS SECTION -->
+      <div class="dev-card scroll-reveal">
+        <div class="dev-header">
+          <i class="fas fa-laptop-code"></i>
+          <h3>About the Developers</h3>
+        </div>
+        <div class="dev-grid">
+          <div class="dev-person">
+            <div class="name"><i class="fas fa-user-circle"></i> Michael Q. Calumno</div>
+            <div class="role">Government Internship Program (GIP) Participant</div>
+            <div class="desc">Designed and built this website as part of the GIP initiative, focusing on digital accessibility and resource organization for the ELUPDD.</div>
+          </div>
+          <div class="dev-person">
+            <div class="name"><i class="fas fa-chalkboard-teacher"></i> Leo Pillora Ambid</div>
+            <div class="role">Direct Supervisor</div>
+            <div class="desc">Provided direct technical guidance and mentorship throughout the development process, ensuring alignment with division goals.</div>
+          </div>
+          <div class="dev-person" style="grid-column: span 2; background: #eef5ff;">
+            <div class="name"><i class="fas fa-user-tie"></i> EnP. Romel F. Genodia</div>
+            <div class="role">Head Chief, Environment and Land Use Policy Development Division (ELUPDD)</div>
+            <div class="desc">Administrative oversight and strategic direction. Championed the joint initiative to enhance service delivery, optimize resources, and modernize the division's digital presence.</div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem; padding:1rem; background:#f8fcff; border-radius:20px; border:1px solid #eef2ff; text-align:center; font-size:0.9rem; color:#1e3a8a;">
+          <i class="fas fa-handshake" style="color:#2563eb;"></i> This project represents a joint initiative to enhance digital accessibility, organize division resources, and optimize service delivery for the ELUPDD.
+        </div>
+      </div>
+
+      <!-- Back to Home Link -->
+
+    </div>
+  </main>
+
+  <footer class="footer-new">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD<br  />
+        </div>
+        <div>
+          <strong>Our Social Networks</strong><br />Follow us for updates<br />
+          <div class="social-icons">
+            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+      <div class="login-modal-brand">
+        <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+        <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+        <h3>DHSUD Region VI</h3>
+        <p>ELUPDD · CLUP & ZO Platform</p>
+      </div>
+      <div class="login-modal-body">
+        <form id="modalLoginForm">
+          <div class="input-group">
+            <label><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
+        </form>
+      </div>
+      <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+  </div>
+
+  <script>
+    // Minimal script to replicate header/nav functionality from index
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
+    let currentUser = null;
+
+    function escapeHtml(s) { if (!s) return ""; return String(s).replace(/[&<>]/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" })[m]); }
+    function showToastMessage(msg, type = "info") { let t = document.querySelector(".toast-msg"); if (t) t.remove(); let toast = document.createElement("div"); toast.className = "toast-msg" + (type === "error" ? " error" : type === "success" ? " success" : ""); toast.innerText = msg; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+    function encodePassword(p) { return btoa(p); }
+
+    function checkSession() { const raw = localStorage.getItem("dhsud_session"); if (raw) { try { const s = JSON.parse(raw); const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60); if (diff < 12 && s.email) { currentUser = s; return true; } else localStorage.removeItem("dhsud_session"); } catch(e) { localStorage.removeItem("dhsud_session"); } } currentUser = null; return false; }
+    function getUserInitials(n) { if (!n) return "U"; let p = n.split(" "); if (p.length >= 2) return (p[0][0] + p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
+    function getRoleLabel(r) { if (r === "admin") return "👑 Admin"; if (r === "encoder" || r === "staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
+    function getRoleClass(r) { if (r === "admin") return "admin"; if (r === "encoder" || r === "staff") return "staff"; return "viewer"; }
+
+   function renderMainNavigation() {
+        const container = document.getElementById("mainNavContainer");
+        if (!container) return;
+        let navHtml = `<a href="index.html">Home</a>`;
+        if (currentUser) {
+            navHtml +=
+                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+                    <a href="lc.html">Locational Clearance</a>
+                    <a href="SZC.html">Site Zoning Certification</a></div></div>
+                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
+                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
+                </div></div>
+                <a href="Techsamp.html">Technical Assistance</a>
+                <a href="training.html">CLUP/ZO Trainings</a>
+				<a href="p_monitoring.html">Plan Monitoring</a>
+                <a href="lgu-info.html">LGU Information</a>
+                <a href="report.html">Reports</a>
+                <a href="calendar.html">Calendar of Activities</a>
+                <a href="issuance.html">Issuances</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>`;
+      } else { navHtml += `<a href="about.html">About</a><a href="#contact">Contact</a>`; }
+      container.innerHTML = navHtml;
+      setTimeout(() => {
+        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const submenu = trigger.closest(".dropdown-submenu");
+            if (submenu) submenu.classList.toggle("open");
+          });
+        });
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".dropdown-submenu")) {
+            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+          }
+        });
+      }, 10);
+    }
+
+    function renderUserMenu() {
+      const container = document.getElementById("userMenuContainer"); 
+      if (!container) return;
+      
+      if (currentUser) {
+        const initials = getUserInitials(currentUser.fullName);
+        const firstName = currentUser.fullName?.split(" ")[0] || "User";
+        const isAdmin = currentUser.role === "admin";
+        const roleLabel = getRoleLabel(currentUser.role);
+        const roleClass = getRoleClass(currentUser.role);
+        
+        container.innerHTML = `
+          <div class="user-menu" id="userMenuDropdown">
+            <div class="user-avatar">${initials}</div>
+            <span class="user-name">${escapeHtml(firstName)}</span>
+            <span class="role-badge-header ${roleClass}">${roleLabel}</span>
+            <span style="font-size:0.7rem; margin-left:2px;">▼</span>
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+              <div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div>
+              <div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>
+              ${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}
+              <div class="user-dropdown-item danger" id="logoutDropdownBtn">🚪 Sign Out</div>
+            </div>
+          </div>
+        `;
+        
+        // Toggle dropdown on click
+        const userDiv = document.getElementById("userMenuDropdown");
+        const dropdownMenu = document.getElementById("userDropdownMenu");
+        
+        if (userDiv && dropdownMenu) {
+          userDiv.addEventListener("click", function(e) {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+          });
+          
+          // Close dropdown when clicking outside
+          document.addEventListener("click", function(e) {
+            if (!userDiv.contains(e.target)) {
+              dropdownMenu.classList.remove("show");
+            }
+          });
+        }
+        
+        // Admin console link
+        if (isAdmin) {
+          const adminBtn = document.getElementById("adminConsoleLink");
+          if (adminBtn) {
+            adminBtn.addEventListener("click", function(e) {
+              e.stopPropagation();
+              window.location.href = "admin.html";
+            });
+          }
+        }
+        
+        // Logout
+        const logoutBtn = document.getElementById("logoutDropdownBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", function(e) {
+            e.stopPropagation();
+            localStorage.removeItem("dhsud_session");
+            showToastMessage("Logged out successfully.", "success");
+            setTimeout(() => window.location.reload(), 700);
+          });
+        }
+      } else {
+        container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
+      }
+    }
+
+    function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
+    function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
+
+    async function handleModalLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("modalLoginPassword").value;
+      const btn = document.getElementById("loginModalBtn");
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = "⏳ Authenticating...";
+      try {
+        const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=users&_=${Date.now()}`);
+        const users = await resp.json();
+        const user = users.find((u) => u.email?.toLowerCase() === email);
+        if (!user) { showToastMessage("Account not found.", "error"); btn.innerHTML = originalText; btn.disabled = false; return false; }
+        if (user.password === encodePassword(password)) {
+          const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
+          localStorage.setItem("dhsud_session", JSON.stringify(session));
+          showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+          closeLoginModal();
+          setTimeout(() => window.location.reload(), 1000);
+        } else { showToastMessage("Invalid password.", "error"); }
+      } catch (error) { showToastMessage("Connection error.", "error"); }
+      finally { btn.innerHTML = originalText; btn.disabled = false; }
+      return false;
+    }
+
+    function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.scroll-reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } });
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+      revealElements.forEach(el => observer.observe(el));
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("modalLoginForm");
+      if (form) form.addEventListener("submit", handleModalLogin);
+      checkSession();
+      renderMainNavigation();
+      renderUserMenu();
+      initScrollReveal();
+      window.openLoginModal = openLoginModal;
+      window.closeLoginModal = closeLoginModal;
+    });
+  </script>
+</body>
+</html>

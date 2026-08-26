@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>DHSUD Region VI - Locational Clearance (Blue) with PRS92 Map Tool</title>
+  <title>DHSUD VI | LOCATIONAL CLEARANCE </title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
@@ -1714,7 +1714,7 @@
       return "viewer";
     }
 
-    function renderMainNavigation() {
+     function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
         let navHtml = `<a href="index.html">Home</a>`;
@@ -1734,8 +1734,8 @@
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>`;
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>`;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
@@ -1763,7 +1763,7 @@
         const isAdmin = currentUser.role === "admin";
         const roleLabel = getRoleLabel(currentUser.role);
         const roleClass = getRoleClass(currentUser.role);
-        container.innerHTML = `<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}" style="font-size:0.65rem;">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users (Admin Panel)</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
+        container.innerHTML = `<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}" style="font-size:0.65rem;">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
         const userDiv = document.getElementById("userMenuDropdown");
         if (userDiv) {
           userDiv.addEventListener("click", (e) => {

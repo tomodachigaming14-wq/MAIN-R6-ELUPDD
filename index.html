@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>DHSUD VI | ELUPDD - CLUP & ZO Platform | Geospatial Innovation</title>
+  <title>DHSUD VI | ELUPDD</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
@@ -124,35 +124,6 @@
     .news-title { font-weight: 700; font-size: 0.85rem; }
     .news-desc { font-size: 0.7rem; color: #64748b; }
     .news-badge { background: #dbeafe; color: #1e40af; font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 30px; display: inline-block; margin-top: 0.3rem; }
-    .values-section { margin: 3rem 0; }
-    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
-    .value-card { background: white; border-radius: 28px; padding: 2rem 1.5rem; text-align: center; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); border: 1px solid #e4edf5; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
-    .value-card:hover { transform: translateY(-8px); box-shadow: 0 22px 35px -12px rgba(0, 0, 0, 0.15); border-color: #cbdff2; }
-    .value-icon { width: 70px; height: 70px; background: linear-gradient(135deg, #eef5ff, #dbeafe); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; }
-    .value-icon i { font-size: 2rem; color: #2563eb; }
-    .value-card h3 { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-bottom: 1rem; }
-    .value-card p { font-size: 0.9rem; color: #475569; line-height: 1.6; }
-    .core-values-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin: 1rem 0; }
-    .value-tag { background: #dbeafe; color: #1e40af; padding: 0.4rem 1rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600; }
-    .core-values-note { font-size: 0.75rem; font-style: italic; color: #64748b; margin-top: 0.8rem; }
-    .mandate-card { background: white; border-radius: 28px; padding: 2rem; border: 1px solid #e4edf5; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 1rem; }
-    .mandate-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 2px solid #2563eb; }
-    .mandate-header i { font-size: 1.8rem; color: #2563eb; }
-    .mandate-header h3 { font-size: 1.3rem; font-weight: 700; color: #1e3a8a; }
-    .mandate-content p, .mandate-content li { font-size: 0.85rem; color: #334155; line-height: 1.6; margin-bottom: 0.8rem; }
-    .mandate-content ul { margin-left: 1.5rem; margin-bottom: 1rem; }
-    .mandate-content li { margin-bottom: 0.5rem; }
-    .contact-section { background: #0a2540; color: white; border-radius: 2rem; padding: 2.5rem; margin: 2rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-    .contact-info h3, .contact-form h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
-    .contact-details { margin: 1.2rem 0; }
-    .contact-details div { margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
-    .contact-details i { width: 24px; color: #3b82f6; }
-    .map-container { margin-top: 1.2rem; border-radius: 20px; overflow: hidden; border: 2px solid #ffffff20; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-    .map-container iframe { width: 100%; height: 250px; border: none; display: block; }
-    .contact-form input, .contact-form textarea { width: 100%; padding: 12px; border-radius: 28px; border: none; margin-bottom: 12px; background: #ffffff20; color: white; }
-    .contact-form input::placeholder, .contact-form textarea::placeholder { color: #cbd5e1; }
-    .contact-form button { background: #2563eb; margin-top: 0.5rem; }
-    @media (max-width: 800px) { .contact-section { grid-template-columns: 1fr; } .map-container iframe { height: 200px; } }
     .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
     .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
@@ -187,7 +158,7 @@
     .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
     .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
     .user-dropdown-item:hover { background: #f8fafc; }
-    @media (max-width: 800px) { .hero-grid { flex-direction: column; } .calendar-widget { min-width: auto; } .top-bar { flex-direction: column; align-items: stretch; } .header-logo-img span { white-space: normal; font-size: 0.7rem; } .video-gallery-grid { grid-template-columns: 1fr; } .values-grid { grid-template-columns: 1fr; } .mandate-card { padding: 1.5rem; } .login-modal-brand img { width: 100px; } }
+    @media (max-width: 800px) { .hero-grid { flex-direction: column; } .calendar-widget { min-width: auto; } .top-bar { flex-direction: column; align-items: stretch; } .header-logo-img span { white-space: normal; font-size: 0.7rem; } .video-gallery-grid { grid-template-columns: 1fr; } .login-modal-brand img { width: 100px; } }
     .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
     .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
 
@@ -243,19 +214,7 @@
         </div>
       </div>
 
-      <!-- ARTICLES -->
-      <div class="articles-section scroll-reveal">
-        <div class="section-header"><h2><i class="fas fa-newspaper"></i> ARTICLES AND EVENTS</h2></div>
-        <div class="articles-grid" id="articlesGrid"></div>
-      </div>
-
-      <!-- VIDEO GALLERY -->
-      <div class="video-gallery-section scroll-reveal">
-        <div class="section-header"><h2><i class="fab fa-youtube"></i> FEATURED VIDEOS</h2></div>
-        <div class="video-gallery-grid" id="videoGalleryGrid"></div>
-      </div>
-
-      <!-- Calendar + News -->
+      <!-- Calendar + News (MOVED ABOVE ARTICLES) -->
       <div class="hero-grid scroll-reveal" style="display:flex; flex-wrap:wrap; gap:2rem; margin:2rem 0">
         <!-- Calendar Widget with Event Details Below -->
         <div class="calendar-widget" style="flex:1.2">
@@ -296,71 +255,18 @@
         </div>
       </div>
 
-      <!-- VALUES -->
-      <div class="values-section scroll-reveal">
-        <div class="section-header"><h2><i class="fas fa-bullseye"></i> OUR FOUNDATION</h2></div>
-        <div class="values-grid">
-          <div class="value-card">
-            <div class="value-icon"><i class="fas fa-eye"></i></div>
-            <h3>Vision</h3>
-            <p>A strong institution and catalyst for the provision of adequate and affordable housing, inclusive human settlements and well-planned communities for every Filipino family.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-icon"><i class="fas fa-rocket"></i></div>
-            <h3>Mission</h3>
-            <p>To improve the lives of the Filipino people as the primary government agency in the management of housing, human settlements and urban development.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-icon"><i class="fas fa-gem"></i></div>
-            <h3>Core Values</h3>
-            <div class="core-values-list">
-              <span class="value-tag">Dynamism</span><span class="value-tag">Honesty</span>
-              <span class="value-tag">Service Excellence</span><span class="value-tag">Unity of Purpose</span><span class="value-tag">Education</span>
-            </div>
-            <p class="core-values-note">DHSUD - D.E.H.S.U. | Driven by Excellence, Honesty, Service, Unity</p>
-          </div>
-        </div>
-        <div class="mandate-card">
-          <div class="mandate-header">
-            <i class="fas fa-gavel"></i>
-            <h3>Our Mandate</h3>
-          </div>
-          <div class="mandate-content">
-            <p><strong>1.</strong> Act as the primary national government entity responsible for the management of housing, human settlements and urban development.</p>
-            <p><strong>2.</strong> Be the sole and main planning and policy-making, regulatory, program coordination, and performance monitoring entity for all housing, human settlement and urban development concerns, primarily focusing on the access to and the affordability of basic human needs. For this purpose, the following functions of HLURB are hereby transferred to the Department:</p>
-            <ul><li>The land use planning and monitoring function, including the imposition of penalties for noncompliance to ensure that LGUs will follow the planning guidelines and implement their CLUPs and ZOs;</li>
-            <li>The regulatory function, including the formulation, promulgation, and enforcement of rules, standards and guidelines over subdivisions, condominiums and similar real estate developments, and imposition of fines and other administrative sanctions for violations;</li>
-            <li>The registration, regulation and supervision of HOAs, including the imposition of fines for violations.</li></ul>
-            <p><strong>3.</strong> Develop and adopt a national strategy to immediately address the provision of adequate and affordable housing to all Filipinos, and ensure the alignment of the policies, programs, and projects of all its attached agencies to facilitate the achievement of this objective.</p>
-          </div>
-        </div>
+      <!-- ARTICLES -->
+      <div class="articles-section scroll-reveal">
+        <div class="section-header"><h2><i class="fas fa-newspaper"></i> ARTICLES AND EVENTS</h2></div>
+        <div class="articles-grid" id="articlesGrid"></div>
       </div>
 
-      <!-- CONTACT -->
-      <div class="contact-section scroll-reveal" id="contact">
-        <div class="contact-info">
-          <h3><i class="fas fa-headset"></i> CONTACT US</h3>
-          <p style="margin:0.8rem 0">Have a question, comment or suggestion? We'd love to hear from you!</p>
-          <div class="contact-details">
-            <div><i class="fas fa-map-pin"></i> <strong>Location:</strong> Senator Benigno S. Aquino Jr. Ave, Mandurriao, Iloilo City, Iloilo</div>
-            <div><i class="fas fa-envelope"></i> <strong>Email:</strong> elupdd.region6@dhsud.gov.ph</div>
-            <div><i class="fas fa-phone-alt"></i> <strong>Call:</strong> +63 (033) 123-4567</div>
-          </div>
-          <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m773.179403259934!2d122.5530314!3d10.7097803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33aefaab96770b99%3A0x5c2b7b8bed82d2c9!2sGaisano%20Iloilo%20City%20Center%20Mall!5e1!3m2!1sen!2sph!4v1749480000000!5m2!1sen!2sph" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
-          <p style="font-size:0.7rem; margin-top:0.5rem; opacity:0.7"><i class="fas fa-external-link-alt"></i> <a href="https://www.google.com/maps/place/Gaisano+Iloilo+City+Center+Mall/@10.7097803,122.5530314,276m/data=!3m1!1e3!4m15!1m8!3m7!1s0x33aee56fe538d781:0xe8250cd6bc30a488!2sIloilo+City,+Iloilo!3b1!8m2!3d10.7301854!4d122.5591148!16zL20vMDR3ZGIx!3m5!1s0x33aefaab96770b99:0x5c2b7b8bed82d2c9!8m2!3d10.7097803!4d122.5536751!16s%2Fg%2F11b6dpplyw?entry=ttu" target="_blank" style="color:#3b82f6">Open in Google Maps →</a></p>
-        </div>
-        <div class="contact-form">
-          <form id="contactFormSim" onsubmit="alert('Message sent (demo). Thank you!'); return false;">
-            <input type="text" placeholder="Name" required />
-            <input type="email" placeholder="Email" required />
-            <input type="text" placeholder="Subject" />
-            <textarea placeholder="Message" rows="3"></textarea>
-            <button type="submit" class="btn-primary">Send Message</button>
-          </form>
-        </div>
+      <!-- VIDEO GALLERY -->
+      <div class="video-gallery-section scroll-reveal">
+        <div class="section-header"><h2><i class="fab fa-youtube"></i> FEATURED VIDEOS</h2></div>
+        <div class="video-gallery-grid" id="videoGalleryGrid"></div>
       </div>
+
     </div>
   </main>
 
@@ -368,13 +274,12 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD – CLUP & ZO Platform<br />Geospatial Innovation for Resilience
+          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD<br  />
         </div>
         <div>
           <strong>Our Social Networks</strong><br />Follow us for updates<br />
           <div class="social-icons">
             <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-            <i class="fab fa-instagram"></i><i class="fab fa-twitter"></i>
           </div>
         </div>
       </div>
@@ -458,8 +363,8 @@
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>`;
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>`;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {

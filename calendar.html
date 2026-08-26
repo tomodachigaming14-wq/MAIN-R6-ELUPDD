@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Calendar of Activities</title>
+  <title>DHSUD VI | COA  </title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
@@ -1374,12 +1374,13 @@ footer {
                 </div></div>
                 <a href="Techsamp.html">Technical Assistance</a>
                 <a href="training.html">CLUP/ZO Trainings</a>
+				<a href="p_monitoring.html">Plan Monitoring</a>
                 <a href="lgu-info.html">LGU Information</a>
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>`;
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>`;
         } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
@@ -1407,7 +1408,7 @@ footer {
             const isAdmin = currentUser.role === "admin";
             const roleLabel = getRoleLabel(currentUser.role);
             const roleClass = getRoleClass(currentUser.role);
-            container.innerHTML = `<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users (Admin Panel)</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
+            container.innerHTML = `<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
             const userDiv = document.getElementById("userMenuDropdown");
             if (userDiv) { 
                 userDiv.addEventListener("click", (e) => { 
