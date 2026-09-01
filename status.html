@@ -2,199 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DHSUD VI | STATUS CLUP/ZO </title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DHSUD VI | CLUP/ZO STATUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: "Inter", sans-serif;
-      background: #f4f7fc;
-      color: #0f2b3a;
-      line-height: 1.45;
-    }
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
-
-    /* --- HEADER (PRESERVED) --- */
-    header {
-      background: white;
-      border-bottom: 1px solid #eef2ff;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(8px);
-      background: rgba(255,255,255,0.96);
-    }
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 0;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .logo-area-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .header-logo-img {
-      background: #f1f5f9;
-      padding: 4px 16px;
-      border-radius: 40px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #1e3a8a;
-      white-space: nowrap;
-    }
-    .header-logo-img img {
-      height: 32px;
-      width: auto;
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .user-menu {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: #f1f5f9;
-      padding: 0.3rem 0.8rem 0.3rem 1rem;
-      border-radius: 60px;
-      cursor: pointer;
-      position: relative;
-    }
-    .user-avatar {
-      width: 32px; height: 32px;
-      background: #2563eb;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-    }
-    .login-prompt {
-      background: #f1f5f9;
-      padding: 0.3rem 1rem;
-      border-radius: 40px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    .role-badge-header {
-      background: #e2e8f0;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      margin-left: 0.5rem;
-    }
-    .role-badge-header.admin { background: #dcfce7; color: #166534; }
-    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
-    .user-dropdown-menu {
-      position: absolute;
-      top: 48px;
-      right: 0;
-      background: white;
-      border-radius: 20px;
-      min-width: 180px;
-      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
-      border: 1px solid #eef2ff;
-      overflow: hidden;
-      display: none;
-      z-index: 200;
-    }
-    .user-dropdown-item {
-      padding: 0.8rem 1.2rem;
-      border-bottom: 1px solid #f1f5f9;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-    .user-dropdown-item:hover { background: #f8fafc; }
-    .user-name { font-size: 0.8rem; font-weight: 500; }
-    .nav-bottom {
-      background: #ffffff;
-      border-top: 1px solid #eef2ff;
-      padding: 0.5rem 0;
-    }
-    .main-nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .main-nav-links a, .main-nav-links .dropdown {
-      text-decoration: none;
-      color: #334155;
-      font-weight: 500;
-      font-size: 0.9rem;
-      transition: 0.2s;
-    }
-    .main-nav-links a:hover, .main-nav-links .dropbtn:hover { color: #2563eb; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
+    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
+    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
+    .logo-area-header { display: flex; align-items: center; gap: 16px; }
+    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
+    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
+    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
+    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
+    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
+    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
+    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
     .dropdown { position: relative; display: inline-block; }
-    .dropbtn {
-      background: none; border: none;
-      font-weight: 500; font-size: 0.9rem;
-      color: #334155; cursor: pointer;
-      font-family: inherit; padding: 0.4rem 0;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background: white;
-      min-width: 220px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
-      border-radius: 16px;
-      z-index: 1000;
-      top: 30px;
-      left: 0;
-      border: 1px solid #eef2ff;
-      padding: 0.3rem 0;
-    }
+    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
+    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
     .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a {
-      display: block;
-      padding: 0.7rem 1.2rem;
-      color: #1e293b;
-      font-size: 0.8rem;
-      text-decoration: none;
-    }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
     .dropdown-content a:hover { background: #eff6ff; }
     .dropdown-submenu { position: relative; }
-    .submenu-trigger {
-      background: none; border: none; width: 100%;
-      text-align: left; padding: 0.7rem 1.2rem;
-      font-size: 0.8rem; font-weight: 500;
-      color: #1e293b; cursor: pointer;
-      display: flex; justify-content: space-between;
-      align-items: center; font-family: inherit;
-    }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
     .submenu-trigger:hover { background: #eff6ff; }
     .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
-    .submenu-content {
-      display: none;
-      position: absolute;
-      left: 100%; top: 0;
-      background: white;
-      min-width: 180px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
-      border-radius: 16px;
-      border: 1px solid #eef2ff;
-      z-index: 1001;
-      padding: 0.3rem 0;
-    }
+    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
     .dropdown-submenu:hover .submenu-content { display: block; }
     .submenu-content a { padding: 0.7rem 1.2rem; }
+    .dropdown-submenu.open .submenu-content { display: block; }
     .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
+    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
+    .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
+    .user-name { font-size: 0.7rem; font-weight: 500; }
+    .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
+    .role-badge-header.admin { background: #dcfce7; color: #166534; }
+    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
+    .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
+    .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
+    .user-dropdown-item:hover { background: #f8fafc; }
+    .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
+    .login-modal.active { display: flex; }
+    .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
+    .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
+    .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
+    .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
+    .login-modal-body .input-group { margin-bottom: 1.3rem; }
+    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
+    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+    .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
+    .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+    .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.4rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
+    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
+    .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
+    .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .toast-msg.success { background: #166534; }
+    .toast-msg.error { background: #b91c1c; }
+    .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
+    .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
+    .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Dashboard */
+    /* Status Page Styles - Preserved from original */
     .page-header {
       background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%);
       padding: 2rem 0;
@@ -317,7 +205,6 @@
     }
     .chart-box canvas { max-height: 200px; max-width: 100%; }
 
-    /* SECOND ROW: Province Status Summary + Formulation Phase & Review Status - side by side */
     .charts-row-2col {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
@@ -371,8 +258,6 @@
       color: #1e293b;
     }
     .charts-row-2col .chart-controls .reset-btn:hover { background: #e2e8f0; }
-
-    /* Column chart tabs inside the second column */
     .charts-row-2col .chart-tabs {
       display: flex;
       flex-wrap: wrap;
@@ -397,7 +282,6 @@
     }
     .charts-row-2col .chart-tabs button:hover:not(.active) { background: #f1f5f9; }
 
-    /* THIRD ROW: Pie charts */
     .pie-chart-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -500,7 +384,6 @@
       flex-wrap: wrap;
     }
 
-    /* Edit Modal */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -553,7 +436,6 @@
       color: #1f3e54;
     }
 
-    /* Edit Form Styles */
     .edit-form-group {
       margin-bottom: 14px;
     }
@@ -622,26 +504,6 @@
     }
     .btn-cancel:hover { background: #e2e8f0; }
 
-    .toast-msg {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #166534;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 40px;
-      z-index: 9999;
-      font-size: 0.85rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      animation: slideUp 0.3s ease;
-    }
-    .toast-msg.error { background: #b91c1c; }
-    .toast-msg.info { background: #2563eb; }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
     @keyframes modalSlideIn {
       from { transform: scale(0.95) translateY(20px); opacity: 0; }
       to { transform: scale(1) translateY(0); opacity: 1; }
@@ -659,485 +521,526 @@
         margin-left: 0;
         width: 100%;
       }
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+      .login-modal-brand img { width: 100px; }
     }
   </style>
 </head>
 <body>
-<!-- HEADER (PRESERVED) -->
-<header>
-  <div class="container">
-    <div class="top-bar">
-      <div class="logo-area-header">
-        <div class="header-logo-img">
-          <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo">
-          <span>DHSUD VI - ELUPDD Integrated Database</span>
-        </div>
-      </div>
-      <div class="nav-right" id="userMenuContainer"></div>
-    </div>
-  </div>
-  <div class="nav-bottom">
+  <header>
     <div class="container">
-      <div class="main-nav-links" id="mainNavContainer"></div>
+      <div class="top-bar">
+        <div class="logo-area-header">
+          <div class="header-logo-img">
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
+          </div>
+        </div>
+        <div class="nav-right" id="userMenuContainer"></div>
+      </div>
+    </div>
+    <div class="nav-bottom">
+      <div class="container">
+        <div class="main-nav-links" id="mainNavContainer"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container">
     </div>
   </div>
-</header>
 
-<!-- PAGE HEADER -->
-<div class="page-header">
   <div class="container">
-    <h1>📊 CLUP/ZO Formulation Dashboard</h1>
-    <p>Real‑time monitoring · LGU status & progress</p>
-  </div>
-</div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-number" id="statTotalLgu">0</div><div class="stat-label">🏛️ No. of LGUs</div></div>
+      <div class="stat-card"><div class="stat-number" id="statUpdated">0</div><div class="stat-label">✅ Updated CLUP/ZO</div></div>
+      <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">🔄 CLUPs Due for updating</div></div>
+      <div class="stat-card"><div class="stat-number" id="statUnderReview">0</div><div class="stat-label">📋 Under Review</div></div>
+    </div>
 
-<div class="container">
-<div class="stats-grid" id="statsGrid">
-  <div class="stat-card"><div class="stat-number" id="statTotalLgu">0</div><div class="stat-label">🏛️ No. of LGUs</div></div>
-  <div class="stat-card"><div class="stat-number" id="statUpdated">0</div><div class="stat-label">✅ Updated CLUP/ZO</div></div>
-  <div class="stat-card"><div class="stat-number" id="statDue">0</div><div class="stat-label">🔄 CLUPs Due for updating</div></div>
-  <div class="stat-card"><div class="stat-number" id="statUnderReview">0</div><div class="stat-label">📋 Under Review</div></div>
-</div>
-
-  <!-- FILTERS -->
-  <div class="filter-bar">
-    <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
-    <select id="filterProvince"><option value="">All Provinces</option></select>
-    <select id="filterLgu"><option value="">All LGUs</option></select>
-    
-    <!-- Year of Approval - aligned to the right -->
-    <div class="filter-year-group">
-      <label for="filterYear">Year of Approval :</label>
-      <select id="filterYear"><option value="">(All Years)</option></select>
-    </div>
-    
-    <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
-    <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
-  </div>
-
-  <!-- CHARTS - Row 1: CLUP Status, Status of CLUP Updating, Support from Other Institutions -->
-  <div class="chart-grid">
-    <div class="chart-box">
-      <h4>
-        <span>🟢 CLUP Status</span>
-        <select class="chart-dropdown" id="filterClupStatus">
-          <option value="all">All CLUP Status</option>
-          <option value="Updated">Updated</option>
-          <option value="For Updating">For Updating</option>
-          <option value="Under Review">Under Review</option>
-        </select>
-      </h4>
-      <canvas id="pieChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h4>
-        📊 Status of CLUP Updating Breakdown
-        <select class="chart-dropdown" id="barChartDropdown">
-          <option value="all">All</option>
-          <option value="Pre-Phase">Pre-Phase</option>
-          <option value="Phase 1">Phase 1</option>
-          <option value="Phase 2">Phase 2</option>
-          <option value="Phase 3">Phase 3</option>
-          <option value="Phase 4">Phase 4</option>
-          <option value="Phase 5">Phase 5</option>
-          <option value="RA 1">RA 1</option>
-          <option value="RA 2">RA 2</option>
-          <option value="RA 3">RA 3</option>
-          <option value="RA 4">RA 4</option>
-          <option value="RA 5">RA 5</option>
-          <option value="RA 6">RA 6</option>
-          <option value="RA 7">RA 7</option>
-          <option value="None Indicated">None Indicated</option>
-        </select>
-      </h4>
-      <canvas id="barChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h4>
-        🏛️ Support from Other Institutions
-        <select class="chart-dropdown" id="filterSupportPie">
-          <option value="all">All</option>
-          <option value="None">None</option>
-          <option value="National Government Agency">National Government Agency</option>
-          <option value="Donor Agency">Donor Agency</option>
-          <option value="Consultant">Consultant</option>
-          <option value="Academe">Academe</option>
-          <option value="Others">Others</option>
-        </select>
-      </h4>
-      <canvas id="supportPieChart"></canvas>
-    </div>
-  </div>
-
-  <!-- CHARTS - Row 2: Province Status Summary & Formulation Phase & Review Status (side by side) -->
-  <div class="charts-row-2col">
-    <div class="chart-box">
-      <h4>📊 Province Status Summary (Updated / For Updating / Under Review)</h4>
-      <div class="chart-controls">
-        <label for="filterStackedProvince">Province:</label>
-        <select id="filterStackedProvince">
-          <option value="all">All Provinces</option>
-        </select>
-        <button class="reset-btn" id="resetStackedFilter">↺ Reset</button>
-      </div>
-      <canvas id="stackedChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h4>📊 Formulation Phase & Review Status</h4>
-      <div class="chart-tabs" id="columnTabs">
-        <button class="active" data-view="preparatory">Preparatory</button>
-        <button data-view="formulation">Formulation</button>
-        <button data-view="review">Review & Approval</button>
-        <button data-view="unspecified">Unspecified</button>
-      </div>
-      <canvas id="columnChart"></canvas>
-    </div>
-  </div>
-
-  <!-- CHARTS - Row 3: Shelter Plan, Housing Subsector, Comm Plan -->
-  <div class="pie-chart-grid">
-    <div class="chart-box">
-      <h4>🏠 LGU with Local Shelter Plan</h4>
-      <canvas id="shelterPieChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h4>🏗️ LGU with Integrated Housing Subsector</h4>
-      <canvas id="housingPieChart"></canvas>
-    </div>
-    <div class="chart-box">
-      <h4>📡 LGU with Communications Plan</h4>
-      <canvas id="commPieChart"></canvas>
-    </div>
-  </div>
-
-  <!-- TABLE -->
-  <div class="table-section">
-    <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUstatus sheet)</span></h4>
-    <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
-      <table class="lgu-table" id="lguTable">
-        <thead><tr>
-          <th>Region</th>
-          <th>Province</th>
-          <th>City/Municipality</th>
-          <th>Income Class</th>
-          <th>CLUP Status</th>
-          <th>Target Year</th>
-          <th>Shelter Plan</th>
-          <th>Housing Subsector</th>
-          <th>Comm Plan</th>
-          <th>Remarks</th>
-          <th>Action</th>
-        </tr></thead>
-        <tbody id="lguTableBody"><tr><td colspan="11" style="text-align:center;">Loading LGU data...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal-content">
-    <button class="modal-close" id="modalCloseBtn">&times;</button>
-    <h2>📋 CLUP Details</h2>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal-content">
-    <button class="modal-close" id="editModalCloseBtn">&times;</button>
-    <h2>✏️ Edit LGU Status Record</h2>
-    <form id="editForm">
-      <!-- Hidden fields for action and data_type -->
-      <input type="hidden" name="action" value="update">
-      <input type="hidden" name="data_type" value="lgu_status">
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
+      <select id="filterProvince"><option value="">All Provinces</option></select>
+      <select id="filterLgu"><option value="">All LGUs</option></select>
       
-      <div class="edit-form-row">
-        <div class="edit-form-group">
-          <label>PSGC</label>
-          <input type="text" id="editPsgc" name="PSGC" readonly>
+      <div class="filter-year-group">
+        <label for="filterYear">Year of Approval :</label>
+        <select id="filterYear"><option value="">(All Years)</option></select>
+      </div>
+      
+      <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
+      <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
+    </div>
+
+    <!-- CHARTS - Row 1 -->
+    <div class="chart-grid">
+      <div class="chart-box">
+        <h4>
+          <span>🟢 CLUP Status</span>
+          <select class="chart-dropdown" id="filterClupStatus">
+            <option value="all">All CLUP Status</option>
+            <option value="Updated">Updated</option>
+            <option value="For Updating">For Updating</option>
+            <option value="Under Review">Under Review</option>
+          </select>
+        </h4>
+        <canvas id="pieChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>
+          📊 Status of CLUP Updating Breakdown
+          <select class="chart-dropdown" id="barChartDropdown">
+            <option value="all">All</option>
+            <option value="Pre-Phase">Pre-Phase</option>
+            <option value="Phase 1">Phase 1</option>
+            <option value="Phase 2">Phase 2</option>
+            <option value="Phase 3">Phase 3</option>
+            <option value="Phase 4">Phase 4</option>
+            <option value="Phase 5">Phase 5</option>
+            <option value="RA 1">RA 1</option>
+            <option value="RA 2">RA 2</option>
+            <option value="RA 3">RA 3</option>
+            <option value="RA 4">RA 4</option>
+            <option value="RA 5">RA 5</option>
+            <option value="RA 6">RA 6</option>
+            <option value="RA 7">RA 7</option>
+            <option value="None Indicated">None Indicated</option>
+          </select>
+        </h4>
+        <canvas id="barChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>
+          🏛️ Support from Other Institutions
+          <select class="chart-dropdown" id="filterSupportPie">
+            <option value="all">All</option>
+            <option value="None">None</option>
+            <option value="National Government Agency">National Government Agency</option>
+            <option value="Donor Agency">Donor Agency</option>
+            <option value="Consultant">Consultant</option>
+            <option value="Academe">Academe</option>
+            <option value="Others">Others</option>
+          </select>
+        </h4>
+        <canvas id="supportPieChart"></canvas>
+      </div>
+    </div>
+
+    <!-- CHARTS - Row 2 -->
+    <div class="charts-row-2col">
+      <div class="chart-box">
+        <h4>📊 Province Status Summary (Updated / For Updating / Under Review)</h4>
+        <div class="chart-controls">
+          <label for="filterStackedProvince">Province:</label>
+          <select id="filterStackedProvince">
+            <option value="all">All Provinces</option>
+          </select>
+          <button class="reset-btn" id="resetStackedFilter">↺ Reset</button>
         </div>
-        <div class="edit-form-group">
-          <label>Income Class</label>
-          <input type="text" id="editIncome" name="Income Class">
+        <canvas id="stackedChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>📊 Formulation Phase & Review Status</h4>
+        <div class="chart-tabs" id="columnTabs">
+          <button class="active" data-view="preparatory">Preparatory</button>
+          <button data-view="formulation">Formulation</button>
+          <button data-view="review">Review & Approval</button>
+          <button data-view="unspecified">Unspecified</button>
         </div>
+        <canvas id="columnChart"></canvas>
       </div>
-      <div class="edit-form-row">
-        <div class="edit-form-group">
-          <label>Region</label>
-          <input type="text" id="editRegion" name="Region">
-        </div>
-        <div class="edit-form-group">
-          <label>Province</label>
-          <input type="text" id="editProvince" name="Province" readonly>
-        </div>
+    </div>
+
+    <!-- CHARTS - Row 3: Pie Charts -->
+    <div class="pie-chart-grid">
+      <div class="chart-box">
+        <h4>🏠 LGU with Local Shelter Plan</h4>
+        <canvas id="shelterPieChart"></canvas>
       </div>
-      <div class="edit-form-row">
-        <div class="edit-form-group">
-          <label>City/Municipality</label>
-          <input type="text" id="editCity" name="City/Municipality" readonly>
-        </div>
-        <div class="edit-form-group">
-          <label>Start Year</label>
-          <input type="text" id="editStartYear" name="Start Year">
-        </div>
+      <div class="chart-box">
+        <h4>🏗️ LGU with Integrated Housing Subsector</h4>
+        <canvas id="housingPieChart"></canvas>
       </div>
-      <div class="edit-form-row">
-        <div class="edit-form-group">
-          <label>End Year</label>
-          <input type="text" id="editEndYear" name="End Year">
-        </div>
-        <div class="edit-form-group">
-          <label>Resolution Number of the Latest Plan</label>
-          <input type="text" id="editResolution" name="Resolution Number of the Latest Plan">
-        </div>
+      <div class="chart-box">
+        <h4>📡 LGU with Communications Plan</h4>
+        <canvas id="commPieChart"></canvas>
       </div>
-      <div class="edit-form-group">
-        <label>Approval Date (MM/DD/YYYY)</label>
-        <input type="text" id="editApprovalDate" name="Approval date of the Latest plan (MM/DD/YYYY)" placeholder="MM/DD/YYYY">
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-section">
+      <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUstatus sheet)</span></h4>
+      <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
+        <table class="lgu-table" id="lguTable">
+          <thead><tr>
+            <th>Region</th>
+            <th>Province</th>
+            <th>City/Municipality</th>
+            <th>Income Class</th>
+            <th>CLUP Status</th>
+            <th>Target Year</th>
+            <th>Shelter Plan</th>
+            <th>Housing Subsector</th>
+            <th>Comm Plan</th>
+            <th>Remarks</th>
+            <th>Action</th>
+          </tr></thead>
+          <tbody id="lguTableBody"><tr><td colspan="11" style="text-align:center;">Loading LGU data...</td></tr></tbody>
+        </table>
       </div>
-      <div class="edit-form-group">
-        <label>CLUP Status</label>
-        <select id="editClupStatus" name="CLUP Status">
-          <option value="">Select...</option>
-          <option value="Updated">Updated</option>
-          <option value="For Updating">For Updating</option>
-          <option value="Under Review">Under Review</option>
-          <option value="No CLUP">No CLUP</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>Status of CLUP Updating</label>
-        <select id="editClupUpdates" name="CLUPStatus/Updates">
-          <option value="">Select...</option>
-          <option value="Pre-Phase">Pre-Phase</option>
-          <option value="Phase 1">Phase 1</option>
-          <option value="Phase 2">Phase 2</option>
-          <option value="Phase 3">Phase 3</option>
-          <option value="Phase 4">Phase 4</option>
-          <option value="Phase 5">Phase 5</option>
-          <option value="RA 1">RA 1</option>
-          <option value="RA 2">RA 2</option>
-          <option value="RA 3">RA 3</option>
-          <option value="RA 4">RA 4</option>
-          <option value="RA 5">RA 5</option>
-          <option value="RA 6">RA 6</option>
-          <option value="RA 7">RA 7</option>
-          <option value="None Indicated">None Indicated</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>Technical Assistance Provided</label>
-        <select id="editTechAssist" name="Technical Assistance Provided">
-          <option value="">Select...</option>
-          <option value="Trained">Trained</option>
-          <option value="Trained and Assisted">Trained and Assisted</option>
-          <option value="Assisted">Assisted</option>
-          <option value="No assistance">No assistance</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>Support from Other Institutions</label>
-        <select id="editSupport" name="Support from Other Institutions">
-          <option value="">Select...</option>
-          <option value="None">None</option>
-          <option value="National Government Agency">National Government Agency</option>
-          <option value="Donor Agency">Donor Agency</option>
-          <option value="Consultant">Consultant</option>
-          <option value="Academe">Academe</option>
-          <option value="Others">Others</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>Name/s of Institutions</label>
-        <input type="text" id="editInstitutions" name="If with Support from other institutions, Name/s of Institutions">
-      </div>
-      <div class="edit-form-group">
-        <label>LGU with Local Shelter Plan</label>
-        <select id="editShelterPlan" name="LGU with Local Shelter Plan">
-          <option value="">Select...</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>LGU with Integrated Housing Subsector</label>
-        <select id="editHousingSubsector" name="LGU with Integrated Housing Subsector">
-          <option value="">Select...</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>LGU with Integrated Communications Plan</label>
-        <select id="editCommPlan" name="LGU with Integrated Communications Plan">
-          <option value="">Select...</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      <div class="edit-form-group">
-        <label>Remarks</label>
-        <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
-      </div>
-      <div class="edit-form-actions">
-        <button type="button" class="btn-cancel" id="editCancelBtn">Cancel</button>
-        <button type="submit" class="btn-save" id="editSaveBtn">💾 Save Changes</button>
-      </div>
-    </form>
+    </div>
   </div>
-</div>
 
-<footer><div class="container"><div class="copyright">© DHSUD Region VI · ELUPDD Integrated Database</div></div></footer>
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalCloseBtn">&times;</button>
+      <h2>📋 CLUP Details</h2>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
-<script>
-  // ========== INTEGRATED SCRIPT ==========
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc1ARF9hc4h8RQ6d3uAiaaLTYdG2C-m8qQizwTm6Q3A3b0mrp4FE7ro70RqQZv7SM/exec";
-  let currentUser = null;
-  let currentBarMode = 'all';
-  let currentEditRecord = null;
-  let isSaving = false;
-  
-  // ========== FIELD MAPPING ==========
-  const FIELD_ALIASES = {
-    "LGU with Local Shelter Plan": [
-      "LGU with Local Shelter Plan",
-      "Local Shelter Plan",
-      "Shelter Plan",
-      "LGU Local Shelter Plan",
-      "ShelterPlan",
-      "local_shelter_plan"
-    ],
-    "LGU with Integrated Housing Subsector": [
-      "LGU with Integrated Housing Subsector",
-      "Integrated Housing Subsector",
-      "Housing Subsector",
-      "Housing",
-      "LGU Housing Subsector",
-      "housing_subsector"
-    ],
-    "LGU with Integrated Communications Plan": [
-      "LGU with Integrated Communications Plan",
-      "LGU with Communications Plan",
-      "Integrated Communications Plan",
-      "Communications Plan",
-      "Comm Plan",
-      "LGU Communications Plan",
-      "communications_plan",
-      "CommPlan",
-      "Communications"
-    ],
-    "CLUP Status": [
-      "CLUP Status",
-      "CLUPStatus",
-      "Status",
-      "clup_status"
-    ],
-    "CLUPStatus/Updates": [
-      "CLUPStatus/Updates",
-      "Status of CLUP Updating",
-      "CLUP Updates",
-      "Updates",
-      "clup_updates"
-    ],
-    "Support from Other Institutions": [
-      "Support from Other Institutions",
-      "Support",
-      "Institutions Support",
-      "support_from_other_institutions"
-    ]
-  };
-  
-  function escapeHtml(s){ 
-    if (s === undefined || s === null) return "—";
-    return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); 
-  }
-  
-  function showToast(msg, type){ 
-    let t=document.createElement("div"); 
-    t.className="toast-msg"+(type==='error'?' error':type==='info'?' info':''); 
-    t.innerText=msg; 
-    document.body.appendChild(t); 
-    setTimeout(()=>t.remove(), 3500); 
-  }
-  
-  function checkSession(){ 
-    const raw=localStorage.getItem("dhsud_session"); 
-    if(raw){ 
-      try{ 
-        const s=JSON.parse(raw); 
-        const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60); 
-        if(diff<12&&s.email){ 
-          currentUser=s; 
-          return true; 
-        } else localStorage.removeItem("dhsud_session"); 
-      }catch(e){localStorage.removeItem("dhsud_session");}
-    } 
-    currentUser=null; 
-    return false; 
-  }
-  
-  function getUserInitials(n){ 
-    if(!n) return "U"; 
-    let p=n.split(" "); 
-    if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); 
-    return n.substring(0,2).toUpperCase(); 
-  }
-  
-  function getRoleLabel(r){ 
-    if(r==="admin") return "👑 Admin"; 
-    if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; 
-    return "👁️ Viewer"; 
-  }
-  
-  function getRoleClass(r){ 
-    if(r==="admin") return "admin"; 
-    if(r==="encoder"||r==="staff") return "staff"; 
-    return "viewer"; 
-  }
-  
-  function renderMainNavigation() {
-        const container = document.getElementById("mainNavContainer");
-        if (!container) return;
-        let navHtml = `<a href="index.html">Home</a>`;
-        if (currentUser) {
-            navHtml +=
-                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-                    <a href="lc.html">Locational Clearance</a>
-                    <a href="SZC.html">Site Zoning Certification</a></div></div>
-                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-                </div></div>
-                <a href="Techsamp.html">Technical Assistance</a>
-                <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
-                <a href="lgu-info.html">LGU Information</a>
-                <a href="report.html">Reports</a>
-                <a href="calendar.html">Calendar of Activities</a>
-                <a href="issuance.html">Issuances</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>`;
-    } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
-    container.innerHTML = navHtml;
-    setTimeout(() => {
-      document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-        trigger.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const submenu = trigger.closest(".dropdown-submenu");
-          if (submenu) submenu.classList.toggle("open");
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-content">
+      <button class="modal-close" id="editModalCloseBtn">&times;</button>
+      <h2>✏️ Edit LGU Status Record</h2>
+      <form id="editForm">
+        <input type="hidden" name="action" value="update">
+        <input type="hidden" name="data_type" value="lgu_status">
+        
+        <div class="edit-form-row">
+          <div class="edit-form-group">
+            <label>PSGC</label>
+            <input type="text" id="editPsgc" name="PSGC" readonly>
+          </div>
+          <div class="edit-form-group">
+            <label>Income Class</label>
+            <input type="text" id="editIncome" name="Income Class">
+          </div>
+        </div>
+        <div class="edit-form-row">
+          <div class="edit-form-group">
+            <label>Region</label>
+            <input type="text" id="editRegion" name="Region">
+          </div>
+          <div class="edit-form-group">
+            <label>Province</label>
+            <input type="text" id="editProvince" name="Province" readonly>
+          </div>
+        </div>
+        <div class="edit-form-row">
+          <div class="edit-form-group">
+            <label>City/Municipality</label>
+            <input type="text" id="editCity" name="City/Municipality" readonly>
+          </div>
+          <div class="edit-form-group">
+            <label>Start Year</label>
+            <input type="text" id="editStartYear" name="Start Year">
+          </div>
+        </div>
+        <div class="edit-form-row">
+          <div class="edit-form-group">
+            <label>End Year</label>
+            <input type="text" id="editEndYear" name="End Year">
+          </div>
+          <div class="edit-form-group">
+            <label>Resolution Number of the Latest Plan</label>
+            <input type="text" id="editResolution" name="Resolution Number of the Latest Plan">
+          </div>
+        </div>
+        <div class="edit-form-group">
+          <label>Approval Date (MM/DD/YYYY)</label>
+          <input type="text" id="editApprovalDate" name="Approval date of the Latest plan (MM/DD/YYYY)" placeholder="MM/DD/YYYY">
+        </div>
+        <div class="edit-form-group">
+          <label>CLUP Status</label>
+          <select id="editClupStatus" name="CLUP Status">
+            <option value="">Select...</option>
+            <option value="Updated">Updated</option>
+            <option value="For Updating">For Updating</option>
+            <option value="Under Review">Under Review</option>
+            <option value="No CLUP">No CLUP</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>Status of CLUP Updating</label>
+          <select id="editClupUpdates" name="CLUPStatus/Updates">
+            <option value="">Select...</option>
+            <option value="Pre-Phase">Pre-Phase</option>
+            <option value="Phase 1">Phase 1</option>
+            <option value="Phase 2">Phase 2</option>
+            <option value="Phase 3">Phase 3</option>
+            <option value="Phase 4">Phase 4</option>
+            <option value="Phase 5">Phase 5</option>
+            <option value="RA 1">RA 1</option>
+            <option value="RA 2">RA 2</option>
+            <option value="RA 3">RA 3</option>
+            <option value="RA 4">RA 4</option>
+            <option value="RA 5">RA 5</option>
+            <option value="RA 6">RA 6</option>
+            <option value="RA 7">RA 7</option>
+            <option value="None Indicated">None Indicated</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>Technical Assistance Provided</label>
+          <select id="editTechAssist" name="Technical Assistance Provided">
+            <option value="">Select...</option>
+            <option value="Trained">Trained</option>
+            <option value="Trained and Assisted">Trained and Assisted</option>
+            <option value="Assisted">Assisted</option>
+            <option value="No assistance">No assistance</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>Support from Other Institutions</label>
+          <select id="editSupport" name="Support from Other Institutions">
+            <option value="">Select...</option>
+            <option value="None">None</option>
+            <option value="National Government Agency">National Government Agency</option>
+            <option value="Donor Agency">Donor Agency</option>
+            <option value="Consultant">Consultant</option>
+            <option value="Academe">Academe</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>Name/s of Institutions</label>
+          <input type="text" id="editInstitutions" name="If with Support from other institutions, Name/s of Institutions">
+        </div>
+        <div class="edit-form-group">
+          <label>LGU with Local Shelter Plan</label>
+          <select id="editShelterPlan" name="LGU with Local Shelter Plan">
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>LGU with Integrated Housing Subsector</label>
+          <select id="editHousingSubsector" name="LGU with Integrated Housing Subsector">
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>LGU with Integrated Communications Plan</label>
+          <select id="editCommPlan" name="LGU with Integrated Communications Plan">
+            <option value="">Select...</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="edit-form-group">
+          <label>Remarks</label>
+          <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
+        </div>
+        <div class="edit-form-actions">
+          <button type="button" class="btn-cancel" id="editCancelBtn">Cancel</button>
+          <button type="submit" class="btn-save" id="editSaveBtn">💾 Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+      <div class="login-modal-brand">
+        <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+        <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+        <h3>DHSUD Region VI</h3>
+        <p>ELUPDD · CLUP & ZO Platform</p>
+      </div>
+      <div class="login-modal-body">
+        <form id="modalLoginForm" onsubmit="return handleModalLogin(event)">
+          <div class="input-group">
+            <label><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+            <button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button>
+          </div>
+          <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
+        </form>
+      </div>
+      <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+  </div>
+
+  <footer class="footer-new">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br />
+          <strong>DHSUD Region VI</strong><br />ELUPDD<br />
+        </div>
+        <div>
+          <strong>Our Social Networks</strong><br />Follow us for updates<br />
+          <div class="social-icons">
+            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
+    </div>
+  </footer>
+
+  <script>
+    // ========== INTEGRATED SCRIPT ==========
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwc1ARF9hc4h8RQ6d3uAiaaLTYdG2C-m8qQizwTm6Q3A3b0mrp4FE7ro70RqQZv7SM/exec";
+    let currentUser = null;
+    let currentBarMode = 'all';
+    let currentEditRecord = null;
+    let isSaving = false;
+    
+    // ========== FIELD MAPPING ==========
+    const FIELD_ALIASES = {
+      "LGU with Local Shelter Plan": [
+        "LGU with Local Shelter Plan",
+        "Local Shelter Plan",
+        "Shelter Plan",
+        "LGU Local Shelter Plan",
+        "ShelterPlan",
+        "local_shelter_plan"
+      ],
+      "LGU with Integrated Housing Subsector": [
+        "LGU with Integrated Housing Subsector",
+        "Integrated Housing Subsector",
+        "Housing Subsector",
+        "Housing",
+        "LGU Housing Subsector",
+        "housing_subsector"
+      ],
+      "LGU with Integrated Communications Plan": [
+        "LGU with Integrated Communications Plan",
+        "LGU with Communications Plan",
+        "Integrated Communications Plan",
+        "Communications Plan",
+        "Comm Plan",
+        "LGU Communications Plan",
+        "communications_plan",
+        "CommPlan",
+        "Communications"
+      ],
+      "CLUP Status": [
+        "CLUP Status",
+        "CLUPStatus",
+        "Status",
+        "clup_status"
+      ],
+      "CLUPStatus/Updates": [
+        "CLUPStatus/Updates",
+        "Status of CLUP Updating",
+        "CLUP Updates",
+        "Updates",
+        "clup_updates"
+      ],
+      "Support from Other Institutions": [
+        "Support from Other Institutions",
+        "Support",
+        "Institutions Support",
+        "support_from_other_institutions"
+      ]
+    };
+    
+    function escapeHtml(s){ 
+      if (s === undefined || s === null) return "—";
+      return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); 
+    }
+    
+    function showToast(msg, type){ 
+      let t=document.createElement("div"); 
+      t.className="toast-msg"+(type==='error'?' error':type==='info'?' info':''); 
+      t.innerText=msg; 
+      document.body.appendChild(t); 
+      setTimeout(()=>t.remove(), 3500); 
+    }
+    
+    function checkSession(){ 
+      const raw=localStorage.getItem("dhsud_session"); 
+      if(raw){ 
+        try{ 
+          const s=JSON.parse(raw); 
+          const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60); 
+          if(diff<12&&s.email){ 
+            currentUser=s; 
+            return true; 
+          } else localStorage.removeItem("dhsud_session"); 
+        }catch(e){localStorage.removeItem("dhsud_session");}
+      } 
+      currentUser=null; 
+      return false; 
+    }
+    
+    function getUserInitials(n){ 
+      if(!n) return "U"; 
+      let p=n.split(" "); 
+      if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); 
+      return n.substring(0,2).toUpperCase(); 
+    }
+    
+    function getRoleLabel(r){ 
+      if(r==="admin") return "👑 Admin"; 
+      if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; 
+      return "👁️ Viewer"; 
+    }
+    
+    function getRoleClass(r){ 
+      if(r==="admin") return "admin"; 
+      if(r==="encoder"||r==="staff") return "staff"; 
+      return "viewer"; 
+    }
+    
+    function renderMainNavigation() {
+      const container = document.getElementById("mainNavContainer");
+      if (!container) return;
+      let navHtml = `<a href="index.html">Home</a>`;
+      if (currentUser) {
+        navHtml +=
+          `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+            <a href="lc.html">Locational Clearance</a>
+            <a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
+            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
+          </div></div>
+          <a href="Techsamp.html">Technical Assistance</a>
+          <a href="training.html">CLUP/ZO Trainings</a>
+          <a href="p_monitoring.html">Plan Monitoring</a>
+          <a href="lgu-info.html">LGU Information</a>
+          <a href="report.html">Reports</a>
+          <a href="calendar.html">Calendar of Activities</a>
+          <a href="issuance.html">Issuances</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>`;
+      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+      container.innerHTML = navHtml;
+      setTimeout(() => {
+        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const submenu = trigger.closest(".dropdown-submenu");
+            if (submenu) submenu.classList.toggle("open");
+          });
         });
-      });
-      document.addEventListener("click", function (e) {
-        if (!e.target.closest(".dropdown-submenu")) {
-          document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-        }
-      });
-    }, 10);
-  }
-  
-  function renderUserMenu() {
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".dropdown-submenu")) {
+            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+          }
+        });
+      }, 10);
+    }
+    
+    function renderUserMenu() {
       const container = document.getElementById("userMenuContainer"); if(!container) return;
       if (currentUser) {
         const initials = getUserInitials(currentUser.fullName);
@@ -1150,270 +1053,344 @@
         if (userDiv) { userDiv.addEventListener("click", (e) => { e.stopPropagation(); const menu = userDiv.querySelector(".user-dropdown-menu"); if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; }); document.addEventListener("click", () => { const menu = userDiv.querySelector(".user-dropdown-menu"); if(menu) menu.style.display = "none"; }); }
         if (isAdmin) { const adminBtn = document.getElementById("adminConsoleLink"); if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); }
         const logoutBtn = document.getElementById("logoutDropdownBtn");
-        if(logoutBtn) logoutBtn.addEventListener("click", () => { localStorage.removeItem("dhsud_session"); showToastMessage("Logged out successfully.", "info"); setTimeout(() => window.location.reload(), 700); });
+        if(logoutBtn) logoutBtn.addEventListener("click", () => { localStorage.removeItem("dhsud_session"); showToast("Logged out successfully.", "info"); setTimeout(() => window.location.reload(), 700); });
       } else {
         container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
       }
     }
 
-  // ========== DASHBOARD LOGIC ==========
-  let rawLguData = [];
-  let filteredData = [];
-  let pieChartInstance=null, barChartInstance=null, columnChartInstance=null, stackedChartInstance=null;
-  let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null, supportPieInstance=null;
-
-  // ========== IMPROVED FIELD ACCESS ==========
-  function getField(record, field) {
-    if (!record) return "—";
-    
-    if (record[field] !== undefined && record[field] !== null && record[field] !== "") {
-      return record[field];
+    function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
+    function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
+    function toggleModalPassword() {
+      let pwd = document.getElementById("modalLoginPassword");
+      pwd.type = pwd.type === "password" ? "text" : "password";
     }
-    
-    if (FIELD_ALIASES[field]) {
-      for (let alias of FIELD_ALIASES[field]) {
-        if (record[alias] !== undefined && record[alias] !== null && record[alias] !== "") {
-          return record[alias];
+
+    async function handleModalLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("modalLoginPassword").value;
+      const btn = e.submitter || document.getElementById("loginModalBtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "⏳ Authenticating...";
+      btn.disabled = true;
+      try {
+        const resp = await fetch(`https://script.google.com/macros/s/AKfycbw8fpw0CcxnNel8hqyYuOwpEWIlVEZX2lRCutAIzSylhwt4zJzJmMdum6Eo4JteHMItmQ/exec?action=get&data_type=users&_=${Date.now()}`);
+        const users = await resp.json();
+        const user = users.find((u) => u.email?.toLowerCase() === email);
+        if (!user) {
+          showToast("Account not found.", "error");
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          return false;
+        }
+        const encodedPassword = btoa(password);
+        if (user.password === encodedPassword) {
+          const session = {
+            userId: user.id,
+            email: user.email,
+            fullName: user.fullName,
+            office: user.office || "ELUPDD",
+            role: user.role,
+            loggedInAt: new Date().toISOString(),
+          };
+          localStorage.setItem("dhsud_session", JSON.stringify(session));
+          showToast(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+          document.getElementById("loginModal").classList.remove("active");
+          setTimeout(() => window.location.reload(), 1000);
+        } else {
+          showToast("Invalid password.", "error");
+        }
+      } catch (error) {
+        showToast("Connection error. Please try again.", "error");
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+      return false;
+    }
+
+    // ========== DASHBOARD LOGIC ==========
+    let rawLguData = [];
+    let filteredData = [];
+    let pieChartInstance=null, barChartInstance=null, columnChartInstance=null, stackedChartInstance=null;
+    let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null, supportPieInstance=null;
+
+    function getField(record, field) {
+      if (!record) return "—";
+      
+      if (record[field] !== undefined && record[field] !== null && record[field] !== "") {
+        return record[field];
+      }
+      
+      if (FIELD_ALIASES[field]) {
+        for (let alias of FIELD_ALIASES[field]) {
+          if (record[alias] !== undefined && record[alias] !== null && record[alias] !== "") {
+            return record[alias];
+          }
         }
       }
-    }
-    
-    for (let key of Object.keys(record)) {
-      if (key.trim() === field.trim()) {
-        return record[key];
+      
+      for (let key of Object.keys(record)) {
+        if (key.trim() === field.trim()) {
+          return record[key];
+        }
       }
-    }
-    
-    const lowerField = field.toLowerCase().trim();
-    for (let key of Object.keys(record)) {
-      if (key.toLowerCase().trim() === lowerField) {
-        return record[key];
+      
+      const lowerField = field.toLowerCase().trim();
+      for (let key of Object.keys(record)) {
+        if (key.toLowerCase().trim() === lowerField) {
+          return record[key];
+        }
       }
-    }
-    
-    for (let key of Object.keys(record)) {
-      const keyLower = key.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const fieldLower = field.toLowerCase().replace(/[^a-z0-9]/g, '');
-      if (keyLower === fieldLower || keyLower.includes(fieldLower) || fieldLower.includes(keyLower)) {
-        return record[key];
+      
+      for (let key of Object.keys(record)) {
+        const keyLower = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const fieldLower = field.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (keyLower === fieldLower || keyLower.includes(fieldLower) || fieldLower.includes(keyLower)) {
+          return record[key];
+        }
       }
+      
+      return "—";
     }
-    
-    return "—";
-  }
 
-  function getFieldValue(record, field) {
-    const val = getField(record, field);
-    return val === "—" ? "" : val;
-  }
+    function getFieldValue(record, field) {
+      const val = getField(record, field);
+      return val === "—" ? "" : val;
+    }
 
-  // ========== FORMAT DATE FUNCTION ==========
-  function formatDate(value) {
-    if (!value || value === "—" || value === "") return "";
-    
-    if (typeof value === 'string' && value.includes('T')) {
-      const date = new Date(value);
-      if (!isNaN(date.getTime())) {
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const year = date.getFullYear();
+    function formatDate(value) {
+      if (!value || value === "—" || value === "") return "";
+      
+      if (typeof value === 'string' && value.includes('T')) {
+        const date = new Date(value);
+        if (!isNaN(date.getTime())) {
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const year = date.getFullYear();
+          return `${month}/${day}/${year}`;
+        }
+      }
+      
+      if (value instanceof Date) {
+        const month = String(value.getMonth() + 1).padStart(2, '0');
+        const day = String(value.getDate()).padStart(2, '0');
+        const year = value.getFullYear();
         return `${month}/${day}/${year}`;
       }
-    }
-    
-    if (value instanceof Date) {
-      const month = String(value.getMonth() + 1).padStart(2, '0');
-      const day = String(value.getDate()).padStart(2, '0');
-      const year = value.getFullYear();
-      return `${month}/${day}/${year}`;
-    }
-    
-    if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+      
+      if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+        return value;
+      }
+      
+      try {
+        const date = new Date(value);
+        if (!isNaN(date.getTime())) {
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const year = date.getFullYear();
+          return `${month}/${day}/${year}`;
+        }
+      } catch (e) {}
+      
       return value;
     }
-    
-    try {
-      const date = new Date(value);
-      if (!isNaN(date.getTime())) {
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${month}/${day}/${year}`;
+
+    function extractYearFromApproval(record) {
+      const approvalDate = getField(record, "Approval date of the Latest plan (MM/DD/YYYY)");
+      if (!approvalDate || approvalDate === "—" || approvalDate === "") return null;
+      
+      const yearMatch = String(approvalDate).match(/\b(19|20)\d{2}\b/);
+      if (yearMatch) {
+        return parseInt(yearMatch[0]);
       }
-    } catch (e) {}
-    
-    return value;
-  }
+      
+      return null;
+    }
 
-  // ========== EXTRACT YEAR FROM APPROVAL DATE ==========
-  function extractYearFromApproval(record) {
-    const approvalDate = getField(record, "Approval date of the Latest plan (MM/DD/YYYY)");
-    if (!approvalDate || approvalDate === "—" || approvalDate === "") return null;
-    
-    // Try to extract 4-digit year
-    const yearMatch = String(approvalDate).match(/\b(19|20)\d{2}\b/);
-    if (yearMatch) {
-      return parseInt(yearMatch[0]);
+    function deriveClupStatus(record){
+      let status = getField(record, "CLUP Status");
+      if (status === "—" || status === "") status = getField(record, "CLUPStatus/Updates");
+      if (status === "—" || status === "") status = getField(record, "PDPFP/CLUP Status");
+      if (status === "—" || status === "") status = getField(record, "Status");
+      if (status === "—" || status === "") status = "Unknown";
+      return status;
     }
     
-    return null;
-  }
-
-  // ========== DERIVE CLUP STATUS WITH RA DETECTION ==========
-  function deriveClupStatus(record){
-    let status = getField(record, "CLUP Status");
-    if (status === "—" || status === "") status = getField(record, "CLUPStatus/Updates");
-    if (status === "—" || status === "") status = getField(record, "PDPFP/CLUP Status");
-    if (status === "—" || status === "") status = getField(record, "Status");
-    if (status === "—" || status === "") status = "Unknown";
-    return status;
-  }
-  
-  // ========== DETERMINE CLUP STATUS CATEGORY ==========
-  function getClupStatusCategory(record) {
-    let clupStatus = getField(record, "CLUP Status");
-    if (clupStatus && clupStatus !== "—" && clupStatus !== "") {
-      const normalized = normalizeStatusCategory(clupStatus);
-      if (normalized) return normalized;
-    }
-    
-    let updates = getField(record, "CLUPStatus/Updates");
-    if (updates && updates !== "—" && updates !== "") {
-      const updatesLower = String(updates).toLowerCase().trim();
-      const raPatterns = ['ra 1', 'ra1', 'ra 2', 'ra2', 'ra 3', 'ra3', 'ra 4', 'ra4', 'ra 5', 'ra5', 'ra 6', 'ra6', 'ra 7', 'ra7'];
-      for (let pattern of raPatterns) {
-        if (updatesLower.includes(pattern)) {
-          return "Under Review";
+    function getClupStatusCategory(record) {
+      let clupStatus = getField(record, "CLUP Status");
+      if (clupStatus && clupStatus !== "—" && clupStatus !== "") {
+        const normalized = normalizeStatusCategory(clupStatus);
+        if (normalized) return normalized;
+      }
+      
+      let updates = getField(record, "CLUPStatus/Updates");
+      if (updates && updates !== "—" && updates !== "") {
+        const updatesLower = String(updates).toLowerCase().trim();
+        const raPatterns = ['ra 1', 'ra1', 'ra 2', 'ra2', 'ra 3', 'ra3', 'ra 4', 'ra4', 'ra 5', 'ra5', 'ra 6', 'ra6', 'ra 7', 'ra7'];
+        for (let pattern of raPatterns) {
+          if (updatesLower.includes(pattern)) {
+            return "Under Review";
+          }
+        }
+        
+        if (updatesLower.includes('updated') || updatesLower === 'yes') {
+          return "Updated";
+        }
+        if (updatesLower.includes('for updating') || updatesLower.includes('due')) {
+          return "For Updating";
         }
       }
       
-      if (updatesLower.includes('updated') || updatesLower === 'yes') {
-        return "Updated";
+      if (clupStatus && clupStatus !== "—" && clupStatus !== "") {
+        return normalizeStatusCategory(clupStatus);
       }
-      if (updatesLower.includes('for updating') || updatesLower.includes('due')) {
-        return "For Updating";
-      }
+      
+      return "Other";
     }
     
-    if (clupStatus && clupStatus !== "—" && clupStatus !== "") {
-      return normalizeStatusCategory(clupStatus);
+    function normalizeStatusCategory(status) {
+      if (!status) return null;
+      const s = String(status).toLowerCase().trim();
+      if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
+      if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For Updating";
+      if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
+      return null;
+    }
+
+    function deriveTargetYear(record){
+      const start = getField(record, "Start Year");
+      const end = getField(record, "End Year");
+      if (start !== "—" && end !== "—") return `${start}-${end}`;
+      if (start !== "—") return start;
+      if (end !== "—") return end;
+      return "—";
+    }
+
+    function normalizeStatus(status){
+      if (!status) return "Other";
+      const s = String(status).toLowerCase().trim();
+      if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
+      if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For Updating";
+      if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
+      if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No CLUP";
+      return "Other";
+    }
+
+    function getPhaseCategory(phaseName){
+      const key = phaseName?.trim() || "";
+      if (key.includes("Preparatory") || key.includes("preparatory")) return "Preparatory";
+      if (key.includes("Phase") || key.includes("Formulation")) return "Formulation";
+      if (key.includes("RA") || key.includes("Review") || key.includes("Approval")) return "Review & Approval";
+      if (key.includes("None") || key.includes("Unspecified")) return "Unspecified";
+      return "Unspecified";
+    }
+
+    function filterByStatusUpdates(records, mode) {
+      if (mode === 'all') return records;
+      
+      const validOptions = [
+        'Pre-Phase', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5',
+        'RA 1', 'RA 2', 'RA 3', 'RA 4', 'RA 5', 'RA 6', 'RA 7',
+        'None Indicated'
+      ];
+      
+      if (!validOptions.includes(mode)) return records;
+      
+      return records.filter(r => {
+        const updatesField = getField(r, "CLUPStatus/Updates");
+        let combined = String(updatesField || "").toLowerCase().trim();
+        
+        const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
+        if (!combined && clupStatus) {
+          combined = clupStatus;
+        }
+        
+        if (mode === 'None Indicated') {
+          return !combined || combined === '' || combined === 'none' || combined === 'n/a';
+        }
+        
+        const modeLower = mode.toLowerCase();
+        const modeNoSpace = modeLower.replace(/\s/g, '');
+        const modeWithHyphen = modeLower.replace(/\s/g, '-');
+        
+        return combined.includes(modeLower) || 
+               combined.includes(modeNoSpace) ||
+               combined.includes(modeWithHyphen);
+      });
     }
     
-    return "Other";
-  }
-  
-  function normalizeStatusCategory(status) {
-    if (!status) return null;
-    const s = String(status).toLowerCase().trim();
-    if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
-    if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For Updating";
-    if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
-    return null;
-  }
-
-  function deriveTargetYear(record){
-    const start = getField(record, "Start Year");
-    const end = getField(record, "End Year");
-    if (start !== "—" && end !== "—") return `${start}-${end}`;
-    if (start !== "—") return start;
-    if (end !== "—") return end;
-    return "—";
-  }
-
-  function normalizeStatus(status){
-    if (!status) return "Other";
-    const s = String(status).toLowerCase().trim();
-    if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
-    if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For Updating";
-    if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
-    if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No CLUP";
-    return "Other";
-  }
-
-  function getPhaseCategory(phaseName){
-    const key = phaseName?.trim() || "";
-    if (key.includes("Preparatory") || key.includes("preparatory")) return "Preparatory";
-    if (key.includes("Phase") || key.includes("Formulation")) return "Formulation";
-    if (key.includes("RA") || key.includes("Review") || key.includes("Approval")) return "Review & Approval";
-    if (key.includes("None") || key.includes("Unspecified")) return "Unspecified";
-    return "Unspecified";
-  }
-
-  // ========== FILTER BY STATUS UPDATES ==========
-  function filterByStatusUpdates(records, mode) {
-    if (mode === 'all') return records;
-    
-    const validOptions = [
-      'Pre-Phase', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5',
-      'RA 1', 'RA 2', 'RA 3', 'RA 4', 'RA 5', 'RA 6', 'RA 7',
-      'None Indicated'
-    ];
-    
-    if (!validOptions.includes(mode)) return records;
-    
-    return records.filter(r => {
-      const updatesField = getField(r, "CLUPStatus/Updates");
-      let combined = String(updatesField || "").toLowerCase().trim();
+    function filterByClupStatusCategory(records, category) {
+      if (category === 'all') return records;
       
-      const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-      if (!combined && clupStatus) {
-        combined = clupStatus;
+      return records.filter(r => {
+        const categoryValue = getClupStatusCategory(r);
+        return categoryValue === category;
+      });
+    }
+    
+    function filterBySupportCategory(records, category) {
+      if (category === 'all') return records;
+      
+      return records.filter(r => {
+        const supportValue = getField(r, "Support from Other Institutions");
+        return supportValue === category;
+      });
+    }
+
+    function filterByYear(records, year) {
+      if (!year || year === 'all' || year === '') return records;
+      
+      const targetYear = parseInt(year);
+      if (isNaN(targetYear)) return records;
+      
+      return records.filter(r => {
+        const extractedYear = extractYearFromApproval(r);
+        return extractedYear === targetYear;
+      });
+    }
+
+    function getBarData(records, mode) {
+      if (mode === 'all') {
+        const allLabels = ["Pre-Phase", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", 
+                           "RA 1", "RA 2", "RA 3", "RA 4", "RA 5", "RA 6", "RA 7", "None Indicated"];
+        const counts = {};
+        allLabels.forEach(l => counts[l] = 0);
+        
+        records.forEach(r => {
+          const updatesField = getField(r, "CLUPStatus/Updates");
+          let combined = String(updatesField || "").toLowerCase().trim();
+          const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
+          if (!combined && clupStatus) {
+            combined = clupStatus;
+          }
+          
+          let matched = false;
+          for (let label of allLabels) {
+            const labelLower = label.toLowerCase();
+            if (combined.includes(labelLower) || 
+                combined.includes(labelLower.replace(/\s/g, '')) ||
+                combined.includes(labelLower.replace('-', ''))) {
+              counts[label] = (counts[label] || 0) + 1;
+              matched = true;
+              break;
+            }
+          }
+          if (!matched) {
+            counts["None Indicated"] = (counts["None Indicated"] || 0) + 1;
+          }
+        });
+        
+        return { 
+          labels: allLabels, 
+          data: allLabels.map(l => counts[l] || 0) 
+        };
       }
       
-      if (mode === 'None Indicated') {
-        return !combined || combined === '' || combined === 'none' || combined === 'n/a';
-      }
-      
-      const modeLower = mode.toLowerCase();
-      const modeNoSpace = modeLower.replace(/\s/g, '');
-      const modeWithHyphen = modeLower.replace(/\s/g, '-');
-      
-      return combined.includes(modeLower) || 
-             combined.includes(modeNoSpace) ||
-             combined.includes(modeWithHyphen);
-    });
-  }
-  
-  // ========== FILTER BY CLUP STATUS CATEGORY ==========
-  function filterByClupStatusCategory(records, category) {
-    if (category === 'all') return records;
-    
-    return records.filter(r => {
-      const categoryValue = getClupStatusCategory(r);
-      return categoryValue === category;
-    });
-  }
-  
-  // ========== FILTER BY SUPPORT CATEGORY ==========
-  function filterBySupportCategory(records, category) {
-    if (category === 'all') return records;
-    
-    return records.filter(r => {
-      const supportValue = getField(r, "Support from Other Institutions");
-      return supportValue === category;
-    });
-  }
-
-  // ========== FILTER BY YEAR ==========
-  function filterByYear(records, year) {
-    if (!year || year === 'all' || year === '') return records;
-    
-    const targetYear = parseInt(year);
-    if (isNaN(targetYear)) return records;
-    
-    return records.filter(r => {
-      const extractedYear = extractYearFromApproval(r);
-      return extractedYear === targetYear;
-    });
-  }
-
-  // ========== CHART DATA ==========
-  function getBarData(records, mode) {
-    if (mode === 'all') {
-      const allLabels = ["Pre-Phase", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", 
-                         "RA 1", "RA 2", "RA 3", "RA 4", "RA 5", "RA 6", "RA 7", "None Indicated"];
+      const labels = [mode];
       const counts = {};
-      allLabels.forEach(l => counts[l] = 0);
+      labels.forEach(l => counts[l] = 0);
       
       records.forEach(r => {
         const updatesField = getField(r, "CLUPStatus/Updates");
@@ -1423,888 +1400,844 @@
           combined = clupStatus;
         }
         
-        let matched = false;
-        for (let label of allLabels) {
-          const labelLower = label.toLowerCase();
-          if (combined.includes(labelLower) || 
-              combined.includes(labelLower.replace(/\s/g, '')) ||
-              combined.includes(labelLower.replace('-', ''))) {
-            counts[label] = (counts[label] || 0) + 1;
-            matched = true;
-            break;
+        const modeLower = mode.toLowerCase();
+        const modeNoSpace = modeLower.replace(/\s/g, '');
+        const modeWithHyphen = modeLower.replace(/\s/g, '-');
+        
+        if (mode === 'None Indicated') {
+          if (!combined || combined === '' || combined === 'none' || combined === 'n/a') {
+            counts[mode] = (counts[mode] || 0) + 1;
           }
-        }
-        if (!matched) {
-          counts["None Indicated"] = (counts["None Indicated"] || 0) + 1;
-        }
-      });
-      
-      return { 
-        labels: allLabels, 
-        data: allLabels.map(l => counts[l] || 0) 
-      };
-    }
-    
-    const labels = [mode];
-    const counts = {};
-    labels.forEach(l => counts[l] = 0);
-    
-    records.forEach(r => {
-      const updatesField = getField(r, "CLUPStatus/Updates");
-      let combined = String(updatesField || "").toLowerCase().trim();
-      const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-      if (!combined && clupStatus) {
-        combined = clupStatus;
-      }
-      
-      const modeLower = mode.toLowerCase();
-      const modeNoSpace = modeLower.replace(/\s/g, '');
-      const modeWithHyphen = modeLower.replace(/\s/g, '-');
-      
-      if (mode === 'None Indicated') {
-        if (!combined || combined === '' || combined === 'none' || combined === 'n/a') {
+        } else if (combined.includes(modeLower) || 
+                   combined.includes(modeNoSpace) ||
+                   combined.includes(modeWithHyphen)) {
           counts[mode] = (counts[mode] || 0) + 1;
         }
-      } else if (combined.includes(modeLower) || 
-                 combined.includes(modeNoSpace) ||
-                 combined.includes(modeWithHyphen)) {
-        counts[mode] = (counts[mode] || 0) + 1;
-      }
-    });
-    
-    return { labels: [mode], data: [counts[mode] || 0] };
-  }
+      });
+      
+      return { labels: [mode], data: [counts[mode] || 0] };
+    }
 
-  function getPieData(records){
-    const statusMap = { "Updated":0, "For Updating":0, "Under Review":0 };
-    records.forEach(r => {
-      const category = getClupStatusCategory(r);
-      if (category === "Updated") {
-        statusMap["Updated"]++;
-      } else if (category === "For Updating") {
-        statusMap["For Updating"]++;
-      } else if (category === "Under Review") {
-        statusMap["Under Review"]++;
-      }
-    });
-    return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
-  }
+    function getPieData(records){
+      const statusMap = { "Updated":0, "For Updating":0, "Under Review":0 };
+      records.forEach(r => {
+        const category = getClupStatusCategory(r);
+        if (category === "Updated") {
+          statusMap["Updated"]++;
+        } else if (category === "For Updating") {
+          statusMap["For Updating"]++;
+        } else if (category === "Under Review") {
+          statusMap["Under Review"]++;
+        }
+      });
+      return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
+    }
 
-  function getSupportPieData(records, filterCategory) {
-    const supportMap = {
-      "None": 0,
-      "National Government Agency": 0,
-      "Donor Agency": 0,
-      "Consultant": 0,
-      "Academe": 0,
-      "Others": 0,
-      "Not Specified": 0
-    };
-    
-    let filteredRecords = records;
-    if (filterCategory && filterCategory !== 'all') {
-      filteredRecords = records.filter(r => {
+    function getSupportPieData(records, filterCategory) {
+      const supportMap = {
+        "None": 0,
+        "National Government Agency": 0,
+        "Donor Agency": 0,
+        "Consultant": 0,
+        "Academe": 0,
+        "Others": 0,
+        "Not Specified": 0
+      };
+      
+      let filteredRecords = records;
+      if (filterCategory && filterCategory !== 'all') {
+        filteredRecords = records.filter(r => {
+          const value = getField(r, "Support from Other Institutions");
+          return value === filterCategory;
+        });
+      }
+      
+      filteredRecords.forEach(r => {
         const value = getField(r, "Support from Other Institutions");
-        return value === filterCategory;
+        if (value && value !== "—" && value !== "") {
+          if (supportMap.hasOwnProperty(value)) {
+            supportMap[value]++;
+          } else {
+            supportMap["Others"]++;
+          }
+        } else {
+          supportMap["Not Specified"]++;
+        }
+      });
+      
+      const labels = [];
+      const data = [];
+      for (let [key, val] of Object.entries(supportMap)) {
+        if (val > 0 || key === "Not Specified") {
+          labels.push(key);
+          data.push(val);
+        }
+      }
+      
+      if (data.every(d => d === 0)) {
+        return { labels: ["No Data"], data: [1] };
+      }
+      
+      return { labels, data };
+    }
+
+    function getYesNoData(records, field) {
+      let yesCount = 0, noCount = 0, emptyCount = 0;
+      records.forEach(r => {
+        const value = getField(r, field);
+        if (value === "Yes") yesCount++;
+        else if (value === "No") noCount++;
+        else emptyCount++;
+      });
+      return { labels: ["Yes", "No", "Not Specified"], data: [yesCount, noCount, emptyCount] };
+    }
+
+    function getColumnData(records, view){
+      const phaseCounts = {
+        "Preparatory": 0,
+        "Formulation": 0,
+        "Review & Approval": 0,
+        "Unspecified": 0
+      };
+      
+      records.forEach(r => {
+        const updatesField = getField(r, "CLUPStatus/Updates");
+        let combined = String(updatesField || "").toLowerCase().trim();
+        const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
+        if (!combined && clupStatus) {
+          combined = clupStatus;
+        }
+        
+        let category = null;
+        
+        if (combined.includes('pre-phase') || combined.includes('prephase') || combined.includes('pre phase')) {
+          category = "Preparatory";
+        }
+        else if (combined.includes('phase 1') || combined.includes('phase1') ||
+                 combined.includes('phase 2') || combined.includes('phase2') ||
+                 combined.includes('phase 3') || combined.includes('phase3') ||
+                 combined.includes('phase 4') || combined.includes('phase4') ||
+                 combined.includes('phase 5') || combined.includes('phase5')) {
+          category = "Formulation";
+        }
+        else if (combined.includes('ra 1') || combined.includes('ra1') ||
+                 combined.includes('ra 2') || combined.includes('ra2') ||
+                 combined.includes('ra 3') || combined.includes('ra3') ||
+                 combined.includes('ra 4') || combined.includes('ra4') ||
+                 combined.includes('ra 5') || combined.includes('ra5') ||
+                 combined.includes('ra 6') || combined.includes('ra6') ||
+                 combined.includes('ra 7') || combined.includes('ra7')) {
+          category = "Review & Approval";
+        }
+        else if (!combined || combined === '' || combined === 'none' || combined === 'n/a' || combined === 'none indicated') {
+          category = "Unspecified";
+        }
+        
+        if (category && phaseCounts.hasOwnProperty(category)) {
+          phaseCounts[category]++;
+        } else {
+          phaseCounts["Unspecified"]++;
+        }
+      });
+      
+      const viewMap = {
+        "preparatory": ["Preparatory"],
+        "formulation": ["Formulation"],
+        "review": ["Review & Approval"],
+        "unspecified": ["Unspecified"]
+      };
+      
+      const target = viewMap[view] || viewMap["preparatory"];
+      return { 
+        labels: target, 
+        values: target.map(p => phaseCounts[p] || 0) 
+      };
+    }
+
+    function getStackedChartData(records, filterProvince) {
+      const provinceData = {};
+      const allProvinces = [];
+      
+      records.forEach(r => {
+        const province = getField(r, "Province");
+        if (province && province !== "—") {
+          if (!provinceData[province]) {
+            provinceData[province] = { 'Updated': 0, 'For Updating': 0, 'Under Review': 0 };
+            allProvinces.push(province);
+          }
+          const category = getClupStatusCategory(r);
+          if (category === 'Updated') provinceData[province]['Updated']++;
+          else if (category === 'For Updating') provinceData[province]['For Updating']++;
+          else if (category === 'Under Review') provinceData[province]['Under Review']++;
+        }
+      });
+      
+      let sortedProvinces = allProvinces.sort();
+      
+      if (filterProvince && filterProvince !== 'all') {
+        sortedProvinces = sortedProvinces.filter(p => p === filterProvince);
+      }
+      
+      if (sortedProvinces.length === 0 && filterProvince !== 'all') {
+        sortedProvinces = allProvinces.sort();
+      }
+      
+      const statuses = ['Updated', 'For Updating', 'Under Review'];
+      const datasets = statuses.map(status => ({
+        label: status,
+        data: sortedProvinces.map(p => provinceData[p]?.[status] || 0),
+        backgroundColor: status === 'Updated' ? '#16a34a' : 
+                         status === 'For Updating' ? '#f59e0b' : '#3b82f6'
+      }));
+      
+      return {
+        labels: sortedProvinces,
+        datasets: datasets
+      };
+    }
+
+    function renderStats(records){
+      const total = records.length;
+      let updated=0, due=0, underReview=0;
+      
+      records.forEach(r => {
+        const category = getClupStatusCategory(r);
+        if (category === "Updated") updated++;
+        else if (category === "For Updating") due++;
+        else if (category === "Under Review") underReview++;
+      });
+      
+      document.getElementById("statTotalLgu").innerText = total;
+      document.getElementById("statUpdated").innerText = updated;
+      document.getElementById("statDue").innerText = due;
+      document.getElementById("statUnderReview").innerText = underReview;
+    }
+
+    function renderPie(records){
+      const data = getPieData(records);
+      const ctx = document.getElementById("pieChart").getContext("2d");
+      if (pieChartInstance) pieChartInstance.destroy();
+      pieChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            data: data.data, 
+            backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']
+          }] 
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
       });
     }
-    
-    filteredRecords.forEach(r => {
-      const value = getField(r, "Support from Other Institutions");
-      if (value && value !== "—" && value !== "") {
-        if (supportMap.hasOwnProperty(value)) {
-          supportMap[value]++;
-        } else {
-          supportMap["Others"]++;
-        }
-      } else {
-        supportMap["Not Specified"]++;
-      }
-    });
-    
-    const labels = [];
-    const data = [];
-    for (let [key, val] of Object.entries(supportMap)) {
-      if (val > 0 || key === "Not Specified") {
-        labels.push(key);
-        data.push(val);
-      }
-    }
-    
-    // If all values are 0, show "No Data"
-    if (data.every(d => d === 0)) {
-      return { labels: ["No Data"], data: [1] };
-    }
-    
-    return { labels, data };
-  }
 
-  function getYesNoData(records, field) {
-    let yesCount = 0, noCount = 0, emptyCount = 0;
-    records.forEach(r => {
-      const value = getField(r, field);
-      if (value === "Yes") yesCount++;
-      else if (value === "No") noCount++;
-      else emptyCount++;
-    });
-    return { labels: ["Yes", "No", "Not Specified"], data: [yesCount, noCount, emptyCount] };
-  }
-
-  function getColumnData(records, view){
-    const phaseCounts = {
-      "Preparatory": 0,
-      "Formulation": 0,
-      "Review & Approval": 0,
-      "Unspecified": 0
-    };
-    
-    records.forEach(r => {
-      const updatesField = getField(r, "CLUPStatus/Updates");
-      let combined = String(updatesField || "").toLowerCase().trim();
-      const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-      if (!combined && clupStatus) {
-        combined = clupStatus;
-      }
+    function renderSupportPie(records, filterCategory) {
+      const data = getSupportPieData(records, filterCategory);
+      const ctx = document.getElementById("supportPieChart").getContext("2d");
+      if (supportPieInstance) supportPieInstance.destroy();
       
-      let category = null;
+      const colorMap = {
+        "None": "#94a3b8",
+        "National Government Agency": "#3b82f6",
+        "Donor Agency": "#8b5cf6",
+        "Consultant": "#f59e0b",
+        "Academe": "#10b981",
+        "Others": "#ef4444",
+        "Not Specified": "#e2e8f0",
+        "No Data": "#e2e8f0"
+      };
       
-      if (combined.includes('pre-phase') || combined.includes('prephase') || combined.includes('pre phase')) {
-        category = "Preparatory";
-      }
-      else if (combined.includes('phase 1') || combined.includes('phase1') ||
-               combined.includes('phase 2') || combined.includes('phase2') ||
-               combined.includes('phase 3') || combined.includes('phase3') ||
-               combined.includes('phase 4') || combined.includes('phase4') ||
-               combined.includes('phase 5') || combined.includes('phase5')) {
-        category = "Formulation";
-      }
-      else if (combined.includes('ra 1') || combined.includes('ra1') ||
-               combined.includes('ra 2') || combined.includes('ra2') ||
-               combined.includes('ra 3') || combined.includes('ra3') ||
-               combined.includes('ra 4') || combined.includes('ra4') ||
-               combined.includes('ra 5') || combined.includes('ra5') ||
-               combined.includes('ra 6') || combined.includes('ra6') ||
-               combined.includes('ra 7') || combined.includes('ra7')) {
-        category = "Review & Approval";
-      }
-      else if (!combined || combined === '' || combined === 'none' || combined === 'n/a' || combined === 'none indicated') {
-        category = "Unspecified";
-      }
+      const colors = data.labels.map(l => colorMap[l] || '#e2e8f0');
       
-      if (category && phaseCounts.hasOwnProperty(category)) {
-        phaseCounts[category]++;
-      } else {
-        phaseCounts["Unspecified"]++;
-      }
-    });
-    
-    const viewMap = {
-      "preparatory": ["Preparatory"],
-      "formulation": ["Formulation"],
-      "review": ["Review & Approval"],
-      "unspecified": ["Unspecified"]
-    };
-    
-    const target = viewMap[view] || viewMap["preparatory"];
-    return { 
-      labels: target, 
-      values: target.map(p => phaseCounts[p] || 0) 
-    };
-  }
-
-  // ========== STACKED CHART DATA - COMPLETE PROVINCES ==========
-  function getStackedChartData(records, filterProvince) {
-    const provinceData = {};
-    const allProvinces = [];
-    
-    records.forEach(r => {
-      const province = getField(r, "Province");
-      if (province && province !== "—") {
-        if (!provinceData[province]) {
-          provinceData[province] = { 'Updated': 0, 'For Updating': 0, 'Under Review': 0 };
-          allProvinces.push(province);
-        }
-        const category = getClupStatusCategory(r);
-        if (category === 'Updated') provinceData[province]['Updated']++;
-        else if (category === 'For Updating') provinceData[province]['For Updating']++;
-        else if (category === 'Under Review') provinceData[province]['Under Review']++;
-      }
-    });
-    
-    let sortedProvinces = allProvinces.sort();
-    
-    if (filterProvince && filterProvince !== 'all') {
-      sortedProvinces = sortedProvinces.filter(p => p === filterProvince);
-    }
-    
-    if (sortedProvinces.length === 0 && filterProvince !== 'all') {
-      sortedProvinces = allProvinces.sort();
-    }
-    
-    const statuses = ['Updated', 'For Updating', 'Under Review'];
-    const datasets = statuses.map(status => ({
-      label: status,
-      data: sortedProvinces.map(p => provinceData[p]?.[status] || 0),
-      backgroundColor: status === 'Updated' ? '#16a34a' : 
-                       status === 'For Updating' ? '#f59e0b' : '#3b82f6'
-    }));
-    
-    return {
-      labels: sortedProvinces,
-      datasets: datasets
-    };
-  }
-
-  function renderStats(records){
-    const total = records.length;
-    let updated=0, due=0, underReview=0;
-    
-    records.forEach(r => {
-      const category = getClupStatusCategory(r);
-      if (category === "Updated") updated++;
-      else if (category === "For Updating") due++;
-      else if (category === "Under Review") underReview++;
-    });
-    
-    document.getElementById("statTotalLgu").innerText = total;
-    document.getElementById("statUpdated").innerText = updated;
-    document.getElementById("statDue").innerText = due;
-    document.getElementById("statUnderReview").innerText = underReview;
-  }
-
-  function renderPie(records){
-    const data = getPieData(records);
-    const ctx = document.getElementById("pieChart").getContext("2d");
-    if (pieChartInstance) pieChartInstance.destroy();
-    pieChartInstance = new Chart(ctx, {
-      type: 'pie',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          data: data.data, 
-          backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']
-        }] 
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
-    });
-  }
-
-  function renderSupportPie(records, filterCategory) {
-    const data = getSupportPieData(records, filterCategory);
-    const ctx = document.getElementById("supportPieChart").getContext("2d");
-    if (supportPieInstance) supportPieInstance.destroy();
-    
-    const colorMap = {
-      "None": "#94a3b8",
-      "National Government Agency": "#3b82f6",
-      "Donor Agency": "#8b5cf6",
-      "Consultant": "#f59e0b",
-      "Academe": "#10b981",
-      "Others": "#ef4444",
-      "Not Specified": "#e2e8f0",
-      "No Data": "#e2e8f0"
-    };
-    
-    const colors = data.labels.map(l => colorMap[l] || '#e2e8f0');
-    
-    supportPieInstance = new Chart(ctx, {
-      type: 'pie',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          data: data.data, 
-          backgroundColor: colors
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        plugins: { 
-          legend: { 
-            position: 'bottom', 
-            labels: { font: { size: 9 } } 
+      supportPieInstance = new Chart(ctx, {
+        type: 'pie',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            data: data.data, 
+            backgroundColor: colors
+          }] 
+        },
+        options: { 
+          responsive: true, 
+          plugins: { 
+            legend: { 
+              position: 'bottom', 
+              labels: { font: { size: 9 } } 
+            } 
           } 
-        } 
+        }
+      });
+    }
+
+    function renderShelterPie(records){
+      const data = getYesNoData(records, "LGU with Local Shelter Plan");
+      const ctx = document.getElementById("shelterPieChart").getContext("2d");
+      if (shelterPieInstance) shelterPieInstance.destroy();
+      shelterPieInstance = new Chart(ctx, {
+        type: 'pie',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            data: data.data, 
+            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
+          }] 
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
+      });
+    }
+
+    function renderHousingPie(records){
+      const data = getYesNoData(records, "LGU with Integrated Housing Subsector");
+      const ctx = document.getElementById("housingPieChart").getContext("2d");
+      if (housingPieInstance) housingPieInstance.destroy();
+      housingPieInstance = new Chart(ctx, {
+        type: 'pie',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            data: data.data, 
+            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
+          }] 
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
+      });
+    }
+
+    function renderCommPie(records){
+      const data = getYesNoData(records, "LGU with Integrated Communications Plan");
+      const ctx = document.getElementById("commPieChart").getContext("2d");
+      if (commPieInstance) commPieInstance.destroy();
+      commPieInstance = new Chart(ctx, {
+        type: 'pie',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            data: data.data, 
+            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
+          }] 
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
+      });
+    }
+
+    function renderBar(records, mode = 'all'){
+      currentBarMode = mode;
+      const data = getBarData(records, mode);
+      const ctx = document.getElementById("barChart").getContext("2d");
+      if (barChartInstance) barChartInstance.destroy();
+      
+      const colorPalette = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#10b981', '#f97316', '#94a3b8', '#6366f1', '#ec4899', '#14b8a6', '#f43f5e', '#8b5cf6', '#6b7280'];
+      const colors = data.labels.map((_, i) => colorPalette[i % colorPalette.length]);
+      
+      barChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            label: 'Count', 
+            data: data.data, 
+            backgroundColor: colors,
+            borderRadius: 4
+          }] 
+        },
+        options: { 
+          responsive: true, 
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, stepSize: 1 } }
+        }
+      });
+    }
+
+    function renderColumn(records, view='preparatory'){
+      const data = getColumnData(records, view);
+      const ctx = document.getElementById("columnChart").getContext("2d");
+      if (columnChartInstance) columnChartInstance.destroy();
+      
+      const colorMap = {
+        "Preparatory": "#3b82f6",
+        "Formulation": "#8b5cf6",
+        "Review & Approval": "#f59e0b",
+        "Unspecified": "#94a3b8"
+      };
+      
+      const colors = data.labels.map(l => colorMap[l] || '#94a3b8');
+      
+      columnChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: { 
+          labels: data.labels, 
+          datasets: [{ 
+            label: 'Count', 
+            data: data.values, 
+            backgroundColor: colors,
+            borderRadius: 4
+          }] 
+        },
+        options: { 
+          responsive: true, 
+          plugins: { legend: { display: false } }, 
+          scales: { y: { beginAtZero: true, stepSize: 1 } }
+        }
+      });
+    }
+
+    function renderStackedChart(records, filterProvince) {
+      const data = getStackedChartData(records, filterProvince);
+      const ctx = document.getElementById("stackedChart").getContext("2d");
+      if (stackedChartInstance) stackedChartInstance.destroy();
+      
+      if (data.labels.length === 0) {
+        stackedChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
+          options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        return;
       }
-    });
-  }
-
-  function renderShelterPie(records){
-    const data = getYesNoData(records, "LGU with Local Shelter Plan");
-    const ctx = document.getElementById("shelterPieChart").getContext("2d");
-    if (shelterPieInstance) shelterPieInstance.destroy();
-    shelterPieInstance = new Chart(ctx, {
-      type: 'pie',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          data: data.data, 
-          backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
-        }] 
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
-    });
-  }
-
-  function renderHousingPie(records){
-    const data = getYesNoData(records, "LGU with Integrated Housing Subsector");
-    const ctx = document.getElementById("housingPieChart").getContext("2d");
-    if (housingPieInstance) housingPieInstance.destroy();
-    housingPieInstance = new Chart(ctx, {
-      type: 'pie',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          data: data.data, 
-          backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
-        }] 
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
-    });
-  }
-
-  function renderCommPie(records){
-    const data = getYesNoData(records, "LGU with Integrated Communications Plan");
-    const ctx = document.getElementById("commPieChart").getContext("2d");
-    if (commPieInstance) commPieInstance.destroy();
-    commPieInstance = new Chart(ctx, {
-      type: 'pie',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          data: data.data, 
-          backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
-        }] 
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
-    });
-  }
-
-  function renderBar(records, mode = 'all'){
-    currentBarMode = mode;
-    const data = getBarData(records, mode);
-    const ctx = document.getElementById("barChart").getContext("2d");
-    if (barChartInstance) barChartInstance.destroy();
-    
-    const colorPalette = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#10b981', '#f97316', '#94a3b8', '#6366f1', '#ec4899', '#14b8a6', '#f43f5e', '#8b5cf6', '#6b7280'];
-    const colors = data.labels.map((_, i) => colorPalette[i % colorPalette.length]);
-    
-    barChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          label: 'Count', 
-          data: data.data, 
-          backgroundColor: colors,
-          borderRadius: 4
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, stepSize: 1 } }
-      }
-    });
-  }
-
-  function renderColumn(records, view='preparatory'){
-    const data = getColumnData(records, view);
-    const ctx = document.getElementById("columnChart").getContext("2d");
-    if (columnChartInstance) columnChartInstance.destroy();
-    
-    const colorMap = {
-      "Preparatory": "#3b82f6",
-      "Formulation": "#8b5cf6",
-      "Review & Approval": "#f59e0b",
-      "Unspecified": "#94a3b8"
-    };
-    
-    const colors = data.labels.map(l => colorMap[l] || '#94a3b8');
-    
-    columnChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: { 
-        labels: data.labels, 
-        datasets: [{ 
-          label: 'Count', 
-          data: data.values, 
-          backgroundColor: colors,
-          borderRadius: 4
-        }] 
-      },
-      options: { 
-        responsive: true, 
-        plugins: { legend: { display: false } }, 
-        scales: { y: { beginAtZero: true, stepSize: 1 } }
-      }
-    });
-  }
-
-  // ========== RENDER STACKED CHART - ALL PROVINCES ==========
-  function renderStackedChart(records, filterProvince) {
-    const data = getStackedChartData(records, filterProvince);
-    const ctx = document.getElementById("stackedChart").getContext("2d");
-    if (stackedChartInstance) stackedChartInstance.destroy();
-    
-    if (data.labels.length === 0) {
+      
       stackedChartInstance = new Chart(ctx, {
         type: 'bar',
-        data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
-        options: { responsive: true, plugins: { legend: { display: false } } }
-      });
-      return;
-    }
-    
-    stackedChartInstance = new Chart(ctx, {
-      type: 'bar',
-      data: data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: { font: { size: 11 } }
-          }
-        },
-        scales: {
-          x: {
-            stacked: true,
-            ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 }
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { font: { size: 11 } }
+            }
           },
-          y: {
-            stacked: true,
-            beginAtZero: true,
-            ticks: { stepSize: 1 }
+          scales: {
+            x: {
+              stacked: true,
+              ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 }
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
           }
         }
-      }
-    });
-  }
-
-  function renderTable(records){
-    const tbody = document.getElementById("lguTableBody");
-    if (!records || records.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`;
-      return;
+      });
     }
-    let html = '';
-    records.forEach((r, index) => {
-      const region = getField(r, "Region") || "—";
-      const province = getField(r, "Province") || "—";
-      const municipality = getField(r, "City/Municipality") || "—";
-      const income = getField(r, "Income Class") || "—";
-      const status = deriveClupStatus(r) || "—";
-      const target = deriveTargetYear(r) || "—";
-      const shelterPlan = getField(r, "LGU with Local Shelter Plan") || "—";
-      const housingSubsector = getField(r, "LGU with Integrated Housing Subsector") || "—";
-      const commPlan = getField(r, "LGU with Integrated Communications Plan") || "—";
-      const remarks = getField(r, "Remarks") || "";
-      
-      const category = getClupStatusCategory(r);
-      const statusClass = category === "Updated" ? "badge-updated" : 
-                          category === "For Updating" ? "badge-due" : 
-                          category === "Under Review" ? "badge-under-review" : "badge-other";
-      
-      const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
-      
-      const getColor = (val) => {
-        if (val === 'Yes') return '#166534';
-        if (val === 'No') return '#991b1b';
-        return '#6b7280';
-      };
-      
-      html += `<tr>
-        <td>${escapeHtml(region)}</td>
-        <td>${escapeHtml(province)}</td>
-        <td><strong>${escapeHtml(municipality)}</strong></td>
-        <td>${escapeHtml(income)}</td>
-        <td><span class="badge-status ${statusClass}">${escapeHtml(category)}</span></td>
-        <td>${escapeHtml(target)}</td>
-        <td><span style="font-weight:600;color:${getColor(shelterPlan)};">${escapeHtml(shelterPlan)}</span></td>
-        <td><span style="font-weight:600;color:${getColor(housingSubsector)};">${escapeHtml(housingSubsector)}</span></td>
-        <td><span style="font-weight:600;color:${getColor(commPlan)};">${escapeHtml(commPlan)}</span></td>
-        <td style="max-width:120px; font-size:0.7rem;">${escapeHtml(remarks)}</td>
-        <td>
-          <div class="action-cell">
-            <button class="btn-view" data-record='${recordJson}'>View</button>
-            <button class="btn-edit" data-record='${recordJson}'>Edit</button>
-          </div>
-        </td>
-      </tr>`;
-    });
-    tbody.innerHTML = html;
-    
-    tbody.querySelectorAll('.btn-view').forEach(btn => {
-      btn.addEventListener('click', function(){
-        const record = JSON.parse(this.dataset.record);
-        showDetailModal(record);
-      });
-    });
-    
-    tbody.querySelectorAll('.btn-edit').forEach(btn => {
-      btn.addEventListener('click', function(){
-        const record = JSON.parse(this.dataset.record);
-        openEditModal(record);
-      });
-    });
-    
-    document.getElementById("filterCount").innerText = `${records.length} LGUs shown`;
-  }
 
-  function showDetailModal(record){
-    const modal = document.getElementById("detailModal");
-    const body = document.getElementById("modalBody");
-    
-    const fields = [
-      { label: "PSGC", key: "PSGC" },
-      { label: "Region", key: "Region" },
-      { label: "Income Class", key: "Income Class" },
-      { label: "City/Municipality", key: "City/Municipality" },
-      { label: "Province", key: "Province" },
-      { label: "Start Year", key: "Start Year" },
-      { label: "End Year", key: "End Year" },
-      { label: "Resolution Number", key: "Resolution Number of the Latest Plan" },
-      { label: "Approval Date", key: "Approval date of the Latest plan (MM/DD/YYYY)" },
-      { label: "CLUP Status", key: "CLUP Status" },
-      { label: "Status of CLUP Updating", key: "CLUPStatus/Updates" },
-      { label: "Technical Assistance", key: "Technical Assistance Provided" },
-      { label: "Support from Other Institutions", key: "Support from Other Institutions" },
-      { label: "Name/s of Institutions", key: "If with Support from other institutions, Name/s of Institutions" },
-      { label: "Local Shelter Plan", key: "LGU with Local Shelter Plan" },
-      { label: "Integrated Housing Subsector", key: "LGU with Integrated Housing Subsector" },
-      { label: "Integrated Communications Plan", key: "LGU with Integrated Communications Plan" },
-      { label: "Remarks", key: "Remarks" }
-    ];
-    
-    let html = '';
-    fields.forEach(f => {
-      let value = getField(record, f.key);
-      if (f.key === "Approval date of the Latest plan (MM/DD/YYYY)") {
-        value = formatDate(value);
+    function renderTable(records){
+      const tbody = document.getElementById("lguTableBody");
+      if (!records || records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`;
+        return;
       }
-      html += `<div class="detail-row">
-        <div class="detail-label">${f.label}</div>
-        <div class="detail-value">${escapeHtml(value)}</div>
-      </div>`;
-    });
-    body.innerHTML = html;
-    modal.classList.add('active');
-  }
+      let html = '';
+      records.forEach((r, index) => {
+        const region = getField(r, "Region") || "—";
+        const province = getField(r, "Province") || "—";
+        const municipality = getField(r, "City/Municipality") || "—";
+        const income = getField(r, "Income Class") || "—";
+        const status = deriveClupStatus(r) || "—";
+        const target = deriveTargetYear(r) || "—";
+        const shelterPlan = getField(r, "LGU with Local Shelter Plan") || "—";
+        const housingSubsector = getField(r, "LGU with Integrated Housing Subsector") || "—";
+        const commPlan = getField(r, "LGU with Integrated Communications Plan") || "—";
+        const remarks = getField(r, "Remarks") || "";
+        
+        const category = getClupStatusCategory(r);
+        const statusClass = category === "Updated" ? "badge-updated" : 
+                            category === "For Updating" ? "badge-due" : 
+                            category === "Under Review" ? "badge-under-review" : "badge-other";
+        
+        const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
+        
+        const getColor = (val) => {
+          if (val === 'Yes') return '#166534';
+          if (val === 'No') return '#991b1b';
+          return '#6b7280';
+        };
+        
+        html += `<tr>
+          <td>${escapeHtml(region)}</td>
+          <td>${escapeHtml(province)}</td>
+          <td><strong>${escapeHtml(municipality)}</strong></td>
+          <td>${escapeHtml(income)}</td>
+          <td><span class="badge-status ${statusClass}">${escapeHtml(category)}</span></td>
+          <td>${escapeHtml(target)}</td>
+          <td><span style="font-weight:600;color:${getColor(shelterPlan)};">${escapeHtml(shelterPlan)}</span></td>
+          <td><span style="font-weight:600;color:${getColor(housingSubsector)};">${escapeHtml(housingSubsector)}</span></td>
+          <td><span style="font-weight:600;color:${getColor(commPlan)};">${escapeHtml(commPlan)}</span></td>
+          <td style="max-width:120px; font-size:0.7rem;">${escapeHtml(remarks)}</td>
+          <td>
+            <div class="action-cell">
+              <button class="btn-view" data-record='${recordJson}'>View</button>
+              <button class="btn-edit" data-record='${recordJson}'>Edit</button>
+            </div>
+          </td>
+        </tr>`;
+      });
+      tbody.innerHTML = html;
+      
+      tbody.querySelectorAll('.btn-view').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const record = JSON.parse(this.dataset.record);
+          showDetailModal(record);
+        });
+      });
+      
+      tbody.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const record = JSON.parse(this.dataset.record);
+          openEditModal(record);
+        });
+      });
+      
+      document.getElementById("filterCount").innerText = `${records.length} LGUs shown`;
+    }
 
-  // ========== EDIT MODAL FUNCTIONS ==========
-  function openEditModal(record) {
-    currentEditRecord = record;
-    const modal = document.getElementById("editModal");
-    
-    document.getElementById("editPsgc").value = getFieldValue(record, "PSGC");
-    document.getElementById("editProvince").value = getFieldValue(record, "Province");
-    document.getElementById("editCity").value = getFieldValue(record, "City/Municipality");
-    document.getElementById("editRegion").value = getFieldValue(record, "Region");
-    document.getElementById("editIncome").value = getFieldValue(record, "Income Class");
-    document.getElementById("editStartYear").value = getFieldValue(record, "Start Year");
-    document.getElementById("editEndYear").value = getFieldValue(record, "End Year");
-    document.getElementById("editResolution").value = getFieldValue(record, "Resolution Number of the Latest Plan");
-    
-    let approvalDate = getFieldValue(record, "Approval date of the Latest plan (MM/DD/YYYY)");
-    document.getElementById("editApprovalDate").value = formatDate(approvalDate);
-    
-    document.getElementById("editClupStatus").value = getFieldValue(record, "CLUP Status");
-    document.getElementById("editClupUpdates").value = getFieldValue(record, "CLUPStatus/Updates");
-    document.getElementById("editTechAssist").value = getFieldValue(record, "Technical Assistance Provided");
-    document.getElementById("editSupport").value = getFieldValue(record, "Support from Other Institutions");
-    document.getElementById("editInstitutions").value = getFieldValue(record, "If with Support from other institutions, Name/s of Institutions");
-    document.getElementById("editShelterPlan").value = getFieldValue(record, "LGU with Local Shelter Plan");
-    document.getElementById("editHousingSubsector").value = getFieldValue(record, "LGU with Integrated Housing Subsector");
-    document.getElementById("editCommPlan").value = getFieldValue(record, "LGU with Integrated Communications Plan");
-    document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
-    
-    document.getElementById("editSaveBtn").disabled = false;
-    modal.classList.add('active');
-  }
-
-  // ========== SAVE FUNCTION ==========
-  async function saveEditedRecord(formData) {
-    if (isSaving) return;
-    isSaving = true;
-    document.getElementById("editSaveBtn").disabled = true;
-    document.getElementById("editSaveBtn").innerHTML = "⏳ Saving...";
-    
-    try {
-      const province = formData.get('Province') || '';
-      const city = formData.get('City/Municipality') || '';
-      const commPlanValue = formData.get('LGU with Integrated Communications Plan') || '';
+    function showDetailModal(record){
+      const modal = document.getElementById("detailModal");
+      const body = document.getElementById("modalBody");
       
-      const record = {
-        'PSGC': formData.get('PSGC') || '',
-        'Province': province,
-        'City/Municipality': city,
-        'Region': formData.get('Region') || '',
-        'Income Class': formData.get('Income Class') || '',
-        'Start Year': formData.get('Start Year') || '',
-        'End Year': formData.get('End Year') || '',
-        'Resolution Number of the Latest Plan': formData.get('Resolution Number of the Latest Plan') || '',
-        'Approval date of the Latest plan (MM/DD/YYYY)': formData.get('Approval date of the Latest plan (MM/DD/YYYY)') || '',
-        'CLUP Status': formData.get('CLUP Status') || '',
-        'CLUPStatus/Updates': formData.get('CLUPStatus/Updates') || '',
-        'Technical Assistance Provided': formData.get('Technical Assistance Provided') || '',
-        'Support from Other Institutions': formData.get('Support from Other Institutions') || '',
-        'If with Support from other institutions, Name/s of Institutions': formData.get('If with Support from other institutions, Name/s of Institutions') || '',
-        'LGU with Local Shelter Plan': formData.get('LGU with Local Shelter Plan') || '',
-        'LGU with Integrated Housing Subsector': formData.get('LGU with Integrated Housing Subsector') || '',
-        'LGU with Integrated Communications Plan': commPlanValue,
-        'Remarks': formData.get('Remarks') || ''
-      };
+      const fields = [
+        { label: "PSGC", key: "PSGC" },
+        { label: "Region", key: "Region" },
+        { label: "Income Class", key: "Income Class" },
+        { label: "City/Municipality", key: "City/Municipality" },
+        { label: "Province", key: "Province" },
+        { label: "Start Year", key: "Start Year" },
+        { label: "End Year", key: "End Year" },
+        { label: "Resolution Number", key: "Resolution Number of the Latest Plan" },
+        { label: "Approval Date", key: "Approval date of the Latest plan (MM/DD/YYYY)" },
+        { label: "CLUP Status", key: "CLUP Status" },
+        { label: "Status of CLUP Updating", key: "CLUPStatus/Updates" },
+        { label: "Technical Assistance", key: "Technical Assistance Provided" },
+        { label: "Support from Other Institutions", key: "Support from Other Institutions" },
+        { label: "Name/s of Institutions", key: "If with Support from other institutions, Name/s of Institutions" },
+        { label: "Local Shelter Plan", key: "LGU with Local Shelter Plan" },
+        { label: "Integrated Housing Subsector", key: "LGU with Integrated Housing Subsector" },
+        { label: "Integrated Communications Plan", key: "LGU with Integrated Communications Plan" },
+        { label: "Remarks", key: "Remarks" }
+      ];
       
-      const altRecord = {
-        ...record,
-        'LGU with Communications Plan': commPlanValue,
-        'Communications Plan': commPlanValue,
-        'Comm Plan': commPlanValue
-      };
-      
-      const params = new URLSearchParams();
-      params.append('action', 'update');
-      params.append('data_type', 'lgu_status');
-      
-      for (let [key, value] of Object.entries(record)) {
-        if (value !== undefined && value !== null && value !== '') {
-          params.append(key, value);
+      let html = '';
+      fields.forEach(f => {
+        let value = getField(record, f.key);
+        if (f.key === "Approval date of the Latest plan (MM/DD/YYYY)") {
+          value = formatDate(value);
         }
+        html += `<div class="detail-row">
+          <div class="detail-label">${f.label}</div>
+          <div class="detail-value">${escapeHtml(value)}</div>
+        </div>`;
+      });
+      body.innerHTML = html;
+      modal.classList.add('active');
+    }
+
+    function openEditModal(record) {
+      currentEditRecord = record;
+      const modal = document.getElementById("editModal");
+      
+      document.getElementById("editPsgc").value = getFieldValue(record, "PSGC");
+      document.getElementById("editProvince").value = getFieldValue(record, "Province");
+      document.getElementById("editCity").value = getFieldValue(record, "City/Municipality");
+      document.getElementById("editRegion").value = getFieldValue(record, "Region");
+      document.getElementById("editIncome").value = getFieldValue(record, "Income Class");
+      document.getElementById("editStartYear").value = getFieldValue(record, "Start Year");
+      document.getElementById("editEndYear").value = getFieldValue(record, "End Year");
+      document.getElementById("editResolution").value = getFieldValue(record, "Resolution Number of the Latest Plan");
+      
+      let approvalDate = getFieldValue(record, "Approval date of the Latest plan (MM/DD/YYYY)");
+      document.getElementById("editApprovalDate").value = formatDate(approvalDate);
+      
+      document.getElementById("editClupStatus").value = getFieldValue(record, "CLUP Status");
+      document.getElementById("editClupUpdates").value = getFieldValue(record, "CLUPStatus/Updates");
+      document.getElementById("editTechAssist").value = getFieldValue(record, "Technical Assistance Provided");
+      document.getElementById("editSupport").value = getFieldValue(record, "Support from Other Institutions");
+      document.getElementById("editInstitutions").value = getFieldValue(record, "If with Support from other institutions, Name/s of Institutions");
+      document.getElementById("editShelterPlan").value = getFieldValue(record, "LGU with Local Shelter Plan");
+      document.getElementById("editHousingSubsector").value = getFieldValue(record, "LGU with Integrated Housing Subsector");
+      document.getElementById("editCommPlan").value = getFieldValue(record, "LGU with Integrated Communications Plan");
+      document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
+      
+      document.getElementById("editSaveBtn").disabled = false;
+      modal.classList.add('active');
+    }
+
+    async function saveEditedRecord(formData) {
+      if (isSaving) return;
+      isSaving = true;
+      document.getElementById("editSaveBtn").disabled = true;
+      document.getElementById("editSaveBtn").innerHTML = "⏳ Saving...";
+      
+      try {
+        const province = formData.get('Province') || '';
+        const city = formData.get('City/Municipality') || '';
+        const commPlanValue = formData.get('LGU with Integrated Communications Plan') || '';
+        
+        const record = {
+          'PSGC': formData.get('PSGC') || '',
+          'Province': province,
+          'City/Municipality': city,
+          'Region': formData.get('Region') || '',
+          'Income Class': formData.get('Income Class') || '',
+          'Start Year': formData.get('Start Year') || '',
+          'End Year': formData.get('End Year') || '',
+          'Resolution Number of the Latest Plan': formData.get('Resolution Number of the Latest Plan') || '',
+          'Approval date of the Latest plan (MM/DD/YYYY)': formData.get('Approval date of the Latest plan (MM/DD/YYYY)') || '',
+          'CLUP Status': formData.get('CLUP Status') || '',
+          'CLUPStatus/Updates': formData.get('CLUPStatus/Updates') || '',
+          'Technical Assistance Provided': formData.get('Technical Assistance Provided') || '',
+          'Support from Other Institutions': formData.get('Support from Other Institutions') || '',
+          'If with Support from other institutions, Name/s of Institutions': formData.get('If with Support from other institutions, Name/s of Institutions') || '',
+          'LGU with Local Shelter Plan': formData.get('LGU with Local Shelter Plan') || '',
+          'LGU with Integrated Housing Subsector': formData.get('LGU with Integrated Housing Subsector') || '',
+          'LGU with Integrated Communications Plan': commPlanValue,
+          'Remarks': formData.get('Remarks') || ''
+        };
+        
+        const altRecord = {
+          ...record,
+          'LGU with Communications Plan': commPlanValue,
+          'Communications Plan': commPlanValue,
+          'Comm Plan': commPlanValue
+        };
+        
+        const params = new URLSearchParams();
+        params.append('action', 'update');
+        params.append('data_type', 'lgu_status');
+        
+        for (let [key, value] of Object.entries(record)) {
+          if (value !== undefined && value !== null && value !== '') {
+            params.append(key, value);
+          }
+        }
+        
+        if (commPlanValue) {
+          params.append('LGU with Communications Plan', commPlanValue);
+          params.append('Communications Plan', commPlanValue);
+          params.append('Comm Plan', commPlanValue);
+        }
+        
+        params.append('data', JSON.stringify(altRecord));
+        
+        const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'no-cors'
+        });
+        
+        showToast("✅ Save request sent successfully!", "");
+        document.getElementById("editModal").classList.remove('active');
+        
+        setTimeout(async () => {
+          await refreshData();
+        }, 2500);
+        
+        return { success: true };
+        
+      } catch (error) {
+        console.error("❌ Error saving record:", error);
+        showToast("❌ Error saving record: " + error.message, "error");
+        return { success: false, error: error.message };
+      } finally {
+        isSaving = false;
+        document.getElementById("editSaveBtn").disabled = false;
+        document.getElementById("editSaveBtn").innerHTML = "💾 Save Changes";
       }
-      
-      if (commPlanValue) {
-        params.append('LGU with Communications Plan', commPlanValue);
-        params.append('Communications Plan', commPlanValue);
-        params.append('Comm Plan', commPlanValue);
+    }
+
+    async function refreshData() {
+      try {
+        showToast("🔄 Refreshing data...", "info");
+        const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
+        const data = await resp.json();
+        if (Array.isArray(data) && data.length > 0) {
+          rawLguData = data;
+          populateFilters(rawLguData);
+          applyFilters();
+          showToast("✅ Data refreshed successfully!", "");
+        } else {
+          showToast("⚠️ No data returned from server", "error");
+        }
+      } catch (e) {
+        console.error("Refresh error", e);
+        showToast("❌ Error refreshing data: " + e.message, "error");
       }
+    }
+
+    function populateFilters(records){
+      const provinceSet = new Set();
+      const lguSet = new Set();
+      const yearSet = new Set();
       
-      params.append('data', JSON.stringify(altRecord));
-      
-      const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
-      
-      const response = await fetch(url, {
-        method: 'GET',
-        mode: 'no-cors'
+      records.forEach(r => {
+        const p = getField(r, "Province") || "—";
+        const m = getField(r, "City/Municipality") || "—";
+        if (p !== "—") provinceSet.add(p);
+        if (m !== "—") lguSet.add(m);
+        
+        const year = extractYearFromApproval(r);
+        if (year) yearSet.add(year);
       });
       
-      showToast("✅ Save request sent successfully!", "");
-      document.getElementById("editModal").classList.remove('active');
+      const provSelect = document.getElementById("filterProvince");
+      const lguSelect = document.getElementById("filterLgu");
+      const yearSelect = document.getElementById("filterYear");
+      const stackedProvSelect = document.getElementById("filterStackedProvince");
       
-      setTimeout(async () => {
-        await refreshData();
-      }, 2500);
+      const currentProv = provSelect.value;
+      const currentLgu = lguSelect.value;
+      const currentYear = yearSelect.value;
+      const currentStackedProv = stackedProvSelect.value;
       
-      return { success: true };
+      const sortedProvinces = [...provinceSet].sort();
+      provSelect.innerHTML = `<option value="">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+      lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
       
-    } catch (error) {
-      console.error("❌ Error saving record:", error);
-      showToast("❌ Error saving record: " + error.message, "error");
-      return { success: false, error: error.message };
-    } finally {
-      isSaving = false;
-      document.getElementById("editSaveBtn").disabled = false;
-      document.getElementById("editSaveBtn").innerHTML = "💾 Save Changes";
+      const sortedYears = [...yearSet].sort((a, b) => b - a);
+      yearSelect.innerHTML = `<option value="">(All Years)</option>` + sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
+      
+      stackedProvSelect.innerHTML = `<option value="all">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+      
+      if (currentProv) provSelect.value = currentProv;
+      if (currentLgu) lguSelect.value = currentLgu;
+      if (currentYear) yearSelect.value = currentYear;
+      if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
     }
-  }
 
-  async function refreshData() {
-    try {
-      showToast("🔄 Refreshing data...", "info");
-      const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
-      const data = await resp.json();
-      if (Array.isArray(data) && data.length > 0) {
-        rawLguData = data;
-        populateFilters(rawLguData);
-        applyFilters();
-        showToast("✅ Data refreshed successfully!", "");
-      } else {
-        showToast("⚠️ No data returned from server", "error");
-      }
-    } catch (e) {
-      console.error("Refresh error", e);
-      showToast("❌ Error refreshing data: " + e.message, "error");
-    }
-  }
-
-  // ========== FILTERS ==========
-  function populateFilters(records){
-    const provinceSet = new Set();
-    const lguSet = new Set();
-    const yearSet = new Set();
-    
-    records.forEach(r => {
-      const p = getField(r, "Province") || "—";
-      const m = getField(r, "City/Municipality") || "—";
-      if (p !== "—") provinceSet.add(p);
-      if (m !== "—") lguSet.add(m);
+    function applyFilters(){
+      const prov = document.getElementById("filterProvince").value;
+      const lgu = document.getElementById("filterLgu").value;
+      const year = document.getElementById("filterYear").value;
+      const barMode = document.getElementById("barChartDropdown").value || 'all';
+      const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
+      const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
+      const supportFilter = document.getElementById("filterSupportPie").value || 'all';
       
-      const year = extractYearFromApproval(r);
-      if (year) yearSet.add(year);
-    });
-    
-    const provSelect = document.getElementById("filterProvince");
-    const lguSelect = document.getElementById("filterLgu");
-    const yearSelect = document.getElementById("filterYear");
-    const stackedProvSelect = document.getElementById("filterStackedProvince");
-    
-    const currentProv = provSelect.value;
-    const currentLgu = lguSelect.value;
-    const currentYear = yearSelect.value;
-    const currentStackedProv = stackedProvSelect.value;
-    
-    const sortedProvinces = [...provinceSet].sort();
-    provSelect.innerHTML = `<option value="">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
-    lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
-    
-    const sortedYears = [...yearSet].sort((a, b) => b - a); // Descending order (latest first)
-    yearSelect.innerHTML = `<option value="">(All Years)</option>` + sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
-    
-    stackedProvSelect.innerHTML = `<option value="all">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
-    
-    if (currentProv) provSelect.value = currentProv;
-    if (currentLgu) lguSelect.value = currentLgu;
-    if (currentYear) yearSelect.value = currentYear;
-    if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
-  }
+      let filtered = rawLguData;
+      if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
+      if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
+      if (year) filtered = filterByYear(filtered, year);
+      
+      filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
+      
+      let supportFiltered = filterBySupportCategory(filtered, supportFilter);
+      
+      let tableFiltered = filterByStatusUpdates(filtered, barMode);
+      
+      filteredData = filtered;
+      
+      renderStats(filtered);
+      renderPie(filtered);
+      renderSupportPie(filtered, supportFilter);
+      renderShelterPie(filtered);
+      renderHousingPie(filtered);
+      renderCommPie(filtered);
+      renderBar(filtered, barMode);
+      
+      const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
+      renderColumn(filtered, activeView);
+      
+      renderStackedChart(filtered, stackedProvFilter);
+      
+      renderTable(tableFiltered);
+    }
 
-  function applyFilters(){
-    const prov = document.getElementById("filterProvince").value;
-    const lgu = document.getElementById("filterLgu").value;
-    const year = document.getElementById("filterYear").value;
-    const barMode = document.getElementById("barChartDropdown").value || 'all';
-    const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
-    const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
-    const supportFilter = document.getElementById("filterSupportPie").value || 'all';
-    
-    let filtered = rawLguData;
-    if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
-    if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
-    if (year) filtered = filterByYear(filtered, year);
-    
-    filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
-    
-    // Apply support filter for the pie chart
-    let supportFiltered = filterBySupportCategory(filtered, supportFilter);
-    
-    let tableFiltered = filterByStatusUpdates(filtered, barMode);
-    
-    filteredData = filtered;
-    
-    renderStats(filtered);
-    renderPie(filtered);
-    renderSupportPie(filtered, supportFilter);
-    renderShelterPie(filtered);
-    renderHousingPie(filtered);
-    renderCommPie(filtered);
-    renderBar(filtered, barMode);
-    
-    const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
-    renderColumn(filtered, activeView);
-    
-    renderStackedChart(filtered, stackedProvFilter);
-    
-    renderTable(tableFiltered);
-  }
-
-  // ========== FETCH DATA ==========
-  async function fetchLguStatusData(){
-    try {
-      const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
-      const data = await resp.json();
-      if (Array.isArray(data) && data.length > 0) {
-        rawLguData = data;
-        console.log("📋 Sample record from LGUstatus:", data[0]);
-        return rawLguData;
-      } else {
-        console.warn("No data from LGUstatus, using fallback");
+    async function fetchLguStatusData(){
+      try {
+        const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
+        const data = await resp.json();
+        if (Array.isArray(data) && data.length > 0) {
+          rawLguData = data;
+          console.log("📋 Sample record from LGUstatus:", data[0]);
+          return rawLguData;
+        } else {
+          console.warn("No data from LGUstatus, using fallback");
+          return getFallbackData();
+        }
+      } catch(e){ 
+        console.error("Fetch error", e); 
         return getFallbackData();
       }
-    } catch(e){ 
-      console.error("Fetch error", e); 
-      return getFallbackData();
     }
-  }
 
-  // ========== FALLBACK DATA ==========
-  function getFallbackData() {
-    return [
-      { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Remarks": "" },
-      { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Remarks": "Needs updating" },
-      { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Remarks": "" }
-    ];
-  }
-
-  // ========== INIT ==========
-  document.addEventListener('DOMContentLoaded', async function(){
-    checkSession(); renderMainNavigation(); renderUserMenu();
-
-    const data = await fetchLguStatusData();
-    if (data.length > 0) {
-      rawLguData = data;
-    } else {
-      rawLguData = getFallbackData();
+    function getFallbackData() {
+      return [
+        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Remarks": "" },
+        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Remarks": "Needs updating" },
+        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Remarks": "" }
+      ];
     }
-    populateFilters(rawLguData);
-    applyFilters();
 
-    document.getElementById("barChartDropdown").addEventListener('change', function() {
-      applyFilters();
-    });
+    document.addEventListener('DOMContentLoaded', async function(){
+      checkSession(); renderMainNavigation(); renderUserMenu();
 
-    document.getElementById("filterProvince").addEventListener('change', applyFilters);
-    document.getElementById("filterLgu").addEventListener('change', applyFilters);
-    document.getElementById("filterYear").addEventListener('change', applyFilters);
-    document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
-    document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
-    document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
-    
-    document.getElementById("resetFiltersBtn").addEventListener('click', function(){
-      document.getElementById("filterProvince").value = "";
-      document.getElementById("filterLgu").value = "";
-      document.getElementById("filterYear").value = "";
-      document.getElementById("filterClupStatus").value = "all";
-      document.getElementById("barChartDropdown").value = "all";
-      document.getElementById("filterStackedProvince").value = "all";
-      document.getElementById("filterSupportPie").value = "all";
+      const data = await fetchLguStatusData();
+      if (data.length > 0) {
+        rawLguData = data;
+      } else {
+        rawLguData = getFallbackData();
+      }
+      populateFilters(rawLguData);
       applyFilters();
-    });
-    
-    document.getElementById("resetStackedFilter").addEventListener('click', function(){
-      document.getElementById("filterStackedProvince").value = "all";
-      applyFilters();
-    });
 
-    document.querySelectorAll('#columnTabs button').forEach(btn => {
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('#columnTabs button').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        renderColumn(filteredData, this.dataset.view);
+      document.getElementById("barChartDropdown").addEventListener('change', function() {
+        applyFilters();
+      });
+
+      document.getElementById("filterProvince").addEventListener('change', applyFilters);
+      document.getElementById("filterLgu").addEventListener('change', applyFilters);
+      document.getElementById("filterYear").addEventListener('change', applyFilters);
+      document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
+      document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
+      document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
+      
+      document.getElementById("resetFiltersBtn").addEventListener('click', function(){
+        document.getElementById("filterProvince").value = "";
+        document.getElementById("filterLgu").value = "";
+        document.getElementById("filterYear").value = "";
+        document.getElementById("filterClupStatus").value = "all";
+        document.getElementById("barChartDropdown").value = "all";
+        document.getElementById("filterStackedProvince").value = "all";
+        document.getElementById("filterSupportPie").value = "all";
+        applyFilters();
+      });
+      
+      document.getElementById("resetStackedFilter").addEventListener('click', function(){
+        document.getElementById("filterStackedProvince").value = "all";
+        applyFilters();
+      });
+
+      document.querySelectorAll('#columnTabs button').forEach(btn => {
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('#columnTabs button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          renderColumn(filteredData, this.dataset.view);
+        });
+      });
+
+      document.getElementById('modalCloseBtn').addEventListener('click', function(){
+        document.getElementById('detailModal').classList.remove('active');
+      });
+      document.getElementById('detailModal').addEventListener('click', function(e){
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      document.getElementById('editModalCloseBtn').addEventListener('click', function(){
+        document.getElementById('editModal').classList.remove('active');
+      });
+      document.getElementById('editCancelBtn').addEventListener('click', function(){
+        document.getElementById('editModal').classList.remove('active');
+      });
+      document.getElementById('editModal').addEventListener('click', function(e){
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      document.getElementById('editForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        await saveEditedRecord(formData);
       });
     });
-
-    document.getElementById('modalCloseBtn').addEventListener('click', function(){
-      document.getElementById('detailModal').classList.remove('active');
-    });
-    document.getElementById('detailModal').addEventListener('click', function(e){
-      if (e.target === this) this.classList.remove('active');
-    });
-
-    document.getElementById('editModalCloseBtn').addEventListener('click', function(){
-      document.getElementById('editModal').classList.remove('active');
-    });
-    document.getElementById('editCancelBtn').addEventListener('click', function(){
-      document.getElementById('editModal').classList.remove('active');
-    });
-    document.getElementById('editModal').addEventListener('click', function(e){
-      if (e.target === this) this.classList.remove('active');
-    });
-
-    document.getElementById('editForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      await saveEditedRecord(formData);
-    });
-  });
-</script>
+  </script>
 </body>
 </html>

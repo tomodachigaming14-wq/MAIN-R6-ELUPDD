@@ -2,191 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DHSUD VI | REPORT</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-   * { margin:0; padding:0; box-sizing:border-box; }
-   body { font-family:"Inter",sans-serif; background:#f4f7fc; color:#0f2b3a; line-height:1.5; }
-   header { background:white; border-bottom:1px solid #eef2ff; position:sticky; top:0; z-index:100; backdrop-filter:blur(8px); background:rgba(255,255,255,0.96); }
-   .top-bar { display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; flex-wrap:wrap; gap:1rem; }
-   .logo-area-header { display:flex; align-items:center; gap:16px; }
-   .header-logo-img { height:42px; background:#f1f5f9; padding:4px 16px; border-radius:40px; display:inline-flex; align-items:center; gap:10px; font-weight:600; font-size:0.95rem; color:#1e3a8a; white-space:nowrap; }
-   .header-logo-img img { height:32px; width:auto; }
-   .nav-right { display:flex; align-items:center; gap:1rem; }
-   .user-menu { display:flex; align-items:center; gap:0.5rem; background:#f1f5f9; padding:0.3rem 0.8rem 0.3rem 1rem; border-radius:60px; cursor:pointer; position:relative; }
-   .user-avatar { width:32px; height:32px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; }
-   .login-prompt { background:#f1f5f9; padding:0.3rem 1rem; border-radius:40px; cursor:pointer; font-size:0.85rem; font-weight:500; }
-   .role-badge-header { background:#e2e8f0; padding:0.2rem 0.6rem; border-radius:20px; font-size:0.65rem; font-weight:600; margin-left:0.5rem; }
-   .role-badge-header.admin { background:#dcfce7; color:#166534; }
-   .role-badge-header.staff { background:#dbeafe; color:#1e40af; }
-   .user-dropdown-menu { position:absolute; top:48px; right:0; background:white; border-radius:20px; min-width:180px; box-shadow:0 20px 35px -12px rgba(0,0,0,0.15); border:1px solid #eef2ff; overflow:hidden; display:none; z-index:200; }
-   .user-dropdown-item { padding:0.8rem 1.2rem; border-bottom:1px solid #f1f5f9; cursor:pointer; font-size:0.8rem; }
-   .user-dropdown-item:hover { background:#f8fafc; }
-   .user-name { font-size:0.8rem; font-weight:500; }
-   .nav-bottom { background:#ffffff; border-top:1px solid #eef2ff; padding:0.5rem 0; }
-   .main-nav-links { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
-   .main-nav-links a, .main-nav-links .dropdown { text-decoration:none; color:#334155; font-weight:500; font-size:0.9rem; transition:0.2s; }
-   .main-nav-links a:hover, .main-nav-links .dropbtn:hover { color:#2563eb; }
-   .dropdown { position:relative; display:inline-block; }
-   .dropbtn { background:none; border:none; font-weight:500; font-size:0.9rem; color:#334155; cursor:pointer; font-family:inherit; padding:0.4rem 0; }
-   .dropdown-content { display:none; position:absolute; background:white; min-width:220px; box-shadow:0 12px 28px rgba(0,0,0,0.1); border-radius:16px; z-index:1000; top:30px; left:0; border:1px solid #eef2ff; padding:0.3rem 0; }
-   .dropdown:hover .dropdown-content { display:block; }
-   .dropdown-content a { display:block; padding:0.7rem 1.2rem; color:#1e293b; font-size:0.8rem; text-decoration:none; }
-   .dropdown-content a:hover { background:#eff6ff; }
-   .dropdown-submenu { position:relative; }
-   .submenu-trigger { background:none; border:none; width:100%; text-align:left; padding:0.7rem 1.2rem; font-size:0.8rem; font-weight:500; color:#1e293b; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit; }
-   .submenu-trigger:hover { background:#eff6ff; }
-   .arrow-right { font-size:0.7rem; margin-left:1rem; }
-   .submenu-content { display:none; position:absolute; left:100%; top:0; background:white; min-width:180px; box-shadow:0 12px 28px rgba(0,0,0,0.1); border-radius:16px; border:1px solid #eef2ff; z-index:1001; padding:0.3rem 0; }
-   .dropdown-submenu:hover .submenu-content { display:block; }
-   .submenu-content a { padding:0.7rem 1.2rem; }
-   .container { max-width:1400px; margin:0 auto; padding:0 24px; }
-   .card { background:white; border-radius:32px; box-shadow:0 20px 35px -12px rgba(0,0,0,0.08); border:1px solid #eef2ff; overflow:hidden; margin:2rem 0; }
-   .card-header { padding:1.25rem 1.8rem; border-bottom:1px solid #eef2ff; background:#ffffff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
-   .card-header h2 { font-size:1.5rem; font-weight:700; color:#1e3a8a; }
-   .filter-group { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-   .report-selector { padding:0.6rem 1.2rem; border-radius:40px; border:1px solid #e2e8f0; background:white; font-weight:500; font-size:0.9rem; cursor:pointer; font-family:inherit; }
-   .month-filter { padding:0.6rem 1.2rem; border-radius:40px; border:1px solid #e2e8f0; background:white; font-weight:500; font-size:0.9rem; cursor:pointer; min-width:160px; }
-   .btn { padding:0.6rem 1.4rem; border-radius:40px; font-weight:600; font-size:0.85rem; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; }
-   .btn-primary { background:#2563eb; color:white; }
-   .btn-primary:hover { background:#1e3a8a; transform:translateY(-1px); }
-   .btn-success { background:#3a7b5c; color:white; }
-   .btn-success:hover { background:#2b5f44; }
-   .btn-print { background:#7c3aed; color:white; }
-   .btn-print:hover { background:#5b21b6; transform:translateY(-1px); }
-   .btn-print-lgu { background:#0d9488; color:white; }
-   .btn-print-lgu:hover { background:#0f766e; transform:translateY(-1px); }
-   .search-bar { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.8rem; background:#f9fafc; padding:1rem 1.2rem; border-radius:24px; align-items:center; }
-   .search-bar input { flex:2; padding:0.65rem 1rem; border-radius:40px; border:1px solid #e2e8f0; background:white; font-size:0.9rem; min-width:220px; }
-   .stats-row { display:flex; gap:2rem; margin-bottom:1.8rem; flex-wrap:wrap; background:#f0f7fa; padding:1rem 1.5rem; border-radius:28px; }
-   .stat-card { background:white; padding:0.6rem 1.5rem; border-radius:40px; box-shadow:0 1px 3px rgba(0,0,0,0.05); border:1px solid #eef2ff; }
-   .stat-number { font-size:1.9rem; font-weight:800; color:#1e3a8a; line-height:1.2; }
-   .stat-label { font-size:0.75rem; color:#475569; letter-spacing:0.3px; }
-   .report-table-wrapper { 
-     overflow-x:auto; 
-     overflow-y:auto; 
-     border-radius:20px; 
-     max-width:100%; 
-     max-height:500px; 
-   }
-   .data-table { width:100%; border-collapse:collapse; font-size:0.8rem; min-width:1100px; }
-   .data-table th { 
-     text-align:left; 
-     padding:0.9rem 0.7rem; 
-     background:#f1f5f9; 
-     color:#1e293b; 
-     font-weight:600; 
-     border-bottom:2px solid #e2e8f0; 
-     white-space:nowrap; 
-     position:sticky; 
-     top:0; 
-     z-index:10; 
-     background:#f1f5f9; 
-   }
-   .data-table td { 
-     padding:0.8rem 0.7rem; 
-     border-bottom:1px solid #eef2ff; 
-     vertical-align:middle; 
-     word-break:normal; 
-     max-width:250px; 
-     white-space:nowrap; 
-   }
-   .empty-row td { text-align:center; padding:3rem !important; color:#64748b; font-style:italic; }
-   .clear-filter-btn { background:#e2e8f0; border:1px solid #cbd5e1; padding:0.6rem 1.2rem; border-radius:40px; font-size:0.8rem; cursor:pointer; font-weight:500; }
-   .clear-filter-btn:hover { background:#cbd5e1; }
-   footer { background:#0f2b3a; color:#cbd5e1; padding:2.5rem 0 1.5rem; margin-top:3rem; }
-   .footer-content { display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.5rem; }
-   .copyright { margin-top:1.5rem; text-align:center; font-size:0.75rem; border-top:1px solid #2d4a5a; padding-top:1rem; }
-   .sync-status { position:fixed; bottom:20px; right:20px; background:white; padding:6px 14px; border-radius:30px; font-size:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; align-items:center; gap:8px; z-index:1000; border:1px solid #eef2ff; }
-   .login-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); justify-content:center; align-items:center; z-index:10000; }
-   .login-modal.active { display:flex; }
-   .login-modal-content { background:white; border-radius:32px; max-width:450px; width:90%; overflow:hidden; animation:modalSlideIn 0.3s ease; }
-   .login-modal-header { background:linear-gradient(135deg,#1e3a8a,#2563eb); padding:1.5rem; text-align:center; color:white; }
-   .login-modal-header .seal-icon { font-size:2rem; margin-bottom:0.5rem; }
-   .login-modal-header h3 { font-size:1.3rem; font-weight:700; }
-   .login-modal-body { padding:1.5rem; }
-   .input-group { margin-bottom:1.2rem; position:relative; }
-   .input-group label { display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase; color:#54708f; margin-bottom:0.4rem; }
-   .input-group input { width:100%; padding:0.85rem 1rem; border:1.5px solid #e2e8f0; border-radius:1rem; font-size:0.9rem; font-family:"Inter",sans-serif; padding-right:45px; }
-   .toggle-password { position:absolute; right:12px; top:38px; cursor:pointer; font-size:1rem; background:none; border:none; color:#94a3b8; }
-   .login-submit-btn { width:100%; padding:0.9rem; background:#2563eb; color:white; border:none; border-radius:1.2rem; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.2s; margin-top:0.5rem; }
-   .login-submit-btn:hover { background:#1d4ed8; transform:translateY(-1px); }
-   .login-modal-footer { border-top:1px solid #eef2ff; padding:1rem; text-align:center; font-size:0.65rem; color:#94a3b8; background:#fafcff; }
-   @keyframes modalSlideIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
-   .toast-msg { position:fixed; bottom:20px; right:20px; background:#1e293b; color:white; padding:10px 20px; border-radius:40px; z-index:9999; font-size:0.8rem; }
-   @media (max-width:720px) { .container { padding:0 1rem; } .card-header { flex-direction:column; align-items:stretch; } .top-bar { flex-direction:column; align-items:stretch; } .nav-right { justify-content:flex-end; } }
-   .dropbtn::after { content:" ▾"; font-size:0.7rem; opacity:0.6; }
-   .dropdown:hover .dropbtn::after { content:" ▾"; opacity:1; }
-   .status-badge { display:inline-block; padding:0.2rem 0.8rem; border-radius:20px; font-size:0.75rem; font-weight:600; }
-   .status-updated { background:#dcfce7; color:#166534; }
-   .status-for-updating { background:#fef3c7; color:#92400e; }
-   .status-under-review { background:#dbeafe; color:#1e40af; }
-   .status-default { background:#e2e8f0; color:#475569; }
-   .phase-badge { display:inline-block; padding:0.15rem 0.6rem; border-radius:12px; font-size:0.65rem; font-weight:500; background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
-   .phase-badge.phase { background:#e0f2fe; color:#0369a1; border-color:#b8dfff; }
-   .phase-badge.ra { background:#fef3c7; color:#92400e; border-color:#fde68a; }
-   .phase-badge.pre { background:#e0e7ff; color:#3730a3; border-color:#c7d2fe; }
-   .phase-badge.none { background:#f1f5f9; color:#64748b; border-color:#e2e8f0; }
-   .hidden-filter { display:none !important; }
-   .lgu-print-container { display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap; }
-   .lgu-print-container .btn-print-lgu { display:none; }
-   .lgu-print-container .btn-print-lgu.visible { display:inline-flex; }
-   #clupLguFilter { display:none; }
-   #clupLguFilter.visible { display:inline-block; }
-   .lgu-directory-filter { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-   .report-table-wrapper { 
-     overflow-x:auto; 
-     -webkit-overflow-scrolling:touch; 
-     max-height:500px; 
-     overflow-y:auto; 
-     border:1px solid #eef2ff; 
-     border-radius:16px; 
-   }
-   .data-table { min-width:1100px; }
-   .data-table td { max-width:200px; overflow:hidden; text-overflow:ellipsis; }
-   .month-filter option { text-transform:capitalize; }
-   .data-table td:first-child { white-space:nowrap; min-width:120px; }
-   .report-table-wrapper::-webkit-scrollbar {
-     width: 8px;
-     height: 8px;
-   }
-   .report-table-wrapper::-webkit-scrollbar-track {
-     background: #f1f5f9;
-     border-radius: 8px;
-   }
-   .report-table-wrapper::-webkit-scrollbar-thumb {
-     background: #cbd5e1;
-     border-radius: 8px;
-   }
-   .report-table-wrapper::-webkit-scrollbar-thumb:hover {
-     background: #94a3b8;
-   }
-   .report-table-wrapper {
-     scrollbar-width: thin;
-     scrollbar-color: #cbd5e1 #f1f5f9;
-   }
-   #clupFormLguFilterContainer {
-     display: none;
-   }
-   #clupFormLguFilterContainer.visible {
-     display: inline-block;
-   }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
+    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
+    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
+    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
+    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
+    .logo-area-header { display: flex; align-items: center; gap: 16px; }
+    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
+    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
+    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
+    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
+    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
+    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
+    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
+    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
+    .dropdown:hover .dropdown-content { display: block; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
+    .dropdown-content a:hover { background: #eff6ff; }
+    .dropdown-submenu { position: relative; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
+    .submenu-trigger:hover { background: #eff6ff; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
+    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
+    .dropdown-submenu:hover .submenu-content { display: block; }
+    .submenu-content a { padding: 0.7rem 1.2rem; }
+    .dropdown-submenu.open .submenu-content { display: block; }
+    .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
+    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
+    .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
+    .user-name { font-size: 0.7rem; font-weight: 500; }
+    .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
+    .role-badge-header.admin { background: #dcfce7; color: #166534; }
+    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
+    .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
+    .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
+    .user-dropdown-item:hover { background: #f8fafc; }
+    .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
+    .login-modal.active { display: flex; }
+    .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
+    .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
+    .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
+    .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
+    .login-modal-body .input-group { margin-bottom: 1.3rem; }
+    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
+    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+    .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
+    .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+    .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.4rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
+    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
+    .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
+    .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .toast-msg.success { background: #166534; }
+    .toast-msg.error { background: #b91c1c; }
+    .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
+    .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
+    .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+
+    /* Report Styles - Preserved from original */
+    .card { background: white; border-radius: 28px; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08); border: 1px solid #eef2ff; overflow: hidden; margin: 2rem 0; }
+    .card-header { padding: 1.25rem 1.8rem; border-bottom: 1px solid #eef2ff; background: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .card-header h2 { font-size: 1.5rem; font-weight: 700; color: #1e3a8a; }
+    .filter-group { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .report-selector { padding: 0.6rem 1.2rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-weight: 500; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
+    .month-filter { padding: 0.6rem 1.2rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-weight: 500; font-size: 0.9rem; cursor: pointer; min-width: 160px; }
+    .btn { padding: 0.6rem 1.4rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1e3a8a; transform: translateY(-1px); }
+    .btn-success { background: #10b981; color: white; }
+    .btn-success:hover { background: #0d9488; transform: translateY(-1px); }
+    .btn-print { background: #7c3aed; color: white; }
+    .btn-print:hover { background: #5b21b6; transform: translateY(-1px); }
+    .btn-print-lgu { background: #0d9488; color: white; }
+    .btn-print-lgu:hover { background: #0f766e; transform: translateY(-1px); }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover { background: #b91c1c; transform: translateY(-1px); }
+    .search-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.8rem; background: #f9fafc; padding: 1rem 1.2rem; border-radius: 24px; align-items: center; }
+    .search-bar input { flex: 2; padding: 0.65rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-size: 0.9rem; min-width: 220px; }
+    .stats-row { display: flex; gap: 2rem; margin-bottom: 1.8rem; flex-wrap: wrap; background: #f0f7fa; padding: 1rem 1.5rem; border-radius: 28px; }
+    .stat-card { background: white; padding: 0.6rem 1.5rem; border-radius: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #eef2ff; }
+    .stat-number { font-size: 1.9rem; font-weight: 800; color: #1e3a8a; line-height: 1.2; }
+    .stat-label { font-size: 0.75rem; color: #475569; letter-spacing: 0.3px; }
+    .report-table-wrapper { overflow-x: auto; overflow-y: auto; border-radius: 20px; max-width: 100%; max-height: 500px; border: 1px solid #eef2ff; }
+    .report-table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
+    .report-table-wrapper::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+    .report-table-wrapper::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+    .report-table-wrapper::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .report-table-wrapper { scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 1100px; }
+    .data-table th { text-align: left; padding: 0.9rem 0.7rem; background: #f1f5f9; color: #1e293b; font-weight: 600; border-bottom: 2px solid #e2e8f0; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
+    .data-table td { padding: 0.8rem 0.7rem; border-bottom: 1px solid #eef2ff; vertical-align: middle; word-break: normal; max-width: 250px; white-space: nowrap; }
+    .empty-row td { text-align: center; padding: 3rem !important; color: #64748b; font-style: italic; }
+    .clear-filter-btn { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 40px; font-size: 0.8rem; cursor: pointer; font-weight: 500; }
+    .clear-filter-btn:hover { background: #cbd5e1; }
+    .sync-status { position: fixed; bottom: 20px; right: 20px; background: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; z-index: 1000; border: 1px solid #eef2ff; }
+    .hidden-filter { display: none !important; }
+    .status-badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .status-updated { background: #dcfce7; color: #166534; }
+    .status-for-updating { background: #fef3c7; color: #92400e; }
+    .status-under-review { background: #dbeafe; color: #1e40af; }
+    .status-default { background: #e2e8f0; color: #475569; }
+    .phase-badge { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.65rem; font-weight: 500; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+    .phase-badge.phase { background: #e0f2fe; color: #0369a1; border-color: #b8dfff; }
+    .phase-badge.ra { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+    .phase-badge.pre { background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
+    .phase-badge.none { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
+    .lgu-print-container { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    .lgu-print-container .btn-print-lgu { display: none; }
+    .lgu-print-container .btn-print-lgu.visible { display: inline-flex; }
+    #clupLguFilter { display: none; }
+    #clupLguFilter.visible { display: inline-block; }
+    #clupFormLguFilterContainer { display: none; }
+    #clupFormLguFilterContainer.visible { display: inline-block; }
+    .card-body { padding: 1.8rem; }
+    @media (max-width: 720px) { .container { padding: 0 1rem; } .card-header { flex-direction: column; align-items: stretch; } .top-bar { flex-direction: column; align-items: stretch; } .header-logo-img span { white-space: normal; font-size: 0.7rem; } .login-modal-brand img { width: 100px; } }
   </style>
 </head>
 <body>
   <header>
-    <div class="container" style="max-width:1400px;margin:0 auto;padding:0 24px;">
+    <div class="container">
       <div class="top-bar">
         <div class="logo-area-header">
-          <div class="header-logo-img"><img src="img/DHSUD_LOGO.png" alt="DHSUD Logo"><span>DHSUD VI - ELUPDD Integrated Database and Information System</span></div>
+          <div class="header-logo-img">
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
+          </div>
         </div>
         <div class="nav-right" id="userMenuContainer"></div>
       </div>
     </div>
     <div class="nav-bottom">
-      <div class="container" style="max-width:1400px;margin:0 auto;padding:0 24px;">
+      <div class="container">
         <div class="main-nav-links" id="mainNavContainer"></div>
       </div>
     </div>
@@ -250,7 +219,7 @@
           </div>
         </div>
       </div>
-      <div class="card-body" style="padding:1.8rem;">
+      <div class="card-body">
         <!-- Search bars -->
         <div id="certSearchBar" class="search-bar"><input type="text" id="reportSearchInput" placeholder="🔍 Search by Control No., Applicant, Location..." onkeyup="filterReportTable()"><span style="font-size:0.75rem;color:#475569;">⬇️ Released records only</span></div>
         <div id="clupSearchBar" class="search-bar hidden-filter"><input type="text" id="clupSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterReportTable()"><span style="font-size:0.75rem;color:#475569;">📋 CLUP Status records</span></div>
@@ -276,21 +245,53 @@
     </div>
   </main>
 
+  <!-- Sync Status -->
   <div class="sync-status" id="syncStatus"><span id="statusDot">🟡</span> <span id="statusText">Connecting...</span><button onclick="fetchLiveData()" style="margin-left:8px;background:#e2e8f0;border:none;border-radius:30px;padding:2px 10px;cursor:pointer;">↻</button></div>
 
+  <!-- LOGIN MODAL -->
   <div id="loginModal" class="login-modal">
     <div class="login-modal-content">
-      <div class="login-modal-header"><div class="seal-icon">🏛️</div><h3>DHSUD Region VI</h3><p style="font-size:0.8rem;opacity:0.9;">Sign in to access your account</p></div>
+      <div class="login-modal-brand">
+        <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+        <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+        <h3>DHSUD Region VI</h3>
+        <p>ELUPDD · CLUP & ZO Platform</p>
+      </div>
       <div class="login-modal-body">
         <form id="modalLoginForm" onsubmit="return handleModalLogin(event)">
-          <div class="input-group"><label>📧 Email Address</label><input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required></div>
-          <div class="input-group"><label>🔒 Password</label><input type="password" id="modalLoginPassword" placeholder="Enter your password" required><button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button></div>
-          <button type="submit" class="login-submit-btn">→ Sign In</button>
+          <div class="input-group">
+            <label><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+            <button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button>
+          </div>
+          <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
         </form>
       </div>
       <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
     </div>
   </div>
+
+  <footer class="footer-new">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br />
+          <strong>DHSUD Region VI</strong><br />ELUPDD<br />
+        </div>
+        <div>
+          <strong>Our Social Networks</strong><br />Follow us for updates<br />
+          <div class="social-icons">
+            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
+    </div>
+  </footer>
 
   <script>
     // ============================================
@@ -324,11 +325,7 @@
     function getMonthYear(d){ if(!d) return ""; const dt=new Date(d); if(isNaN(dt.getTime())) return ""; return dt.toLocaleDateString("en-US",{year:"numeric",month:"long"}); }
     function calcProcessDays(received, issued){ if(!received||!issued) return null; const s=new Date(received), e=new Date(issued); if(isNaN(s.getTime())||isNaN(e.getTime())) return null; const diff=Math.abs(e-s); return Math.ceil(diff/(1000*60*60*24)); }
     function getTimeliness(d){ return d===null ? "—" : (d<=30 ? "On Time" : "Delayed"); }
-    function toTitleCase(str) {
-      if (!str) return "";
-      let lower = str.toLowerCase();
-      return lower.replace(/\b\w/g, c => c.toUpperCase());
-    }
+    function toTitleCase(str) { if (!str) return ""; let lower = str.toLowerCase(); return lower.replace(/\b\w/g, c => c.toUpperCase()); }
 
     // ============================================
     // AUTHENTICATION FUNCTIONS
@@ -338,27 +335,27 @@
     function getRoleLabel(r){ if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r){ if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
     function renderMainNavigation() {
-        const container = document.getElementById("mainNavContainer");
-        if (!container) return;
-        let navHtml = `<a href="index.html">Home</a>`;
-        if (currentUser) {
-            navHtml +=
-                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-                    <a href="lc.html">Locational Clearance</a>
-                    <a href="SZC.html">Site Zoning Certification</a></div></div>
-                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-                </div></div>
-                <a href="Techsamp.html">Technical Assistance</a>
-                <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
-                <a href="lgu-info.html">LGU Information</a>
-                <a href="report.html">Reports</a>
-                <a href="calendar.html">Calendar of Activities</a>
-                <a href="issuance.html">Issuances</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>`;
+      const container = document.getElementById("mainNavContainer");
+      if (!container) return;
+      let navHtml = `<a href="index.html">Home</a>`;
+      if (currentUser) {
+        navHtml +=
+          `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+            <a href="lc.html">Locational Clearance</a>
+            <a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
+            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
+            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
+          </div></div>
+          <a href="Techsamp.html">Technical Assistance</a>
+          <a href="training.html">CLUP/ZO Trainings</a>
+          <a href="p_monitoring.html">Plan Monitoring</a>
+          <a href="lgu-info.html">LGU Information</a>
+          <a href="report.html">Reports</a>
+          <a href="calendar.html">Calendar of Activities</a>
+          <a href="issuance.html">Issuances</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>`;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
@@ -397,13 +394,15 @@
     }
 
     function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
+    function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
     function toggleModalPassword() { let pwd = document.getElementById("modalLoginPassword"); pwd.type = pwd.type === "password" ? "text" : "password"; }
     
     async function handleModalLogin(e) {
       e.preventDefault();
       const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
       const password = document.getElementById("modalLoginPassword").value;
-      const btn = e.submitter; const originalText = btn.innerHTML;
+      const btn = e.submitter || document.getElementById("loginModalBtn");
+      const originalText = btn.innerHTML;
       btn.innerHTML = "⏳ Authenticating..."; btn.disabled = true;
       try {
         const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=users&_=${Date.now()}`);
@@ -511,7 +510,6 @@
     }
 
     function populateClupFormFilters() {
-      // Province filter for CLUP Formulation
       const provinceSet = new Set();
       clupStatusData.forEach(rec => { const p = rec["Province"] || rec["province"] || ""; if(p) provinceSet.add(toTitleCase(p)); });
       const sortedProvinces = Array.from(provinceSet).sort();
@@ -520,33 +518,22 @@
       provSel.innerHTML = '<option value="all">🌍 All Provinces</option>';
       sortedProvinces.forEach(p => { const opt=document.createElement("option"); opt.value=p; opt.textContent=p; provSel.appendChild(opt); });
       if (curProv !== "all" && sortedProvinces.includes(curProv)) provSel.value = curProv; else provSel.value="all";
-
-      // LGU filter for CLUP Formulation - initially hidden
       const lguSel = document.getElementById("clupFormLguFilter");
       lguSel.innerHTML = '<option value="all">🏛️ All LGUs</option>';
-      
-      // Hide LGU filter initially
       document.getElementById("clupFormLguFilterContainer").classList.remove("visible");
     }
 
-    // Update LGU dropdown based on selected province
     function updateClupFormLguFilter() {
       const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
       const lguSel = document.getElementById("clupFormLguFilter");
       const container = document.getElementById("clupFormLguFilterContainer");
-      
       if (provinceFilter === "all") {
-        // Hide LGU filter when "All Provinces" is selected
         container.classList.remove("visible");
         lguSel.value = "all";
         renderClupFormulation();
         return;
       }
-      
-      // Show LGU filter when a specific province is selected
       container.classList.add("visible");
-      
-      // Get LGUs for the selected province
       const lgus = clupStatusData
         .filter(rec => {
           const p = rec["Province"] || rec["province"] || "";
@@ -554,11 +541,7 @@
         })
         .map(rec => rec["City/Municipality"] || rec["city"] || rec["City"] || "")
         .filter(Boolean);
-      
-      // Get unique sorted LGUs
       const uniqueLgus = Array.from(new Set(lgus)).sort();
-      
-      // Populate LGU dropdown
       const currentValue = lguSel.value;
       lguSel.innerHTML = '<option value="all">🏛️ All LGUs</option>';
       uniqueLgus.forEach(l => {
@@ -567,14 +550,11 @@
         opt.textContent = l;
         lguSel.appendChild(opt);
       });
-      
-      // Restore previous selection if still valid
       if (currentValue !== "all" && uniqueLgus.includes(currentValue)) {
         lguSel.value = currentValue;
       } else {
         lguSel.value = "all";
       }
-      
       renderClupFormulation();
     }
 
@@ -739,7 +719,6 @@
       document.getElementById("clupFormProvinceFilter").value="all"; 
       document.getElementById("clupFormLguFilter").value="all"; 
       document.getElementById("clupFormSearchInput").value="";
-      // Hide LGU filter container
       document.getElementById("clupFormLguFilterContainer").classList.remove("visible");
       renderClupFormulation(); 
     }
@@ -854,7 +833,7 @@
     }
 
     // ============================================
-    // CLUP FORMULATION RENDER (LGU Directory style)
+    // CLUP FORMULATION RENDER
     // ============================================
     function renderClupFormulation() {
       const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
@@ -862,21 +841,12 @@
       const search = document.getElementById("clupFormSearchInput")?.value.toLowerCase() || "";
       
       let filtered = clupStatusData;
-      
       if (provinceFilter !== "all") {
-        filtered = filtered.filter(rec => { 
-          const p = rec["Province"] || rec["province"] || ""; 
-          return toTitleCase(p) === provinceFilter; 
-        });
+        filtered = filtered.filter(rec => { const p = rec["Province"] || rec["province"] || ""; return toTitleCase(p) === provinceFilter; });
       }
-      
       if (lguFilter !== "all") {
-        filtered = filtered.filter(rec => { 
-          const c = rec["City/Municipality"] || rec["city"] || rec["City"] || ""; 
-          return c === lguFilter; 
-        });
+        filtered = filtered.filter(rec => { const c = rec["City/Municipality"] || rec["city"] || rec["City"] || ""; return c === lguFilter; });
       }
-      
       if (search) {
         filtered = filtered.filter(rec => {
           const city = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").toLowerCase();
@@ -884,8 +854,6 @@
           return city.includes(search) || province.includes(search);
         });
       }
-      
-      // Sort by Province, then City/Municipality
       filtered.sort((a,b) => {
         const pa = (a["Province"] || a["province"] || "").toUpperCase();
         const pb = (b["Province"] || b["province"] || "").toUpperCase();
@@ -894,7 +862,6 @@
         const cb = (b["City/Municipality"] || b["city"] || b["City"] || "").toUpperCase();
         return ca.localeCompare(cb);
       });
-      
       clupFormFiltered = filtered;
       
       document.getElementById("totalCount").innerText = clupStatusData.length;
@@ -907,25 +874,19 @@
       if (thead) thead.innerHTML = `<tr>${cols.map(c => `<th>${c}</th>`).join("")}</tr>`;
       const tbody = document.getElementById("tableBody");
       if (!tbody) return;
-      
       if (filtered.length === 0) {
         tbody.innerHTML = `<tr class="empty-row"><td colspan="${cols.length}">📭 No CLUP/ZO Formulation records found for the selected filter.</td></tr>`;
         return;
       }
-      
       let rows = "";
       filtered.forEach((rec) => {
-        // Merge LGU data with CLUP data
         const province = rec["Province"] || rec["province"] || "";
         const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
-        
-        // Find matching LGU record for additional info
         const lguMatch = lguRecordsData.find(l => {
           const lProvince = l["Province"] || l["province"] || "";
           const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
           return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
         });
-        
         const row = [
           toTitleCase(province),
           city,
@@ -942,12 +903,7 @@
       tbody.innerHTML = rows;
     }
 
-    function filterClupFormulation() { 
-      // Check if province filter changed to update LGU dropdown
-      updateClupFormLguFilter();
-      // Then render
-      renderClupFormulation(); 
-    }
+    function filterClupFormulation() { updateClupFormLguFilter(); renderClupFormulation(); }
 
     // ============================================
     // LGU DIRECTORY RENDER
@@ -1001,13 +957,7 @@
     function switchReportType() {
       const sel = document.getElementById("reportTypeSelect");
       currentReportType = sel.value;
-      const titleMap = { 
-        "locational":"📎 Locational Clearance (Released)", 
-        "zoning":"📎 Site Zoning Certification (Released)", 
-        "clup_status":"📋 CLUP Status Report", 
-        "lgu_directory":"🏛️ LGU Directory",
-        "clup_formulation":"📋 Status of CLUP/ZO Formulation"
-      };
+      const titleMap = { "locational":"📎 Locational Clearance (Released)", "zoning":"📎 Site Zoning Certification (Released)", "clup_status":"📋 CLUP Status Report", "lgu_directory":"🏛️ LGU Directory", "clup_formulation":"📋 Status of CLUP/ZO Formulation" };
       document.getElementById("reportTitle").innerText = titleMap[currentReportType] || "📎 Report Dashboard";
       const isCert = currentReportType==="locational"||currentReportType==="zoning";
       const isClup = currentReportType==="clup_status";
@@ -1032,7 +982,6 @@
       if (isLguDir) {
         renderLguDirectory();
       } else if (isClupForm) {
-        // Reset filters and render
         document.getElementById("clupFormProvinceFilter").value = "all";
         document.getElementById("clupFormLguFilter").value = "all";
         document.getElementById("clupFormLguFilterContainer").classList.remove("visible");
@@ -1093,11 +1042,8 @@
 
     function printClupFormulation() {
       if (clupFormFiltered.length === 0) { alert("No records to print."); return; }
-      
       const lguFilter = document.getElementById("clupFormLguFilter")?.value || "all";
-      
       if (lguFilter !== "all") {
-        // Print detailed view for specific LGU
         const lguData = clupStatusData.find(rec => {
           const c = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
           return c === lguFilter;
@@ -1108,7 +1054,6 @@
         }
         printClupFormulationDetail(lguData);
       } else {
-        // Print summary view (table format)
         printClupFormulationSummary();
       }
     }
@@ -1117,10 +1062,8 @@
       const now = new Date();
       const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
       const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
-      
       const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
       let provinceLabel = provinceFilter !== "all" ? ` - ${provinceFilter}` : "";
-      
       let tableRows = clupFormFiltered.map((rec) => {
         const province = rec["Province"] || rec["province"] || "";
         const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
@@ -1129,21 +1072,18 @@
           const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
           return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
         });
-        return `
-          <tr>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(toTitleCase(province))}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(city)}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "")}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "")}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Official Email Address of LGU"] || "") : "")}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "")}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "")}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "")}</td>
-            <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "")}</td>
-          </tr>
-        `;
+        return `<tr>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(toTitleCase(province))}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(city)}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "")}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "")}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Official Email Address of LGU"] || "") : "")}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "")}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "")}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "")}</td>
+          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "")}</td>
+        </tr>`;
       }).join("");
-      
       const printHtml = `
         <html>
         <head>
@@ -1155,32 +1095,11 @@
             .print-header .subtitle { font-size: 10pt; color: #000000 !important; margin: 2px 0; }
             .print-header .date-time { font-size: 9pt; color: #000000 !important; }
             table { width: 100%; border-collapse: collapse; font-size: 7.5pt; color: #000000 !important; }
-            th { 
-              background: #1e3a8a !important; 
-              color: #ffffff !important; 
-              padding: 5px 4px; 
-              text-align: left; 
-              font-weight: 700; 
-              white-space: nowrap;
-              border: 1px solid #1e3a8a;
-            }
-            td { 
-              padding: 4px 4px; 
-              border: 1px solid #d1d5db; 
-              color: #000000 !important;
-              vertical-align: top;
-            }
+            th { background: #1e3a8a !important; color: #ffffff !important; padding: 5px 4px; text-align: left; font-weight: 700; white-space: nowrap; border: 1px solid #1e3a8a; }
+            td { padding: 4px 4px; border: 1px solid #d1d5db; color: #000000 !important; vertical-align: top; }
             .footer { margin-top: 15px; font-size: 8pt; color: #000000 !important; text-align: center; border-top: 1px solid #d1d5db; padding-top: 8px; }
-            @media print {
-              * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-              body { color: #000000 !important; background: #ffffff !important; }
-              td { color: #000000 !important; }
-              th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            }
-            @page { 
-              size: landscape; 
-              margin: 10mm 8mm;
-            }
+            @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } body { color: #000000 !important; background: #ffffff !important; } td { color: #000000 !important; } th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
+            @page { size: landscape; margin: 10mm 8mm; }
           </style>
         </head>
         <body>
@@ -1211,7 +1130,6 @@
         </body>
         </html>
       `;
-      
       const win = window.open("", "_blank", "width=1200,height=800");
       if (win) {
         win.document.write(printHtml);
@@ -1223,435 +1141,176 @@
       }
     }
 
-function printClupFormulationDetail(lguData) {
-  const now = new Date();
-  const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
-  const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
-  
-  const city = lguData["City/Municipality"] || lguData["city"] || lguData["City"] || "";
-  const province = lguData["Province"] || lguData["province"] || "";
-  const incomeClass = lguData["Income Class"] || lguData["incomeClass"] || "";
-  
-  // Find matching LGU record for additional info
-  const lguMatch = lguRecordsData.find(l => {
-    const lProvince = l["Province"] || l["province"] || "";
-    const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
-    return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
-  });
-  
-  // Status
-  const clupStatus = lguData["CLUP Status"] || lguData["CLUPStatus"] || lguData["status"] || "";
-  let statusDisplay = "OTHER";
-  if (clupStatus) {
-    const sl = String(clupStatus).toLowerCase().trim();
-    if (sl.includes("updated") || sl === "updated") statusDisplay = "UPDATED";
-    else if (sl.includes("for updating") || sl === "for updating") statusDisplay = "FOR UPDATING";
-    else if (sl.includes("under review") || sl === "under review") statusDisplay = "UNDER REVIEW";
-    else statusDisplay = clupStatus.toUpperCase();
-  }
-  
-  const clupUpdates = lguData["CLUPStatus/Updates"] || lguData["updates"] || "";
-  const phaseInfo = getPhaseDisplay(clupUpdates);
-  let specificStatusText = "None Indicated";
-  if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
-    specificStatusText = phaseInfo.display;
-  } else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") {
-    specificStatusText = clupUpdates;
-  }
-  
-  const shelterPlan = lguData["LGU with Local Shelter Plan"] || "";
-  const housingSubsector = lguData["LGU with Integrated Housing Subsector"] || "";
-  const commPlan = lguData["LGU with Integrated Communications Plan"] || "";
-  
-  const startYear = lguData["Start Year"] || "";
-  const endYear = lguData["End Year"] || "";
-  const resolutionNo = lguData["Resolution Number of the Latest Plan"] || "";
-  const approvalDate = lguData["Approval date of the Latest plan (MM/DD/YYYY)"] || "";
-  const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
-  
-  // C/MPDC Info - from LGU record if available
-  let mpdcName = lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "";
-  // Keep original formatting with line breaks for multi-line display
-  
-  let mpdcEmail = lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "";
-  // Keep original formatting with line breaks
-  
-  let mpdcMobile = lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "";
-  // Keep original formatting with line breaks
-  
-  // Local Chief Executive
-  let mayor = lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "";
-  mayor = mayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  let mayorMobile = lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "";
-  mayorMobile = mayorMobile.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  let viceMayor = lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "";
-  viceMayor = viceMayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  const statusClass = statusDisplay === "UPDATED" ? "status-Updated" : 
-                     statusDisplay === "FOR UPDATING" ? "status-For-Updating" : 
-                     statusDisplay === "UNDER REVIEW" ? "status-Under-Review" : "status-Other";
-  
-  // Get region - default to "WESTERN VISAYAS" and clean up any "REGION_06" values
-  let region = lguData["Region"] || lguData["region"] || "WESTERN VISAYAS";
-  if (region.toUpperCase().includes("REGION_06") || region.toUpperCase().includes("REGION 06") || region.toUpperCase().includes("REGION6")) {
-    region = "WESTERN VISAYAS";
-  }
-  if (region.trim() === "06" || region.trim() === "6") {
-    region = "WESTERN VISAYAS";
-  }
-  
-  // Helper function to format multi-line text with proper spacing
-  function formatMultiLine(text) {
-    if (!text || text.trim() === '') return '<span style="color: #1e293b; font-weight: 500;">—</span>';
-    const lines = text.split('\n').filter(line => line.trim() !== '');
-    if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
-    
-    let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
-    for (let i = 1; i < lines.length; i++) {
-      html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
+    function printClupFormulationDetail(lguData) {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
+      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
+      const city = lguData["City/Municipality"] || lguData["city"] || lguData["City"] || "";
+      const province = lguData["Province"] || lguData["province"] || "";
+      const incomeClass = lguData["Income Class"] || lguData["incomeClass"] || "";
+      const lguMatch = lguRecordsData.find(l => {
+        const lProvince = l["Province"] || l["province"] || "";
+        const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
+        return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
+      });
+      const clupStatus = lguData["CLUP Status"] || lguData["CLUPStatus"] || lguData["status"] || "";
+      let statusDisplay = "OTHER";
+      if (clupStatus) {
+        const sl = String(clupStatus).toLowerCase().trim();
+        if (sl.includes("updated") || sl === "updated") statusDisplay = "UPDATED";
+        else if (sl.includes("for updating") || sl === "for updating") statusDisplay = "FOR UPDATING";
+        else if (sl.includes("under review") || sl === "under review") statusDisplay = "UNDER REVIEW";
+        else statusDisplay = clupStatus.toUpperCase();
+      }
+      const clupUpdates = lguData["CLUPStatus/Updates"] || lguData["updates"] || "";
+      const phaseInfo = getPhaseDisplay(clupUpdates);
+      let specificStatusText = "None Indicated";
+      if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
+        specificStatusText = phaseInfo.display;
+      } else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") {
+        specificStatusText = clupUpdates;
+      }
+      const shelterPlan = lguData["LGU with Local Shelter Plan"] || "";
+      const housingSubsector = lguData["LGU with Integrated Housing Subsector"] || "";
+      const commPlan = lguData["LGU with Integrated Communications Plan"] || "";
+      const startYear = lguData["Start Year"] || "";
+      const endYear = lguData["End Year"] || "";
+      const resolutionNo = lguData["Resolution Number of the Latest Plan"] || "";
+      const approvalDate = lguData["Approval date of the Latest plan (MM/DD/YYYY)"] || "";
+      const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
+      let mpdcName = lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "";
+      let mpdcEmail = lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "";
+      let mpdcMobile = lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "";
+      let mayor = lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "";
+      mayor = mayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      let mayorMobile = lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "";
+      mayorMobile = mayorMobile.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      let viceMayor = lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "";
+      viceMayor = viceMayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      const statusClass = statusDisplay === "UPDATED" ? "status-Updated" : 
+                         statusDisplay === "FOR UPDATING" ? "status-For-Updating" : 
+                         statusDisplay === "UNDER REVIEW" ? "status-Under-Review" : "status-Other";
+      let region = lguData["Region"] || lguData["region"] || "WESTERN VISAYAS";
+      if (region.toUpperCase().includes("REGION_06") || region.toUpperCase().includes("REGION 06") || region.toUpperCase().includes("REGION6")) {
+        region = "WESTERN VISAYAS";
+      }
+      if (region.trim() === "06" || region.trim() === "6") {
+        region = "WESTERN VISAYAS";
+      }
+      function formatMultiLine(text) {
+        if (!text || text.trim() === '') return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+        let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
+        for (let i = 1; i < lines.length; i++) {
+          html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
+        }
+        return html;
+      }
+      const printHtml = `
+        <html>
+        <head>
+          <style>
+            * { color: #000000 !important; }
+            body { font-family: "Inter", sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; color: #000000 !important; background: #ffffff !important; line-height: 1.5; }
+            .print-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; }
+            .print-header h1 { color: #000000 !important; font-size: 14pt; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+            .print-header .date-time { font-size: 9pt; color: #000000 !important; text-align: right; line-height: 1.4; }
+            .lgu-header { display: flex; justify-content: space-between; align-items: stretch; border-bottom: 1px solid #1e3a8a; padding-bottom: 6px; margin-bottom: 12px; }
+            .lgu-left { display: flex; flex-direction: column; align-items: flex-start; gap: 0px; }
+            .lgu-left .lgu-province { font-size: 14pt; font-weight: 600; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.5px; }
+            .lgu-left .lgu-name { font-size: 14pt; font-weight: 600; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.5px; }
+            .lgu-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0px; text-align: right; }
+            .lgu-right .lgu-region { font-size: 12pt; font-weight: 500; color: #1e3a8a !important; text-transform: uppercase; }
+            .lgu-right .lgu-income { font-size: 10pt; font-weight: 400; color: #475569 !important; }
+            .status-row { display: flex; align-items: center; gap: 12px; margin: 4px 0 12px 0; padding: 4px 0; border-bottom: 1px dashed #d1d5db; }
+            .status-label { font-weight: 700; color: #1e3a8a; font-size: 10pt; text-transform: uppercase; min-width: 70px; }
+            .status-badge { display: inline-block; font-weight: 700; padding: 2px 16px; border-radius: 20px; font-size: 10pt; }
+            .status-Updated { background: #dcfce7; color: #166534 !important; }
+            .status-For-Updating { background: #fef3c7; color: #92400e !important; }
+            .status-Under-Review { background: #dbeafe; color: #1e40af !important; }
+            .status-Other { background: #e2e8f0; color: #475569 !important; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 30px; margin: 4px 0; }
+            .info-item { display: flex; padding: 3px 0; font-size: 9.5pt; align-items: baseline; }
+            .info-item .label { font-weight: 600; color: #475569; min-width: 180px; flex-shrink: 0; }
+            .info-item .value { color: #1e293b; font-weight: 500; white-space: normal; word-break: break-word; }
+            .section-title { font-size: 10pt; font-weight: 700; color: #1e3a8a; text-transform: uppercase; border-bottom: 1px solid #d1d5db; padding-bottom: 3px; margin-top: 14px; margin-bottom: 8px; letter-spacing: 0.5px; }
+            .info-section { margin-top: 2px; margin-bottom: 2px; }
+            .info-section .field { margin-bottom: 6px; }
+            .info-section .field-label { font-weight: 700; color: #1e293b; font-size: 9.5pt; display: block; margin-bottom: 1px; }
+            .info-section .field-value { color: #1e293b; font-weight: 500; font-size: 9.5pt; display: block; padding-left: 0px; line-height: 1.5; }
+            .info-section .field-value .line { display: block; color: #1e293b; font-weight: 500; }
+            .two-col-section { display: grid; grid-template-columns: 1fr 1fr; gap: 0px 40px; margin-top: 2px; margin-bottom: 2px; }
+            .two-col-section .field { margin-bottom: 6px; }
+            .two-col-section .field-label { font-weight: 700; color: #000000; font-size: 9.5pt; display: block; margin-bottom: 1px; text-align: left; }
+            .two-col-section .field-value { color: #000000; font-weight: 600; font-size: 9.5pt; display: block; padding-left: 0px; line-height: 1.5; text-align: left; }
+            .two-col-section .field-value .line { display: block; color: #1e293b; font-weight: 600; text-align: left; }
+            .two-col-section .full-width { grid-column: 1 / -1; }
+            .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #d1d5db; font-size: 8pt; color: #94a3b8; text-align: center; }
+            @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } body { color: #000000 !important; background: #ffffff !important; padding: 15px; } .lgu-left .lgu-province { color: #1e3a8a !important; } .lgu-left .lgu-name { color: #1e3a8a !important; } .lgu-right .lgu-region { color: #1e3a8a !important; } .status-badge { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } .status-Updated { background: #dcfce7 !important; color: #166534 !important; } .status-For-Updating { background: #fef3c7 !important; color: #92400e !important; } .status-Under-Review { background: #dbeafe !important; color: #1e40af !important; } .status-Other { background: #e2e8f0 !important; color: #475569 !important; } .two-col-section .field-label { color: #1e293b !important; } .two-col-section .field-value { color: #1e293b !important; } }
+            @page { margin: 12mm 15mm; }
+          </style>
+        </head>
+        <body>
+          <div class="print-header">
+            <h1>STATUS OF CLUP/ZO FORMULATION</h1>
+            <div class="date-time">${dateStr}<br>${timeStr}</div>
+          </div>
+          <div class="lgu-header">
+            <div class="lgu-left">
+              <span class="lgu-province">${escapeHtml(toTitleCase(province).toUpperCase())}</span>
+              <span class="lgu-name">${escapeHtml(city.toUpperCase())}</span>
+            </div>
+            <div class="lgu-right">
+              <span class="lgu-region">${escapeHtml(region.toUpperCase())}</span>
+              ${incomeClass ? `<span class="lgu-income">Income Classification: ${escapeHtml(incomeClass)}</span>` : '<span class="lgu-income">Income Classification: ___</span>'}
+            </div>
+          </div>
+          <div class="status-row">
+            <span class="status-label">Status</span>
+            <span class="status-badge ${statusClass}">${escapeHtml(statusDisplay)}</span>
+          </div>
+          <div class="info-grid">
+            <div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText)}</span></div>
+            <div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || '—')}</span></div>
+            <div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>
+            <div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>
+          </div>
+          <div class="section-title">Latest CLUP</div>
+          <div class="info-grid">
+            <div class="info-item"><span class="label">Planning Period :</span><span class="value">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span></div>
+            <div class="info-item"><span class="label">Date Approved :</span><span class="value">${escapeHtml(approvalDisplay || '—')}</span></div>
+            <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || '—')}</span></div>
+          </div>
+          <div class="section-title">City/Municipal Planning and Development Coordinator (C/MPDC)</div>
+          <div class="two-col-section">
+            <div class="field"><span class="field-label">Name</span><span class="field-value">${formatMultiLine(mpdcName)}</span></div>
+            <div class="field"><span class="field-label">Email</span><span class="field-value">${formatMultiLine(mpdcEmail)}</span></div>
+            <div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${formatMultiLine(mpdcMobile)}</span></div>
+          </div>
+          <div class="section-title">Local Chief Executive</div>
+          <div class="two-col-section">
+            <div class="field"><span class="field-label">Mayor</span><span class="field-value">${escapeHtml(mayor || '—')}</span></div>
+            <div class="field"><span class="field-label">Vice Mayor</span><span class="field-value">${escapeHtml(viceMayor || '—')}</span></div>
+            ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ''}
+          </div>
+          <div class="footer">Generated on ${dateStr} at ${timeStr}</div>
+        </body>
+        </html>
+      `;
+      const win = window.open("", "_blank", "width=900,height=800");
+      if (win) {
+        win.document.write(printHtml);
+        win.document.close();
+        win.focus();
+        setTimeout(function() { win.print(); }, 500);
+      } else {
+        showToastMessage("Please allow popups to print.", "error");
+      }
     }
-    return html;
-  }
-  
-  const printHtml = `
-    <html>
-    <head>
-      <style>
-        * { color: #000000 !important; }
-        body { 
-          font-family: "Inter", sans-serif; 
-          padding: 20px; 
-          max-width: 800px; 
-          margin: 0 auto; 
-          color: #000000 !important; 
-          background: #ffffff !important;
-          line-height: 1.5;
-        }
-        .print-header { 
-          display: flex; 
-          justify-content: space-between; 
-          align-items: flex-start;
-          margin-bottom: 10px;
-          border-bottom: 2px solid #1e3a8a;
-          padding-bottom: 8px;
-        }
-        .print-header h1 { 
-          color: #000000 !important; 
-          font-size: 14pt; 
-          font-weight: 700; 
-          margin: 0;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-        .print-header .date-time { 
-          font-size: 9pt; 
-          color: #000000 !important; 
-          text-align: right;
-          line-height: 1.4;
-        }
-        /* LGU Header - Two column layout */
-        .lgu-header { 
-          display: flex;
-          justify-content: space-between;
-          align-items: stretch;
-          border-bottom: 1px solid #1e3a8a; 
-          padding-bottom: 6px; 
-          margin-bottom: 12px; 
-        }
-        .lgu-left {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0px;
-        }
-        .lgu-left .lgu-province { 
-          font-size: 14pt; 
-          font-weight: 600; 
-          color: #1e3a8a !important; 
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .lgu-left .lgu-name { 
-          font-size: 14pt; 
-          font-weight: 600; 
-          color: #1e3a8a !important; 
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        .lgu-right {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 0px;
-          text-align: right;
-        }
-        .lgu-right .lgu-region { 
-          font-size: 12pt; 
-          font-weight: 500; 
-          color: #1e3a8a !important; 
-          text-transform: uppercase;
-        }
-        .lgu-right .lgu-income { 
-          font-size: 10pt; 
-          font-weight: 400; 
-          color: #475569 !important; 
-        }
-        .status-row { 
-          display: flex; 
-          align-items: center; 
-          gap: 12px; 
-          margin: 4px 0 12px 0;
-          padding: 4px 0;
-          border-bottom: 1px dashed #d1d5db;
-        }
-        .status-label { 
-          font-weight: 700; 
-          color: #1e3a8a; 
-          font-size: 10pt; 
-          text-transform: uppercase;
-          min-width: 70px;
-        }
-        .status-badge { 
-          display: inline-block; 
-          font-weight: 700; 
-          padding: 2px 16px; 
-          border-radius: 20px; 
-          font-size: 10pt; 
-        }
-        .status-Updated { background: #dcfce7; color: #166534 !important; }
-        .status-For-Updating { background: #fef3c7; color: #92400e !important; }
-        .status-Under-Review { background: #dbeafe; color: #1e40af !important; }
-        .status-Other { background: #e2e8f0; color: #475569 !important; }
-        
-        .info-grid { 
-          display: grid; 
-          grid-template-columns: 1fr 1fr; 
-          gap: 2px 30px; 
-          margin: 4px 0; 
-        }
-        .info-item { 
-          display: flex; 
-          padding: 3px 0; 
-          font-size: 9.5pt; 
-          align-items: baseline; 
-        }
-        .info-item .label { 
-          font-weight: 600; 
-          color: #475569; 
-          min-width: 180px; 
-          flex-shrink: 0; 
-        }
-        .info-item .value { 
-          color: #1e293b; 
-          font-weight: 500; 
-          white-space: normal;
-          word-break: break-word;
-        }
-        .section-title { 
-          font-size: 10pt; 
-          font-weight: 700; 
-          color: #1e3a8a; 
-          text-transform: uppercase; 
-          border-bottom: 1px solid #d1d5db; 
-          padding-bottom: 3px; 
-          margin-top: 14px; 
-          margin-bottom: 8px; 
-          letter-spacing: 0.5px;
-        }
-        
-        /* Section with bold labels and values on separate lines */
-        .info-section {
-          margin-top: 2px;
-          margin-bottom: 2px;
-        }
-        .info-section .field {
-          margin-bottom: 6px;
-        }
-        .info-section .field-label {
-          font-weight: 700;
-          color: #1e293b;
-          font-size: 9.5pt;
-          display: block;
-          margin-bottom: 1px;
-        }
-        .info-section .field-value {
-          color: #1e293b;
-          font-weight: 500;
-          font-size: 9.5pt;
-          display: block;
-          padding-left: 0px;
-          line-height: 1.5;
-        }
-        .info-section .field-value .line {
-          display: block;
-          color: #1e293b;
-          font-weight: 500;
-        }
-        
-        /* Two column layout for C/MPDC and Local Chief Executive - ALL LEFT ALIGNED */
-        .two-col-section {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0px 40px;
-		  Font Family: "Inter", sans-serif
-          margin-top: 2px;
-          margin-bottom: 2px;
-        }
-        .two-col-section .field {
-          margin-bottom: 6px;
-        }
-        .two-col-section .field-label {
-          font-weight: 700;
-          color: #000000;
-          font-size: 9.5pt;
-          display: block;
-          margin-bottom: 1px;
-          text-align: left;
-        }
-        .two-col-section .field-value {
-          color: #000000;
-          font-weight: 600;
-          font-size: 9.5pt;
-          display: block;
-          padding-left: 0px;
-          line-height: 1.5;
-          text-align: left;
-        }
-        .two-col-section .field-value .line {
-          display: block;
-          color: #1e293b;
-          font-weight: 600;
-          text-align: left;
-        }
-        .two-col-section .full-width {
-          grid-column: 1 / -1;
-        }
-        
-        .footer { 
-          margin-top: 20px; 
-          padding-top: 10px; 
-          border-top: 1px solid #d1d5db; 
-          font-size: 8pt; 
-          color: #94a3b8; 
-          text-align: center; 
-        }
-        @media print {
-          * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          body { color: #000000 !important; background: #ffffff !important; padding: 15px; }
-          .lgu-left .lgu-province { color: #1e3a8a !important; }
-          .lgu-left .lgu-name { color: #1e3a8a !important; }
-          .lgu-right .lgu-region { color: #1e3a8a !important; }
-          .status-badge { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          .status-Updated { background: #dcfce7 !important; color: #166534 !important; }
-          .status-For-Updating { background: #fef3c7 !important; color: #92400e !important; }
-          .status-Under-Review { background: #dbeafe !important; color: #1e40af !important; }
-          .status-Other { background: #e2e8f0 !important; color: #475569 !important; }
-          .two-col-section .field-label { color: #1e293b !important; }
-          .two-col-section .field-value { color: #1e293b !important; }
-        }
-        @page { margin: 12mm 15mm; }
-      </style>
-    </head>
-    <body>
-      <div class="print-header">
-        <h1>STATUS OF CLUP/ZO FORMULATION</h1>
-        <div class="date-time">${dateStr}<br>${timeStr}</div>
-      </div>
-      
-      <!-- LGU Header: Province + City stacked on left, Region + Income stacked on right -->
-      <div class="lgu-header">
-        <div class="lgu-left">
-          <span class="lgu-province">${escapeHtml(toTitleCase(province).toUpperCase())}</span>
-          <span class="lgu-name">${escapeHtml(city.toUpperCase())}</span>
-        </div>
-        <div class="lgu-right">
-          <span class="lgu-region">${escapeHtml(region.toUpperCase())}</span>
-          ${incomeClass ? `<span class="lgu-income">Income Classification: ${escapeHtml(incomeClass)}</span>` : '<span class="lgu-income">Income Classification: ___</span>'}
-        </div>
-      </div>
-      
-      <div class="status-row">
-        <span class="status-label">Status</span>
-        <span class="status-badge ${statusClass}">${escapeHtml(statusDisplay)}</span>
-      </div>
-      
-      <div class="info-grid">
-        <div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText)}</span></div>
-        <div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || '—')}</span></div>
-        <div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>
-        <div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>
-      </div>
-      
-      <div class="section-title">Latest CLUP</div>
-      <div class="info-grid">
-        <div class="info-item"><span class="label">Planning Period :</span><span class="value">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span></div>
-        <div class="info-item"><span class="label">Date Approved :</span><span class="value">${escapeHtml(approvalDisplay || '—')}</span></div>
-        <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || '—')}</span></div>
-      </div>
-      
-      <!-- C/MPDC Section - Two column layout: Name | Email, Mobile spans full width -->
-      <div class="section-title">City/Municipal Planning and Development Coordinator (C/MPDC)</div>
-      
-      <div class="two-col-section">
-        <!-- Left Column: Name -->
-        <div class="field">
-          <span class="field-label">Name</span>
-          <span class="field-value">${formatMultiLine(mpdcName)}</span>
-        </div>
-        
-        <!-- Right Column: Email (left-aligned) -->
-        <div class="field">
-          <span class="field-label">Email</span>
-          <span class="field-value">${formatMultiLine(mpdcEmail)}</span>
-        </div>
-        
-        <!-- Mobile - spans full width -->
-        <div class="field full-width">
-          <span class="field-label">Mobile</span>
-          <span class="field-value">${formatMultiLine(mpdcMobile)}</span>
-        </div>
-      </div>
-      
-      <!-- Local Chief Executive Section - Two column layout: Mayor | Vice Mayor, Mobile spans full width -->
-      <div class="section-title">Local Chief Executive</div>
-      
-      <div class="two-col-section">
-        <!-- Left Column: Mayor -->
-        <div class="field">
-          <span class="field-label">Mayor</span>
-          <span class="field-value">${escapeHtml(mayor || '—')}</span>
-        </div>
-        
-        <!-- Right Column: Vice Mayor (left-aligned) -->
-        <div class="field">
-          <span class="field-label">Vice Mayor</span>
-          <span class="field-value">${escapeHtml(viceMayor || '—')}</span>
-        </div>
-        
-        <!-- Mobile - spans full width -->
-        ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ''}
-      </div>
-      
-      <div class="footer">Generated on ${dateStr} at ${timeStr}</div>
-    </body>
-    </html>
-  `;
-  
-  const win = window.open("", "_blank", "width=900,height=800");
-  if (win) {
-    win.document.write(printHtml);
-    win.document.close();
-    win.focus();
-    setTimeout(function() { win.print(); }, 500);
-  } else {
-    showToastMessage("Please allow popups to print.", "error");
-  }
-}
 
     // ============================================
-    // CLUP SUMMARY PRINT (existing)
+    // CLUP SUMMARY PRINT
     // ============================================
     function printClupSummary() {
       const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
@@ -1726,7 +1385,7 @@ function printClupFormulationDetail(lguData) {
     }
 
     // ============================================
-    // EXPORT CURRENT REPORT (existing)
+    // EXPORT CURRENT REPORT
     // ============================================
     function exportCurrentReportToExcel() {
       if (currentReportType === "lgu_directory") { exportLguDirectoryExcel(); return; }
@@ -1752,7 +1411,7 @@ function printClupFormulationDetail(lguData) {
     }
 
     // ============================================
-    // LGU DIRECTORY EXPORT & PRINT (existing)
+    // LGU DIRECTORY EXPORT & PRINT
     // ============================================
     function exportLguDirectoryExcel() {
       if (lguDirFiltered.length === 0) { alert("No records to export."); return; }
@@ -1792,7 +1451,6 @@ function printClupFormulationDetail(lguData) {
           <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["C/M/PPDO Contact Number"]||"")}</td>
         </tr>
       `).join("");
-      
       const printHtml = `
         <html>
         <head>
@@ -1804,32 +1462,11 @@ function printClupFormulationDetail(lguData) {
             .print-header .subtitle { font-size: 10pt; color: #000000 !important; margin: 2px 0; }
             .print-header .date-time { font-size: 9pt; color: #000000 !important; }
             table { width: 100%; border-collapse: collapse; font-size: 7.5pt; color: #000000 !important; }
-            th { 
-              background: #1e3a8a !important; 
-              color: #ffffff !important; 
-              padding: 5px 4px; 
-              text-align: left; 
-              font-weight: 700; 
-              white-space: nowrap;
-              border: 1px solid #1e3a8a;
-            }
-            td { 
-              padding: 4px 4px; 
-              border: 1px solid #d1d5db; 
-              color: #000000 !important;
-              vertical-align: top;
-            }
+            th { background: #1e3a8a !important; color: #ffffff !important; padding: 5px 4px; text-align: left; font-weight: 700; white-space: nowrap; border: 1px solid #1e3a8a; }
+            td { padding: 4px 4px; border: 1px solid #d1d5db; color: #000000 !important; vertical-align: top; }
             .footer { margin-top: 15px; font-size: 8pt; color: #000000 !important; text-align: center; border-top: 1px solid #d1d5db; padding-top: 8px; }
-            @media print {
-              * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-              body { color: #000000 !important; background: #ffffff !important; }
-              td { color: #000000 !important; }
-              th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            }
-            @page { 
-              size: landscape; 
-              margin: 10mm 8mm;
-            }
+            @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } body { color: #000000 !important; background: #ffffff !important; } td { color: #000000 !important; } th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
+            @page { size: landscape; margin: 10mm 8mm; }
           </style>
         </head>
         <body>
@@ -1909,6 +1546,7 @@ function printClupFormulationDetail(lguData) {
     window.exportCurrentReportToExcel = exportCurrentReportToExcel;
     window.fetchLiveData = fetchLiveData;
     window.openLoginModal = openLoginModal;
+    window.closeLoginModal = closeLoginModal;
     window.toggleModalPassword = toggleModalPassword;
     window.handleModalLogin = handleModalLogin;
     window.printClupSummary = printClupSummary;
