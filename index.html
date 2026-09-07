@@ -258,52 +258,6 @@
     .calendar-day.other-month .day-number { color: #cbd5e1; }
     .calendar-day.other-month:hover { background: #f0f0f0; }
     
-    /* Event detail panel */
-    .event-detail-panel { 
-        background: #f8fcff; 
-        border-radius: 12px; 
-        padding: 1rem; 
-        border: 1px solid #eef2ff; 
-        margin-top: 1rem; 
-    }
-    .event-detail-panel h4 { 
-        font-size: 0.9rem; 
-        font-weight: 700; 
-        color: #0a2540; 
-        margin-bottom: 0.5rem; 
-    }
-    .event-detail-item { 
-        display: flex; 
-        gap: 0.8rem; 
-        padding: 0.4rem 0; 
-        border-bottom: 1px solid #eef2ff; 
-        font-size: 0.8rem; 
-    }
-    .event-detail-item:last-child { border-bottom: none; }
-    .event-detail-date { 
-        min-width: 80px; 
-        font-weight: 600; 
-        color: #2563eb; 
-        font-size: 0.7rem; 
-    }
-    .event-detail-name { 
-        font-weight: 600; 
-        color: #1f3a5f; 
-    }
-    .event-detail-location { 
-        font-size: 0.7rem; 
-        color: #64748b; 
-    }
-    .no-events-msg { 
-        color: #94a3b8; 
-        font-size: 0.8rem; 
-        padding: 0.3rem 0; 
-    }
-    .event-time { 
-        font-size: 0.65rem; 
-        color: #2563eb; 
-        font-weight: 500; 
-    }
     .calendar-legend { 
         display: flex; 
         gap: 1rem; 
@@ -333,18 +287,57 @@
         display: flex;
         flex-direction: column;
     }
-    .events-panel h3 { 
+    
+    .events-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .events-header h3 { 
         font-size: 1.2rem; 
         font-weight: 700; 
         color: #0a2540;
-        margin-bottom: 0.75rem;
+        margin: 0;
     }
-    .events-panel h3 i { 
+    
+    .events-header h3 i { 
         color: #2563eb; 
         margin-right: 8px; 
     }
+    
+    /* Filter dropdowns - inline with title */
+    .filter-container {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .filter-container select {
+        padding: 0.25rem 0.6rem;
+        border-radius: 20px;
+        border: 1px solid #e2e8f0;
+        font-family: "Inter", sans-serif;
+        font-size: 0.7rem;
+        background: #f8fafc;
+        color: #0a2540;
+        cursor: pointer;
+        outline: none;
+        transition: 0.2s;
+    }
+    .filter-container select:hover {
+        border-color: #2563eb;
+    }
+    .filter-container select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
+    }
+    
     .events-panel .selected-date {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #2563eb;
         font-weight: 600;
         margin-bottom: 0.5rem;
@@ -423,6 +416,12 @@
         margin-top: 0.1rem; 
         font-weight: 600; 
     }
+    .event-info .event-date-badge {
+        font-size: 0.5rem;
+        color: #64748b;
+        display: block;
+        margin-top: 0.1rem;
+    }
     .no-events-selected {
         color: #94a3b8;
         font-size: 0.85rem;
@@ -493,6 +492,9 @@
         .events-panel { min-height: 200px; }
         .calendar-header { flex-direction: row; flex-wrap: wrap; }
         .view-calendar-link-header { font-size: 0.7rem; padding: 0.2rem 0.6rem; }
+        .events-header { flex-direction: column; align-items: stretch; }
+        .filter-container { justify-content: flex-start; }
+        .filter-container select { font-size: 0.6rem; padding: 0.2rem 0.4rem; }
     }
 </style>
 </head>
@@ -558,12 +560,36 @@
         
         <!-- Events on selected date Panel -->
         <div class="events-panel" style="flex:1">
-          <h3><i class="fas fa-calendar-check"></i> Calendar Events</h3>
-          <div id="selectedDateDisplay" class="selected-date">Select a date on the calendar</div>
+          <div class="events-header">
+            <h3><i class="fas fa-calendar-check"></i> Calendar Events</h3>
+            <!-- Filter Dropdowns - Right aligned -->
+            <div class="filter-container">
+              <select id="filterMonth">
+                <option value="all">All Months</option>
+                <option value="0">January</option>
+                <option value="1">February</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">August</option>
+                <option value="8">September</option>
+                <option value="9">October</option>
+                <option value="10">November</option>
+                <option value="11">December</option>
+              </select>
+              <select id="filterYear">
+                <option value="all">All Years</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="selectedDateDisplay" class="selected-date">All Events</div>
           <div id="eventsListContainer" class="events-list-container">
             <div class="no-events-selected">
               <i class="far fa-calendar-alt"></i>
-              Click a date on the calendar to view events
+              No events found
             </div>
           </div>
         </div>
@@ -780,7 +806,9 @@
       { id: 102, name: "Zoning Ordinance Review", type: "Meeting", startDateTime: "2026-09-15T10:00:00", endDateTime: "2026-09-15T16:00:00", purpose: "ZO amendments review", location: "Zoom Meeting", status: "upcoming", meetingLink: "https://zoom.us/j/123456789" },
       { id: 103, name: "Regional Planning Session", type: "Workshop", startDateTime: "2026-09-16T08:30:00", endDateTime: "2026-09-16T12:00:00", purpose: "Regional planning and coordination", location: "Conference Room B", status: "upcoming", meetingLink: "" },
       { id: 104, name: "LGU Consultation Meeting", type: "Meeting", startDateTime: "2026-09-22T13:00:00", endDateTime: "2026-09-22T15:00:00", purpose: "Consultation with LGUs", location: "Online via Google Meet", status: "upcoming", meetingLink: "https://meet.google.com/abc-defg" },
-      { id: 105, name: "CLUP Workshop for LGUs", type: "Workshop", startDateTime: "2026-09-07T09:00:00", endDateTime: "2026-09-07T17:00:00", purpose: "CLUP Formulation Workshop", location: "DHSUD Regional Office", status: "upcoming", meetingLink: "" }
+      { id: 105, name: "CLUP Workshop for LGUs", type: "Workshop", startDateTime: "2026-09-07T09:00:00", endDateTime: "2026-09-07T17:00:00", purpose: "CLUP Formulation Workshop", location: "DHSUD Regional Office", status: "upcoming", meetingLink: "" },
+      { id: 106, name: "Annual Planning Conference", type: "Conference", startDateTime: "2026-10-05T08:00:00", endDateTime: "2026-10-05T17:00:00", purpose: "Annual planning and budgeting", location: "Grand Convention Center", status: "upcoming", meetingLink: "" },
+      { id: 107, name: "Zoning Board Meeting", type: "Meeting", startDateTime: "2026-10-12T14:00:00", endDateTime: "2026-10-12T16:00:00", purpose: "Zoning board regular session", location: "City Hall", status: "upcoming", meetingLink: "" }
     ];
 
     function loadActivities() {
@@ -796,23 +824,37 @@
         const end = new Date(a.endDateTime);
         a.status = end < now ? "completed" : "upcoming";
       });
-      renderMiniCalendar();
-      renderEventsPanel();
       
-      // Show today's events or first available
-      const today = new Date().toISOString().split("T")[0];
-      const todayEvents = getEventsForDate(today);
-      if (todayEvents.length > 0) {
-        handleDateClick(today);
-      } else {
-        // Find first date with events
-        const allDates = activities.map(a => new Date(a.startDateTime).toISOString().split("T")[0]);
-        const uniqueDates = [...new Set(allDates)].sort();
-        if (uniqueDates.length > 0) {
-          handleDateClick(uniqueDates[0]);
-        } else {
-          renderEventsPanel();
-        }
+      // Populate year filter
+      populateYearFilter();
+      
+      renderMiniCalendar();
+      renderAllEvents();
+    }
+
+    function populateYearFilter() {
+      const yearSelect = document.getElementById("filterYear");
+      if (!yearSelect) return;
+      
+      // Get unique years from activities
+      const years = [...new Set(activities.map(a => {
+        return new Date(a.startDateTime).getFullYear();
+      }))].sort();
+      
+      // Clear existing options except "All Years"
+      yearSelect.innerHTML = '<option value="all">All Years</option>';
+      
+      years.forEach(year => {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+      });
+      
+      // Set default to current year if available
+      const currentYear = new Date().getFullYear();
+      if (years.includes(currentYear)) {
+        yearSelect.value = currentYear;
       }
     }
 
@@ -822,6 +864,31 @@
         const end = new Date(act.endDateTime).toISOString().split("T")[0];
         return start <= dateStr && end >= dateStr;
       });
+    }
+
+    function getFilteredEvents() {
+      const monthFilter = document.getElementById("filterMonth")?.value;
+      const yearFilter = document.getElementById("filterYear")?.value;
+      
+      let filtered = [...activities];
+      
+      if (monthFilter !== "all") {
+        const monthNum = parseInt(monthFilter);
+        filtered = filtered.filter(a => {
+          const d = new Date(a.startDateTime);
+          return d.getMonth() === monthNum;
+        });
+      }
+      
+      if (yearFilter !== "all") {
+        const yearNum = parseInt(yearFilter);
+        filtered = filtered.filter(a => {
+          const d = new Date(a.startDateTime);
+          return d.getFullYear() === yearNum;
+        });
+      }
+      
+      return filtered.sort((a,b) => new Date(a.startDateTime) - new Date(b.startDateTime));
     }
 
     // ====== CALENDAR RENDERING - FIXED AND CENTERED ======
@@ -916,50 +983,64 @@
 
     window.handleDateClick = function(dateStr) {
         selectedDateForDetail = dateStr;
-        renderEventsPanel(dateStr);
+        // Update filter to show all events but highlight the selected date
+        document.getElementById("filterMonth").value = "all";
+        document.getElementById("filterYear").value = "all";
+        renderAllEvents(dateStr);
     };
 
-    function renderEventsPanel(dateStr) {
+    function renderAllEvents(highlightDate) {
         const container = document.getElementById("eventsListContainer");
         const dateDisplay = document.getElementById("selectedDateDisplay");
         
         if (!container) return;
         
-        let events = [];
-        let dateLabel = "Select a date on the calendar";
+        const filtered = getFilteredEvents();
+        const monthFilter = document.getElementById("filterMonth")?.value;
+        const yearFilter = document.getElementById("filterYear")?.value;
         
-        if (dateStr) {
-            events = getEventsForDate(dateStr);
-            const d = new Date(dateStr);
-            dateLabel = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        // Update date display - removed year display
+        let label = "All Events";
+        if (monthFilter !== "all" || yearFilter !== "all") {
+            const parts = [];
+            if (monthFilter !== "all") {
+                const monthNames = ["January", "February", "March", "April", "May", "June", 
+                                   "July", "August", "September", "October", "November", "December"];
+                parts.push(monthNames[parseInt(monthFilter)]);
+            }
+            // Removed year from display
+            label = parts.join(" ");
+            if (!label) label = "All Events";
         }
-        
-        // Update date display
-        if (dateDisplay) {
-            dateDisplay.textContent = dateLabel;
+        if (highlightDate) {
+            const d = new Date(highlightDate);
+            label = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
         }
+        dateDisplay.textContent = label;
         
-        if (!dateStr || events.length === 0) {
+        if (filtered.length === 0) {
             container.innerHTML = `<div class="no-events-selected">
                 <i class="far fa-calendar-alt"></i>
-                ${!dateStr ? 'Click a date on the calendar to view events' : 'No events on this date'}
+                No events found for the selected filter
             </div>`;
             return;
         }
         
-        const sorted = events.sort((a,b) => new Date(a.startDateTime) - new Date(b.startDateTime));
         let html = '';
-        sorted.forEach(ev => {
+        filtered.forEach(ev => {
             const start = new Date(ev.startDateTime);
             const hour = start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            const dateStr = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const isHighlighted = highlightDate && start.toISOString().split("T")[0] === highlightDate;
             
-            html += `<div class="event-card">
+            html += `<div class="event-card" style="${isHighlighted ? 'border-color: #2563eb; background: #eef5ff;' : ''}">
                 <div class="event-time-badge">
                     <span class="hour">${hour}</span>
                 </div>
                 <div class="event-info">
                     <div class="title">${escapeHtml(ev.name)}</div>
                     <div class="location"><i class="fas fa-map-pin" style="font-size:0.5rem;"></i> ${escapeHtml(ev.location || 'Online')}</div>
+                    <span class="event-date-badge">📅 ${dateStr}</span>
                     ${ev.meetingLink && ev.meetingLink.trim() !== "" ? `<a href="${ev.meetingLink}" target="_blank" style="color:#2563eb;font-size:0.6rem;text-decoration:none;">🔗 Join Meeting</a>` : ''}
                     ${ev.type ? `<span class="badge">${escapeHtml(ev.type)}</span>` : ''}
                 </div>
@@ -996,58 +1077,25 @@
       renderVideoGallery();
       initScrollReveal();
       
+      // Filter event listeners
+      document.getElementById("filterMonth")?.addEventListener("change", () => {
+        selectedDateForDetail = null;
+        renderAllEvents();
+      });
+      
+      document.getElementById("filterYear")?.addEventListener("change", () => {
+        selectedDateForDetail = null;
+        renderAllEvents();
+      });
+      
       document.getElementById("prevMonthWidget")?.addEventListener("click", () => { 
         widgetCurrentDate.setMonth(widgetCurrentDate.getMonth() - 1); 
         renderMiniCalendar();
-        // Keep the detail panel showing the same date if possible
-        if (selectedDateForDetail) {
-          const events = getEventsForDate(selectedDateForDetail);
-          if (events.length > 0) {
-            renderEventsPanel(selectedDateForDetail);
-          } else {
-            // Find first date with events in this month
-            const year = widgetCurrentDate.getFullYear();
-            const month = widgetCurrentDate.getMonth();
-            const monthStr = `${year}-${String(month + 1).padStart(2, "0")}`;
-            const dates = activities
-              .map(a => new Date(a.startDateTime).toISOString().split("T")[0])
-              .filter(d => d.startsWith(monthStr))
-              .sort();
-            if (dates.length > 0) {
-              renderEventsPanel(dates[0]);
-            } else {
-              renderEventsPanel(null);
-            }
-          }
-        } else {
-          renderEventsPanel(null);
-        }
       });
       
       document.getElementById("nextMonthWidget")?.addEventListener("click", () => { 
         widgetCurrentDate.setMonth(widgetCurrentDate.getMonth() + 1); 
         renderMiniCalendar();
-        if (selectedDateForDetail) {
-          const events = getEventsForDate(selectedDateForDetail);
-          if (events.length > 0) {
-            renderEventsPanel(selectedDateForDetail);
-          } else {
-            const year = widgetCurrentDate.getFullYear();
-            const month = widgetCurrentDate.getMonth();
-            const monthStr = `${year}-${String(month + 1).padStart(2, "0")}`;
-            const dates = activities
-              .map(a => new Date(a.startDateTime).toISOString().split("T")[0])
-              .filter(d => d.startsWith(monthStr))
-              .sort();
-            if (dates.length > 0) {
-              renderEventsPanel(dates[0]);
-            } else {
-              renderEventsPanel(null);
-            }
-          }
-        } else {
-          renderEventsPanel(null);
-        }
       });
       
       window.onclick = function (e) {
