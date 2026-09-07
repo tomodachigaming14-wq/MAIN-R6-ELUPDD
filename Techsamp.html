@@ -1986,7 +1986,7 @@
     // ============================================
     // CONFIGURATION
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzC4lST4LEKp8HstTrNhCZ-eA2rrlE0xg8u27pxNN0uXy38DBzKc18b1OXB9VEYLo11-Q/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby2wAp3XcCGN33ztHmw5IkJGFEgD932SiJVtAA9K3342e7jI0Ssdj2tgDf_yjZRWOmxoA/exec';
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1ikMuQVy3MBiuK6KuAEGBJ2sod-jlzLwCqsTtenORczg/edit?usp=sharing';
 
     // ============================================
@@ -2367,19 +2367,53 @@
     });
 
     // ============================================
-    // FORMAT DATE HELPER
+    // FORMAT DATE HELPER - FIXED TO SHOW MM/DD/YYYY
     // ============================================
-    function formatDate(dateValue) {
+    function formatDateDisplay(dateValue) {
         if (!dateValue) return '-';
-        if (typeof dateValue === 'string' && dateValue.includes('T')) {
-            return dateValue.split('T')[0];
-        }
-        if (dateValue instanceof Date) {
-            return dateValue.toISOString().split('T')[0];
-        }
-        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        
+        // If it's already in MM/DD/YYYY format, return as is
+        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) {
             return dateValue;
         }
+        
+        // If it's in YYYY-MM-DD format, convert to MM/DD/YYYY
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            const parts = dateValue.split('-');
+            return parts[1] + '/' + parts[2] + '/' + parts[0];
+        }
+        
+        // If it's a string with T (ISO format)
+        if (typeof dateValue === 'string' && dateValue.includes('T')) {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                const year = d.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+        }
+        
+        // If it's a Date object
+        if (dateValue instanceof Date) {
+            const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+            const day = String(dateValue.getDate()).padStart(2, '0');
+            const year = dateValue.getFullYear();
+            return month + '/' + day + '/' + year;
+        }
+        
+        // Try to parse as date
+        try {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                const year = d.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+        } catch (e) {}
+        
+        // If all else fails, return the original
         return dateValue || '-';
     }
 
@@ -2654,7 +2688,8 @@
             columns.forEach(col => {
                 let value = record[col.key] || '-';
                 if (col.key === 'Date Conducted') {
-                    value = formatDate(value);
+                    // Use the new formatDateDisplay function for proper display
+                    value = formatDateDisplay(value);
                 }
 
                 if (isEditing) {
@@ -2681,7 +2716,14 @@
                         });
                         html += `</select></td>`;
                     } else if (col.key === 'Date Conducted') {
-                        html += `<td><input type="date" name="${fieldName}" data-key="${col.key}" value="${value}"></td>`;
+                        // For editing, show as date input with YYYY-MM-DD format
+                        let dateValue = value;
+                        // Convert from MM/DD/YYYY to YYYY-MM-DD for input
+                        if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+                            const parts = value.split('/');
+                            dateValue = parts[2] + '-' + parts[0] + '-' + parts[1];
+                        }
+                        html += `<td><input type="date" name="${fieldName}" data-key="${col.key}" value="${dateValue}"></td>`;
                     } else if (col.key === 'TA Category') {
                         const categories = currentFormType === 'CLUP' ?
                             ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
