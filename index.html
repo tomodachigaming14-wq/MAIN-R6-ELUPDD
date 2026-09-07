@@ -11,12 +11,7 @@
     body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
     @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
-    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
-    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
-    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
     .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
     .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
     header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
@@ -49,11 +44,6 @@
     .innov-text { flex: 1.2; }
     .innov-text h1 { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #0f2b3a, #1e4a76); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 1rem; }
     .innov-text p { font-size: 1rem; color: #2c4c6e; margin-bottom: 1.8rem; max-width: 90%; }
-    .innov-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary { background: #2563eb; color: white; border: none; padding: 0.8rem 1.8rem; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.25s; box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2); }
-    .btn-primary:hover { background: #1d4ed8; transform: translateY(-3px); box-shadow: 0 12px 20px -8px #2563eb70; }
-    .btn-outline { background: transparent; border: 1.5px solid #2563eb; color: #2563eb; padding: 0.8rem 1.8rem; border-radius: 40px; font-weight: 600; transition: 0.2s; cursor: pointer; }
-    .btn-outline:hover { background: #2563eb10; transform: translateY(-2px); }
     .innov-image { flex: 0.8; text-align: center; animation: float 4s ease-in-out infinite; }
     .innov-image img { max-width: 800px; border-radius: 32px; box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1); background: white; padding: 0.8rem; border: 1px solid #eef2ff; }
     .platform-badges { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
@@ -92,42 +82,352 @@
     .video-modal-content iframe { width: 100%; height: 500px; border: none; }
     .close-video-modal { position: absolute; top: -40px; right: 0; background: none; border: none; color: white; font-size: 30px; cursor: pointer; padding: 10px; }
     @media (max-width: 800px) { .video-modal-content iframe { height: 300px; } .play-button-overlay { width: 45px; height: 45px; } .play-button-overlay i { font-size: 20px; } }
-    .calendar-widget { background: white; border-radius: 32px; padding: 1.8rem; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08); border: 1px solid #eef2ff; transition: all 0.2s; }
-    .calendar-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem; }
-    .calendar-header h3 { font-size: 1.3rem; font-weight: 700; color: #1e3a8a; }
-    .calendar-nav { display: flex; align-items: center; gap: 0.5rem; }
-    .calendar-nav button { background: #eef2ff; border: none; border-radius: 30px; padding: 6px 12px; cursor: pointer; font-family: inherit; font-weight: 500; }
-    .calendar-nav button:hover { background: #2563eb; color: white; }
-    .calendar-nav .month-display { font-weight: 600; font-size: 0.9rem; min-width: 100px; text-align: center; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin: 1rem 0; }
-    .calendar-weekday { font-weight: 700; font-size: 0.8rem; text-align: center; padding: 0.5rem 0; background: #f8fcff; border-radius: 20px; }
-    .calendar-day { aspect-ratio: 1; background: #fbfeff; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-weight: 500; cursor: pointer; transition: 0.1s; font-size: 0.85rem; border: 1px solid #eef2ff; }
-    .calendar-day.has-event { background: #2563eb; color: white; box-shadow: 0 2px 8px #2563eb30; transform: scale(0.98); }
-    .calendar-day.today { border: 2px solid #f5b042; background: #fff6e5; }
-    .calendar-legend { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.7rem; color: #475569; }
-    .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 12px; margin-right: 6px; }
+    
+    /* ===== CALENDAR STYLES - FIXED AND CENTERED ===== */
+    .calendar-widget { 
+        background: white; 
+        border-radius: 24px; 
+        padding: 1.5rem; 
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); 
+        border: 1px solid #eef2ff; 
+        width: 100%; 
+    }
+    
+    .calendar-header { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        gap: 0.3rem; 
+        margin-bottom: 0.75rem; 
+    }
+    
+    .calendar-header h3 { 
+        font-size: 1.3rem; 
+        font-weight: 700; 
+        color: #0a2540; 
+        text-align: center; 
+    }
+    
+    .calendar-header h3 i { 
+        color: #2563eb; 
+        margin-right: 8px; 
+    }
+    
+    .calendar-nav { 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 0.75rem; 
+        width: 100%; 
+    }
+    
+    .calendar-nav button { 
+        background: #f1f5f9; 
+        border: none; 
+        border-radius: 50%; 
+        width: 32px; 
+        height: 32px; 
+        cursor: pointer; 
+        font-family: inherit; 
+        font-weight: 600; 
+        font-size: 0.7rem; 
+        transition: 0.2s; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        color: #1e293b; 
+        flex-shrink: 0; 
+    }
+    
+    .calendar-nav button:hover { 
+        background: #2563eb; 
+        color: white; 
+    }
+    
+    .calendar-nav .month-display { 
+        font-weight: 700; 
+        font-size: 1rem; 
+        color: #0a2540; 
+        min-width: 140px; 
+        text-align: center; 
+    }
+    
+    /* CALENDAR GRID - FIXED AND CENTERED */
+    #miniCalendarGrid {
+        display: flex;
+        justify-content: center;
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+    
+    .calendar-grid { 
+        display: grid; 
+        grid-template-columns: repeat(7, 1fr); 
+        gap: 0; 
+        width: 100%;
+        max-width: 100%;
+        border: 1px solid #eef2ff; 
+        border-radius: 8px; 
+        overflow: hidden; 
+    }
+    
+    .calendar-weekday { 
+        font-weight: 600; 
+        font-size: 0.7rem; 
+        text-align: center; 
+        padding: 0.5rem 0; 
+        background: #f8fafc; 
+        border-bottom: 1px solid #eef2ff;
+        border-right: 1px solid #eef2ff;
+    }
+    
+    .calendar-weekday:last-child {
+        border-right: none;
+    }
+    
+    .calendar-day { 
+        height: 65px;
+        min-height: 65px;
+        max-height: 65px;
+        background: #ffffff; 
+        padding: 3px 4px; 
+        border-right: 1px solid #eef2ff;
+        border-bottom: 1px solid #eef2ff;
+        cursor: pointer; 
+        transition: 0.1s; 
+        display: flex; 
+        flex-direction: column; 
+        width: 100%; 
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .calendar-day:nth-child(7n) { border-right: none; }
+    .calendar-day:hover { background: #f0f6ff; }
+    .calendar-day .day-number { 
+        font-weight: 600; 
+        font-size: 0.8rem; 
+        color: #0f2b3a; 
+        line-height: 1.2; 
+        flex-shrink: 0; 
+        text-align: right;
+        padding-right: 2px;
+    }
+    .calendar-day .day-event { 
+        font-size: 0.35rem; 
+        color: #1e40af; 
+        font-weight: 500; 
+        line-height: 1.1; 
+        padding: 1px 3px; 
+        background: #eef5ff; 
+        border-radius: 2px; 
+        margin-bottom: 1px; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        border-left: 2px solid #2563eb; 
+        flex-shrink: 0;
+    }
+    .calendar-day.has-event { background: #f8fcff; }
+    .calendar-day.today { background: #fffbeb; }
+    .calendar-day.today .day-number { color: #b45309; }
+    .calendar-day.other-month { background: #fafafa; }
+    .calendar-day.other-month .day-number { color: #cbd5e1; }
+    .calendar-day.other-month:hover { background: #f0f0f0; }
+    
+    /* Event detail panel */
+    .event-detail-panel { 
+        background: #f8fcff; 
+        border-radius: 12px; 
+        padding: 1rem; 
+        border: 1px solid #eef2ff; 
+        margin-top: 1rem; 
+    }
+    .event-detail-panel h4 { 
+        font-size: 0.9rem; 
+        font-weight: 700; 
+        color: #0a2540; 
+        margin-bottom: 0.5rem; 
+    }
+    .event-detail-item { 
+        display: flex; 
+        gap: 0.8rem; 
+        padding: 0.4rem 0; 
+        border-bottom: 1px solid #eef2ff; 
+        font-size: 0.8rem; 
+    }
+    .event-detail-item:last-child { border-bottom: none; }
+    .event-detail-date { 
+        min-width: 80px; 
+        font-weight: 600; 
+        color: #2563eb; 
+        font-size: 0.7rem; 
+    }
+    .event-detail-name { 
+        font-weight: 600; 
+        color: #1f3a5f; 
+    }
+    .event-detail-location { 
+        font-size: 0.7rem; 
+        color: #64748b; 
+    }
+    .no-events-msg { 
+        color: #94a3b8; 
+        font-size: 0.8rem; 
+        padding: 0.3rem 0; 
+    }
+    .event-time { 
+        font-size: 0.65rem; 
+        color: #2563eb; 
+        font-weight: 500; 
+    }
+    .calendar-legend { 
+        display: flex; 
+        gap: 1rem; 
+        margin-top: 0.5rem; 
+        font-size: 0.7rem; 
+        color: #475569; 
+        justify-content: center; 
+    }
+    .legend-dot { 
+        display: inline-block; 
+        width: 12px; 
+        height: 12px; 
+        border-radius: 12px; 
+        margin-right: 6px; 
+    }
     .legend-dot.event { background: #2563eb; }
     .legend-dot.today { background: #f5b042; }
-    .view-calendar-link { display: inline-block; margin-top: 1rem; color: #2563eb; font-weight: 500; text-decoration: none; font-size: 0.8rem; }
-    .news-section { background: white; border-radius: 32px; padding: 1.5rem; border: 1px solid #eef2ff; height: 100%; box-shadow: 0 10px 25px -12px rgba(0, 0, 0, 0.05); }
-    .news-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
-    .news-header h3 { font-size: 1.3rem; font-weight: 700; }
-    .news-tabs { display: flex; gap: 0.5rem; }
-    .news-tab-btn { background: none; border: none; padding: 0.4rem 1rem; border-radius: 40px; font-weight: 600; font-size: 0.7rem; cursor: pointer; color: #475569; transition: 0.2s; }
-    .news-tab-btn.active { background: #2563eb; color: white; }
-    .news-list { max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.7rem; }
-    .news-card { background: #fafdff; border-radius: 20px; padding: 0.9rem; border: 1px solid #eef2ff; transition: 0.1s; cursor: pointer; display: flex; gap: 1rem; }
-    .news-card:hover { background: #f0f6ff; transform: translateX(6px); }
-    .news-date { min-width: 60px; text-align: center; background: #f1f5f9; border-radius: 16px; padding: 0.3rem; }
-    .news-date .day { font-size: 1.1rem; font-weight: 800; color: #2563eb; }
-    .news-date .month { font-size: 0.7rem; }
-    .news-title { font-weight: 700; font-size: 0.85rem; }
-    .news-desc { font-size: 0.7rem; color: #64748b; }
-    .news-badge { background: #dbeafe; color: #1e40af; font-size: 0.6rem; padding: 0.2rem 0.6rem; border-radius: 30px; display: inline-block; margin-top: 0.3rem; }
+    .view-calendar-link { 
+        display: inline-block; 
+        margin-top: 0.8rem; 
+        color: #2563eb; 
+        font-weight: 500; 
+        text-decoration: none; 
+        font-size: 0.8rem; 
+    }
+
+    /* Right Panel - Events on selected date */
+    .events-panel { 
+        background: white; 
+        border-radius: 24px; 
+        padding: 1.5rem; 
+        border: 1px solid #eef2ff; 
+        height: 100%; 
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06); 
+        display: flex;
+        flex-direction: column;
+    }
+    .events-panel h3 { 
+        font-size: 1.2rem; 
+        font-weight: 700; 
+        color: #0a2540;
+        margin-bottom: 0.75rem;
+    }
+    .events-panel h3 i { 
+        color: #2563eb; 
+        margin-right: 8px; 
+    }
+    .events-panel .selected-date {
+        font-size: 0.85rem;
+        color: #2563eb;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eef2ff;
+    }
+    .events-list-container { 
+        flex: 1;
+        overflow-y: auto; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 0.4rem; 
+        max-height: 340px;
+    }
+    .events-list-container::-webkit-scrollbar { width: 3px; }
+    .events-list-container::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    .event-card { 
+        background: #fafdff; 
+        border-radius: 12px; 
+        padding: 0.6rem; 
+        border: 1px solid #f1f5f9; 
+        transition: 0.1s; 
+        display: flex; 
+        gap: 0.6rem; 
+        align-items: center; 
+    }
+    .event-card:hover { 
+        background: #f0f6ff; 
+        border-color: #2563eb40; 
+        transform: translateX(3px); 
+    }
+    .event-time-badge { 
+        min-width: 60px; 
+        text-align: center; 
+        background: #eef5ff; 
+        border-radius: 10px; 
+        padding: 0.15rem 0.3rem; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        flex-shrink: 0; 
+    }
+    .event-time-badge .hour { 
+        font-size: 0.7rem; 
+        font-weight: 700; 
+        color: #2563eb; 
+        line-height: 1.1; 
+    }
+    .event-time-badge .ampm { 
+        font-size: 0.45rem; 
+        color: #94a3b8; 
+        font-weight: 600; 
+    }
+    .event-info { flex: 1; min-width: 0; }
+    .event-info .title { 
+        font-weight: 700; 
+        font-size: 0.72rem; 
+        color: #0f2b3a; 
+    }
+    .event-info .location { 
+        font-size: 0.58rem; 
+        color: #94a3b8; 
+        margin-top: 1px; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+    }
+    .event-info .badge { 
+        background: #dbeafe; 
+        color: #1e40af; 
+        font-size: 0.45rem; 
+        padding: 0.05rem 0.4rem; 
+        border-radius: 30px; 
+        display: inline-block; 
+        margin-top: 0.1rem; 
+        font-weight: 600; 
+    }
+    .no-events-selected {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        text-align: center;
+        padding: 2rem 0;
+    }
+    .no-events-selected i {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #d1d5db;
+    }
+    
+    /* Footer */
     .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
     .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+    
+    /* Login Modal */
     .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
     .login-modal.active { display: flex; }
     .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
@@ -158,21 +458,26 @@
     .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
     .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
     .user-dropdown-item:hover { background: #f8fafc; }
-    @media (max-width: 800px) { .hero-grid { flex-direction: column; } .calendar-widget { min-width: auto; } .top-bar { flex-direction: column; align-items: stretch; } .header-logo-img span { white-space: normal; font-size: 0.7rem; } .video-gallery-grid { grid-template-columns: 1fr; } .login-modal-brand img { width: 100px; } }
     .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
     .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
-
-    /* Event details below calendar */
-    .event-detail-panel { background: #f8fcff; border-radius: 24px; padding: 1.2rem 1.5rem; border: 1px solid #e2edf7; margin-top: 1.2rem; }
-    .event-detail-panel h4 { font-size: 0.9rem; font-weight: 700; color: #0a2540; margin-bottom: 0.8rem; }
-    .event-detail-item { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #eef2ff; }
-    .event-detail-item:last-child { border-bottom: none; }
-    .event-detail-date { min-width: 80px; font-weight: 600; color: #2563eb; font-size: 0.8rem; }
-    .event-detail-name { font-size: 0.85rem; color: #1f3a5f; font-weight: 600; }
-    .event-detail-location { font-size: 0.75rem; color: #64748b; }
-    .no-events-msg { color: #94a3b8; font-size: 0.85rem; padding: 0.5rem 0; }
-    .event-time { font-size: 0.7rem; color: #2563eb; font-weight: 500; }
-  </style>
+    
+    /* Mobile Responsive */
+    @media (max-width: 800px) { 
+        .hero-grid { flex-direction: column; } 
+        .top-bar { flex-direction: column; align-items: stretch; } 
+        .header-logo-img span { white-space: normal; font-size: 0.7rem; } 
+        .video-gallery-grid { grid-template-columns: 1fr; } 
+        .login-modal-brand img { width: 100px; }
+        .calendar-day { height: 45px; min-height: 45px; max-height: 45px; } 
+        .calendar-day .day-event { font-size: 0.25rem; } 
+        .calendar-header h3 { font-size: 1rem; }
+        .calendar-nav .month-display { font-size: 0.85rem; min-width: 100px; }
+        .calendar-nav button { width: 28px; height: 28px; font-size: 0.6rem; }
+        .calendar-weekday { font-size: 0.55rem; padding: 0.3rem 0; }
+        .calendar-day .day-number { font-size: 0.65rem; }
+        .events-panel { min-height: 200px; }
+    }
+</style>
 </head>
 <body>
   <header>
@@ -214,44 +519,36 @@
         </div>
       </div>
 
-      <!-- Calendar + News (MOVED ABOVE ARTICLES) -->
-      <div class="hero-grid scroll-reveal" style="display:flex; flex-wrap:wrap; gap:2rem; margin:2rem 0">
-        <!-- Calendar Widget with Event Details Below -->
-        <div class="calendar-widget" style="flex:1.2">
+      <!-- Calendar + Events Panel -->
+      <div class="hero-grid scroll-reveal" style="display:flex; flex-wrap:wrap; gap:1.5rem; margin:2rem 0">
+        <!-- Calendar Widget -->
+        <div class="calendar-widget" style="flex:1.2; min-width: 0;">
           <div class="calendar-header">
-            <h3><i class="far fa-calendar-alt"></i> Calendar of Activities</h3>
+            <h3><i class="far fa-calendar-alt"></i> Calendar </h3>
+            <div class="calendar-nav">
+              <button id="prevMonthWidget"><i class="fas fa-chevron-left"></i></button>
+              <span id="currentMonthDisplay" class="month-display"></span>
+              <button id="nextMonthWidget"><i class="fas fa-chevron-right"></i></button>
+            </div>
           </div>
-          <!-- Navigation moved to just above the calendar grid -->
-          <div class="calendar-nav" style="display:flex; justify-content:center; align-items:center; gap:1rem; margin-bottom:0.5rem;">
-            <button id="prevMonthWidget">◀ Prev</button>
-            <span id="currentMonthDisplay" style="font-weight:600; font-size:1rem; min-width:120px; text-align:center;"></span>
-            <button id="nextMonthWidget">Next ▶</button>
-          </div>
-          <div id="miniCalendarGrid" class="calendar-grid"></div>
+          <div id="miniCalendarGrid"></div>
           <div class="calendar-legend">
             <span><span class="legend-dot event"></span> Has Events</span>
             <span><span class="legend-dot today"></span> Today</span>
           </div>
           <a href="calendar.html" class="view-calendar-link">📆 View Full Calendar →</a>
-          
-          <!-- Event Details Panel - BELOW CALENDAR -->
-          <div id="eventDetailPanel" class="event-detail-panel">
-            <h4>📌 Events on selected date</h4>
-            <div id="eventDetailList"><div class="no-events-msg">Click a date with events to see details.</div></div>
-          </div>
         </div>
         
-        <!-- News Section -->
-        <div class="news-section" style="flex:1">
-          <div class="news-header">
-            <h3>📰 News & Activities</h3>
-            <div class="news-tabs">
-              <button class="news-tab-btn active" data-tab="announcements">Announcements</button>
-              <button class="news-tab-btn" data-tab="upcoming">Upcoming Events</button>
-              <button class="news-tab-btn" data-tab="completed">Past Activities</button>
+        <!-- Events on selected date Panel -->
+        <div class="events-panel" style="flex:1">
+          <h3><i class="fas fa-calendar-check"></i> Calendar Events </h3>
+          <div id="selectedDateDisplay" class="selected-date">Select a date on the calendar</div>
+          <div id="eventsListContainer" class="events-list-container">
+            <div class="no-events-selected">
+              <i class="far fa-calendar-alt"></i>
+              Click a date on the calendar to view events
             </div>
           </div>
-          <div id="newsListContainer" class="news-list">Loading...</div>
         </div>
       </div>
 
@@ -274,7 +571,7 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD<br  />
+          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD
         </div>
         <div>
           <strong>Our Social Networks</strong><br />Follow us for updates<br />
@@ -313,7 +610,6 @@
     </div>
   </div>
 
-  <div id="eventModal" class="event-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:20000;"><div class="event-modal-content" style="background:white; border-radius:2rem; max-width:500px; width:90%; padding:2rem; max-height:80vh; overflow-y:auto;"></div></div>
   <div id="videoModal" class="video-modal">
     <div class="video-modal-content">
       <button class="close-video-modal" onclick="closeVideoModal()">&times;</button>
@@ -358,13 +654,13 @@
                 </div></div>
                 <a href="Techsamp.html">Technical Assistance</a>
                 <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
+                <a href="p_monitoring.html">Plan Monitoring</a>
                 <a href="lgu-info.html">LGU Information</a>
                 <a href="report.html">Reports</a>
                 <a href="calendar.html">Calendar of Activities</a>
                 <a href="issuance.html">Issuances</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>`;
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>`;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
@@ -436,13 +732,10 @@
       if (form) form.addEventListener("submit", handleModalLogin);
     });
 
-    // Platform badges click
-    document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll('.badge-pill').forEach(badge => {
-        badge.addEventListener('click', function(e) {
-          const url = this.getAttribute('data-url');
-          if (url) window.open(url, '_blank');
-        });
+    document.querySelectorAll('.badge-pill').forEach(badge => {
+      badge.addEventListener('click', function() {
+        const url = this.getAttribute('data-url');
+        if (url) window.open(url, '_blank');
       });
     });
 
@@ -464,42 +757,44 @@
       container.innerHTML = videoData.map(video => `<div class="video-card"><div class="video-thumbnail" onclick="openVideoModal('${video.videoId}')"><img src="${video.thumbnail}" alt="${escapeHtml(video.title)}" onerror="this.src='https://via.placeholder.com/480x360?text=Video+Thumbnail'"><div class="play-button-overlay"><i class="fab fa-youtube"></i></div></div><div class="video-info"><div class="video-title">${escapeHtml(video.title)}</div><div class="video-source"><i class="fab fa-youtube"></i> ${escapeHtml(video.source)}</div><a href="https://www.youtube.com/watch?v=${video.videoId}" target="_blank" class="watch-on-youtube"><i class="fab fa-youtube"></i> Watch on YouTube →</a></div></div>`).join("");
     }
 
-    // Activities and calendar
+    // ====== ACTIVITIES MANAGEMENT ======
+    const defaultActivities = [
+      { id: 101, name: "CDRA Training for LGU Pavia, Iloilo", type: "Training", startDateTime: "2026-09-14T09:00:00", endDateTime: "2026-09-14T17:00:00", purpose: "CDRA Training", location: "District 21 Hotel, Iloilo City", status: "upcoming", meetingLink: "" },
+      { id: 102, name: "Zoning Ordinance Review", type: "Meeting", startDateTime: "2026-09-15T10:00:00", endDateTime: "2026-09-15T16:00:00", purpose: "ZO amendments review", location: "Zoom Meeting", status: "upcoming", meetingLink: "https://zoom.us/j/123456789" },
+      { id: 103, name: "Regional Planning Session", type: "Workshop", startDateTime: "2026-09-16T08:30:00", endDateTime: "2026-09-16T12:00:00", purpose: "Regional planning and coordination", location: "Conference Room B", status: "upcoming", meetingLink: "" },
+      { id: 104, name: "LGU Consultation Meeting", type: "Meeting", startDateTime: "2026-09-22T13:00:00", endDateTime: "2026-09-22T15:00:00", purpose: "Consultation with LGUs", location: "Online via Google Meet", status: "upcoming", meetingLink: "https://meet.google.com/abc-defg" },
+      { id: 105, name: "CLUP Workshop for LGUs", type: "Workshop", startDateTime: "2026-09-07T09:00:00", endDateTime: "2026-09-07T17:00:00", purpose: "CLUP Formulation Workshop", location: "DHSUD Regional Office", status: "upcoming", meetingLink: "" }
+    ];
+
     function loadActivities() {
       const stored = localStorage.getItem("calendarActivities");
       if (stored) {
         activities = JSON.parse(stored);
       } else {
-        // Seed events for July 2026 as per the calendar image
-        activities = [
-          { id: 101, name: "CDRA Training for LGU Pavia, Iloilo", type: "Training", startDateTime: "2026-07-14T09:00:00", endDateTime: "2026-07-14T17:00:00", purpose: "CDRA Training", location: "District 21 Hotel, Iloilo City", status: "upcoming", meetingLink: "" },
-          { id: 102, name: "Zoning Ordinance Review", type: "Meeting", startDateTime: "2026-07-15T10:00:00", endDateTime: "2026-07-15T16:00:00", purpose: "ZO amendments review", location: "Zoom Meeting", status: "upcoming", meetingLink: "https://zoom.us/j/123456789" },
-          { id: 103, name: "Regional Planning Session", type: "Workshop", startDateTime: "2026-07-16T08:30:00", endDateTime: "2026-07-16T12:00:00", purpose: "Regional planning and coordination", location: "Conference Room B", status: "upcoming", meetingLink: "" },
-          { id: 104, name: "LGU Consultation Meeting", type: "Meeting", startDateTime: "2026-07-22T13:00:00", endDateTime: "2026-07-22T15:00:00", purpose: "Consultation with LGUs", location: "Online via Google Meet", status: "upcoming", meetingLink: "https://meet.google.com/abc-defg" }
-        ];
+        activities = JSON.parse(JSON.stringify(defaultActivities));
         localStorage.setItem("calendarActivities", JSON.stringify(activities));
       }
-      // Update status based on current date
       const now = new Date();
       activities.forEach((a) => {
         const end = new Date(a.endDateTime);
         a.status = end < now ? "completed" : "upcoming";
       });
       renderMiniCalendar();
-      renderNewsAndActivities();
+      renderEventsPanel();
+      
       // Show today's events or first available
       const today = new Date().toISOString().split("T")[0];
       const todayEvents = getEventsForDate(today);
       if (todayEvents.length > 0) {
-        updateEventDetailPanel(today);
+        handleDateClick(today);
       } else {
         // Find first date with events
         const allDates = activities.map(a => new Date(a.startDateTime).toISOString().split("T")[0]);
         const uniqueDates = [...new Set(allDates)].sort();
         if (uniqueDates.length > 0) {
-          updateEventDetailPanel(uniqueDates[0]);
+          handleDateClick(uniqueDates[0]);
         } else {
-          updateEventDetailPanel(null);
+          renderEventsPanel();
         }
       }
     }
@@ -512,112 +807,150 @@
       });
     }
 
+    // ====== CALENDAR RENDERING - FIXED AND CENTERED ======
     function renderMiniCalendar() {
-      const year = widgetCurrentDate.getFullYear(), month = widgetCurrentDate.getMonth();
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const today = new Date().toISOString().split("T")[0];
-      const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-      let html = `<div class="calendar-grid">`;
-      weekdays.forEach((day) => (html += `<div class="calendar-weekday">${day}</div>`));
-      let dayCount = 1;
-      for (let i = 0; i < 42; i++) {
-        if (i < firstDay || dayCount > daysInMonth) {
-          html += `<div class="calendar-day"></div>`;
-          if (i >= firstDay) dayCount++;
-        } else {
-          const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(dayCount).padStart(2, "0")}`;
-          const hasEvent = getEventsForDate(dateStr).length > 0;
-          const isToday = dateStr === today;
-          let cls = "calendar-day";
-          if (hasEvent) cls += " has-event";
-          if (isToday) cls += " today";
-          html += `<div class="${cls}" onclick="handleDateClick('${dateStr}')"><span>${dayCount}</span></div>`;
-          dayCount++;
+        const year = widgetCurrentDate.getFullYear();
+        const month = widgetCurrentDate.getMonth();
+        
+        // Get first day of month (0=Sunday, 1=Monday, etc.)
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+        
+        const today = new Date();
+        const todayStr = today.toISOString().split("T")[0];
+        
+        const monthNames = ["January", "February", "March", "April", "May", "June", 
+                            "July", "August", "September", "October", "November", "December"];
+        const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+        
+        // Build the calendar grid
+        let html = `<div class="calendar-grid">`;
+        
+        // Weekday headers
+        weekdays.forEach(day => {
+            html += `<div class="calendar-weekday">${day}</div>`;
+        });
+        
+        // Build array of days
+        let days = [];
+        
+        // Previous month days
+        const prevMonth = month === 0 ? 11 : month - 1;
+        const prevMonthYear = month === 0 ? year - 1 : year;
+        
+        for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+            const day = daysInPrevMonth - i;
+            const dateStr = `${prevMonthYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            days.push({ day: day, isCurrentMonth: false, date: dateStr });
         }
-      }
-      html += `</div>`;
-      document.getElementById("miniCalendarGrid").innerHTML = html;
-      const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-      document.getElementById("currentMonthDisplay").innerText = `${monthNames[month]} ${year}`;
+        
+        // Current month days
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            days.push({ day: d, isCurrentMonth: true, date: dateStr });
+        }
+        
+        // Next month days
+        const nextMonth = month === 11 ? 0 : month + 1;
+        const nextMonthYear = month === 11 ? year + 1 : year;
+        const remaining = 42 - days.length;
+        
+        for (let d = 1; d <= remaining; d++) {
+            const dateStr = `${nextMonthYear}-${String(nextMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            days.push({ day: d, isCurrentMonth: false, date: dateStr });
+        }
+        
+        // Render each day
+        days.forEach((dayInfo) => {
+            const dateStr = dayInfo.date;
+            const events = getEventsForDate(dateStr);
+            const hasEvent = events.length > 0;
+            const isToday = dateStr === todayStr;
+            
+            let cls = "calendar-day";
+            if (!dayInfo.isCurrentMonth) cls += " other-month";
+            if (hasEvent) cls += " has-event";
+            if (isToday) cls += " today";
+            
+            let eventHtml = '';
+            if (hasEvent) {
+                const displayEvents = events.slice(0, 2);
+                displayEvents.forEach((ev) => {
+                    const shortName = ev.name.length > 10 ? ev.name.substring(0, 10) + '…' : ev.name;
+                    eventHtml += `<div class="day-event">${escapeHtml(shortName)}</div>`;
+                });
+                if (events.length > 2) {
+                    eventHtml += `<div class="day-event" style="font-size:0.3rem;color:#94a3b8;background:transparent;border-left-color:#94a3b8;">+${events.length - 2} more</div>`;
+                }
+            }
+            
+            html += `<div class="${cls}" onclick="handleDateClick('${dateStr}')">
+                <div class="day-number">${dayInfo.day}</div>
+                ${eventHtml}
+            </div>`;
+        });
+        
+        html += `</div>`;
+        
+        document.getElementById("miniCalendarGrid").innerHTML = html;
+        document.getElementById("currentMonthDisplay").innerText = `${monthNames[month]} ${year}`;
     }
 
     window.handleDateClick = function(dateStr) {
-      selectedDateForDetail = dateStr;
-      updateEventDetailPanel(dateStr);
+        selectedDateForDetail = dateStr;
+        renderEventsPanel(dateStr);
     };
 
-    function updateEventDetailPanel(dateStr) {
-      const container = document.getElementById("eventDetailList");
-      if (!container) return;
-      let events = [];
-      if (dateStr) {
-        events = getEventsForDate(dateStr);
-      }
-      if (events.length === 0) {
-        container.innerHTML = `<div class="no-events-msg">${dateStr ? 'No events on this date.' : 'Click a date with events to see details.'}</div>`;
-        return;
-      }
-      const sorted = events.sort((a,b) => new Date(a.startDateTime) - new Date(b.startDateTime));
-      let html = '';
-      sorted.forEach(ev => {
-        const start = new Date(ev.startDateTime);
-        const dateLabel = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        const timeLabel = start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-        html += `<div class="event-detail-item">
-          <div class="event-detail-date">${dateLabel}<br><span class="event-time">${timeLabel}</span></div>
-          <div><div class="event-detail-name">${escapeHtml(ev.name)}</div>
-          <div class="event-detail-location"><i class="fas fa-map-pin" style="font-size:0.6rem;"></i> ${escapeHtml(ev.location || 'Online')} ${ev.meetingLink && ev.meetingLink.trim() !== "" ? `<a href="${ev.meetingLink}" target="_blank" style="color:#2563eb;font-size:0.7rem;">🔗 Join</a>` : ''}</div>
-          </div>
-        </div>`;
-      });
-      container.innerHTML = html;
-    }
-
-    // News
-    const announcements = [
-      { id: 1, title: "MC 2025-018 Released", description: "New guidelines for CLUP formulation.", date: "2026-05-01", category: "announcement", badge: "Policy" },
-      { id: 2, title: "Online Portal Launch", description: "Integrated CLUP/ZO system live.", date: "2026-04-28", category: "announcement", badge: "System" },
-      { id: 3, title: "Regional Planning Workshop", description: "All LGUs invited.", date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10), category: "announcement", badge: "Event" }
-    ];
-    function getUpcomingEvents() { return activities.filter((a) => a.status === "upcoming").map((a) => ({ id: a.id, title: a.name, description: a.purpose, date: a.startDateTime, category: "event", badge: a.type })); }
-    function getPastActivities() { return activities.filter((a) => a.status === "completed").slice(0,5).map((a) => ({ id: a.id, title: a.name, description: a.purpose, date: a.startDateTime, category: "past", badge: a.type })); }
-    function formatNewsDate(dateStr) { const d = new Date(dateStr); if (isNaN(d)) return { day: "--", month: "--" }; return { day: d.getDate().toString(), month: d.toLocaleString("en", { month: "short" }) }; }
-    function renderNewsAndActivities() {
-      let items = [];
-      const currentNewsTab = document.querySelector(".news-tab-btn.active")?.getAttribute("data-tab") || "announcements";
-      if (currentNewsTab === "announcements") items = announcements.map((a) => ({ ...a, formattedDate: formatNewsDate(a.date) }));
-      else if (currentNewsTab === "upcoming") items = getUpcomingEvents().map((e) => ({ ...e, formattedDate: formatNewsDate(e.date) }));
-      else items = getPastActivities().map((e) => ({ ...e, formattedDate: formatNewsDate(e.date) }));
-      const container = document.getElementById("newsListContainer");
-      if (!items.length) { container.innerHTML = "<div>No items.</div>"; return; }
-      container.innerHTML = items.map((item) => `<div class="news-card" onclick="handleNewsClick('${item.category}', ${item.id})"><div class="news-date"><div class="day">${item.formattedDate.day}</div><div class="month">${item.formattedDate.month}</div></div><div><div class="news-title">${escapeHtml(item.title)}</div><div class="news-desc">${escapeHtml(item.description?.substring(0,80) || "")}</div>${item.badge ? `<span class="news-badge">${escapeHtml(item.badge)}</span>` : ""}</div></div>`).join("");
-    }
-    window.handleNewsClick = function (category, id) {
-      if (category === "announcement") {
-        const a = announcements.find((a) => a.id === id);
-        if (a) alert("📢 " + a.title + "\n" + a.description);
-      } else {
-        const ev = activities.find((a) => a.id === id);
-        if (ev) {
-          const d = new Date(ev.startDateTime).toISOString().split("T")[0];
-          handleDateClick(d);
-          // switch to upcoming tab to show context
-          document.querySelectorAll(".news-tab-btn").forEach(b => b.classList.remove("active"));
-          document.querySelector(".news-tab-btn[data-tab='upcoming']")?.classList.add("active");
-          renderNewsAndActivities();
+    function renderEventsPanel(dateStr) {
+        const container = document.getElementById("eventsListContainer");
+        const dateDisplay = document.getElementById("selectedDateDisplay");
+        
+        if (!container) return;
+        
+        let events = [];
+        let dateLabel = "Select a date on the calendar";
+        
+        if (dateStr) {
+            events = getEventsForDate(dateStr);
+            const d = new Date(dateStr);
+            dateLabel = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
         }
-      }
-    };
-    function setupNewsTabs() {
-      document.querySelectorAll(".news-tab-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".news-tab-btn").forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          renderNewsAndActivities();
+        
+        // Update date display
+        if (dateDisplay) {
+            dateDisplay.textContent = dateLabel;
+        }
+        
+        if (!dateStr || events.length === 0) {
+            container.innerHTML = `<div class="no-events-selected">
+                <i class="far fa-calendar-alt"></i>
+                ${!dateStr ? 'Click a date on the calendar to view events' : 'No events on this date'}
+            </div>`;
+            return;
+        }
+        
+        const sorted = events.sort((a,b) => new Date(a.startDateTime) - new Date(b.startDateTime));
+        let html = '';
+        sorted.forEach(ev => {
+            const start = new Date(ev.startDateTime);
+            const hour = start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            html += `<div class="event-card">
+                <div class="event-time-badge">
+                    <span class="hour">${hour}</span>
+                </div>
+                <div class="event-info">
+                    <div class="title">${escapeHtml(ev.name)}</div>
+                    <div class="location"><i class="fas fa-map-pin" style="font-size:0.5rem;"></i> ${escapeHtml(ev.location || 'Online')}</div>
+                    ${ev.meetingLink && ev.meetingLink.trim() !== "" ? `<a href="${ev.meetingLink}" target="_blank" style="color:#2563eb;font-size:0.6rem;text-decoration:none;">🔗 Join Meeting</a>` : ''}
+                    ${ev.type ? `<span class="badge">${escapeHtml(ev.type)}</span>` : ''}
+                </div>
+            </div>`;
         });
-      });
+        container.innerHTML = html;
     }
+
     function setupArticles() {
       const articles = [
         { title: "GeoAnalyticsPH Beta Testing: Shaping the Future of Land Use Planning", date: "November 25, 2024", desc: "DOST-PHIVOLCS in collaboration with DHSUD..." },
@@ -627,6 +960,7 @@
       const grid = document.getElementById("articlesGrid");
       grid.innerHTML = articles.map((a) => `<div class="article-card" onclick="alert('Read more: ${a.title}')"><div class="article-date">${a.date}</div><div class="article-title">${a.title}</div><div class="article-desc">${a.desc}</div><div class="view-link">Read More →</div></div>`).join("");
     }
+
     function initScrollReveal() {
       const revealElements = document.querySelectorAll('.scroll-reveal');
       const observer = new IntersectionObserver((entries) => {
@@ -635,25 +969,24 @@
       revealElements.forEach(el => observer.observe(el));
     }
 
+    // ====== INIT ======
     function init() {
       checkSession();
       renderMainNavigation();
       renderUserMenu();
       loadActivities();
-      setupNewsTabs();
       setupArticles();
       renderVideoGallery();
       initScrollReveal();
       
-      // Calendar navigation
       document.getElementById("prevMonthWidget")?.addEventListener("click", () => { 
         widgetCurrentDate.setMonth(widgetCurrentDate.getMonth() - 1); 
-        renderMiniCalendar(); 
-        // Keep the detail panel showing the same date if possible, or find first event
+        renderMiniCalendar();
+        // Keep the detail panel showing the same date if possible
         if (selectedDateForDetail) {
           const events = getEventsForDate(selectedDateForDetail);
           if (events.length > 0) {
-            updateEventDetailPanel(selectedDateForDetail);
+            renderEventsPanel(selectedDateForDetail);
           } else {
             // Find first date with events in this month
             const year = widgetCurrentDate.getFullYear();
@@ -664,26 +997,24 @@
               .filter(d => d.startsWith(monthStr))
               .sort();
             if (dates.length > 0) {
-              updateEventDetailPanel(dates[0]);
+              renderEventsPanel(dates[0]);
             } else {
-              updateEventDetailPanel(null);
+              renderEventsPanel(null);
             }
           }
         } else {
-          updateEventDetailPanel(null);
+          renderEventsPanel(null);
         }
       });
       
       document.getElementById("nextMonthWidget")?.addEventListener("click", () => { 
         widgetCurrentDate.setMonth(widgetCurrentDate.getMonth() + 1); 
         renderMiniCalendar();
-        // Keep the detail panel showing the same date if possible, or find first event
         if (selectedDateForDetail) {
           const events = getEventsForDate(selectedDateForDetail);
           if (events.length > 0) {
-            updateEventDetailPanel(selectedDateForDetail);
+            renderEventsPanel(selectedDateForDetail);
           } else {
-            // Find first date with events in this month
             const year = widgetCurrentDate.getFullYear();
             const month = widgetCurrentDate.getMonth();
             const monthStr = `${year}-${String(month + 1).padStart(2, "0")}`;
@@ -692,21 +1023,19 @@
               .filter(d => d.startsWith(monthStr))
               .sort();
             if (dates.length > 0) {
-              updateEventDetailPanel(dates[0]);
+              renderEventsPanel(dates[0]);
             } else {
-              updateEventDetailPanel(null);
+              renderEventsPanel(null);
             }
           }
         } else {
-          updateEventDetailPanel(null);
+          renderEventsPanel(null);
         }
       });
       
       window.onclick = function (e) {
         const modal = document.getElementById("loginModal");
         if (e.target === modal) closeLoginModal();
-        const eventModal = document.getElementById("eventModal");
-        if (e.target === eventModal) eventModal.style.display = "none";
         const videoModal = document.getElementById("videoModal");
         if (e.target === videoModal) closeVideoModal();
       };
