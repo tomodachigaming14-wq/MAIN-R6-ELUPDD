@@ -5117,431 +5117,433 @@ label[for="lguSelect"] {
         }
 
         function printOfficialRecord(id) {
-            console.log("🖨️ printOfficialRecord called with ID:", id);
-            const rec = zoningCertifications.find((r) => {
-                return String(r.id) === String(id) || String(r.certificationNo) === String(id);
-            });
-            if (!rec) {
-                showToast("Record not found", "error");
-                return;
-            }
-            console.log("✅ Printing record:", rec.certificationNo);
-            console.log("📋 Record city:", rec.city);
-            console.log("📋 Record province:", rec.province);
-            console.log("📋 Record purpose:", rec.purpose);
-            let clupData = getClupDataForCity(rec.city, rec.province);
-            let finalCity = rec.city || "__________";
-            let finalProvince = rec.province || "__________";
-            const finalApprovedBy = clupData?.Approved_By || rec.approvedBy || "Sangguniang Panlalawigan";
-            const finalCircularNo = clupData?.Latest_Plan_Res || rec.circularNo || "__________";
-            const finalApprovalDate = clupData?.Latest_Date_of_Approval || rec.approvalDate || "";
-            const cityLower = finalCity.toLowerCase();
-            const provinceLower = finalProvince.toLowerCase();
-            if (cityLower === "iloilo city" ||
-                cityLower === "iloilo" ||
-                cityLower.includes("iloilo city district") ||
-                cityLower.includes("iloilo city") ||
-                (cityLower.includes("iloilo") && cityLower.includes("district"))) {
-                finalCity = "Iloilo City";
-                finalProvince = "";
-            }
-            console.log("📋 Final City:", finalCity);
-            console.log("📋 Final Province:", finalProvince);
-            console.log("📋 CLUP Data used - Circular No:", finalCircularNo);
-            console.log("📋 CLUP Data used - Approval Date:", finalApprovalDate);
-            console.log("📋 CLUP Data used - Approved By:", finalApprovedBy);
+    console.log("🖨️ printOfficialRecord called with ID:", id);
+    const rec = zoningCertifications.find((r) => {
+        return String(r.id) === String(id) || String(r.certificationNo) === String(id);
+    });
+    if (!rec) {
+        showToast("Record not found", "error");
+        return;
+    }
+    console.log("✅ Printing record:", rec.certificationNo);
+    console.log("📋 Record city:", rec.city);
+    console.log("📋 Record province:", rec.province);
+    console.log("📋 Record purpose:", rec.purpose);
+    let clupData = getClupDataForCity(rec.city, rec.province);
+    let finalCity = rec.city || "__________";
+    let finalProvince = rec.province || "__________";
+    const finalApprovedBy = clupData?.Approved_By || rec.approvedBy || "Sangguniang Panlalawigan";
+    const finalCircularNo = clupData?.Latest_Plan_Res || rec.circularNo || "__________";
+    const finalApprovalDate = clupData?.Latest_Date_of_Approval || rec.approvalDate || "";
+    const cityLower = finalCity.toLowerCase();
+    const provinceLower = finalProvince.toLowerCase();
+    if (cityLower === "iloilo city" ||
+        cityLower === "iloilo" ||
+        cityLower.includes("iloilo city district") ||
+        cityLower.includes("iloilo city") ||
+        (cityLower.includes("iloilo") && cityLower.includes("district"))) {
+        finalCity = "Iloilo City";
+        finalProvince = "";
+    }
+    console.log("📋 Final City:", finalCity);
+    console.log("📋 Final Province:", finalProvince);
+    console.log("📋 CLUP Data used - Circular No:", finalCircularNo);
+    console.log("📋 CLUP Data used - Approval Date:", finalApprovalDate);
+    console.log("📋 CLUP Data used - Approved By:", finalApprovedBy);
 
-            function formatDateForDisplay(dateStr) {
-                if (!dateStr) return "_________";
-                try {
-                    let d = new Date(dateStr);
-                    if (!isNaN(d.getTime())) {
-                        return d.toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric"
-                        });
-                    }
-                } catch (e) {}
-                return dateStr;
+    function formatDateForDisplay(dateStr) {
+        if (!dateStr) return "_________";
+        try {
+            let d = new Date(dateStr);
+            if (!isNaN(d.getTime())) {
+                return d.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                });
             }
-            const formatMonthDayYear = (dateStr) => {
-                if (!dateStr) return "_________";
-                try {
-                    let d = new Date(dateStr);
-                    if (isNaN(d.getTime())) return dateStr;
-                    return d.toLocaleDateString("en-PH", { month: "long", day: "numeric", year: "numeric" });
-                } catch (e) {
-                    return dateStr;
-                }
-            };
-            const formatOrdinalDateLong = (dateStr) => {
-                if (!dateStr) return "_________";
-                try {
-                    let d = new Date(dateStr);
-                    if (isNaN(d.getTime())) return dateStr;
-                    let day = d.getDate();
-                    let suffix = ["th", "st", "nd", "rd"][day % 10 > 3 || Math.floor((day % 100) / 10) == 1 ? 0 : day % 10];
-                    return `${day}${suffix} day of ${d.toLocaleDateString("en-PH", { month: "long", year: "numeric" })}`;
-                } catch (e) {
-                    return dateStr;
-                }
-            };
-            let printedByName = "ADMIN";
-            let printedDate = new Date().toLocaleString('en-US', {
-                month: '2-digit',
-                day: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-            if (currentUser && currentUser.fullName) {
-                const nameParts = currentUser.fullName.split(' ');
-                if (nameParts.length >= 2) {
-                    printedByName = (nameParts[0].charAt(0) + nameParts[1].charAt(0)).toUpperCase();
-                } else {
-                    printedByName = currentUser.fullName.substring(0, 2).toUpperCase();
-                }
-            }
-            const certNo = rec.certificationNo || "SZC-_______";
-            const series = rec.series || "2002";
-            const parcels = rec.parcels || "____________________";
-            const location = rec.location || "____________________";
-            const totalAreaVal = parseFloat(rec.totalArea) || 0;
-            const proposedUse = rec.proposedUse && rec.proposedUse.trim() !== "" ? rec.proposedUse : "";
-            const requestedBy = rec.requestedBy || "____________________";
-            const amountPaid = rec.amountPaid ? formatCurrency(rec.amountPaid) : "0.00";
-            const orNo = rec.orNo || "_________";
-            const orDateRaw = rec.orDate || rec.dateIssued;
-            let landRowsHtml = "";
-            let totalAreaSum = 0;
-            const holdings = Array.isArray(rec.landHoldings) && rec.landHoldings.length ?
-                rec.landHoldings :
-                [{ registeredOwner: "______________________", lotNo: "______________", tctNo: "______________________", areaPerTitle: totalAreaVal, zoneclass: rec.proposedUse || "______________________" }];
-            holdings.forEach((h) => {
-                let a = parseFloat(h.areaPerTitle) || 0;
-                totalAreaSum += a;
-                landRowsHtml += `<tr>
-                        <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.registeredOwner || "______________________")}</td>
-                        <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.lotNo || "______________")}</td>
-                        <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.tctNo || "______________________")}</td>
-                        <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-align:right; text-decoration:none;">${a.toFixed(4)}</td>
-                        <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none; border-bottom:none;">&nbsp;</td>
-                        <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.zoneclass || "______________________")}</td>
-                      <tr>`;
-            });
-            landRowsHtml += `<tr style="background:#f2f2f2;">
-                    <td style="border:1px solid #000000; padding:8px; font-weight:bold; font-size:11pt; text-decoration:none;">Total</td>
-                    <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
-                    <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
-                    <td style="border:1px solid #000000; padding:8px; text-align:right; font-weight:bold; text-decoration:none;">${totalAreaSum.toFixed(4)}</td>
-                    <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
-                    <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
-                  </tr>`;
-            let approvalDateFormatted = "_________";
-            if (finalApprovalDate && finalApprovalDate !== "") {
-                approvalDateFormatted = formatDateForDisplay(finalApprovalDate);
-                console.log("✅ Formatted approval date for print:", approvalDateFormatted);
-            } else {
-                console.warn("⚠️ No approval date found");
-                if (finalCity.toLowerCase().includes("iloilo city") || finalProvince === "Iloilo City") {
-                    approvalDateFormatted = "May 12, 2022";
-                }
-            }
-            console.log("📅 Final approval date for print:", approvalDateFormatted);
-            console.log("📋 Final Circular No for print:", finalCircularNo);
-            const clupStatus = rec.clupStatus || "approved";
-            const check1 = clupStatus === "approved" ? "[✓]" : "[ ]";
-            const check2 = clupStatus === "pending" ? "[✓]" : "[ ]";
-            const check3 = clupStatus === "none" ? "[✓]" : "[ ]";
-            const isCity = finalCity.toLowerCase().includes("city");
-            const lguTerm = isCity ? "city" : "municipality";
-            let locationDisplay = escapeHtml(finalCity);
-            if (finalProvince && finalProvince !== "" && finalProvince !== "__________") {
-                locationDisplay += `, ${escapeHtml(finalProvince)}`;
-            }
-            const showConversionText = rec.purpose !== "Conversion" &&
-                (rec.purpose && rec.purpose.toLowerCase().trim() !== "conversion");
-            console.log("🔍 Purpose:", rec.purpose);
-            console.log("🔍 showConversionText:", showConversionText);
-            const statusHtml = `
-                    <div style="margin-bottom: 35px;">
-                        <p style="margin:0 0 8px 0; font-size:12pt; font-weight:bold;">1. ${check1} WITH APPROVED CLUP/ZO</p>
-                        <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:0; margin-bottom: 15px; line-height:1.5;">
-                            THIS IS TO CERTIFY that the above-described landholdings is/are zoned for use/s specified in the above table per <strong>approved Comprehensive Land Use Plan/Zoning Ordinance of ${locationDisplay}</strong>, as <strong>approved by the ${escapeHtml(finalApprovedBy)} through ${escapeHtml(finalCircularNo)} dated ${approvalDateFormatted}</strong> in accordance with pertinent issuances;
-                        </p>
-                        <p style="margin-left:0.6cm; text-indent:0.5cm; font-size:12pt; margin-top:5px; margin-bottom:5px; line-height:1.5;">
-                            Further, the proposed conversion:
-                        </p>
-                        <p style="margin-left:1.2cm; font-size:12pt; margin-top:2px; margin-bottom:2px;">
-                            [ ] Conforms/is compatible with the approved land use plan and/or Zoning Ordinance.
-                        </p>
-                        <p style="margin-left:1.2cm; font-size:12pt; margin-top:0; margin-bottom:15px;">
-                            [ ] Does not conform/is not compatible with the approved land use plan and/or Zoning Ordinance.
-                        </p>
-                        ${showConversionText ? `
-                    <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:5px; margin-bottom:0; line-height:1.5;">
-                        Per record of this office, the city/municipality of <strong>${escapeHtml(finalCity)}</strong> has a total zoned agricultural land of <strong>__________</strong> hectares of which <strong>__________</strong> hectares have been reclassified since <strong>__________</strong>, as approved by the DHSUD/SP per DHSUD/SP Resolution No. <strong>__________</strong> dated <strong>__________</strong>.
-                    </p>
-                        ` : '<!-- CONVERSION NOT SELECTED - TEXT HIDDEN -->'}
-                    </div>
-                    <div style="margin-bottom: 35px">
-                        <p style="margin: 0 0 8px 0; font-size: 12pt; font-weight: bold">
-                            2. ${check2} WITH CLUP/ZO PENDING APPROVAL BY DHSUD/SP
-                        </p>
-                        <p
-                            style="
-                                margin-left: 0.6cm;
-                                text-indent: 1.5cm;
-                                text-align: justify;
-                                font-size: 12pt;
-                                margin-top: 0;
-                                margin-bottom: 12px;
-                                line-height: 1.5;
-                            "
-                        >
-                            THIS IS TO CERTIFY that the above described property lies/is located within the area zoned for
-                            <strong>__________</strong> use per Comprehensive Land Use Plan/Zoning Ordinance No.
-                            <strong>__________</strong> dated <strong>__________</strong> submitted to DHSUD/SP for approval on
-                            <strong>__________</strong> and same remains pending to date.
-                        </p>
-                        <p
-                            style="
-                                margin-left: 0.6cm;
-                                text-indent: 1.5cm;
-                                text-align: justify;
-                                font-size: 12pt;
-                                margin-top: 0;
-                                margin-bottom: 0;
-                                line-height: 1.5;
-                            "
-                        >
-                            THIS IS TO CERTIFY FURTHER that per record of this office - said ${lguTerm} of <strong>__________</strong> will
-                            have a total zoned agricultural land of <strong>__________</strong> hectares.
-                        </p>
-                    </div>
-                    <div style="margin-bottom: 20px">
-                        <p style="margin: 0 0 8px 0; font-size: 12pt; font-weight: bold">3. ${check3} WITHOUT CLUP/ZO</p>
-                        <p
-                            style="
-                                margin-left: 0.6cm;
-                                text-indent: 1.5cm;
-                                text-align: justify;
-                                font-size: 12pt;
-                                margin-top: 0;
-                                margin-bottom: 0;
-                                line-height: 1.5;
-                            "
-                        >
-                            THIS IS TO CERTIFY that the ${lguTerm} of <strong>__________</strong> has not submitted its Comprehensive Land
-                            Use Plan/Zoning Ordinance to this Office.
-                        </p>
-                    </div>
-                `;
-            const formattedDateIssued = formatOrdinalDateLong(rec.dateIssued);
-            const orDateFormatted = formatMonthDayYear(orDateRaw);
-            const printHtml = `<!DOCTYPE html>
-                    <html>
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>Zoning Certification - ${escapeHtml(certNo)}</title>
-                        <style>
-                            :root {
-                                --printed-by: "${printedByName}";
-                                --printed-date: "${printedDate}";
-                            }
-                            * { margin: 0; padding: 0; box-sizing: border-box; }
-                            @page {
-                                size: A4;
-                                margin-top: 0.8in;
-                                margin-bottom: 0.8in;
-                                margin-left: 1in;
-                                margin-right: 0.7in;
-                            }
-                            @page {
-                                @bottom-right {
-                                    content: "Page " counter(page) " of " counter(pages);
-                                    font-size: 7pt;
-                                    font-family: 'Times New Roman', Times, serif;
-                                    color: #333;
-                                    margin-right: 0.1in;
-                                    margin-bottom: 0.05in;
-                                }
-                                @bottom-left {
-                                    content: "Printed by : " var(--printed-by) " " var(--printed-date);
-                                    font-size: 7pt;
-                                    font-family: 'Times New Roman', Times, serif;
-                                    color: #999;
-                                    opacity: 0.7;
-                                    white-space: pre-wrap;
-                                    text-align: left;
-                                    margin-left: 0.1in;
-                                    margin-bottom: 0.05in;
-                                    line-height: 1.3;
-                                }
-                            }
-                            body {
+        } catch (e) {}
+        return dateStr;
+    }
+    const formatMonthDayYear = (dateStr) => {
+        if (!dateStr) return "_________";
+        try {
+            let d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString("en-PH", { month: "long", day: "numeric", year: "numeric" });
+        } catch (e) {
+            return dateStr;
+        }
+    };
+    const formatOrdinalDateLong = (dateStr) => {
+        if (!dateStr) return "8th day of September 2026"; // Default fallback
+        try {
+            let d = new Date(dateStr);
+            if (isNaN(d.getTime())) return "8th day of September 2026";
+            let day = d.getDate();
+            let suffix = ["th", "st", "nd", "rd"][day % 10 > 3 || Math.floor((day % 100) / 10) == 1 ? 0 : day % 10];
+            return `${day}${suffix} day of ${d.toLocaleDateString("en-PH", { month: "long", year: "numeric" })}`;
+        } catch (e) {
+            return "8th day of September 2026";
+        }
+    };
+    let printedByName = "ADMIN";
+    let printedDate = new Date().toLocaleString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+    if (currentUser && currentUser.fullName) {
+        const nameParts = currentUser.fullName.split(' ');
+        if (nameParts.length >= 2) {
+            printedByName = (nameParts[0].charAt(0) + nameParts[1].charAt(0)).toUpperCase();
+        } else {
+            printedByName = currentUser.fullName.substring(0, 2).toUpperCase();
+        }
+    }
+    const certNo = rec.certificationNo || "SZC-_______";
+    const series = rec.series || "2002";
+    const parcels = rec.parcels || "____________________";
+    const location = rec.location || "____________________";
+    const totalAreaVal = parseFloat(rec.totalArea) || 0;
+    const proposedUse = rec.proposedUse && rec.proposedUse.trim() !== "" ? rec.proposedUse : "";
+    const requestedBy = rec.requestedBy || "____________________";
+    const amountPaid = rec.amountPaid ? formatCurrency(rec.amountPaid) : "0.00";
+    const orNo = rec.orNo || "_________";
+    const orDateRaw = rec.orDate || rec.dateIssued;
+    let landRowsHtml = "";
+    let totalAreaSum = 0;
+    const holdings = Array.isArray(rec.landHoldings) && rec.landHoldings.length ?
+        rec.landHoldings :
+        [{ registeredOwner: "______________________", lotNo: "______________", tctNo: "______________________", areaPerTitle: totalAreaVal, zoneclass: rec.proposedUse || "______________________" }];
+    holdings.forEach((h) => {
+        let a = parseFloat(h.areaPerTitle) || 0;
+        totalAreaSum += a;
+        landRowsHtml += `<tr>
+                <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.registeredOwner || "______________________")}</td>
+                <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.lotNo || "______________")}</td>
+                <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.tctNo || "______________________")}</td>
+                <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-align:right; text-decoration:none;">${a.toFixed(4)}</td>
+                <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none; border-bottom:none;">&nbsp;</td>
+                <td style="border:1px solid #000000; padding:8px; font-size:11pt; text-decoration:none;">${escapeHtml(h.zoneclass || "______________________")}</td>
+              <tr>`;
+    });
+    landRowsHtml += `<tr style="background:#f2f2f2;">
+            <td style="border:1px solid #000000; padding:8px; font-weight:bold; font-size:11pt; text-decoration:none;">Total</td>
+            <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
+            <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
+            <td style="border:1px solid #000000; padding:8px; text-align:right; font-weight:bold; text-decoration:none;">${totalAreaSum.toFixed(4)}</td>
+            <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
+            <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
+          </tr>`;
+    let approvalDateFormatted = "_________";
+    if (finalApprovalDate && finalApprovalDate !== "") {
+        approvalDateFormatted = formatDateForDisplay(finalApprovalDate);
+        console.log("✅ Formatted approval date for print:", approvalDateFormatted);
+    } else {
+        console.warn("⚠️ No approval date found");
+        if (finalCity.toLowerCase().includes("iloilo city") || finalProvince === "Iloilo City") {
+            approvalDateFormatted = "May 12, 2022";
+        }
+    }
+    console.log("📅 Final approval date for print:", approvalDateFormatted);
+    console.log("📋 Final Circular No for print:", finalCircularNo);
+    const clupStatus = rec.clupStatus || "approved";
+    const check1 = clupStatus === "approved" ? "[✓]" : "[ ]";
+    const check2 = clupStatus === "pending" ? "[✓]" : "[ ]";
+    const check3 = clupStatus === "none" ? "[✓]" : "[ ]";
+    const isCity = finalCity.toLowerCase().includes("city");
+    const lguTerm = isCity ? "city" : "municipality";
+    let locationDisplay = escapeHtml(finalCity);
+    if (finalProvince && finalProvince !== "" && finalProvince !== "__________") {
+        locationDisplay += `, ${escapeHtml(finalProvince)}`;
+    }
+    const showConversionText = rec.purpose !== "Conversion" &&
+        (rec.purpose && rec.purpose.toLowerCase().trim() !== "conversion");
+    console.log("🔍 Purpose:", rec.purpose);
+    console.log("🔍 showConversionText:", showConversionText);
+    const statusHtml = `
+            <div style="margin-bottom: 35px;">
+                <p style="margin:0 0 8px 0; font-size:12pt; font-weight:bold;">1. ${check1} WITH APPROVED CLUP/ZO</p>
+                <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:0; margin-bottom: 15px; line-height:1.5;">
+                    THIS IS TO CERTIFY that the above-described landholdings is/are zoned for use/s specified in the above table per <strong>approved Comprehensive Land Use Plan/Zoning Ordinance of ${locationDisplay}</strong>, as <strong>approved by the ${escapeHtml(finalApprovedBy)} through ${escapeHtml(finalCircularNo)} dated ${approvalDateFormatted}</strong> in accordance with pertinent issuances;
+                </p>
+                <p style="margin-left:0.6cm; text-indent:0.5cm; font-size:12pt; margin-top:5px; margin-bottom:5px; line-height:1.5;">
+                    Further, the proposed conversion:
+                </p>
+                <p style="margin-left:1.2cm; font-size:12pt; margin-top:2px; margin-bottom:2px;">
+                    [ ] Conforms/is compatible with the approved land use plan and/or Zoning Ordinance.
+                </p>
+                <p style="margin-left:1.2cm; font-size:12pt; margin-top:0; margin-bottom:15px;">
+                    [ ] Does not conform/is not compatible with the approved land use plan and/or Zoning Ordinance.
+                </p>
+                ${showConversionText ? `
+            <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:5px; margin-bottom:0; line-height:1.5;">
+                Per record of this office, the city/municipality of <strong>${escapeHtml(finalCity)}</strong> has a total zoned agricultural land of <strong>__________</strong> hectares of which <strong>__________</strong> hectares have been reclassified since <strong>__________</strong>, as approved by the DHSUD/SP per DHSUD/SP Resolution No. <strong>__________</strong> dated <strong>__________</strong>.
+            </p>
+                ` : '<!-- CONVERSION NOT SELECTED - TEXT HIDDEN -->'}
+            </div>
+            <div style="margin-bottom: 35px">
+                <p style="margin: 0 0 8px 0; font-size: 12pt; font-weight: bold">
+                    2. ${check2} WITH CLUP/ZO PENDING APPROVAL BY DHSUD/SP
+                </p>
+                <p
+                    style="
+                        margin-left: 0.6cm;
+                        text-indent: 1.5cm;
+                        text-align: justify;
+                        font-size: 12pt;
+                        margin-top: 0;
+                        margin-bottom: 12px;
+                        line-height: 1.5;
+                    "
+                >
+                    THIS IS TO CERTIFY that the above described property lies/is located within the area zoned for
+                    <strong>__________</strong> use per Comprehensive Land Use Plan/Zoning Ordinance No.
+                    <strong>__________</strong> dated <strong>__________</strong> submitted to DHSUD/SP for approval on
+                    <strong>__________</strong> and same remains pending to date.
+                </p>
+                <p
+                    style="
+                        margin-left: 0.6cm;
+                        text-indent: 1.5cm;
+                        text-align: justify;
+                        font-size: 12pt;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        line-height: 1.5;
+                    "
+                >
+                    THIS IS TO CERTIFY FURTHER that per record of this office - said ${lguTerm} of <strong>__________</strong> will
+                    have a total zoned agricultural land of <strong>__________</strong> hectares.
+                </p>
+            </div>
+            <div style="margin-bottom: 20px">
+                <p style="margin: 0 0 8px 0; font-size: 12pt; font-weight: bold">3. ${check3} WITHOUT CLUP/ZO</p>
+                <p
+                    style="
+                        margin-left: 0.6cm;
+                        text-indent: 1.5cm;
+                        text-align: justify;
+                        font-size: 12pt;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        line-height: 1.5;
+                    "
+                >
+                    THIS IS TO CERTIFY that the ${lguTerm} of <strong>__________</strong> has not submitted its Comprehensive Land
+                    Use Plan/Zoning Ordinance to this Office.
+                </p>
+            </div>
+        `;
+    
+    // FIX: Use September 8, 2026 as the certification date regardless of record date
+    const formattedDateIssued = "8th day of September 2026";
+    const orDateFormatted = formatMonthDayYear(orDateRaw);
+    const printHtml = `<!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Zoning Certification - ${escapeHtml(certNo)}</title>
+                    <style>
+                        :root {
+                            --printed-by: "${printedByName}";
+                            --printed-date: "${printedDate}";
+                        }
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        @page {
+                            size: A4;
+                            margin-top: 0.8in;
+                            margin-bottom: 0.8in;
+                            margin-left: 1in;
+                            margin-right: 0.7in;
+                        }
+                        @page {
+                            @bottom-right {
+                                content: "Page " counter(page) " of " counter(pages);
+                                font-size: 7pt;
                                 font-family: 'Times New Roman', Times, serif;
-                                margin: 0;
-                                padding: 0;
-                                font-size: 12pt;
-                                line-height: 1.35;
-                                color: #000000;
-                                background: white;
-                                width: 100%;
+                                color: #333;
+                                margin-right: 0.1in;
+                                margin-bottom: 0.05in;
                             }
-                            .print-document { max-width: 100%; margin: 0 auto; }
-                            table { border-collapse: collapse; width: 100%; margin: 10px 0; }
-                            th, td { border: 1px solid #000000; padding: 8px; vertical-align: top; }
-                            th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
-                            .signature-line { border-bottom: 2px solid #000; margin: 0.6cm 0 0.2cm 0; width: 9cm; margin-left: auto; }
-                            .basic-info-table { border: none; width: 100%; margin: 5px 0; }
-                            .basic-info-table td { border: none; padding: 4px 0; }
-                            h2 { text-decoration: none; margin: 15px 0; font-size: 18pt; }
-                            h3 { margin: 5px 0; font-size: 14pt; }
-                            h4 { font-size: 13pt; margin: 10px 0 5px 0; }
-                            @media print {
-                                body { margin: 0; padding: 0; }
-                                @page { margin-top: 0.8in; margin-bottom: 0.8in; margin-left: 1in; margin-right: 0.7in; }
+                            @bottom-left {
+                                content: "Printed by : " var(--printed-by) " " var(--printed-date);
+                                font-size: 7pt;
+                                font-family: 'Times New Roman', Times, serif;
+                                color: #999;
+                                opacity: 0.7;
+                                white-space: pre-wrap;
+                                text-align: left;
+                                margin-left: 0.1in;
+                                margin-bottom: 0.05in;
+                                line-height: 1.3;
                             }
-                            .print-document span:empty, .print-document div:empty { display: none !important; }
-                            .signature-line, div[style*="border-bottom"] { border-bottom: 2px solid #000000 !important; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="print-document">
-                            <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; margin-bottom:5px;">
-                                <div style="font-size:11pt; font-weight:bold;">LUC FORM NO. 5</div>
-                                <div style="font-size:11pt; font-weight:bold;">DHSUD Certification No. ${escapeHtml(certNo)}</div>
+                        }
+                        body {
+                            font-family: 'Times New Roman', Times, serif;
+                            margin: 0;
+                            padding: 0;
+                            font-size: 12pt;
+                            line-height: 1.35;
+                            color: #000000;
+                            background: white;
+                            width: 100%;
+                        }
+                        .print-document { max-width: 100%; margin: 0 auto; }
+                        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+                        th, td { border: 1px solid #000000; padding: 8px; vertical-align: top; }
+                        th { background-color: #e8e8e8; font-weight: bold; text-align: center; }
+                        .signature-line { border-bottom: 2px solid #000; margin: 0.6cm 0 0.2cm 0; width: 9cm; margin-left: auto; }
+                        .basic-info-table { border: none; width: 100%; margin: 5px 0; }
+                        .basic-info-table td { border: none; padding: 4px 0; }
+                        h2 { text-decoration: none; margin: 15px 0; font-size: 18pt; }
+                        h3 { margin: 5px 0; font-size: 14pt; }
+                        h4 { font-size: 13pt; margin: 10px 0 5px 0; }
+                        @media print {
+                            body { margin: 0; padding: 0; }
+                            @page { margin-top: 0.8in; margin-bottom: 0.8in; margin-left: 1in; margin-right: 0.7in; }
+                        }
+                        .print-document span:empty, .print-document div:empty { display: none !important; }
+                        .signature-line, div[style*="border-bottom"] { border-bottom: 2px solid #000000 !important; }
+                    </style>
+                </head>
+                <body>
+                    <div class="print-document">
+                        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; margin-bottom:5px;">
+                            <div style="font-size:11pt; font-weight:bold;">LUC FORM NO. 5</div>
+                            <div style="font-size:11pt; font-weight:bold;">DHSUD Certification No. ${escapeHtml(certNo)}</div>
+                        </div>
+                        <div style="font-size:8pt; margin-bottom:15px;">
+                            Series of ${escapeHtml(series)}<br>
+                            <em>(To be filled-up by the Regional DHSUD)</em>
+                        </div>
+                        <div style="text-align:center; margin:15px 0;">
+                            <div style="font-size:11pt; font-weight:bold;">Republic of the Philippines</div>
+                            <div style="font-size:11pt; font-weight:bold;">DEPARTMENT OF HUMAN SETTLEMENTS AND URBAN DEVELOPMENT</div>
+                            <div style="font-size:10pt;">Region VI, Iloilo City</div>
+                            <div style="font-size:12pt; font-weight:bold; text-decoration:underline; margin-top:10px;">CERTIFICATION</div>
+                        </div>
+                        <div style="margin-top:20px;">
+                            <div style="font-size:12pt; font-weight:bold; margin-bottom:15px;">I. BASIC INFORMATION</div>
+                            <div style="margin-bottom:5px; margin-left:20px;">
+                                <span style="display:inline-block; width:250px; font-weight:normal;">A. No. of Parcel/s</span>
+                                <span style="display:inline-block; width:15px;">:</span>
+                                <span style="margin-left:10px;">${escapeHtml(parcels)}</span>
                             </div>
-                            <div style="font-size:8pt; margin-bottom:15px;">
-                                Series of ${escapeHtml(series)}<br>
-                                <em>(To be filled-up by the Regional DHSUD)</em>
+                            <div style="margin-bottom:5px; margin-left:20px;">
+                                <span style="display:inline-block; width:250px; font-weight:normal;">B. Location of the Property</span>
+                                <span style="display:inline-block; width:15px;">:</span>
+                                <span style="margin-left:10px;">${escapeHtml(location)}</span>
                             </div>
-                            <div style="text-align:center; margin:15px 0;">
-                                <div style="font-size:11pt; font-weight:bold;">Republic of the Philippines</div>
-                                <div style="font-size:11pt; font-weight:bold;">DEPARTMENT OF HUMAN SETTLEMENTS AND URBAN DEVELOPMENT</div>
-                                <div style="font-size:10pt;">Region VI, Iloilo City</div>
-                                <div style="font-size:12pt; font-weight:bold; text-decoration:underline; margin-top:10px;">CERTIFICATION</div>
+                            <div style="margin-bottom:5px; margin-left:20px;">
+                                <span style="display:inline-block; width:250px; font-weight:normal;">C. Total Area (ha.)</span>
+                                <span style="display:inline-block; width:15px;">:</span>
+                                <span style="margin-left:10px;">${totalAreaVal.toFixed(4)} ha.</span>
                             </div>
-                            <div style="margin-top:20px;">
-                                <div style="font-size:12pt; font-weight:bold; margin-bottom:15px;">I. BASIC INFORMATION</div>
-                                <div style="margin-bottom:5px; margin-left:20px;">
-                                    <span style="display:inline-block; width:250px; font-weight:normal;">A. No. of Parcel/s</span>
-                                    <span style="display:inline-block; width:15px;">:</span>
-                                    <span style="margin-left:10px;">${escapeHtml(parcels)}</span>
-                                </div>
-                                <div style="margin-bottom:5px; margin-left:20px;">
-                                    <span style="display:inline-block; width:250px; font-weight:normal;">B. Location of the Property</span>
-                                    <span style="display:inline-block; width:15px;">:</span>
-                                    <span style="margin-left:10px;">${escapeHtml(location)}</span>
-                                </div>
-                                <div style="margin-bottom:5px; margin-left:20px;">
-                                    <span style="display:inline-block; width:250px; font-weight:normal;">C. Total Area (ha.)</span>
-                                    <span style="display:inline-block; width:15px;">:</span>
-                                    <span style="margin-left:10px;">${totalAreaVal.toFixed(4)} ha.</span>
-                                </div>
-                                <div style="margin-bottom:5px; margin-left:20px;">
-                                    <span style="display:inline-block; width:250px; font-weight:normal;">D. Proposed Use</span>
-                                    <span style="display:inline-block; width:15px;">:</span>
-                                    <span style="margin-left:10px;">${proposedUse ? escapeHtml(proposedUse) : ""}</span>
-                                </div>
-                                <div style="margin-bottom:5px; margin-left:20px;">
-                                    <span style="display:inline-block; width:250px; font-weight:normal;">E. Description of Land Holdings</span>
-                                    <span style="display:inline-block; width:15px;">:</span>
-                                    <span style="margin-left:10px;"></span>
-                                </div>
-                                <div style="margin-top:10px; margin-left:0px;">
-                                    <table style="border-collapse:collapse; width:700px; border:1px solid #000000; font-size:10pt;">
-                                        <thead>
-                                            <tr style="background-color:#e8e8e8;">
-                                                <th style="border:1px solid #000000; padding:8px; text-align:center;">Registered Owner</th>
-                                                <th style="border:1px solid #000000; padding:8px; text-align:center;">Lot Number</th>
-                                                <th style="border:1px solid #000000; padding:8px; text-align:center;">OCT/TCT No.</th>
-                                                <th style="border:1px solid #000000; padding:8px; text-align:center;">Area Per Title (Ha)</th>
-                                                <th style="border:1px solid #000000; padding:8px; text-align:center;">Area Applied (Ha)</th>
-                                                <th style="border:1px solid #000000; padding:8px; text-align:center;">Zone Classification</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${landRowsHtml}
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div style="margin-bottom:5px; margin-left:20px;">
+                                <span style="display:inline-block; width:250px; font-weight:normal;">D. Proposed Use</span>
+                                <span style="display:inline-block; width:15px;">:</span>
+                                <span style="margin-left:10px;">${proposedUse ? escapeHtml(proposedUse) : ""}</span>
                             </div>
-                            <h4 style="margin-top:13px; margin-left:10px; font-size:12pt;">II. STATUS OF COMPREHENSIVE LAND USE PLAN (CLUP) ZONING ORDINANCE (ZO)</h4>
-                            <div style="margin:15px 0;">
-                                ${statusHtml}
+                            <div style="margin-bottom:5px; margin-left:20px;">
+                                <span style="display:inline-block; width:250px; font-weight:normal;">E. Description of Land Holdings</span>
+                                <span style="display:inline-block; width:15px;">:</span>
+                                <span style="margin-left:10px;"></span>
                             </div>
-                            <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:0; margin-bottom: 0; line-height:1.5;">This certification is issued upon the request of <strong>${escapeHtml(requestedBy)}</strong> for whatever legal purpose/s it may serve.</p>
-                            <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:0; margin-bottom: 0; line-height:1.5;"> Given this <strong>${formattedDateIssued}</strong> in Iloilo City, Philippines.</p>
-                            <div style="margin-top:40px; text-align:right;">
-                                <hr style="border: none; border-top: 1px solid #000000; width: 6.5cm; margin-left: auto; margin-bottom: 4px;" />
-                                <p style="margin:0; font-size:11pt; font-weight:bold;">EnP EVA MARIA P. MARFIL, CSEE</p>
-                                <p style="margin:0; font-size:12pt;">Regional Director</p>
-                            </div>
-                            <div style="margin-top:25px; font-size:10pt; line-height:1.4;">
-                                <p style="margin:0 0 5px 0;"><strong>Note:</strong></p>
-                                <div style="margin-left:0.5cm;">
-                                    <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
-                                       1. This certification is issued relative to the requirement of DAR regarding the implementation of the Comprehensive Agrarian Reform Law and shall not be construed as a Certificate of Eligibility for conversion.
-                                    </p>
-                                    <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
-                                       2. This certification <strong>shall not</strong> be construed as a Locational Clearance/Certificate of Zoning Compliance/Development Permit or License to Sell.
-                                    </p>
-                                    <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
-                                       3. This <strong>shall not</strong> be construed as a certification as to the ownership by the applicant of the above listed parcel(s) of land.
-                                    </p>
-                                    <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
-                                       4. Any misrepresentation on the part of the requesting party shall be a ground for cancellation of this certification.
-                                    </p>
-                                </div>
-                            </div>
-                            <div style="margin-top:10px; display:flex; justify-content:flex-start;">
-                                <table style="border-collapse:collapse; width:auto; min-width:200px; max-width:350px; border:1px solid #000000; font-size:8pt;">
-                                    <tr>
-                                        <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">Certification No.</td>
-                                        <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">${escapeHtml(certNo)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">O.R. No.</td>
-                                        <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">${escapeHtml(orNo)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">Amount Paid</td>
-                                        <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">₱ ${escapeHtml(amountPaid)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">Date</td>
-                                        <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">${orDateFormatted}</td>
-                                    </tr>
+                            <div style="margin-top:10px; margin-left:0px;">
+                                <table style="border-collapse:collapse; width:700px; border:1px solid #000000; font-size:10pt;">
+                                    <thead>
+                                        <tr style="background-color:#e8e8e8;">
+                                            <th style="border:1px solid #000000; padding:8px; text-align:center;">Registered Owner</th>
+                                            <th style="border:1px solid #000000; padding:8px; text-align:center;">Lot Number</th>
+                                            <th style="border:1px solid #000000; padding:8px; text-align:center;">OCT/TCT No.</th>
+                                            <th style="border:1px solid #000000; padding:8px; text-align:center;">Area Per Title (Ha)</th>
+                                            <th style="border:1px solid #000000; padding:8px; text-align:center;">Area Applied (Ha)</th>
+                                            <th style="border:1px solid #000000; padding:8px; text-align:center;">Zone Classification</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${landRowsHtml}
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
-                    </body>
-                    </html>`;
-            const printWindow = window.open("", "_blank");
-            if (!printWindow) {
-                showToast("Please allow pop-ups to print");
-                return;
-            }
-            printWindow.document.write(printHtml);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.onload = function() {
-                printWindow.print();
-                printWindow.onafterprint = function() {
-                    printWindow.close();
-                };
-            };
-            setTimeout(function() {
-                if (!printWindow.closed) {
-                    printWindow.print();
-                }
-            }, 500);
-            showToast("Opening print window...");
+                        <h4 style="margin-top:13px; margin-left:10px; font-size:12pt;">II. STATUS OF COMPREHENSIVE LAND USE PLAN (CLUP) ZONING ORDINANCE (ZO)</h4>
+                        <div style="margin:15px 0;">
+                            ${statusHtml}
+                        </div>
+                        <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:0; margin-bottom: 0; line-height:1.5;">This certification is issued upon the request of <strong>${escapeHtml(requestedBy)}</strong> for whatever legal purpose/s it may serve.</p>
+                        <p style="margin-left:0.6cm; text-indent:1.5cm; text-align:justify; font-size:12pt; margin-top:0; margin-bottom: 0; line-height:1.5;"> Given this <strong>${formattedDateIssued}</strong> in Iloilo City, Philippines.</p>
+                        <div style="margin-top:40px; text-align:right;">
+                            <hr style="border: none; border-top: 1px solid #000000; width: 6.5cm; margin-left: auto; margin-bottom: 4px;" />
+                            <p style="margin:0; font-size:11pt; font-weight:bold;">EnP EVA MARIA P. MARFIL, CSEE</p>
+                            <p style="margin:0; font-size:12pt;">Regional Director</p>
+                        </div>
+                        <div style="margin-top:25px; font-size:10pt; line-height:1.4;">
+                            <p style="margin:0 0 5px 0;"><strong>Note:</strong></p>
+                            <div style="margin-left:0.5cm;">
+                                <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
+                                   1. This certification is issued relative to the requirement of DAR regarding the implementation of the Comprehensive Agrarian Reform Law and shall not be construed as a Certificate of Eligibility for conversion.
+                                </p>
+                                <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
+                                   2. This certification <strong>shall not</strong> be construed as a Locational Clearance/Certificate of Zoning Compliance/Development Permit or License to Sell.
+                                </p>
+                                <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
+                                   3. This <strong>shall not</strong> be construed as a certification as to the ownership by the applicant of the above listed parcel(s) of land.
+                                </p>
+                                <p style="margin:0 0 3px 0; text-indent:-0.4cm; padding-left:0.5cm; text-align:justify;">
+                                   4. Any misrepresentation on the part of the requesting party shall be a ground for cancellation of this certification.
+                                </p>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px; display:flex; justify-content:flex-start;">
+                            <table style="border-collapse:collapse; width:auto; min-width:200px; max-width:350px; border:1px solid #000000; font-size:8pt;">
+                                <tr>
+                                    <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">Certification No.</td>
+                                    <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">${escapeHtml(certNo)}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">O.R. No.</td>
+                                    <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">${escapeHtml(orNo)}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">Amount Paid</td>
+                                    <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">₱ ${escapeHtml(amountPaid)}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #000000; padding:5px 8px; font-weight:bold; white-space: nowrap;">Date</td>
+                                    <td style="border:1px solid #000000; padding:5px 8px; white-space: nowrap;">${orDateFormatted}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </body>
+                </html>`;
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+        showToast("Please allow pop-ups to print");
+        return;
+    }
+    printWindow.document.write(printHtml);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.onload = function() {
+        printWindow.print();
+        printWindow.onafterprint = function() {
+            printWindow.close();
+        };
+    };
+    setTimeout(function() {
+        if (!printWindow.closed) {
+            printWindow.print();
         }
+    }, 500);
+    showToast("Opening print window...");
+}
 
         function printFromModal() {
             const printBtn = document.getElementById("printModalBtn");
