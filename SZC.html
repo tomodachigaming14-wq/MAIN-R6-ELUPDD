@@ -5899,11 +5899,11 @@ label[for="lguSelect"] {
                         scrollWheelZoom: true,
                         doubleClickZoom: true
                     });
-                    currentBaseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                        maxZoom: 18,
-                        minZoom: 6
-                    }).addTo(popupMap);
+                    currentBaseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+    minZoom: 6
+}).addTo(popupMap);
                     popupMap.invalidateSize();
                     mapInitialized = true;
                     initGeocoder();
@@ -6492,33 +6492,34 @@ label[for="lguSelect"] {
             return false;
         }
 
-        // ===== MAP VIEW FUNCTIONS =====
-        function changeMapView(type) {
-            if (!popupMap) return;
-            if (currentBaseLayer) {
-                popupMap.removeLayer(currentBaseLayer);
-            }
-            let url;
-            let attribution;
-            if (type === "satellite") {
-                url = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}';
-                attribution = 'Imagery &copy; Google Maps';
-            } else if (type === "street") {
-                url = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-                attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
-            } else if (type === "outdoor") {
-                url = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
-                attribution = '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors';
-            } else {
-                url = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-                attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
-            }
-            currentBaseLayer = L.tileLayer(url, {
-                attribution: attribution,
-                maxZoom: 20,
-                minZoom: 6,
-                crossOrigin: true
-            }).addTo(popupMap);
+       // Find the changeMapView function and replace the 'street' section
+function changeMapView(type) {
+    if (!popupMap) return;
+    if (currentBaseLayer) {
+        popupMap.removeLayer(currentBaseLayer);
+    }
+    let url;
+    let attribution;
+    if (type === "satellite") {
+        url = 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}';
+        attribution = 'Imagery &copy; Google Maps';
+    } else if (type === "street") {
+        // FIXED: Use standard OpenStreetMap tiles instead of CartoDB
+        url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    } else if (type === "outdoor") {
+        url = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+        attribution = '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> contributors';
+    } else {
+        url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    }
+    currentBaseLayer = L.tileLayer(url, {
+        attribution: attribution,
+        maxZoom: 20,
+        minZoom: 6,
+        crossOrigin: true
+    }).addTo(popupMap);
             const streetBtn = document.getElementById("mapTypeStreet");
             const satelliteBtn = document.getElementById("mapTypeSatellite");
             const outdoorBtn = document.getElementById("mapTypeOutdoor");
