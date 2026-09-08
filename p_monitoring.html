@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* ===== GLOBAL ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: "Inter", sans-serif;
@@ -20,7 +19,6 @@
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
-        /* ===== HEADER / NAV ===== */
         header {
             background: #ffffff;
             border-bottom: 1px solid #e2edf7;
@@ -200,7 +198,6 @@
             padding: 0.7rem 1.2rem;
         }
 
-        /* ===== USER DROPDOWN ===== */
         .user-avatar {
             width: 28px;
             height: 28px;
@@ -250,7 +247,6 @@
             background: #f8fafc;
         }
 
-        /* ===== TOAST ===== */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -319,7 +315,6 @@
             to { transform: translateX(120%); opacity: 0; }
         }
 
-        /* ===== PLAN MONITORING CARD ===== */
         .pm-card {
             max-width: 880px;
             width: 100%;
@@ -625,7 +620,6 @@
             border-color: #0b7e48;
         }
 
-        /* ===== STATUS MESSAGE WITH ACTIVITY LOG ===== */
         .pm-status-message {
             margin-top: 1.2rem;
             padding: 0.8rem 1.2rem;
@@ -711,7 +705,6 @@
         }
         .pm-status-message.error i { color: #dc2626; }
 
-        /* ===== MONTHLY ACTIVITY SECTION ===== */
         .monthly-activity-section {
             margin-top: 1rem;
             width: 100%;
@@ -870,7 +863,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== MODALS ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -1221,7 +1213,6 @@
             background: #1d4ed8;
         }
 
-        /* ===== CHART STYLES ===== */
         .chart-filters {
             display: flex;
             flex-wrap: wrap;
@@ -1366,7 +1357,6 @@
             margin-bottom: 1rem;
         }
 
-        /* ===== DETAIL MODAL ===== */
         .detail-modal .modal-box {
             max-width: 600px;
         }
@@ -1431,7 +1421,6 @@
             display: block;
         }
 
-        /* ===== LOGIN MODAL ===== */
         .login-modal {
             display: none;
             position: fixed;
@@ -1569,7 +1558,6 @@
             margin: 0 1.8rem;
         }
 
-        /* ===== FOOTER ===== */
         .footer-new {
             background: #0a2540;
             color: #b9d0e7;
@@ -1601,7 +1589,6 @@
             margin-bottom: 12px;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 800px) {
             .pm-card { padding: 1.5rem; border-radius: 2rem; }
             .pm-form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
@@ -3533,17 +3520,35 @@
 
         if (currentChartType === 'status') {
             const counts = {};
+            // Initialize ALL statuses with 0
             statuses.forEach(s => counts[s] = 0);
             filtered.forEach(r => {
-                const s = r['Updated Status'] || 'None Indicated';
-                if (counts.hasOwnProperty(s)) counts[s]++;
-                else counts[s] = 1;
+                // Count BOTH Initial Status and Updated Status
+                // Handle case-insensitive Pre-Phase
+                let initial = r['Initial Status'] || 'None Indicated';
+                let updated = r['Updated Status'] || 'None Indicated';
+                
+                // Normalize Pre-Phase variations (case insensitive)
+                if (initial.toLowerCase() === 'pre-phase' || initial.toLowerCase() === 'prephase') {
+                    initial = 'Pre-Phase';
+                }
+                if (updated.toLowerCase() === 'pre-phase' || updated.toLowerCase() === 'prephase') {
+                    updated = 'Pre-Phase';
+                }
+                
+                if (counts.hasOwnProperty(initial)) counts[initial]++;
+                else counts[initial] = 1;
+                
+                if (counts.hasOwnProperty(updated)) counts[updated]++;
+                else counts[updated] = 1;
             });
-            labels = Object.keys(counts).filter(k => counts[k] > 0);
-            data = labels.map(k => counts[k]);
-            chartTitle = 'Status Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '');
+            // Show ALL statuses in the correct order with Pre-Phase first
+            const order = ['Pre-Phase', 'Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
+            labels = order;
+            data = order.map(k => counts[k] || 0);
+            chartTitle = 'Status Distribution (Initial & Updated Combined)' + (monthFilter !== 'all' ? ' - ' + monthFilter : '');
             datasetLabel = 'Count';
-            document.getElementById('statStatuses').textContent = labels.length;
+            document.getElementById('statStatuses').textContent = labels.filter(k => counts[k] > 0).length;
             let top = '-', topCount = 0;
             labels.forEach((l,i) => { if (data[i] > topCount) { topCount = data[i]; top = l; } });
             document.getElementById('statTopStatus').textContent = top + ' (' + topCount + ')';
