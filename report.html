@@ -3,149 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>DHSUD VI | REPORT</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>DHSUD VI · REPORT · text wrap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
-    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
-    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
-    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
-    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
-    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
-    .logo-area-header { display: flex; align-items: center; gap: 16px; }
-    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
-    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
-    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
-    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
-    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
-    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
-    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
-    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
-    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
-    .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
-    .dropdown-content a:hover { background: #eff6ff; }
-    .dropdown-submenu { position: relative; }
-    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
-    .submenu-trigger:hover { background: #eff6ff; }
-    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
-    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
-    .dropdown-submenu:hover .submenu-content { display: block; }
-    .submenu-content a { padding: 0.7rem 1.2rem; }
-    .dropdown-submenu.open .submenu-content { display: block; }
-    .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
-    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
-    .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
-    .user-name { font-size: 0.7rem; font-weight: 500; }
-    .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
-    .role-badge-header.admin { background: #dcfce7; color: #166534; }
-    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
-    .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
-    .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
-    .user-dropdown-item:hover { background: #f8fafc; }
-    .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
-    .login-modal.active { display: flex; }
-    .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
-    .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
-    .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
-    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-    .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
-    .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
-    .login-modal-body .input-group { margin-bottom: 1.3rem; }
-    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
-    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
-    .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
-    .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-    .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
-    .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.4rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
-    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
-    .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
-    .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .toast-msg.success { background: #166534; }
-    .toast-msg.error { background: #b91c1c; }
-    .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
-    .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
-    .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
-    .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "Inter", -apple-system, system-ui, sans-serif;
+      background: #f4f9fe;
+      color: #0a2540;
+      line-height: 1.5;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1400px; margin:0 auto; padding:0 20px; }
 
-    /* Report Styles - Preserved from original */
-    .card { background: white; border-radius: 28px; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08); border: 1px solid #eef2ff; overflow: hidden; margin: 2rem 0; }
-    .card-header { padding: 1.25rem 1.8rem; border-bottom: 1px solid #eef2ff; background: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .card-header h2 { font-size: 1.5rem; font-weight: 700; color: #1e3a8a; }
-    .filter-group { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
-    .report-selector { padding: 0.6rem 1.2rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-weight: 500; font-size: 0.9rem; cursor: pointer; font-family: inherit; }
-    .month-filter { padding: 0.6rem 1.2rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-weight: 500; font-size: 0.9rem; cursor: pointer; min-width: 160px; }
-    .btn { padding: 0.6rem 1.4rem; border-radius: 40px; font-weight: 600; font-size: 0.85rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
-    .btn-primary { background: #2563eb; color: white; }
-    .btn-primary:hover { background: #1e3a8a; transform: translateY(-1px); }
-    .btn-success { background: #10b981; color: white; }
-    .btn-success:hover { background: #0d9488; transform: translateY(-1px); }
-    .btn-print { background: #7c3aed; color: white; }
-    .btn-print:hover { background: #5b21b6; transform: translateY(-1px); }
-    .btn-print-lgu { background: #0d9488; color: white; }
-    .btn-print-lgu:hover { background: #0f766e; transform: translateY(-1px); }
-    .btn-danger { background: #dc2626; color: white; }
-    .btn-danger:hover { background: #b91c1c; transform: translateY(-1px); }
-    .search-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.8rem; background: #f9fafc; padding: 1rem 1.2rem; border-radius: 24px; align-items: center; }
-    .search-bar input { flex: 2; padding: 0.65rem 1rem; border-radius: 40px; border: 1px solid #e2e8f0; background: white; font-size: 0.9rem; min-width: 220px; }
-    .stats-row { display: flex; gap: 2rem; margin-bottom: 1.8rem; flex-wrap: wrap; background: #f0f7fa; padding: 1rem 1.5rem; border-radius: 28px; }
-    .stat-card { background: white; padding: 0.6rem 1.5rem; border-radius: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #eef2ff; }
-    .stat-number { font-size: 1.9rem; font-weight: 800; color: #1e3a8a; line-height: 1.2; }
-    .stat-label { font-size: 0.75rem; color: #475569; letter-spacing: 0.3px; }
-    .report-table-wrapper { overflow-x: auto; overflow-y: auto; border-radius: 20px; max-width: 100%; max-height: 500px; border: 1px solid #eef2ff; }
-    .report-table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
-    .report-table-wrapper::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
-    .report-table-wrapper::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-    .report-table-wrapper::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    .report-table-wrapper { scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9; }
-    .data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 1100px; }
-    .data-table th { text-align: left; padding: 0.9rem 0.7rem; background: #f1f5f9; color: #1e293b; font-weight: 600; border-bottom: 2px solid #e2e8f0; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
-    .data-table td { padding: 0.8rem 0.7rem; border-bottom: 1px solid #eef2ff; vertical-align: middle; word-break: normal; max-width: 250px; white-space: nowrap; }
-    .empty-row td { text-align: center; padding: 3rem !important; color: #64748b; font-style: italic; }
-    .clear-filter-btn { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 40px; font-size: 0.8rem; cursor: pointer; font-weight: 500; }
-    .clear-filter-btn:hover { background: #cbd5e1; }
-    .sync-status { position: fixed; bottom: 20px; right: 20px; background: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 8px; z-index: 1000; border: 1px solid #eef2ff; }
-    .hidden-filter { display: none !important; }
-    .status-badge { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-    .status-updated { background: #dcfce7; color: #166534; }
-    .status-for-updating { background: #fef3c7; color: #92400e; }
-    .status-under-review { background: #dbeafe; color: #1e40af; }
-    .status-default { background: #e2e8f0; color: #475569; }
-    .phase-badge { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.65rem; font-weight: 500; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-    .phase-badge.phase { background: #e0f2fe; color: #0369a1; border-color: #b8dfff; }
-    .phase-badge.ra { background: #fef3c7; color: #92400e; border-color: #fde68a; }
-    .phase-badge.pre { background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
-    .phase-badge.none { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
-    .lgu-print-container { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
-    .lgu-print-container .btn-print-lgu { display: none; }
-    .lgu-print-container .btn-print-lgu.visible { display: inline-flex; }
-    #clupLguFilter { display: none; }
-    #clupLguFilter.visible { display: inline-block; }
-    #clupFormLguFilterContainer { display: none; }
-    #clupFormLguFilterContainer.visible { display: inline-block; }
-    .card-body { padding: 1.8rem; }
-    @media (max-width: 720px) { .container { padding: 0 1rem; } .card-header { flex-direction: column; align-items: stretch; } .top-bar { flex-direction: column; align-items: stretch; } .header-logo-img span { white-space: normal; font-size: 0.7rem; } .login-modal-brand img { width: 100px; } }
+    /* ============== HEADER ============== */
+    header { background:#fff; border-bottom:1px solid #e2edf7; position:sticky; top:0; z-index:100; backdrop-filter:blur(2px); background:rgba(255,255,255,0.97); }
+    .top-bar { display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; flex-wrap:wrap; gap:1rem; }
+    .logo-area { display:flex; align-items:center; gap:16px; }
+    .header-logo-img { display:flex; align-items:center; gap:12px; background:#f0f6fe; padding:6px 20px; border-radius:60px; transition:all 0.2s; }
+    .header-logo-img img { height:40px; width:auto; transition:transform 0.2s; }
+    .header-logo-img span { font-weight:700; font-size:0.9rem; color:#1e3a8a; letter-spacing:-0.2px; white-space:nowrap; }
+    .nav-right .login-prompt, .user-menu { display:flex; align-items:center; gap:0.5rem; background:#f1f5f9; padding:0.2rem 0.6rem 0.2rem 0.8rem; border-radius:60px; cursor:pointer; position:relative; }
+    .login-prompt:hover { background:#2563eb; color:white; transform:translateY(-2px); }
+    .nav-bottom { background:white; border-top:1px solid #eef2ff; padding:0.5rem 0; }
+    .main-nav-links { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+    .main-nav-links a, .dropbtn { text-decoration:none; font-weight:500; font-size:0.85rem; color:#1f3a5f; padding:0.5rem 0; transition:0.2s; letter-spacing:-0.2px; }
+    .main-nav-links a:hover, .dropbtn:hover { color:#2563eb; transform:translateY(-1px); }
+    .dropdown { position:relative; display:inline-block; }
+    .dropbtn { background:none; border:none; font-family:inherit; cursor:pointer; }
+    .dropbtn::after { content:" ▾"; font-size:0.7rem; opacity:0.6; }
+    .dropdown:hover .dropbtn::after { content:" ▾"; opacity:1; }
+    .dropdown-content { display:none; position:absolute; background:white; min-width:220px; box-shadow:0 12px 28px rgba(0,0,0,0.1); border-radius:16px; z-index:1000; top:30px; left:0; border:1px solid #eef2ff; padding:0.3rem 0; }
+    .dropdown:hover .dropdown-content { display:block; }
+    .dropdown-content a { display:block; padding:0.7rem 1.2rem; color:#1e293b; font-size:0.8rem; text-decoration:none; }
+    .dropdown-content a:hover { background:#eff6ff; }
+    .dropdown-submenu { position:relative; }
+    .submenu-trigger { background:none; border:none; width:100%; text-align:left; padding:0.7rem 1.2rem; font-size:0.8rem; font-weight:500; color:#1e293b; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit; }
+    .submenu-trigger:hover { background:#eff6ff; }
+    .arrow-right { font-size:0.7rem; margin-left:1rem; }
+    .submenu-content { display:none; position:absolute; left:100%; top:0; background:white; min-width:180px; box-shadow:0 12px 28px rgba(0,0,0,0.1); border-radius:16px; border:1px solid #eef2ff; z-index:1001; padding:0.3rem 0; }
+    .dropdown-submenu:hover .submenu-content { display:block; }
+    .submenu-content a { padding:0.7rem 1.2rem; }
+
+    /* User menu */
+    .user-avatar { width:28px; height:28px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:0.75rem; }
+    .user-name { font-size:0.7rem; font-weight:500; }
+    .role-badge-header { background:#e2e8f0; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.6rem; font-weight:600; margin-left:0.3rem; }
+    .role-badge-header.admin { background:#dcfce7; color:#166534; }
+    .role-badge-header.staff { background:#dbeafe; color:#1e40af; }
+    .user-dropdown-menu { position:absolute; top:48px; right:0; background:white; border-radius:20px; min-width:180px; box-shadow:0 20px 35px -12px rgba(0,0,0,0.15); border:1px solid #eef2ff; overflow:hidden; display:none; z-index:200; }
+    .user-dropdown-item { padding:0.8rem 1.2rem; border-bottom:1px solid #f1f5f9; cursor:pointer; font-size:0.8rem; }
+    .user-dropdown-item:hover { background:#f8fafc; }
+
+    /* Login Modal */
+    .login-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:10000; }
+    .login-modal.active { display:flex; }
+    .login-modal-content { background:white; border-radius:2.5rem; max-width:460px; width:92%; overflow:hidden; box-shadow:0 30px 60px -20px rgba(0,0,0,0.4); animation:fadeUp 0.3s ease; }
+    .login-modal-brand { background:linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding:2rem 1.5rem 1.8rem; text-align:center; color:white; position:relative; }
+    .login-modal-brand img { width:130px; height:auto; background:white; border-radius:20px; padding:14px; box-shadow:0 8px 20px rgba(0,0,0,0.2); display:inline-block; margin-bottom:0.8rem; }
+    .login-modal-brand h3 { font-size:1.6rem; font-weight:800; letter-spacing:-0.5px; margin-bottom:0.2rem; text-shadow:0 2px 4px rgba(0,0,0,0.2); }
+    .login-modal-brand p { font-size:0.75rem; opacity:0.85; margin:0; }
+    .login-modal-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:2rem; color:white; cursor:pointer; opacity:0.7; transition:0.2s; z-index:10; }
+    .login-modal-close:hover { opacity:1; transform:scale(1.1); }
+    .login-modal-body { padding:2rem 1.8rem 1.8rem; }
+    .login-modal-body .input-group { margin-bottom:1.3rem; }
+    .login-modal-body .input-group label { display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase; color:#54708f; margin-bottom:0.4rem; letter-spacing:0.3px; }
+    .login-modal-body .input-group input { width:100%; padding:0.85rem 1rem; border:1.5px solid #e2e8f0; border-radius:1rem; font-size:0.9rem; font-family:'Inter', sans-serif; transition:all 0.2s; }
+    .login-modal-body .input-group input:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+    .login-submit-btn { width:100%; padding:0.9rem; background:#2563eb; color:white; border:none; border-radius:1.2rem; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.2s; margin-top:0.3rem; font-family:'Inter', sans-serif; }
+    .login-submit-btn:hover { background:#1d4ed8; transform:translateY(-1px); }
+    .login-submit-btn:disabled { background:#94a3b8; cursor:not-allowed; transform:none; }
+    .login-modal-footer { text-align:center; font-size:0.65rem; color:#94a3b8; padding:0.4rem 0 1.2rem; border-top:1px solid #eef2ff; margin:0 1.8rem; }
+
+    /* Animations */
+    @keyframes fadeUp { 0% { opacity:0; transform:translateY(25px); } 100% { opacity:1; transform:translateY(0); } }
+    @keyframes slideInLeft { 0% { opacity:0; transform:translateX(-40px); } 100% { opacity:1; transform:translateX(0); } }
+    @keyframes slideInRight { 0% { opacity:0; transform:translateX(40px); } 100% { opacity:1; transform:translateX(0); } }
+    @keyframes float { 0% { transform:translateY(0px); } 50% { transform:translateY(-8px); } 100% { transform:translateY(0px); } }
+
+    /* ============== CARD & REPORT ============== */
+    .card { background:#fff; border-radius:28px; box-shadow:0 16px 30px -12px rgba(0,0,0,0.06); border:1px solid #eef2ff; margin:1.8rem 0; overflow:hidden; }
+    .card-header { padding:1rem 1.8rem; border-bottom:1px solid #eef2ff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; }
+    .card-header h2 { font-size:1.3rem; font-weight:700; color:#1e3a8a; letter-spacing:-0.02em; }
+    .card-body { padding:1.5rem 1.8rem; }
+
+    .filter-group { display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap; }
+    .report-selector, .month-filter { padding:0.4rem 1rem; border-radius:60px; border:1px solid #e2e8f0; background:#fff; font-weight:500; font-size:0.8rem; font-family:inherit; cursor:pointer; color:#0a2540; }
+    .btn { padding:0.4rem 1.2rem; border-radius:60px; font-weight:600; font-size:0.75rem; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; transition:0.15s; font-family:inherit; }
+    .btn-primary { background:#2563eb; color:#fff; }
+    .btn-primary:hover { background:#1e3a8a; transform:translateY(-1px); }
+    .btn-success { background:#10b981; color:#fff; }
+    .btn-success:hover { background:#0d9488; transform:translateY(-1px); }
+    .btn-print { background:#7c3aed; color:#fff; }
+    .btn-print:hover { background:#5b21b6; transform:translateY(-1px); }
+    .btn-print-lgu { background:#0d9488; color:#fff; }
+    .btn-print-lgu:hover { background:#0f766e; transform:translateY(-1px); }
+    .clear-filter-btn { background:#e2e8f0; border:1px solid #cbd5e1; padding:0.4rem 1rem; border-radius:60px; font-size:0.7rem; cursor:pointer; font-weight:500; font-family:inherit; }
+    .clear-filter-btn:hover { background:#cbd5e1; }
+
+    .search-bar { display:flex; gap:0.8rem; flex-wrap:wrap; margin-bottom:1.2rem; background:#f9fafc; padding:0.6rem 1rem; border-radius:28px; align-items:center; }
+    .search-bar input { flex:2; padding:0.4rem 1rem; border-radius:60px; border:1px solid #e2e8f0; background:#fff; font-size:0.8rem; min-width:180px; font-family:inherit; }
+    .search-bar span { font-size:0.65rem; color:#475569; font-weight:450; }
+
+    .stats-row { display:flex; gap:1.5rem; margin-bottom:1.2rem; flex-wrap:wrap; background:#f0f7fa; padding:0.6rem 1.5rem; border-radius:28px; }
+    .stat-card { background:#fff; padding:0.2rem 1.2rem; border-radius:40px; border:1px solid #eef2ff; }
+    .stat-number { font-size:1.6rem; font-weight:700; color:#1e3a8a; line-height:1.2; letter-spacing:-0.02em; }
+    .stat-label { font-size:0.65rem; color:#475569; font-weight:500; }
+
+    /* Table */
+    .report-table-wrapper { overflow-x:auto; overflow-y:auto; border-radius:20px; max-width:100%; max-height:560px; border:1px solid #eef2ff; background:#fff; }
+    .report-table-wrapper::-webkit-scrollbar { width:7px; height:7px; }
+    .report-table-wrapper::-webkit-scrollbar-track { background:#f1f5f9; border-radius:8px; }
+    .report-table-wrapper::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
+
+    .data-table { width:100%; border-collapse:collapse; font-size:0.78rem; min-width:1100px; font-family:"Inter", -apple-system, system-ui, sans-serif; table-layout:auto; }
+    .data-table th { text-align:left; padding:0.55rem 0.6rem; background:#f1f5f9; color:#0b1e33; font-weight:600; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.03em; border-bottom:2px solid #e2e8f0; white-space:nowrap; position:sticky; top:0; z-index:10; }
+    
+    /* --- FIX STARTS HERE --- */
+    .data-table td {
+      padding:0.45rem 0.6rem;
+      border-bottom:1px solid #eef2ff;
+      vertical-align:middle;
+      word-break:break-word;
+      white-space:normal; /* Allows wrapping ONLY for long location/area text */
+      max-width:280px;
+      color:#122b44;
+      font-weight:450;
+      font-size:0.78rem;
+      line-height:1.4;
+      overflow-wrap:break-word;
+      word-wrap:break-word;
+      hyphens:auto;
+    }
+    
+    /* Force "Zoning (Simple)" and "Certification No." to stay on one line */
+    .data-table td:nth-child(1), 
+    .data-table td:nth-child(2) { 
+      white-space: nowrap !important; 
+      word-break: keep-all !important; 
+      overflow-wrap: normal !important; 
+      word-wrap: normal !important; 
+      hyphens: none !important; 
+      max-width: none !important; 
+    }
+    /* --- FIX ENDS HERE --- */
+
+    .data-table tr:hover td { background:#fafcff; }
+    .data-table .empty-row td { text-align:center; padding:2.5rem !important; color:#64748b; font-style:italic; font-size:0.85rem; white-space:normal; }
+
+    /* Badges */
+    .status-badge { display:inline-block; padding:0.1rem 0.7rem; border-radius:40px; font-size:0.6rem; font-weight:600; letter-spacing:0.01em; background:#e2e8f0; color:#1e293b; white-space:nowrap; }
+    .status-updated { background:#dcfce7; color:#166534; }
+    .status-for-updating { background:#fef3c7; color:#92400e; }
+    .status-under-review { background:#dbeafe; color:#1e40af; }
+    .status-default { background:#e2e8f0; color:#475569; }
+    .phase-badge { display:inline-block; padding:0.05rem 0.5rem; border-radius:20px; font-size:0.55rem; font-weight:500; background:#f1f5f9; color:#1e293b; border:1px solid #e2e8f0; margin-left:3px; white-space:nowrap; }
+    .phase-badge.phase { background:#e0f2fe; color:#0369a1; border-color:#b8dfff; }
+    .phase-badge.ra { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+    .phase-badge.pre { background:#e0e7ff; color:#3730a3; border-color:#c7d2fe; }
+    .phase-badge.none { background:#f1f5f9; color:#64748b; border-color:#e2e8f0; }
+
+    /* Utilities */
+    .hidden-filter { display:none !important; }
+    .toast-msg { position:fixed; bottom:20px; right:20px; background:#1e293b; color:#fff; padding:8px 18px; border-radius:60px; z-index:9999; font-size:0.75rem; box-shadow:0 4px 12px rgba(0,0,0,0.12); font-family:inherit; }
+    .toast-msg.success { background:#166534; }
+    .toast-msg.error { background:#b91c1c; }
+    .sync-status { position:fixed; bottom:20px; right:20px; background:#fff; padding:3px 12px; border-radius:40px; font-size:0.6rem; box-shadow:0 2px 8px rgba(0,0,0,0.06); display:flex; align-items:center; gap:6px; z-index:1000; border:1px solid #eef2ff; font-family:inherit; }
+    .footer-new { background:#0a2540; color:#b9d0e7; padding:1.5rem 0; margin-top:2.5rem; border-top:1px solid #2d4f6e; font-size:0.8rem; }
+    .footer-grid { display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem; }
+    .social-icons i { font-size:1.6rem; margin-right:1rem; color:white; transition:0.2s; cursor:pointer; }
+    .social-icons i:hover { transform:translateY(-4px); color:#3b82f6; }
+
+    @media (max-width:720px) {
+      .container { padding:0 12px; }
+      .card-header { flex-direction:column; align-items:stretch; }
+      .data-table { font-size:0.7rem; min-width:700px; }
+      .data-table td, .data-table th { padding:0.3rem 0.4rem; }
+      .header-logo-img span { white-space:normal; font-size:0.7rem; }
+      .top-bar { flex-direction:column; align-items:stretch; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ============== HEADER ============== -->
   <header>
     <div class="container">
       <div class="top-bar">
-        <div class="logo-area-header">
+        <div class="logo-area">
           <div class="header-logo-img">
             <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
             <span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
@@ -161,6 +209,7 @@
     </div>
   </header>
 
+  <!-- ============== MAIN ============== -->
   <main class="container">
     <div class="card">
       <div class="card-header">
@@ -173,21 +222,16 @@
             <option value="lgu_directory">🏛️ LGU Directory</option>
             <option value="clup_formulation">📋 Status of CLUP/ZO Formulation</option>
           </select>
-          <!-- Filters for Locational and Zoning -->
+          <!-- cert filters -->
           <div id="certFilters" class="filter-group">
             <select id="monthFilter" class="month-filter" onchange="filterReportTable()"><option value="all">📅 All Months</option></select>
             <button class="clear-filter-btn" onclick="clearMonthFilter()">✖ Clear Month Filter</button>
             <button class="btn btn-success" onclick="exportCurrentReportToExcel()">📥 Download Excel</button>
             <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
           </div>
-          <!-- Filters for CLUP Status -->
+          <!-- clup filters -->
           <div id="clupFilters" class="filter-group hidden-filter">
-            <select id="clupStatusFilter" class="month-filter" onchange="filterReportTable()">
-              <option value="all">📋 All CLUP Status</option>
-              <option value="Updated">✅ Summary of CLUP's Updated</option>
-              <option value="For Updating">🔄 Summary of CLUP's For Updating</option>
-              <option value="Under Review">📝 Summary of CLUP's Under Review</option>
-            </select>
+            <select id="clupStatusFilter" class="month-filter" onchange="filterReportTable()"><option value="all">📋 All CLUP Status</option><option value="Updated">✅ Summary of CLUP's Updated</option><option value="For Updating">🔄 Summary of CLUP's For Updating</option><option value="Under Review">📝 Summary of CLUP's Under Review</option></select>
             <select id="clupProvinceFilter" class="month-filter" onchange="filterReportTable()"><option value="all">🌍 All Provinces</option></select>
             <select id="clupLguFilter" class="month-filter" onchange="filterReportTable()"><option value="all">🏛️ All LGUs</option></select>
             <div class="lgu-print-container">
@@ -198,7 +242,7 @@
               <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
             </div>
           </div>
-          <!-- LGU Directory filters -->
+          <!-- LGU dir filters -->
           <div id="lguDirFilters" class="filter-group hidden-filter">
             <select id="lguDirProvinceFilter" class="month-filter" onchange="filterLguDirectory()"><option value="all">🌍 All Provinces</option></select>
             <button class="clear-filter-btn" onclick="clearLguDirFilters()">✖ Clear Filters</button>
@@ -206,12 +250,10 @@
             <button class="btn btn-success" onclick="exportLguDirectoryExcel()">📥 Download Excel</button>
             <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
           </div>
-          <!-- Filters for CLUP Formulation -->
+          <!-- CLUP Form filters -->
           <div id="clupFormFilters" class="filter-group hidden-filter">
             <select id="clupFormProvinceFilter" class="month-filter" onchange="filterClupFormulation()"><option value="all">🌍 All Provinces</option></select>
-            <span id="clupFormLguFilterContainer">
-              <select id="clupFormLguFilter" class="month-filter" onchange="filterClupFormulation()"><option value="all">🏛️ All LGUs</option></select>
-            </span>
+            <span id="clupFormLguFilterContainer"><select id="clupFormLguFilter" class="month-filter" onchange="filterClupFormulation()"><option value="all">🏛️ All LGUs</option></select></span>
             <button class="clear-filter-btn" onclick="clearClupFormFilters()">✖ Clear Filters</button>
             <button class="btn btn-print" onclick="printClupFormulation()">🖨️ Print</button>
             <button class="btn btn-success" onclick="exportClupFormulationExcel()">📥 Download Excel</button>
@@ -220,23 +262,28 @@
         </div>
       </div>
       <div class="card-body">
-        <!-- Search bars -->
-        <div id="certSearchBar" class="search-bar"><input type="text" id="reportSearchInput" placeholder="🔍 Search by Control No., Applicant, Location..." onkeyup="filterReportTable()"><span style="font-size:0.75rem;color:#475569;">⬇️ Released records only</span></div>
-        <div id="clupSearchBar" class="search-bar hidden-filter"><input type="text" id="clupSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterReportTable()"><span style="font-size:0.75rem;color:#475569;">📋 CLUP Status records</span></div>
-        <div id="lguDirSearchBar" class="search-bar hidden-filter"><input type="text" id="lguDirSearchInput" placeholder="🔍 Search by Municipality, Province, Mayor..." onkeyup="filterLguDirectory()"><span style="font-size:0.75rem;color:#475569;">🏛️ LGU Directory</span></div>
-        <div id="clupFormSearchBar" class="search-bar hidden-filter"><input type="text" id="clupFormSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterClupFormulation()"><span style="font-size:0.75rem;color:#475569;">📋 CLUP/ZO Formulation</span></div>
-        
+        <!-- search bars -->
+        <div id="certSearchBar" class="search-bar"><input type="text" id="reportSearchInput" placeholder="🔍 Search by Control No., Applicant, Location..." onkeyup="filterReportTable()"><span>⬇️ Released records only</span></div>
+        <div id="clupSearchBar" class="search-bar hidden-filter"><input type="text" id="clupSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterReportTable()"><span>📋 CLUP Status records</span></div>
+        <div id="lguDirSearchBar" class="search-bar hidden-filter"><input type="text" id="lguDirSearchInput" placeholder="🔍 Search by Municipality, Province, Mayor..." onkeyup="filterLguDirectory()"><span>🏛️ LGU Directory</span></div>
+        <div id="clupFormSearchBar" class="search-bar hidden-filter"><input type="text" id="clupFormSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterClupFormulation()"><span>📋 CLUP/ZO Formulation</span></div>
+
+        <!-- stats -->
         <div class="stats-row" id="statsPanel">
           <div class="stat-card"><div class="stat-number" id="totalCount">-</div><div class="stat-label">Total Records</div></div>
           <div class="stat-card"><div class="stat-number" id="monthCount">-</div><div class="stat-label">Filtered Records</div></div>
           <div class="stat-card" id="avgDaysCard"><div class="stat-number" id="avgDays">-</div><div class="stat-label">Avg. Processing Days</div></div>
         </div>
+
+        <!-- table -->
         <div class="report-table-wrapper">
           <table class="data-table" id="reportTable">
-            <thead id="tableHeader"><tr><th colspan="12">Loading data from Google Sheets...</th></tr></thead>
+            <thead id="tableHeader"><tr><th colspan="12">Loading...</th></tr></thead>
             <tbody id="tableBody"><tr class="empty-row"><td colspan="12">Please wait, fetching records...</td></tr></tbody>
           </table>
         </div>
+
+        <!-- footers -->
         <div id="certFooter" style="margin-top:1.5rem;font-size:0.75rem;background:#eef2ff;padding:0.7rem 1rem;border-radius:16px;color:#1e3a8a;">✅ Report includes ONLY records with status = <strong>"Released"</strong> from live Google Sheets endpoints.</div>
         <div id="clupFooter" class="hidden-filter" style="margin-top:1.5rem;font-size:0.75rem;background:#eef2ff;padding:0.7rem 1rem;border-radius:16px;color:#1e3a8a;">📋 CLUP Status data from LGUstatus sheet.</div>
         <div id="lguDirFooter" class="hidden-filter" style="margin-top:1.5rem;font-size:0.75rem;background:#eef2ff;padding:0.7rem 1rem;border-radius:16px;color:#1e3a8a;">🏛️ LGU Directory from LGURecords sheet.</div>
@@ -266,7 +313,6 @@
           <div class="input-group">
             <label><i class="fas fa-lock"></i> Password</label>
             <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-            <button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button>
           </div>
           <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
         </form>
@@ -275,6 +321,7 @@
     </div>
   </div>
 
+  <!-- FOOTER -->
   <footer class="footer-new">
     <div class="container">
       <div class="footer-grid">
@@ -294,12 +341,11 @@
   </footer>
 
   <script>
-    // ============================================
-    // CONFIGURATION
-    // ============================================
+    // ============================================================
+    //  CONFIG
+    // ============================================================
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
-    
-    // Data stores
+
     let locationalReleased = [];
     let zoningReleased = [];
     let clupStatusData = [];
@@ -314,9 +360,9 @@
     let lguDirFiltered = [];
     let clupFormFiltered = [];
 
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
+    // ============================================================
+    //  UTILITIES
+    // ============================================================
     function encodePassword(p) { return btoa(p); }
     function escapeHtml(s) { if (s==null) return ""; return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
     function showToastMessage(msg, type="info") { let t = document.querySelector(".toast-msg"); if(t) t.remove(); let toast = document.createElement("div"); toast.className="toast-msg"; toast.style.background = type==="error" ? "#b91c1c" : "#166534"; toast.innerText=msg; document.body.appendChild(toast); setTimeout(()=>toast.remove(),3000); }
@@ -327,20 +373,32 @@
     function getTimeliness(d){ return d===null ? "—" : (d<=30 ? "On Time" : "Delayed"); }
     function toTitleCase(str) { if (!str) return ""; let lower = str.toLowerCase(); return lower.replace(/\b\w/g, c => c.toUpperCase()); }
 
-    // ============================================
-    // AUTHENTICATION FUNCTIONS
-    // ============================================
-    function checkSession() { const raw=localStorage.getItem("dhsud_session"); if(raw){ try{ const s=JSON.parse(raw); const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60); if(diff<12 && s.email){ currentUser=s; return true; } else localStorage.removeItem("dhsud_session"); } catch(e){ localStorage.removeItem("dhsud_session"); } } currentUser=null; return false; }
+    // ============================================================
+    //  AUTHENTICATION
+    // ============================================================
+    function checkSession() {
+      const raw = localStorage.getItem("dhsud_session");
+      if (raw) {
+        try {
+          const s = JSON.parse(raw);
+          const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60);
+          if (diff < 12 && s.email) { currentUser = s; return true; }
+          else localStorage.removeItem("dhsud_session");
+        } catch(e) { localStorage.removeItem("dhsud_session"); }
+      }
+      currentUser = null;
+      return false;
+    }
     function getUserInitials(n){ if(!n) return "U"; let p=n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
     function getRoleLabel(r){ if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r){ if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
+
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
       let navHtml = `<a href="index.html">Home</a>`;
       if (currentUser) {
-        navHtml +=
-          `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
+        navHtml += `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
             <a href="lc.html">Locational Clearance</a>
             <a href="SZC.html">Site Zoning Certification</a></div></div>
           <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
@@ -356,7 +414,9 @@
           <a href="issuance.html">Issuances</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>`;
-      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+      } else {
+        navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+      }
       container.innerHTML = navHtml;
       setTimeout(() => {
         document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
@@ -422,9 +482,9 @@
       return false;
     }
 
-    // ============================================
-    // DATA FETCHING
-    // ============================================
+    // ============================================================
+    //  DATA FETCHING
+    // ============================================================
     async function fetchLocationalReleased() {
       try {
         const url = `${GOOGLE_SCRIPT_URL}?action=get&data_type=locational&_=${Date.now()}`;
@@ -589,9 +649,9 @@
       }
     }
 
-    // ============================================
-    // REPORT TABLE RENDERING
-    // ============================================
+    // ============================================================
+    //  REPORT TABLE RENDERING
+    // ============================================================
     const LOCATIONAL_COLS = ["Application No.","Decision No.","Requesting Party","Date Issued","Report Month","Owner/Proponents","Location","Total Area","No. of Days","On Time / Delayed","Amount Paid","O.R. No."];
     const ZONING_COLS = ["Certification No.","Type","Requesting Party","Date Issued","Report Month","Owner/Proponents","Location","No. of Parcels","Total Area (ha)","No. of Days","On Time / Delayed","Amount Paid","O.R. No."];
     const CLUP_COLS = ["No.","City/Municipality","Province","Latest Plan Approval","Resolution No.","Date Approved","Start Year","End Year","Specific Status"];
@@ -832,9 +892,9 @@
       tbody.innerHTML = rows;
     }
 
-    // ============================================
-    // CLUP FORMULATION RENDER
-    // ============================================
+    // ============================================================
+    //  CLUP FORMULATION RENDER
+    // ============================================================
     function renderClupFormulation() {
       const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
       const lguFilter = document.getElementById("clupFormLguFilter")?.value || "all";
@@ -905,9 +965,9 @@
 
     function filterClupFormulation() { updateClupFormLguFilter(); renderClupFormulation(); }
 
-    // ============================================
-    // LGU DIRECTORY RENDER
-    // ============================================
+    // ============================================================
+    //  LGU DIRECTORY RENDER
+    // ============================================================
     function renderLguDirectory() {
       const provinceFilter = document.getElementById("lguDirProvinceFilter")?.value || "all";
       const search = document.getElementById("lguDirSearchInput")?.value.toLowerCase() || "";
@@ -951,9 +1011,9 @@
 
     function filterLguDirectory() { renderLguDirectory(); }
 
-    // ============================================
-    // SWITCH REPORT TYPE
-    // ============================================
+    // ============================================================
+    //  SWITCH REPORT TYPE
+    // ============================================================
     function switchReportType() {
       const sel = document.getElementById("reportTypeSelect");
       currentReportType = sel.value;
@@ -1008,9 +1068,9 @@
       }
     }
 
-    // ============================================
-    // CLUP FORMULATION EXPORT & PRINT
-    // ============================================
+    // ============================================================
+    //  CLUP FORMULATION EXPORT & PRINT
+    // ============================================================
     function exportClupFormulationExcel() {
       if (clupFormFiltered.length === 0) { alert("No records to export."); return; }
       const data = clupFormFiltered.map((rec) => {
@@ -1309,9 +1369,9 @@
       }
     }
 
-    // ============================================
-    // CLUP SUMMARY PRINT
-    // ============================================
+    // ============================================================
+    //  CLUP SUMMARY PRINT
+    // ============================================================
     function printClupSummary() {
       const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
       const provinceValue = document.getElementById("clupProvinceFilter")?.value || "all";
@@ -1384,9 +1444,9 @@
       printClupFormulationDetail(lguData);
     }
 
-    // ============================================
-    // EXPORT CURRENT REPORT
-    // ============================================
+    // ============================================================
+    //  EXPORT CURRENT REPORT
+    // ============================================================
     function exportCurrentReportToExcel() {
       if (currentReportType === "lgu_directory") { exportLguDirectoryExcel(); return; }
       if (currentReportType === "clup_formulation") { exportClupFormulationExcel(); return; }
@@ -1410,9 +1470,9 @@
       showToastMessage(`Exported ${records.length} records to Excel`, "success");
     }
 
-    // ============================================
-    // LGU DIRECTORY EXPORT & PRINT
-    // ============================================
+    // ============================================================
+    //  LGU DIRECTORY EXPORT & PRINT
+    // ============================================================
     function exportLguDirectoryExcel() {
       if (lguDirFiltered.length === 0) { alert("No records to export."); return; }
       const data = lguDirFiltered.map(rec => ({
@@ -1509,9 +1569,9 @@
       else { showToastMessage("Please allow popups to print.", "error"); }
     }
 
-    // ============================================
-    // INIT
-    // ============================================
+    // ============================================================
+    //  INIT
+    // ============================================================
     async function init() {
       checkSession();
       renderMainNavigation();
