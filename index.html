@@ -83,7 +83,7 @@
     .close-video-modal { position: absolute; top: -40px; right: 0; background: none; border: none; color: white; font-size: 30px; cursor: pointer; padding: 10px; }
     @media (max-width: 800px) { .video-modal-content iframe { height: 300px; } .play-button-overlay { width: 45px; height: 45px; } .play-button-overlay i { font-size: 20px; } }
     
-    /* ===== CALENDAR STYLES - FIXED AND CENTERED ===== */
+    /* ===== CALENDAR STYLES ===== */
     .calendar-widget { 
         background: white; 
         border-radius: 24px; 
@@ -175,7 +175,6 @@
         text-align: center; 
     }
     
-    /* CALENDAR GRID - FIXED AND CENTERED */
     #miniCalendarGrid {
         display: flex;
         justify-content: center;
@@ -250,6 +249,12 @@
         text-overflow: ellipsis; 
         border-left: 2px solid #2563eb; 
         flex-shrink: 0;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .calendar-day .day-event:hover {
+        background: #dbeafe;
+        border-left-color: #1d4ed8;
     }
     .calendar-day.has-event { background: #f8fcff; }
     .calendar-day.today { background: #fffbeb; }
@@ -276,7 +281,7 @@
     .legend-dot.event { background: #2563eb; }
     .legend-dot.today { background: #f5b042; }
 
-    /* Right Panel - Events on selected date */
+    /* Right Panel - Events */
     .events-panel { 
         background: white; 
         border-radius: 24px; 
@@ -309,7 +314,6 @@
         margin-right: 8px; 
     }
     
-    /* Filter dropdowns - inline with title */
     .filter-container {
         display: flex;
         gap: 0.5rem;
@@ -399,8 +403,8 @@
         color: #0f2b3a; 
     }
     .event-info .location { 
-        font-size: 0.58rem; 
-        color: #94a3b8; 
+        font-size: 0.9rem; 
+        color: #000000; 
         margin-top: 1px; 
         white-space: nowrap; 
         overflow: hidden; 
@@ -417,8 +421,9 @@
         font-weight: 600; 
     }
     .event-info .event-date-badge {
-        font-size: 0.5rem;
-        color: #64748b;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #000000;
         display: block;
         margin-top: 0.1rem;
     }
@@ -558,11 +563,10 @@
           </div>
         </div>
         
-        <!-- Events on selected date Panel -->
+        <!-- Events Panel -->
         <div class="events-panel" style="flex:1">
           <div class="events-header">
             <h3><i class="fas fa-calendar-check"></i> Calendar Events</h3>
-            <!-- Filter Dropdowns - Right aligned -->
             <div class="filter-container">
               <select id="filterMonth">
                 <option value="all">All Months</option>
@@ -665,7 +669,6 @@
     let currentUser = null;
     let activities = [];
     let widgetCurrentDate = new Date();
-    let selectedDateForDetail = null;
 
     const videoData = [
       { id: 1, title: "DHSUD Geospatial Innovation and Resilience", videoId: "IG7Y-S0jUpM", source: "YouTube", thumbnail: "https://img.youtube.com/vi/IG7Y-S0jUpM/hqdefault.jpg" },
@@ -802,7 +805,7 @@
 
     // ====== ACTIVITIES MANAGEMENT ======
     const defaultActivities = [
-      { id: 101, name: "CDRA Training for LGU Pavia, Iloilo", type: "Training", startDateTime: "2026-09-14T09:00:00", endDateTime: "2026-09-14T17:00:00", purpose: "CDRA Training", location: "District 21 Hotel, Iloilo City", status: "upcoming", meetingLink: "" },
+      { id: 101, name: "CDRA Training for LGU Pavia, Iloilo", type: "Training", startDateTime: "2026-09-14T09:00:00", endDateTime: "2026-09-14T17:00:00", purpose: "CDRA Training", location: "Sam's 21 Hotel, Iloilo City", status: "upcoming", meetingLink: "" },
       { id: 102, name: "Zoning Ordinance Review", type: "Meeting", startDateTime: "2026-09-15T10:00:00", endDateTime: "2026-09-15T16:00:00", purpose: "ZO amendments review", location: "Zoom Meeting", status: "upcoming", meetingLink: "https://zoom.us/j/123456789" },
       { id: 103, name: "Regional Planning Session", type: "Workshop", startDateTime: "2026-09-16T08:30:00", endDateTime: "2026-09-16T12:00:00", purpose: "Regional planning and coordination", location: "Conference Room B", status: "upcoming", meetingLink: "" },
       { id: 104, name: "LGU Consultation Meeting", type: "Meeting", startDateTime: "2026-09-22T13:00:00", endDateTime: "2026-09-22T15:00:00", purpose: "Consultation with LGUs", location: "Online via Google Meet", status: "upcoming", meetingLink: "https://meet.google.com/abc-defg" },
@@ -825,8 +828,30 @@
         a.status = end < now ? "completed" : "upcoming";
       });
       
-      // Populate year filter
       populateYearFilter();
+      
+      // Set calendar to current month
+      const today = new Date();
+      widgetCurrentDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      
+      // Set month filter to current month by default
+      const currentMonth = today.getMonth();
+      const monthSelect = document.getElementById("filterMonth");
+      if (monthSelect) {
+        monthSelect.value = currentMonth;
+      }
+      
+      // Set year filter to current year by default
+      const currentYear = today.getFullYear();
+      const yearSelect = document.getElementById("filterYear");
+      if (yearSelect) {
+        const yearOptions = yearSelect.querySelectorAll('option');
+        yearOptions.forEach(opt => {
+          if (parseInt(opt.value) === currentYear) {
+            yearSelect.value = currentYear;
+          }
+        });
+      }
       
       renderMiniCalendar();
       renderAllEvents();
@@ -836,12 +861,10 @@
       const yearSelect = document.getElementById("filterYear");
       if (!yearSelect) return;
       
-      // Get unique years from activities
       const years = [...new Set(activities.map(a => {
         return new Date(a.startDateTime).getFullYear();
       }))].sort();
       
-      // Clear existing options except "All Years"
       yearSelect.innerHTML = '<option value="all">All Years</option>';
       
       years.forEach(year => {
@@ -850,12 +873,6 @@
         option.textContent = year;
         yearSelect.appendChild(option);
       });
-      
-      // Set default to current year if available
-      const currentYear = new Date().getFullYear();
-      if (years.includes(currentYear)) {
-        yearSelect.value = currentYear;
-      }
     }
 
     function getEventsForDate(dateStr) {
@@ -864,6 +881,10 @@
         const end = new Date(act.endDateTime).toISOString().split("T")[0];
         return start <= dateStr && end >= dateStr;
       });
+    }
+
+    function getEventById(eventId) {
+      return activities.find(act => act.id === eventId);
     }
 
     function getFilteredEvents() {
@@ -891,12 +912,134 @@
       return filtered.sort((a,b) => new Date(a.startDateTime) - new Date(b.startDateTime));
     }
 
-    // ====== CALENDAR RENDERING - FIXED AND CENTERED ======
+    // Handle click on a date in the calendar
+    window.handleDateClick = function(dateStr) {
+      const date = new Date(dateStr);
+      const month = date.getMonth();
+      const year = date.getFullYear();
+      
+      // Update filters to show only the clicked month and year
+      const monthSelect = document.getElementById("filterMonth");
+      const yearSelect = document.getElementById("filterYear");
+      
+      if (monthSelect) {
+        monthSelect.value = month;
+      }
+      
+      if (yearSelect) {
+        const yearOptions = yearSelect.querySelectorAll('option');
+        let yearFound = false;
+        yearOptions.forEach(opt => {
+          if (parseInt(opt.value) === year) {
+            yearSelect.value = year;
+            yearFound = true;
+          }
+        });
+        if (!yearFound) {
+          const option = document.createElement("option");
+          option.value = year;
+          option.textContent = year;
+          yearSelect.appendChild(option);
+          yearSelect.value = year;
+        }
+      }
+      
+      // Render events for the selected month
+      renderAllEvents(null);
+      
+      // Show a toast notification
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      showToastMessage(`📅 Showing events for ${monthNames[month]} ${year}`, "info");
+    };
+
+    // Handle click on an event in the calendar
+    window.handleEventClick = function(eventId, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      
+      const ev = getEventById(eventId);
+      if (!ev) return;
+      
+      // Get the month and year of the event
+      const eventDate = new Date(ev.startDateTime);
+      const eventMonth = eventDate.getMonth();
+      const eventYear = eventDate.getFullYear();
+      
+      // Update filters to show only the event's month and year
+      const monthSelect = document.getElementById("filterMonth");
+      const yearSelect = document.getElementById("filterYear");
+      
+      if (monthSelect) {
+        monthSelect.value = eventMonth;
+      }
+      
+      if (yearSelect) {
+        const yearOptions = yearSelect.querySelectorAll('option');
+        let yearFound = false;
+        yearOptions.forEach(opt => {
+          if (parseInt(opt.value) === eventYear) {
+            yearSelect.value = eventYear;
+            yearFound = true;
+          }
+        });
+        if (!yearFound) {
+          const option = document.createElement("option");
+          option.value = eventYear;
+          option.textContent = eventYear;
+          yearSelect.appendChild(option);
+          yearSelect.value = eventYear;
+        }
+      }
+      
+      // Render events for the selected month
+      renderAllEvents(null);
+      
+      // Highlight the clicked event in the list
+      highlightEventInList(eventId);
+      
+      // Scroll to the events panel
+      const eventsPanel = document.querySelector('.events-panel');
+      if (eventsPanel) {
+        eventsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      
+      // Show a toast notification
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      showToastMessage(`📅 Showing events for ${monthNames[eventMonth]} ${eventYear}`, "info");
+    };
+
+    // Highlight a specific event in the list
+    function highlightEventInList(eventId) {
+      const container = document.getElementById("eventsListContainer");
+      if (!container) return;
+      
+      const cards = container.querySelectorAll('.event-card');
+      const ev = getEventById(eventId);
+      
+      cards.forEach(card => {
+        // Remove existing highlight
+        card.style.borderColor = '';
+        card.style.background = '';
+        
+        // Check if this card matches the event
+        const titleEl = card.querySelector('.title');
+        if (titleEl && ev && titleEl.textContent.trim() === ev.name) {
+          card.style.borderColor = '#2563eb';
+          card.style.background = '#eef5ff';
+          // Scroll to this card
+          setTimeout(() => {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+        }
+      });
+    }
+
+    // ====== CALENDAR RENDERING ======
     function renderMiniCalendar() {
         const year = widgetCurrentDate.getFullYear();
         const month = widgetCurrentDate.getMonth();
         
-        // Get first day of month (0=Sunday, 1=Monday, etc.)
         const firstDayOfMonth = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const daysInPrevMonth = new Date(year, month, 0).getDate();
@@ -908,18 +1051,13 @@
                             "July", "August", "September", "October", "November", "December"];
         const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
         
-        // Build the calendar grid
         let html = `<div class="calendar-grid">`;
         
-        // Weekday headers
         weekdays.forEach(day => {
             html += `<div class="calendar-weekday">${day}</div>`;
         });
         
-        // Build array of days
         let days = [];
-        
-        // Previous month days
         const prevMonth = month === 0 ? 11 : month - 1;
         const prevMonthYear = month === 0 ? year - 1 : year;
         
@@ -929,13 +1067,11 @@
             days.push({ day: day, isCurrentMonth: false, date: dateStr });
         }
         
-        // Current month days
         for (let d = 1; d <= daysInMonth; d++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
             days.push({ day: d, isCurrentMonth: true, date: dateStr });
         }
         
-        // Next month days
         const nextMonth = month === 11 ? 0 : month + 1;
         const nextMonthYear = month === 11 ? year + 1 : year;
         const remaining = 42 - days.length;
@@ -945,7 +1081,6 @@
             days.push({ day: d, isCurrentMonth: false, date: dateStr });
         }
         
-        // Render each day
         days.forEach((dayInfo) => {
             const dateStr = dayInfo.date;
             const events = getEventsForDate(dateStr);
@@ -962,10 +1097,10 @@
                 const displayEvents = events.slice(0, 2);
                 displayEvents.forEach((ev) => {
                     const shortName = ev.name.length > 10 ? ev.name.substring(0, 10) + '…' : ev.name;
-                    eventHtml += `<div class="day-event">${escapeHtml(shortName)}</div>`;
+                    eventHtml += `<div class="day-event" onclick="handleEventClick(${ev.id}, event)" title="${escapeHtml(ev.name)}">${escapeHtml(shortName)}</div>`;
                 });
                 if (events.length > 2) {
-                    eventHtml += `<div class="day-event" style="font-size:0.3rem;color:#94a3b8;background:transparent;border-left-color:#94a3b8;">+${events.length - 2} more</div>`;
+                    eventHtml += `<div class="day-event" style="font-size:0.3rem;color:#94a3b8;background:transparent;border-left-color:#94a3b8;cursor:default;" onclick="event.stopPropagation();">+${events.length - 2} more</div>`;
                 }
             }
             
@@ -981,14 +1116,6 @@
         document.getElementById("currentMonthDisplay").innerText = `${monthNames[month]} ${year}`;
     }
 
-    window.handleDateClick = function(dateStr) {
-        selectedDateForDetail = dateStr;
-        // Update filter to show all events but highlight the selected date
-        document.getElementById("filterMonth").value = "all";
-        document.getElementById("filterYear").value = "all";
-        renderAllEvents(dateStr);
-    };
-
     function renderAllEvents(highlightDate) {
         const container = document.getElementById("eventsListContainer");
         const dateDisplay = document.getElementById("selectedDateDisplay");
@@ -999,16 +1126,19 @@
         const monthFilter = document.getElementById("filterMonth")?.value;
         const yearFilter = document.getElementById("filterYear")?.value;
         
-        // Update date display - removed year display
+        const monthNames = ["January", "February", "March", "April", "May", "June", 
+                           "July", "August", "September", "October", "November", "December"];
+        
+        // Update date display
         let label = "All Events";
         if (monthFilter !== "all" || yearFilter !== "all") {
             const parts = [];
             if (monthFilter !== "all") {
-                const monthNames = ["January", "February", "March", "April", "May", "June", 
-                                   "July", "August", "September", "October", "November", "December"];
                 parts.push(monthNames[parseInt(monthFilter)]);
             }
-            // Removed year from display
+            if (yearFilter !== "all") {
+                parts.push(yearFilter);
+            }
             label = parts.join(" ");
             if (!label) label = "All Events";
         }
@@ -1079,12 +1209,10 @@
       
       // Filter event listeners
       document.getElementById("filterMonth")?.addEventListener("change", () => {
-        selectedDateForDetail = null;
         renderAllEvents();
       });
       
       document.getElementById("filterYear")?.addEventListener("change", () => {
-        selectedDateForDetail = null;
         renderAllEvents();
       });
       
