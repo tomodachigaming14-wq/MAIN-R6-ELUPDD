@@ -685,11 +685,11 @@
     <!-- CHARTS - Row 3: Risk-Informed -->
     <div class="charts-row-risk">
       <div class="chart-box">
-        <h4>⚠️ Risk-Informed by Province (Yes / No)</h4>
+        <h4>⚠️ Risk-Informed by Province (Yes / No / Not Specified)</h4>
         <canvas id="riskStackedChart"></canvas>
       </div>
       <div class="chart-box">
-        <h4>⚠️ Risk-Informed Total (Yes vs No)</h4>
+        <h4>⚠️ Risk-Informed Total (Yes / No / Not Specified)</h4>
         <canvas id="riskTotalChart"></canvas>
       </div>
     </div>
@@ -1589,15 +1589,16 @@
     }
 
     function getRiskTotalChartData(records) {
-      let yesCount = 0, noCount = 0;
+      let yesCount = 0, noCount = 0, notSpecifiedCount = 0;
       records.forEach(r => {
         const riskVal = getField(r, "Risk-Informed");
         if (riskVal === "Yes") yesCount++;
         else if (riskVal === "No") noCount++;
+        else notSpecifiedCount++;
       });
       return {
-        labels: ["Yes", "No"],
-        data: [yesCount, noCount]
+        labels: ["Yes", "No", "Not Specified"],
+        data: [yesCount, noCount, notSpecifiedCount]
       };
     }
 
@@ -1990,7 +1991,7 @@
           datasets: [{
             label: 'Count',
             data: data.data,
-            backgroundColor: ['#16a34a', '#dc2626'],
+            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8'],
             borderRadius: 6,
             barThickness: 60
           }]
