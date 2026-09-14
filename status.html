@@ -683,10 +683,11 @@
             <th>Income Class</th>
             <th>CLUP Status</th>
             <th>Target Year</th>
+            <th>Status of CLUP Updating</th>
             <th>Shelter Plan</th>
             <th>Housing Subsector</th>
             <th>Comm Plan</th>
-            <th>Remarks</th>
+            <!-- Remarks column removed -->
             <th>Action</th>
           </tr></thead>
           <tbody id="lguTableBody"><tr><td colspan="11" style="text-align:center;">Loading LGU data...</td></tr></tbody>
@@ -1835,10 +1836,12 @@
         const income = getField(r, "Income Class") || "—";
         const status = deriveClupStatus(r) || "—";
         const target = deriveTargetYear(r) || "—";
+        // New: Status of CLUP Updating
+        const clupUpdates = getField(r, "CLUPStatus/Updates") || "—";
         const shelterPlan = getField(r, "LGU with Local Shelter Plan") || "—";
         const housingSubsector = getField(r, "LGU with Integrated Housing Subsector") || "—";
         const commPlan = getField(r, "LGU with Integrated Communications Plan") || "—";
-        const remarks = getField(r, "Remarks") || "";
+        // Remarks removed from display
         
         const category = getClupStatusCategory(r);
         const statusClass = category === "Updated" ? "badge-updated" : 
@@ -1853,6 +1856,7 @@
           return '#6b7280';
         };
         
+        // Column order: Region, Province, City, Income, CLUP Status, Target Year, Status of CLUP Updating, Shelter Plan, Housing Sub, Comm Plan, Action
         html += `<tr>
           <td>${escapeHtml(region)}</td>
           <td>${escapeHtml(province)}</td>
@@ -1860,10 +1864,10 @@
           <td>${escapeHtml(income)}</td>
           <td><span class="badge-status ${statusClass}">${escapeHtml(category)}</span></td>
           <td>${escapeHtml(target)}</td>
+          <td>${escapeHtml(clupUpdates)}</td>
           <td><span style="font-weight:600;color:${getColor(shelterPlan)};">${escapeHtml(shelterPlan)}</span></td>
           <td><span style="font-weight:600;color:${getColor(housingSubsector)};">${escapeHtml(housingSubsector)}</span></td>
           <td><span style="font-weight:600;color:${getColor(commPlan)};">${escapeHtml(commPlan)}</span></td>
-          <td style="max-width:120px; font-size:0.7rem;">${escapeHtml(remarks)}</td>
           <td>
             <div class="action-cell">
               <button class="btn-view" data-record='${recordJson}'>View</button>
