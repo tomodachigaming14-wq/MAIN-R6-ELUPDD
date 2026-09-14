@@ -1985,7 +1985,7 @@
     // ============================================
     // CONFIGURATION
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby2wAp3XcCGN33ztHmw5IkJGFEgD932SiJVtAA9K3342e7jI0Ssdj2tgDf_yjZRWOmxoA/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwkJeP7BFW0-hBKwu35_bKPgp8StOpnAyZom417vmlHQ6mkTQRk0JEIglUaOi2SW-7s4A/exec';
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1ikMuQVy3MBiuK6KuAEGBJ2sod-jlzLwCqsTtenORczg/edit?usp=sharing';
 
     // ============================================
@@ -2678,7 +2678,7 @@
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
-            const actualRow = index + 2;
+            const actualRow = record.rowNumber || (index + 2); // use the real row from sheet
             const isEditing = editingRowNumber === actualRow;
 
             html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}">`;
@@ -2687,7 +2687,6 @@
             columns.forEach(col => {
                 let value = record[col.key] || '-';
                 if (col.key === 'Date Conducted') {
-                    // Use the new formatDateDisplay function for proper display
                     value = formatDateDisplay(value);
                 }
 
@@ -2715,9 +2714,7 @@
                         });
                         html += `</select></td>`;
                     } else if (col.key === 'Date Conducted') {
-                        // For editing, show as date input with YYYY-MM-DD format
                         let dateValue = value;
-                        // Convert from MM/DD/YYYY to YYYY-MM-DD for input
                         if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
                             const parts = value.split('/');
                             dateValue = parts[2] + '-' + parts[0] + '-' + parts[1];
@@ -2813,9 +2810,10 @@
             }
         });
 
-        const recordIndex = rowNumber - 2;
-        if (recordIndex < 0 || recordIndex >= filteredRecords.length) {
-            setStatus('❌ Error: Record not found', 'error');
+        // Find the original record using its real row number
+        const recordIndex = filteredRecords.findIndex(r => r.rowNumber === rowNumber);
+        if (recordIndex === -1) {
+            setStatus('❌ Error: Record not found in local data', 'error');
             return;
         }
         const originalRecord = filteredRecords[recordIndex];
