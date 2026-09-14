@@ -285,7 +285,7 @@
         /* Risk charts row */
     .charts-row-risk {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 0.8fr 1.2fr;
       gap: 24px;
       margin-bottom: 28px;
       max-width: 950px;
@@ -305,6 +305,20 @@
       letter-spacing: 0.5px;
       color: #4a6f88;
       margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .charts-row-risk .chart-box h4 .chart-dropdown {
+      font-weight: 400;
+      text-transform: none;
+      font-size: 0.65rem;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
     }
     .charts-row-risk .chart-box canvas { max-height: 200px; max-width: 100%; }
 
@@ -682,15 +696,23 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 3: Risk-Informed -->
+    <!-- CHARTS - Row 3: Risk-Informed (SWAPPED) -->
     <div class="charts-row-risk">
+      <div class="chart-box">
+        <h4>
+          ⚠️ Risk-Informed Total (Yes / No / Not Specified)
+          <select class="chart-dropdown" id="filterRiskTotal">
+            <option value="all">All</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Not Specified">Not Specified</option>
+          </select>
+        </h4>
+        <canvas id="riskTotalChart"></canvas>
+      </div>
       <div class="chart-box">
         <h4>⚠️ Risk-Informed by Province (Yes / No / Not Specified)</h4>
         <canvas id="riskStackedChart"></canvas>
-      </div>
-      <div class="chart-box">
-        <h4>⚠️ Risk-Informed Total (Yes / No / Not Specified)</h4>
-        <canvas id="riskTotalChart"></canvas>
       </div>
     </div>
 
@@ -712,7 +734,7 @@
 
     <!-- TABLE -->
     <div class="table-section">
-      <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;">(from LGUstatus sheet)</span></h4>
+      <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;" id="tableSubtitle">(from LGUstatus sheet)</span></h4>
       <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
         <table class="lgu-table" id="lguTable">
           <thead><tr>
@@ -1400,6 +1422,19 @@
       });
     }
 
+    // NEW: Filter by Risk-Informed value
+    function filterByRiskTotalCategory(records, category) {
+      if (category === 'all') return records;
+      
+      return records.filter(r => {
+        const riskVal = getField(r, "Risk-Informed");
+        if (category === 'Not Specified') {
+          return !riskVal || riskVal === "—" || riskVal === "" || (riskVal !== "Yes" && riskVal !== "No");
+        }
+        return riskVal === category;
+      });
+    }
+
     function filterByYear(records, year) {
       if (!year || year === 'all' || year === '') return records;
       
@@ -1979,10 +2014,17 @@
       });
     }
 
-    function renderRiskTotalChart(records) {
+    function renderRiskTotalChart(records, activeCategory = 'all') {
       const data = getRiskTotalChartData(records);
       const ctx = document.getElementById("riskTotalChart").getContext("2d");
       if (riskTotalChartInstance) riskTotalChartInstance.destroy();
+      
+      // Highlight the active category bar, mute the others
+      const baseColors = ['#16a34a', '#dc2626', '#94a3b8'];
+      const mutedColors = ['#bbf7d0', '#fecaca', '#e2e8f0'];
+      const colors = data.labels.map((label, i) => 
+        activeCategory === 'all' || label === activeCategory ? baseColors[i] : mutedColors[i]
+      );
       
       riskTotalChartInstance = new Chart(ctx, {
         type: 'bar',
@@ -1991,7 +2033,7 @@
           datasets: [{
             label: 'Count',
             data: data.data,
-            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8'],
+            backgroundColor: colors,
             borderRadius: 6,
             barThickness: 60
           }]
@@ -2089,7 +2131,17 @@
         });
       });
       
-      document.getElementById("filterCount").innerText = `${records.length} LGUs shown`;
+      // Update the count text with a note about the Risk-Informed filter
+      const riskFilterVal = document.getElementById("filterRiskTotal").value || 'all';
+      const tableSubtitle = document.getElementById("tableSubtitle");
+      let countText = `${records.length} LGUs shown`;
+      if (riskFilterVal !== 'all') {
+        countText += ` (Risk-Informed: ${riskFilterVal})`;
+        if (tableSubtitle) tableSubtitle.innerHTML = `(from LGUstatus sheet · filtered by Risk-Informed: ${riskFilterVal})`;
+      } else {
+        if (tableSubtitle) tableSubtitle.innerHTML = `(from LGUstatus sheet)`;
+      }
+      document.getElementById("filterCount").innerText = countText;
     }
 
     function showDetailModal(record){
@@ -2316,6 +2368,7 @@
       const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
       const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
       const supportFilter = document.getElementById("filterSupportPie").value || 'all';
+      const riskTotalFilter = document.getElementById("filterRiskTotal").value || 'all';
       
       let filtered = rawLguData;
       if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
@@ -2324,9 +2377,12 @@
       
       filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
       
-      let supportFiltered = filterBySupportCategory(filtered, supportFilter);
+      // Risk-Informed filter — applied to both the Total chart AND the table
+      let riskFiltered = filterByRiskTotalCategory(filtered, riskTotalFilter);
       
-      let tableFiltered = filterByStatusUpdates(filtered, barMode);
+      // Table uses riskFiltered (so it respects the Risk-Informed filter)
+      // but still needs the barMode / status-updates filter applied on top
+      let tableFiltered = filterByStatusUpdates(riskFiltered, barMode);
       
       filteredData = filtered;
       
@@ -2337,8 +2393,10 @@
       renderHousingPie(filtered);
       renderCommPie(filtered);
       renderBar(filtered, barMode);
-      renderRiskStackedChart(filtered);
-      renderRiskTotalChart(filtered);
+      
+      // Render Risk-Informed charts
+      renderRiskStackedChart(filtered);                      // By Province uses base filtered data
+      renderRiskTotalChart(riskFiltered, riskTotalFilter);   // Total uses the risk-specific filter
       
       const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
       renderColumn(filtered, activeView);
@@ -2396,6 +2454,7 @@
       document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
       document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
       document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
+      document.getElementById("filterRiskTotal").addEventListener('change', applyFilters);
       
       document.getElementById("resetFiltersBtn").addEventListener('click', function(){
         document.getElementById("filterProvince").value = "";
@@ -2405,6 +2464,7 @@
         document.getElementById("barChartDropdown").value = "all";
         document.getElementById("filterStackedProvince").value = "all";
         document.getElementById("filterSupportPie").value = "all";
+        document.getElementById("filterRiskTotal").value = "all";
         applyFilters();
       });
       
