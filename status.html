@@ -682,14 +682,14 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 3: Risk-Information -->
+    <!-- CHARTS - Row 3: Risk-Informed -->
     <div class="charts-row-risk">
       <div class="chart-box">
-        <h4>⚠️ Risk-Information by Province (Yes / No)</h4>
+        <h4>⚠️ Risk-Informed by Province (Yes / No)</h4>
         <canvas id="riskStackedChart"></canvas>
       </div>
       <div class="chart-box">
-        <h4>⚠️ Risk-Information Total (Yes vs No)</h4>
+        <h4>⚠️ Risk-Informed Total (Yes vs No)</h4>
         <canvas id="riskTotalChart"></canvas>
       </div>
     </div>
@@ -726,7 +726,7 @@
             <th>Shelter Plan</th>
             <th>Housing Subsector</th>
             <th>Comm Plan</th>
-            <th>Risk-Information</th>
+            <th>Risk-Informed</th>
             <th>Action</th>
           </tr></thead>
           <tbody id="lguTableBody"><tr><td colspan="12" style="text-align:center;">Loading LGU data...</td></tr></tbody>
@@ -878,8 +878,8 @@
           </select>
         </div>
         <div class="edit-form-group">
-          <label>Risk-Information</label>
-          <select id="editRiskInfo" name="Risk-Information">
+          <label>Risk-Informed</label>
+          <select id="editRiskInfo" name="Risk-Informed">
             <option value="">Select...</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
@@ -979,7 +979,11 @@
         "CommPlan",
         "Communications"
       ],
-      "Risk-Information": [
+      "Risk-Informed": [
+        "Risk-Informed",
+        "Risk Informed",
+        "RiskInformed",
+        "risk_informed",
         "Risk-Information",
         "Risk Information",
         "RiskInformation",
@@ -1549,7 +1553,7 @@
       return { labels: ["Yes", "No", "Not Specified"], data: [yesCount, noCount, emptyCount] };
     }
 
-    // ========== RISK-INFORMATION CHART DATA ==========
+    // ========== RISK-INFORMED CHART DATA ==========
     function getRiskStackedChartData(records) {
       const provinceData = {};
       const allProvinces = [];
@@ -1561,7 +1565,7 @@
             provinceData[province] = { 'Yes': 0, 'No': 0, 'Not Specified': 0 };
             allProvinces.push(province);
           }
-          const riskVal = getField(r, "Risk-Information");
+          const riskVal = getField(r, "Risk-Informed");
           if (riskVal === "Yes") provinceData[province]['Yes']++;
           else if (riskVal === "No") provinceData[province]['No']++;
           else provinceData[province]['Not Specified']++;
@@ -1587,7 +1591,7 @@
     function getRiskTotalChartData(records) {
       let yesCount = 0, noCount = 0;
       records.forEach(r => {
-        const riskVal = getField(r, "Risk-Information");
+        const riskVal = getField(r, "Risk-Informed");
         if (riskVal === "Yes") yesCount++;
         else if (riskVal === "No") noCount++;
       });
@@ -1926,7 +1930,7 @@
       });
     }
 
-    // ========== RISK-INFORMATION RENDERERS ==========
+    // ========== RISK-INFORMED RENDERERS ==========
     function renderRiskStackedChart(records) {
       const data = getRiskStackedChartData(records);
       const ctx = document.getElementById("riskStackedChart").getContext("2d");
@@ -2033,7 +2037,7 @@
         const shelterPlan = getField(r, "LGU with Local Shelter Plan") || "—";
         const housingSubsector = getField(r, "LGU with Integrated Housing Subsector") || "—";
         const commPlan = getField(r, "LGU with Integrated Communications Plan") || "—";
-        const riskInfo = getField(r, "Risk-Information") || "—";
+        const riskInfo = getField(r, "Risk-Informed") || "—";
         
         const category = getClupStatusCategory(r);
         const statusClass = category === "Updated" ? "badge-updated" : 
@@ -2109,7 +2113,7 @@
         { label: "Local Shelter Plan", key: "LGU with Local Shelter Plan" },
         { label: "Integrated Housing Subsector", key: "LGU with Integrated Housing Subsector" },
         { label: "Integrated Communications Plan", key: "LGU with Integrated Communications Plan" },
-        { label: "Risk-Information", key: "Risk-Information" },
+        { label: "Risk-Informed", key: "Risk-Informed" },
         { label: "Remarks", key: "Remarks" }
       ];
       
@@ -2152,7 +2156,7 @@
       document.getElementById("editShelterPlan").value = getFieldValue(record, "LGU with Local Shelter Plan");
       document.getElementById("editHousingSubsector").value = getFieldValue(record, "LGU with Integrated Housing Subsector");
       document.getElementById("editCommPlan").value = getFieldValue(record, "LGU with Integrated Communications Plan");
-      document.getElementById("editRiskInfo").value = getFieldValue(record, "Risk-Information");
+      document.getElementById("editRiskInfo").value = getFieldValue(record, "Risk-Informed");
       document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
       
       document.getElementById("editSaveBtn").disabled = false;
@@ -2188,7 +2192,7 @@
           'LGU with Local Shelter Plan': formData.get('LGU with Local Shelter Plan') || '',
           'LGU with Integrated Housing Subsector': formData.get('LGU with Integrated Housing Subsector') || '',
           'LGU with Integrated Communications Plan': commPlanValue,
-          'Risk-Information': formData.get('Risk-Information') || '',
+          'Risk-Informed': formData.get('Risk-Informed') || '',
           'Remarks': formData.get('Remarks') || ''
         };
         
@@ -2363,9 +2367,9 @@
 
     function getFallbackData() {
       return [
-        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Information": "Yes", "Remarks": "" },
-        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Information": "No", "Remarks": "Needs updating" },
-        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Information": "Yes", "Remarks": "" }
+        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "Remarks": "" },
+        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "Remarks": "Needs updating" },
+        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "Remarks": "" }
       ];
     }
 
