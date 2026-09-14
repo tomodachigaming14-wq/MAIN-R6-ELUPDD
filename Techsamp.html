@@ -1845,7 +1845,7 @@
             <button class="filter-btn reset-btn" id="resetRecordFilter"><i class="fas fa-undo"></i> Reset</button>
         </div>
         <div class="modal-search">
-            <input type="text" id="searchInput" placeholder="🔍 Search by PSGC, Province, City/Municipality, or Personnel...">
+            <input type="text" id="searchInput" placeholder=" ">
             <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
         </div>
         <div class="modal-body" id="modalBody">
@@ -2627,6 +2627,7 @@
         filterProvince.value = 'all';
         filterReportingMonth.value = 'all';
         filterPIC.value = 'all';
+        searchInput.value = '';
         applyRecordFilters();
     });
 
@@ -2879,21 +2880,56 @@
         }
     };
 
+    // ============================================
+    // SEARCH - ENHANCED, CASE-INSENSITIVE, MATCHES PROVINCE & CITY/MUNICIPALITY
+    // ============================================
     searchInput.addEventListener('input', function() {
         const term = this.value.trim().toLowerCase();
+        
+        // If empty, revert to the applied filter set
         if (!term) {
             applyRecordFilters();
             return;
         }
-        const filtered = filteredRecords.filter(r => {
-            const psgc = (r.PSGC || '').toLowerCase();
-            const province = (r.Province || '').toLowerCase();
-            const city = (r['City/Municipality'] || '').toLowerCase();
-            const pic = (r['Personnel In-Charge'] || '').toLowerCase();
-            return psgc.includes(term) || province.includes(term) || city.includes(term) || pic.includes(term);
+
+        // Search from the FULL dataset (allRecords), not the filtered subset,
+        // so that searching "Iloilo" always finds all Iloilo records.
+        const searchFiltered = allRecords.filter(r => {
+            // Convert every field to a lowercase string for comparison
+            const psgc        = String(r.PSGC || '').toLowerCase();
+            const province    = String(r.Province || '').toLowerCase();
+            const city        = String(r['City/Municipality'] || '').toLowerCase();
+            const pic         = String(r['Personnel In-Charge'] || '').toLowerCase();
+            const region      = String(r.Region || '').toLowerCase();
+            const query       = String(r['Query / TA Details'] || '').toLowerCase();
+            const assistance  = String(r['Type of Assistance Provided'] || '').toLowerCase();
+            const category    = String(r['TA Category'] || '').toLowerCase();
+            const planned     = String(r['Planned / Requested'] || '').toLowerCase();
+            const remarks     = String(r.Remarks || '').toLowerCase();
+            const month       = String(r['Reporting Month'] || '').toLowerCase();
+
+            // Return true if ANY field contains the search term.
+            // This is what makes "Iloilo" match every Iloilo record,
+            // and "Alimodian" match every Alimodian record.
+            return (
+                province.includes(term) ||
+                city.includes(term) ||
+                psgc.includes(term) ||
+                pic.includes(term) ||
+                region.includes(term) ||
+                query.includes(term) ||
+                assistance.includes(term) ||
+                category.includes(term) ||
+                planned.includes(term) ||
+                remarks.includes(term) ||
+                month.includes(term)
+            );
         });
-        renderTable(filtered);
-        displayCount.textContent = filtered.length;
+
+        // Render the results and update the counters
+        renderTable(searchFiltered);
+        displayCount.textContent = searchFiltered.length;
+        footerTotalCount.textContent = searchFiltered.length;
         editingRowNumber = null;
     });
 
