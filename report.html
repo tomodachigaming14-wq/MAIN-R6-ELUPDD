@@ -344,7 +344,7 @@
     // ============================================================
     //  CONFIG
     // ============================================================
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgcd9hZlpCO4HnQgCD4eukvq6zWl0c5rfC2NmfaaUnkwjyqu6iqInBSzWbF7opyVg/exec";
 
     let locationalReleased = [];
     let zoningReleased = [];
@@ -1591,8 +1591,7 @@
       document.getElementById("clupFooter").classList.add("hidden-filter");
       document.getElementById("lguDirFooter").classList.add("hidden-filter");
       document.getElementById("clupFormFooter").classList.add("hidden-filter");
-      await fetchLiveData();
-      setInterval(() => { fetchLiveData().catch(e => console.warn("Auto-refresh error:", e)); }, 60000);
+       await fetchLiveData();
     }
     init();
 
