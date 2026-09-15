@@ -609,7 +609,7 @@
     }
 
     @media print { .filter-bar, .chart-tabs, .btn-view, header { display: none !important; } }
-    @media (max-width: 760px) { 
+    @media (max-width: 760px) {
       .chart-grid { grid-template-columns: 1fr; }
       .charts-row-2col { grid-template-columns: 1fr; }
       .charts-row-risk { grid-template-columns: 1fr; }
@@ -749,7 +749,7 @@
     <div class="charts-row-risk">
       <div class="chart-box">
         <h4>
-          ⚠️ Risk-Informed Total 
+          ⚠️ Risk-Informed Total
           <select class="chart-dropdown" id="filterRiskTotal">
             <option value="all">All</option>
             <option value="Yes">Yes</option>
@@ -818,6 +818,12 @@
             <option value="RUDD, OSD, & PCE">RUDD, OSD, &amp; PCE</option>
           </select>
         </h4>
+        <div style="display:flex; gap:6px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
+          <label style="font-size:0.62rem; font-weight:700; color:#4a6f88; text-transform:uppercase; letter-spacing:0.4px;">📅 Year:</label>
+          <select class="chart-dropdown" id="filterUrbanDevYear" style="max-width:120px;">
+            <option value="all">All Years</option>
+          </select>
+        </div>
         <canvas id="urbanDevChart"></canvas>
       </div>
     </div>
@@ -843,9 +849,10 @@
             <th>PLANADO Target</th>
             <th>Target Year</th>
             <th>Urban Development</th>
+            <th>Target Year_Urban Devt</th>
             <th>Action</th>
           </tr></thead>
-          <tbody id="lguTableBody"><tr><td colspan="15" style="text-align:center;">Loading LGU data...</td></tr></tbody>
+          <tbody id="lguTableBody"><tr><td colspan="16" style="text-align:center;">Loading LGU data...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -868,7 +875,7 @@
       <form id="editForm">
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="data_type" value="lgu_status">
-        
+
         <div class="edit-form-row">
           <div class="edit-form-group">
             <label>PSGC</label>
@@ -1001,7 +1008,7 @@
             <option value="No">No</option>
           </select>
         </div>
-        
+
         <div class="edit-form-group">
           <label>PLANADO Target</label>
           <select id="editPlanadoTarget" name="PLANADO Target">
@@ -1037,7 +1044,20 @@
             <option value="RUDD, OSD, & PCE">RUDD, OSD, &amp; PCE</option>
           </select>
         </div>
-        
+
+        <!-- ===== TARGET YEAR_URBAN DEVT ===== -->
+        <div class="edit-form-group">
+          <label>Target Year_Urban Devt</label>
+          <div class="target-year-selector" id="editTargetYearUrbanDevtPills">
+            <!-- dynamic pills go here -->
+          </div>
+          <div class="add-year-row">
+            <input type="text" id="editTargetYearUrbanDevtInput" placeholder="e.g. 2026 (press Enter or click Add)" />
+            <button type="button" id="editTargetYearUrbanDevtAddBtn">+ Add</button>
+          </div>
+          <input type="hidden" id="editTargetYearUrbanDevt" name="Target Year_Urban Devt" value="">
+        </div>
+
         <div class="edit-form-group">
           <label>Remarks</label>
           <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
@@ -1106,6 +1126,7 @@
     // Chart filter states
     let planadoChartFilter = 'all';
     let urbanDevChartFilter = 'all';
+    let urbanDevYearFilter = 'all';
     let targetYearChartFilter = 'all';
 
     // ========== FIELD MAPPING ==========
@@ -1119,12 +1140,13 @@
       "Support from Other Institutions": ["Support from Other Institutions", "Support", "Institutions Support", "support_from_other_institutions"],
       "PLANADO Target": ["PLANADO Target", "Planado Target", "planado_target", "PLANADO", "Planado"],
       "Target Year": ["Target Year", "TargetYear", "target_year", "Target year", "target year"],
-      "Urban Development": ["Urban Development", "urban_development", "UrbanDevelopment", "Urban Dev", "urban"]
+      "Urban Development": ["Urban Development", "urban_development", "UrbanDevelopment", "Urban Dev", "urban"],
+      "Target Year_Urban Devt": ["Target Year_Urban Devt", "TargetYearUrbanDevt", "target_year_urban_devt", "Target year urban devt", "target year urban devt", "TargetYear_Urban_Devt"]
     };
-    
-    function escapeHtml(s){ 
+
+    function escapeHtml(s){
       if (s === undefined || s === null) return "—";
-      return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); 
+      return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
     }
 
     // ========== SAFE BASE64 ENCODE / DECODE ==========
@@ -1165,50 +1187,50 @@
       }
       return clean;
     }
-    
-    function showToast(msg, type){ 
-      let t=document.createElement("div"); 
-      t.className="toast-msg"+(type==='error'?' error':type==='info'?' info':''); 
-      t.innerText=msg; 
-      document.body.appendChild(t); 
-      setTimeout(()=>t.remove(), 3500); 
+
+    function showToast(msg, type){
+      let t=document.createElement("div");
+      t.className="toast-msg"+(type==='error'?' error':type==='info'?' info':'');
+      t.innerText=msg;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(), 3500);
     }
-    
-    function checkSession(){ 
-      const raw=localStorage.getItem("dhsud_session"); 
-      if(raw){ 
-        try{ 
-          const s=JSON.parse(raw); 
-          const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60); 
-          if(diff<12&&s.email){ 
-            currentUser=s; 
-            return true; 
-          } else localStorage.removeItem("dhsud_session"); 
+
+    function checkSession(){
+      const raw=localStorage.getItem("dhsud_session");
+      if(raw){
+        try{
+          const s=JSON.parse(raw);
+          const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60);
+          if(diff<12&&s.email){
+            currentUser=s;
+            return true;
+          } else localStorage.removeItem("dhsud_session");
         }catch(e){localStorage.removeItem("dhsud_session");}
-      } 
-      currentUser=null; 
-      return false; 
+      }
+      currentUser=null;
+      return false;
     }
-    
-    function getUserInitials(n){ 
-      if(!n) return "U"; 
-      let p=n.split(" "); 
-      if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); 
-      return n.substring(0,2).toUpperCase(); 
+
+    function getUserInitials(n){
+      if(!n) return "U";
+      let p=n.split(" ");
+      if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase();
+      return n.substring(0,2).toUpperCase();
     }
-    
-    function getRoleLabel(r){ 
-      if(r==="admin") return "👑 Admin"; 
-      if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; 
-      return "👁️ Viewer"; 
+
+    function getRoleLabel(r){
+      if(r==="admin") return "👑 Admin";
+      if(r==="encoder"||r==="staff") return "📋 Staff/Officer";
+      return "👁️ Viewer";
     }
-    
-    function getRoleClass(r){ 
-      if(r==="admin") return "admin"; 
-      if(r==="encoder"||r==="staff") return "staff"; 
-      return "viewer"; 
+
+    function getRoleClass(r){
+      if(r==="admin") return "admin";
+      if(r==="encoder"||r==="staff") return "staff";
+      return "viewer";
     }
-    
+
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
@@ -1248,7 +1270,7 @@
         });
       }, 10);
     }
-    
+
     function renderUserMenu() {
       const container = document.getElementById("userMenuContainer"); if(!container) return;
       if (currentUser) {
@@ -1370,7 +1392,7 @@
       if (clupStatus && clupStatus !== "—" && clupStatus !== "") return normalizeStatusCategory(clupStatus);
       return "Other";
     }
-    
+
     function normalizeStatusCategory(status) {
       if (!status) return null;
       const s = String(status).toLowerCase().trim();
@@ -1508,33 +1530,131 @@
       return { labels, datasets, allYears, yearProvinceBreakdown, yearCounts };
     }
 
-    function getUrbanDevData(records, filterCategory = 'all') {
+    // ============================================================
+    // ✅ URBAN DEVELOPMENT CHART DATA (now with year breakdown)
+    // ============================================================
+    function getUrbanDevData(records, filterCategory = 'all', filterYear = 'all') {
+      // Collect the years present in Target Year_Urban Devt across records
+      const yearSet = new Set();
+      records.forEach(r => {
+        const tyud = getField(r, "Target Year_Urban Devt");
+        String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => yearSet.add(y));
+      });
+      const allYears = [...yearSet].sort();
+
+      // If a specific year is selected, only include records whose
+      // Target Year_Urban Devt contains that year
+      const filteredRecords = (filterYear === 'all')
+        ? records
+        : records.filter(r => {
+            const tyud = getField(r, "Target Year_Urban Devt");
+            const years = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
+            return years.includes(filterYear);
+          });
+
       const provinceData = {};
       const allProvinces = [];
       const allCategories = ['RUDD', 'OSD', 'PCE', 'RUDD & OSD', 'RUDD & PCE', 'OSD & PCE', 'RUDD, OSD, & PCE'];
       const categoriesToShow = filterCategory === 'all' ? allCategories : [filterCategory];
-      records.forEach(r => {
+
+      // Determine the year dimension for the bars.
+      // If a specific year is selected → single segment per category (that year)
+      // If "all" → one segment per year (stacked by year)
+      const yearsToShow = (filterYear === 'all')
+        ? (allYears.length > 0 ? allYears : ['Not Specified'])
+        : [filterYear];
+
+      filteredRecords.forEach(r => {
         const province = getField(r, "Province");
         if (province && province !== "—") {
-          if (!provinceData[province]) { provinceData[province] = {}; categoriesToShow.forEach(c => provinceData[province][c] = 0); allProvinces.push(province); }
+          if (!provinceData[province]) {
+            provinceData[province] = {};
+            categoriesToShow.forEach(c => {
+              provinceData[province][c] = {};
+              yearsToShow.forEach(y => provinceData[province][c][y] = 0);
+            });
+            allProvinces.push(province);
+          }
           const val = getField(r, "Urban Development");
           if (val && val !== "—" && val !== "") {
             const normalized = String(val).trim();
             let matchedCategory = null;
-            if (allCategories.includes(normalized)) { matchedCategory = normalized; } 
+            if (allCategories.includes(normalized)) { matchedCategory = normalized; }
             else {
               const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
               matchedCategory = allCategories.find(c => { const cParts = c.split(/[,&]+/).map(s => s.trim()).filter(Boolean); return cParts.length === parts.length && cParts.every(p => parts.includes(p)); });
               if (!matchedCategory) { for (let cat of allCategories) { if (normalized.includes(cat)) { matchedCategory = cat; break; } } }
             }
-            if (matchedCategory && categoriesToShow.includes(matchedCategory)) { provinceData[province][matchedCategory] = (provinceData[province][matchedCategory] || 0) + 1; }
+            if (matchedCategory && categoriesToShow.includes(matchedCategory)) {
+              // Which year(s) does this record belong to?
+              let recordYears = [];
+              if (filterYear === 'all') {
+                const tyud = getField(r, "Target Year_Urban Devt");
+                recordYears = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
+                if (recordYears.length === 0) recordYears = ['Not Specified'];
+                // Only keep years we care about
+                recordYears = recordYears.filter(y => yearsToShow.includes(y));
+              } else {
+                recordYears = [filterYear];
+              }
+              recordYears.forEach(y => {
+                if (provinceData[province][matchedCategory][y] === undefined) {
+                  provinceData[province][matchedCategory][y] = 0;
+                }
+                provinceData[province][matchedCategory][y]++;
+              });
+            }
           }
         }
       });
+
       const sortedProvinces = allProvinces.sort();
-      const colorMap = { 'RUDD': '#3b82f6', 'OSD': '#10b981', 'PCE': '#f59e0b', 'RUDD & OSD': '#8b5cf6', 'RUDD & PCE': '#ec4899', 'OSD & PCE': '#06b6d4', 'RUDD, OSD, & PCE': '#ef4444' };
-      const datasets = categoriesToShow.map(cat => ({ label: cat, data: sortedProvinces.map(p => provinceData[p]?.[cat] || 0), backgroundColor: colorMap[cat] || '#94a3b8' }));
-      return { labels: sortedProvinces, datasets };
+      const catColorMap = { 'RUDD': '#3b82f6', 'OSD': '#10b981', 'PCE': '#f59e0b', 'RUDD & OSD': '#8b5cf6', 'RUDD & PCE': '#ec4899', 'OSD & PCE': '#06b6d4', 'RUDD, OSD, & PCE': '#ef4444' };
+      const yearShadeMap = ['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe'];
+
+      // Build one dataset per (category × year) combination
+      const datasets = [];
+      categoriesToShow.forEach(cat => {
+        yearsToShow.forEach((yr, yIdx) => {
+          const data = sortedProvinces.map(p => provinceData[p]?.[cat]?.[yr] || 0);
+          // Skip entirely empty year-datasets when showing all years, to reduce clutter
+          if (filterYear === 'all' && data.every(v => v === 0) && yearsToShow.length > 1) return;
+
+          // For "all years" view, tint each year with a shade of the category's base color.
+          // We use the category color directly and rely on Chart.js legend/tooltip for year context.
+          const baseColor = catColorMap[cat] || '#94a3b8';
+          let bgColor = baseColor;
+          if (filterYear === 'all' && yearsToShow.length > 1) {
+            // Blend the year index into the base color for visual distinction
+            const shade = yearShadeMap[yIdx % yearShadeMap.length];
+            bgColor = cat === 'RUDD' ? shade : baseColor;
+          }
+
+          datasets.push({
+            label: filterYear === 'all' ? `${cat} — ${yr}` : cat,
+            data: data,
+            backgroundColor: filterYear === 'all' ? (yIdx === 0 ? baseColor : shadeForYear(yIdx, baseColor)) : baseColor,
+            stack: filterYear === 'all' ? `${cat}` : undefined,
+            _year: yr,
+            _category: cat
+          });
+        });
+      });
+
+      return { labels: sortedProvinces, datasets, allYears };
+    }
+
+    // Helper: generate a lighter/darker shade of a hex color
+    function shadeForYear(index, hex) {
+      if (!hex || hex[0] !== '#') return hex;
+      const num = parseInt(hex.slice(1), 16);
+      let r = (num >> 16) & 0xff, g = (num >> 8) & 0xff, b = num & 0xff;
+      // Darken for odd indexes, lighten for even
+      const factor = index % 2 === 0 ? 0.75 : 1.25;
+      r = Math.min(255, Math.max(0, Math.round(r * factor)));
+      g = Math.min(255, Math.max(0, Math.round(g * factor)));
+      b = Math.min(255, Math.max(0, Math.round(b * factor)));
+      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
     }
 
     function getColumnData(records, view){
@@ -1749,18 +1869,65 @@
       });
     }
 
+    // ============================================================
+    // ✅ URBAN DEV CHART RENDERER (now supports year breakdown)
+    // ============================================================
     function renderUrbanDevChart(records) {
-      const data = getUrbanDevData(records, urbanDevChartFilter);
+      const data = getUrbanDevData(records, urbanDevChartFilter, urbanDevYearFilter);
       const ctx = document.getElementById("urbanDevChart").getContext("2d");
       if (urbanDevChartInstance) urbanDevChartInstance.destroy();
-      if (data.labels.length === 0 || data.datasets.every(d => d.data.every(v => v === 0))) { urbanDevChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
-      urbanDevChartInstance = new Chart(ctx, { type: 'bar', data: data, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 9 } } }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
+
+      if (!data.labels || data.labels.length === 0 || data.datasets.every(d => d.data.every(v => v === 0))) {
+        urbanDevChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
+          options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        return;
+      }
+
+      // Stack by category when showing all years (so within a province,
+      // RUDD+2025 and RUDD+2026 are stacked on top of each other),
+      // otherwise just show plain bars for the single-year view.
+      const isStacked = (urbanDevYearFilter === 'all');
+
+      urbanDevChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', labels: { font: { size: 8 }, boxWidth: 10 } },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const ds = context.dataset;
+                  const label = ds.label || '';
+                  const val = context.raw;
+                  return `${label}: ${val}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: isStacked,
+              ticks: { font: { size: 9 }, maxRotation: 45 }
+            },
+            y: {
+              stacked: isStacked,
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
+          }
+        }
+      });
     }
 
     // ========== TABLE RENDER ==========
     function renderTable(records){
       const tbody = document.getElementById("lguTableBody");
-      if (!records || records.length === 0) { tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`; return; }
+      if (!records || records.length === 0) { tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`; return; }
       let html = '';
       records.forEach((r) => {
         const region = getField(r, "Region") || "—";
@@ -1776,14 +1943,15 @@
         const planadoTarget = getField(r, "PLANADO Target") || "—";
         const targetYear = getField(r, "Target Year") || "—";
         const urbanDev = getField(r, "Urban Development") || "—";
+        const targetYearUrbanDevt = getField(r, "Target Year_Urban Devt") || "—";
         const category = getClupStatusCategory(r);
         const statusClass = category === "Updated" ? "badge-updated" : category === "For Updating" ? "badge-due" : category === "Under Review" ? "badge-under-review" : "badge-other";
-        
+
         const recordJson = encodeRecord(sanitizeRecord(r));
-        
+
         const getColor = (val) => { if (val === 'Yes') return '#166534'; if (val === 'No') return '#991b1b'; return '#6b7280'; };
         const getPlanadoColor = (val) => { if (val === 'PlanSmart') return '#1e40af'; if (val === 'CAMI') return '#92400e'; return '#6b7280'; };
-        
+
         html += `<tr>
           <td style="display:none;">${escapeHtml(region)}</td>
           <td>${escapeHtml(province)}</td>
@@ -1799,6 +1967,7 @@
           <td><span style="font-weight:600;color:${getPlanadoColor(planadoTarget)};">${escapeHtml(planadoTarget)}</span></td>
           <td><strong style="color:#1e3a8a;">${escapeHtml(targetYear)}</strong></td>
           <td>${escapeHtml(urbanDev)}</td>
+          <td><strong style="color:#1e3a8a;">${escapeHtml(targetYearUrbanDevt)}</strong></td>
           <td>
             <div class="action-cell">
               <button type="button" class="btn-view" data-record="${recordJson}">View</button>
@@ -1845,6 +2014,7 @@
         { label: "PLANADO Target", key: "PLANADO Target" },
         { label: "Target Year", key: "Target Year" },
         { label: "Urban Development", key: "Urban Development" },
+        { label: "Target Year_Urban Devt", key: "Target Year_Urban Devt" },
         { label: "Remarks", key: "Remarks" }
       ];
       let html = '';
@@ -1857,7 +2027,7 @@
       modal.classList.add('active');
     }
 
-    // ========== TARGET YEAR EDIT UI ==========
+    // ========== TARGET YEAR EDIT UI (Target Year) ==========
     let editTargetYears = [];
 
     function renderEditTargetYearPills() {
@@ -1896,6 +2066,45 @@
       renderEditTargetYearPills();
     }
 
+    // ========== TARGET YEAR_URBAN DEVT EDIT UI ==========
+    let editTargetYearUrbanDevts = [];
+
+    function renderEditTargetYearUrbanDevtPills() {
+      const container = document.getElementById("editTargetYearUrbanDevtPills");
+      container.innerHTML = '';
+      if (editTargetYearUrbanDevts.length === 0) {
+        container.innerHTML = `<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">No target years selected yet.</span>`;
+      } else {
+        editTargetYearUrbanDevts.forEach(y => {
+          const pill = document.createElement('span');
+          pill.className = 'target-year-pill';
+          pill.innerHTML = `${escapeHtml(y)} <button type="button" class="remove-year" data-year="${escapeHtml(y)}" title="Remove">×</button>`;
+          container.appendChild(pill);
+        });
+        container.querySelectorAll('.remove-year').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const y = this.getAttribute('data-year');
+            editTargetYearUrbanDevts = editTargetYearUrbanDevts.filter(x => x !== y);
+            renderEditTargetYearUrbanDevtPills();
+          });
+        });
+      }
+      document.getElementById("editTargetYearUrbanDevt").value = editTargetYearUrbanDevts.join("; ");
+    }
+
+    function addEditTargetYearUrbanDevt(year) {
+      const y = String(year || '').trim();
+      if (!y) return;
+      if (editTargetYearUrbanDevts.includes(y)) { showToast("Year already added.", "info"); return; }
+      editTargetYearUrbanDevts.push(y);
+      editTargetYearUrbanDevts.sort((a, b) => {
+        const na = parseInt(a, 10), nb = parseInt(b, 10);
+        if (!isNaN(na) && !isNaN(nb)) return na - nb;
+        return String(a).localeCompare(String(b));
+      });
+      renderEditTargetYearUrbanDevtPills();
+    }
+
     // ========== OPEN EDIT MODAL ==========
     function openEditModal(record) {
       currentEditRecord = record;
@@ -1923,6 +2132,7 @@
       document.getElementById("editUrbanDev").value = getFieldValue(record, "Urban Development");
       document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
 
+      // Target Year pills
       const tyRaw = getFieldValue(record, "Target Year");
       editTargetYears = String(tyRaw || "")
         .split(/[;,]\s*/)
@@ -1930,6 +2140,15 @@
         .filter(Boolean);
       renderEditTargetYearPills();
       document.getElementById("editTargetYearInput").value = '';
+
+      // Target Year_Urban Devt pills
+      const tyudRaw = getFieldValue(record, "Target Year_Urban Devt");
+      editTargetYearUrbanDevts = String(tyudRaw || "")
+        .split(/[;,]\s*/)
+        .map(s => s.trim())
+        .filter(Boolean);
+      renderEditTargetYearUrbanDevtPills();
+      document.getElementById("editTargetYearUrbanDevtInput").value = '';
 
       document.getElementById("editSaveBtn").disabled = false;
       modal.classList.add('active');
@@ -1945,6 +2164,7 @@
         const city = formData.get('City/Municipality') || '';
         const commPlanValue = formData.get('LGU with Integrated Communications Plan') || '';
         const targetYearValue = formData.get('Target Year') || editTargetYears.join("; ");
+        const targetYearUrbanDevtValue = formData.get('Target Year_Urban Devt') || editTargetYearUrbanDevts.join("; ");
         const record = {
           'PSGC': formData.get('PSGC') || '', 'Province': province, 'City/Municipality': city, 'Region': formData.get('Region') || '',
           'Income Class': formData.get('Income Class') || '', 'Start Year': formData.get('Start Year') || '', 'End Year': formData.get('End Year') || '',
@@ -1961,6 +2181,7 @@
           'PLANADO Target': formData.get('PLANADO Target') || '',
           'Target Year': targetYearValue,
           'Urban Development': formData.get('Urban Development') || '',
+          'Target Year_Urban Devt': targetYearUrbanDevtValue,
           'Remarks': formData.get('Remarks') || ''
         };
         const altRecord = { ...record, 'LGU with Communications Plan': commPlanValue, 'Communications Plan': commPlanValue, 'Comm Plan': commPlanValue };
@@ -2019,7 +2240,7 @@
       if (currentLgu) lguSelect.value = currentLgu;
       if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
 
-      // Populate target year chart filter — only years that exist in data
+      // Populate target year chart filter — only years that exist in data (Target Year column)
       const targetYearSelect = document.getElementById("filterTargetYearChart");
       const allYears = new Set();
       records.forEach(r => {
@@ -2035,8 +2256,32 @@
         targetYearSelect.value = 'all';
         targetYearChartFilter = 'all';
       }
+
+      // ✅ Populate Urban Development Year filter — from Target Year_Urban Devt column
+      const urbanDevYearSelect = document.getElementById("filterUrbanDevYear");
+      const allUrbanDevYears = new Set();
+      records.forEach(r => {
+        const val = getField(r, "Target Year_Urban Devt");
+        String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => allUrbanDevYears.add(y));
+      });
+      const sortedUrbanDevYears = [...allUrbanDevYears].sort();
+      const currentUrbanDevYear = urbanDevYearSelect.value || 'all';
+      urbanDevYearSelect.innerHTML = `<option value="all">All Years</option>` + sortedUrbanDevYears.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+      if (currentUrbanDevYear && [...urbanDevYearSelect.options].some(o => o.value === currentUrbanDevYear)) {
+        urbanDevYearSelect.value = currentUrbanDevYear;
+      } else {
+        urbanDevYearSelect.value = 'all';
+        urbanDevYearFilter = 'all';
+      }
     }
 
+    // ============================================================
+    // ✅ applyFilters — PLANADO Target + Target Year sync is now
+    //    ISOLATED to the LGU STATUS LIST (table) only.
+    //    All other charts always use the full dataset (plus their
+    //    own independent filters), so they don't get narrowed by
+    //    PLANADO / Target Year selections.
+    // ============================================================
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
       const lgu = document.getElementById("filterLgu").value;
@@ -2045,71 +2290,96 @@
       const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
       const supportFilter = document.getElementById("filterSupportPie").value || 'all';
       const riskTotalFilter = document.getElementById("filterRiskTotal").value || 'all';
-      
+
       planadoChartFilter = document.getElementById("filterPlanadoTarget").value || 'all';
       targetYearChartFilter = document.getElementById("filterTargetYearChart").value || 'all';
       urbanDevChartFilter = document.getElementById("filterUrbanDev").value || 'all';
-      
-      let filtered = rawLguData;
+      urbanDevYearFilter = document.getElementById("filterUrbanDevYear").value || 'all';
 
-      // --- Apply PLANADO filter to the data used for Target Year chart and table ---
+      // ============ BASE POOL (used by all charts) ============
+      // Charts get the full dataset PLUS only their own independent filters.
+      let baseFiltered = rawLguData;
+      if (prov) baseFiltered = baseFiltered.filter(r => (getField(r, "Province") || "") === prov);
+      if (lgu) baseFiltered = baseFiltered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
+
+      // ============================================================
+      // ✅ TABLE POOL — PLANADO Target + Target Year ONLY affect this pool.
+      //    This pool is ONLY consumed by the LGU STATUS LIST table.
+      // ============================================================
+      let tableFiltered = baseFiltered.slice();
+
       if (planadoChartFilter && planadoChartFilter !== 'all') {
-        filtered = filtered.filter(r => {
+        tableFiltered = tableFiltered.filter(r => {
           const val = getField(r, "PLANADO Target");
+          if (planadoChartFilter === 'Not Specified') {
+            return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
+          }
           return val === planadoChartFilter;
         });
       }
 
-      // --- Apply TARGET YEAR filter to the data used for the table and charts ---
       if (targetYearChartFilter && targetYearChartFilter !== 'all') {
-        filtered = filtered.filter(r => {
+        tableFiltered = tableFiltered.filter(r => {
           const val = getField(r, "Target Year");
           const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
           return years.includes(targetYearChartFilter);
         });
       }
 
-      if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
-      if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
-      
-      // CLUP Status filter (pie chart)
-      filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
-      
-      // Risk total filter for bar chart
-      let riskFiltered = filterByRiskTotalCategory(filtered, riskTotalFilter);
-      
-      // Status updates filter for table
-      let tableFiltered = filterByStatusUpdates(riskFiltered, barMode);
-      
-      filteredData = filtered;
-      
-      // Render stats & charts with the filtered data
-      renderStats(filtered);
-      renderPie(filtered);
-      renderSupportPie(filtered, supportFilter);
-      renderShelterPie(filtered);
-      renderHousingPie(filtered);
-      renderCommPie(filtered);
-      renderBar(filtered, barMode);
-      
-      renderRiskStackedChart(filtered);
-      renderRiskTotalChart(riskFiltered, riskTotalFilter);
-      
-      // PLANADO chart uses the filtered set (filter already applied)
-      renderPlanadoTargetChart(filtered);
-      
-      // Target Year chart now uses the same filtered set (which respects PLANADO filter)
-      renderTargetYearChart(filtered);
-      
-      renderUrbanDevChart(filtered);
-      
+      // ------------------------------------------------------------
+      // Urban Development ↔ Target Year_Urban Devt connection:
+      // The Urban Development filter narrows what shows in the table
+      // (so the Target Year_Urban Devt column reflects only matching
+      // records). It does NOT affect other charts beyond the Urban
+      // Development chart itself.
+      // ------------------------------------------------------------
+      if (urbanDevChartFilter && urbanDevChartFilter !== 'all') {
+        tableFiltered = tableFiltered.filter(r => {
+          const val = getField(r, "Urban Development");
+          if (!val || val === "—") return false;
+          const normalized = String(val).trim();
+          if (normalized === urbanDevChartFilter) return true;
+          const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
+          const targetParts = urbanDevChartFilter.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
+          return targetParts.length === parts.length && targetParts.every(p => parts.includes(p));
+        });
+      }
+
+      // CLUP Status filter for the pie chart — applied to baseFiltered only
+      const piePool = filterByClupStatusCategory(baseFiltered, clupStatusFilter);
+      // Risk Total filter pool
+      const riskPool = filterByRiskTotalCategory(baseFiltered, riskTotalFilter);
+      // Status updates filter pool for the table (in addition to PLANADO/Target Year)
+      const tableWithStatus = filterByStatusUpdates(tableFiltered, barMode);
+
+      filteredData = baseFiltered;
+
+      // ============ RENDER CHARTS (independent pools) ============
+      renderStats(baseFiltered);
+      renderPie(piePool);
+      renderSupportPie(baseFiltered, supportFilter);
+      renderShelterPie(baseFiltered);
+      renderHousingPie(baseFiltered);
+      renderCommPie(baseFiltered);
+      renderBar(baseFiltered, barMode);
+
+      renderRiskStackedChart(baseFiltered);
+      renderRiskTotalChart(riskPool, riskTotalFilter);
+
+      // PLANADO & Target Year charts use baseFiltered (do NOT react to each other's dropdown)
+      renderPlanadoTargetChart(baseFiltered);
+      renderTargetYearChart(baseFiltered);
+
+      // Urban Development chart uses baseFiltered but respects its own 2 dropdowns
+      renderUrbanDevChart(baseFiltered);
+
       const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
-      renderColumn(filtered, activeView);
-      
-      renderStackedChart(filtered, stackedProvFilter);
-      
-      // Table uses the filtered set (which respects PLANADO filter)
-      renderTable(tableFiltered);
+      renderColumn(baseFiltered, activeView);
+
+      renderStackedChart(baseFiltered, stackedProvFilter);
+
+      // ============ RENDER TABLE (uses PLANADO + Target Year + Urban Dev + Status Updates) ============
+      renderTable(tableWithStatus);
     }
 
     function filterByStatusUpdates(records, mode) {
@@ -2126,12 +2396,12 @@
         return combined.includes(modeLower) || combined.includes(modeNoSpace) || combined.includes(modeWithHyphen);
       });
     }
-    
+
     function filterByClupStatusCategory(records, category) {
       if (category === 'all') return records;
       return records.filter(r => getClupStatusCategory(r) === category);
     }
-    
+
     function filterByRiskTotalCategory(records, category) {
       if (category === 'all') return records;
       return records.filter(r => {
@@ -2145,16 +2415,16 @@
       try {
         const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
         const data = await resp.json();
-        if (Array.isArray(data) && data.length > 0) { rawLguData = data; return rawLguData; } 
+        if (Array.isArray(data) && data.length > 0) { rawLguData = data; return rawLguData; }
         else { console.warn("No data from LGUstatus, using fallback"); return getFallbackData(); }
       } catch(e){ console.error("Fetch error", e); return getFallbackData(); }
     }
 
     function getFallbackData() {
       return [
-        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2025; 2026", "Urban Development": "RUDD", "Remarks": "" },
-        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "PLANADO Target": "CAMI", "Target Year": "2026", "Urban Development": "OSD & PCE", "Remarks": "Needs updating" },
-        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2025; 2027", "Urban Development": "RUDD, OSD, & PCE", "Remarks": "" }
+        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2025; 2026", "Urban Development": "RUDD", "Target Year_Urban Devt": "2025; 2026", "Remarks": "" },
+        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "PLANADO Target": "CAMI", "Target Year": "2026", "Urban Development": "OSD & PCE", "Target Year_Urban Devt": "2026", "Remarks": "Needs updating" },
+        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2025; 2027", "Urban Development": "RUDD, OSD, & PCE", "Target Year_Urban Devt": "2025; 2027", "Remarks": "" }
       ];
     }
 
@@ -2167,11 +2437,13 @@
       document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
       document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
       document.getElementById("filterRiskTotal").addEventListener('change', applyFilters);
-      
+
       document.getElementById("filterPlanadoTarget").addEventListener('change', function() { planadoChartFilter = this.value; applyFilters(); });
       document.getElementById("filterTargetYearChart").addEventListener('change', function() { targetYearChartFilter = this.value; applyFilters(); });
       document.getElementById("filterUrbanDev").addEventListener('change', function() { urbanDevChartFilter = this.value; applyFilters(); });
-      
+      // ✅ New Urban Dev Year dropdown
+      document.getElementById("filterUrbanDevYear").addEventListener('change', function() { urbanDevYearFilter = this.value; applyFilters(); });
+
       document.getElementById("resetFiltersBtn").addEventListener('click', function(){
         document.getElementById("filterProvince").value = ""; document.getElementById("filterLgu").value = "";
         document.getElementById("filterClupStatus").value = "all"; document.getElementById("barChartDropdown").value = "all";
@@ -2180,10 +2452,11 @@
         document.getElementById("filterPlanadoTarget").value = "all";
         document.getElementById("filterTargetYearChart").value = "all";
         document.getElementById("filterUrbanDev").value = "all";
-        planadoChartFilter = 'all'; urbanDevChartFilter = 'all'; targetYearChartFilter = 'all';
+        document.getElementById("filterUrbanDevYear").value = "all";
+        planadoChartFilter = 'all'; urbanDevChartFilter = 'all'; targetYearChartFilter = 'all'; urbanDevYearFilter = 'all';
         applyFilters();
       });
-      
+
       document.getElementById("resetStackedFilter").addEventListener('click', function(){ document.getElementById("filterStackedProvince").value = "all"; applyFilters(); });
 
       document.querySelectorAll('#columnTabs button').forEach(btn => {
@@ -2202,6 +2475,7 @@
 
       document.getElementById('editForm').addEventListener('submit', async function(e) { e.preventDefault(); const formData = new FormData(this); await saveEditedRecord(formData); });
 
+      // Target Year pills
       document.getElementById('editTargetYearAddBtn').addEventListener('click', function() {
         const input = document.getElementById('editTargetYearInput');
         addEditTargetYear(input.value);
@@ -2215,6 +2489,21 @@
           this.value = '';
         }
       });
+
+      // Target Year_Urban Devt pills
+      document.getElementById('editTargetYearUrbanDevtAddBtn').addEventListener('click', function() {
+        const input = document.getElementById('editTargetYearUrbanDevtInput');
+        addEditTargetYearUrbanDevt(input.value);
+        input.value = '';
+        input.focus();
+      });
+      document.getElementById('editTargetYearUrbanDevtInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addEditTargetYearUrbanDevt(this.value);
+          this.value = '';
+        }
+      });
     }
 
     document.addEventListener('DOMContentLoaded', async function(){
@@ -2222,11 +2511,11 @@
 
       const data = await fetchLguStatusData();
       if (data.length > 0) { rawLguData = data; } else { rawLguData = getFallbackData(); }
-      
+
       populateFilters(rawLguData);
-      
+
       setupAllEventListeners();
-      
+
       applyFilters();
     });
   </script>
