@@ -2349,8 +2349,7 @@
       });
     }
 
-    // ========== RENDER TABLE (uses inline onclick for guaranteed reliability) ==========
-       // ========== RENDER TABLE (bulletproof version with body-level delegation) ==========
+    // ========== RENDER TABLE (bulletproof version with body-level delegation) ==========
     function renderTable(records){
       const tbody = document.getElementById("lguTableBody");
       if (!records || records.length === 0) {
@@ -2808,31 +2807,70 @@
       renderTable(tableFiltered);
     }
 
-    async function fetchLguStatusData(){
-      try {
-        const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
-        const data = await resp.json();
-        if (Array.isArray(data) && data.length > 0) {
-          rawLguData = data;
-          console.log("📋 Sample record from LGUstatus:", data[0]);
-          return rawLguData;
-        } else {
-          console.warn("No data from LGUstatus, using fallback");
-          return getFallbackData();
-        }
-      } catch(e){ 
-        console.error("Fetch error", e); 
-        return getFallbackData();
-      }
+   async function fetchLguStatusData(){
+  const url = `${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`;
+  console.log("📡 Fetching LGU status from:", url);
+
+  // Attempt 1: standard fetch
+  try {
+    const resp = await fetch(url, { method: 'GET', redirect: 'follow' });
+    console.log("✅ HTTP status:", resp.status, resp.statusText);
+
+    if (!resp.ok) {
+      throw new Error(`HTTP ${resp.status} - ${resp.statusText}`);
     }
 
-    function getFallbackData() {
-      return [
-        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2026, 2027", "Urban Development": "RUDD", "Remarks": "" },
-        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "PLANADO Target": "CAMI", "Target Year": "2027", "Urban Development": "OSD & PCE", "Remarks": "Needs updating" },
-        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2028", "Urban Development": "RUDD, OSD, & PCE", "Remarks": "" }
-      ];
+    const text = await resp.text();
+    console.log("📦 Raw response (first 300 chars):", text.substring(0, 300));
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (jsonErr) {
+      console.error("❌ Response is not valid JSON:", text.substring(0, 500));
+      showToast("⚠️ Server returned invalid JSON. Check Apps Script deployment.", "error");
+      return [];
     }
+
+    if (Array.isArray(data) && data.length > 0) {
+      console.log(`✅ Loaded ${data.length} LGU records from server.`);
+      return data;
+    }
+
+    console.warn("⚠️ Server returned empty or non-array data:", data);
+    showToast("⚠️ No LGU data returned from server (empty array).", "error");
+    return [];
+
+  } catch (err) {
+    console.error("❌ Fetch failed:", err);
+
+    // Attempt 2: no-cors fallback (won't give us data, but confirms reachability)
+    try {
+      await fetch(url, { method: 'GET', mode: 'no-cors' });
+      console.warn("⚠️ no-cors request succeeded but response is opaque — cannot read data.");
+      showToast("⚠️ CORS issue: Apps Script must allow access. See console.", "error");
+    } catch (err2) {
+      console.error("❌ Even no-cors request failed:", err2);
+      showToast("❌ Cannot reach Google Apps Script. Check your internet / URL.", "error");
+    }
+
+    return [];
+  }
+}
+
+   function getFallbackData() {
+  // ⚠️ DEMO DATA ONLY — used when the live fetch fails.
+  // Extend this list to match your real number of LGUs so the dashboard
+  // doesn't misleadingly show "3" when the server is unreachable.
+  console.warn("⚠️ Using FALLBACK demo data — NOT live server data.");
+  showToast("⚠️ Using demo data — server fetch failed. Check console.", "error");
+
+  return [
+    { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2026, 2027", "Urban Development": "RUDD", "Remarks": "" },
+    { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "PLANADO Target": "CAMI", "Target Year": "2027", "Urban Development": "OSD & PCE", "Remarks": "Needs updating" },
+    { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2028", "Urban Development": "RUDD, OSD, & PCE", "Remarks": "" }
+  ];
+}
 
     function setupAllEventListeners() {
       document.getElementById("barChartDropdown").addEventListener('change', function() {
@@ -3025,61 +3063,60 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', async function(){
-      checkSession(); 
-      renderMainNavigation(); 
-      renderUserMenu();
+   document.addEventListener('DOMContentLoaded', async function(){
+  checkSession(); 
+  renderMainNavigation(); 
+  renderUserMenu();
 
-      const data = await fetchLguStatusData();
-      if (data.length > 0) {
-        rawLguData = data;
-      } else {
-        rawLguData = getFallbackData();
-      }
-      
-      collectAvailableYears(rawLguData);
-      populateFilters(rawLguData);
-      
-      refreshFilterYearCheckboxes();
-      updateFilterYearLabel();
-      refreshYearPickerSelect();
-      populateTargetYearChartFilter();
-      
-      setupAllEventListeners();
-      
-      applyFilters();
-    });
-	    // ========== BULLETPROOF GLOBAL DELEGATED CLICK HANDLER ==========
+  let data = await fetchLguStatusData();
+
+  // Only fall back if the fetch truly returned nothing
+  if (!Array.isArray(data) || data.length === 0) {
+    console.warn("⚠️ No live data — loading fallback demo records.");
+    data = getFallbackData();
+  }
+
+  rawLguData = data;
+  
+  collectAvailableYears(rawLguData);
+  populateFilters(rawLguData);
+  
+  refreshFilterYearCheckboxes();
+  updateFilterYearLabel();
+  refreshYearPickerSelect();
+  populateTargetYearChartFilter();
+  
+  setupAllEventListeners();
+  
+  applyFilters();
+});
+
+    // ========== BULLETPROOF GLOBAL DELEGATED CLICK HANDLER ==========
     // Attached to document — survives ANY re-render of the table
-    document.addEventListener("click", function(e) {
-      // Find if the click was on (or inside) a record action button
-      const btn = e.target.closest(".record-action-btn");
+    document.addEventListener("click", function (e) {
+      const btn = e.target.closest("#lguTable .record-action-btn");
+
       if (!btn) return;
-      
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const action = btn.getAttribute("data-action");
-      const recordId = btn.getAttribute("data-record-id");
-      
-      console.log("🔥 DELEGATED CLICK:", action, "| recordId:", recordId);
-      
-      if (!recordId) {
-        showToast("Missing record ID.", "error");
-        return;
-      }
-      
+
+      const action = btn.dataset.action;
+      const recordId = btn.dataset.recordId;
+
+      console.log("LGU ACTION:", action, recordId);
+
       const record = getStoredRecord(recordId);
+
       if (!record) {
-        console.error("Record not in store:", recordId);
-        showToast("Record data not found. Try refreshing.", "error");
-        return;
+          console.error("LGU record not found:", recordId);
+          showToast("Record data not found. Please refresh the page.", "error");
+          return;
       }
-      
+
       if (action === "view") {
-        showDetailModal(record);
-      } else if (action === "edit") {
-        openEditModal(record);
+          showDetailModal(record);
+      }
+
+      if (action === "edit") {
+          openEditModal(record);
       }
     });
   </script>
