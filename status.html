@@ -82,7 +82,6 @@
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Status Page Styles - Preserved from original */
     .page-header {
       background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%);
       padding: 2rem 0;
@@ -282,7 +281,6 @@
     }
     .charts-row-2col .chart-tabs button:hover:not(.active) { background: #f1f5f9; }
 
-        /* Risk charts row */
     .charts-row-risk {
       display: grid;
       grid-template-columns: 0.8fr 1.2fr;
@@ -395,6 +393,16 @@
     .badge-none { background: #fee2e2; color: #991b1b; }
     .badge-other { background: #f1f5f9; color: #475569; }
     .badge-under-review { background: #dbeafe; color: #1e40af; }
+    .badge-year {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin: 1px 2px;
+    }
     .btn-view {
       background: #d9efff;
       color: #0369a1;
@@ -544,6 +552,189 @@
     }
     .btn-cancel:hover { background: #e2e8f0; }
 
+    .target-year-widget {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .target-year-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 30px;
+      padding: 6px;
+      background: #fafcff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+    }
+    .target-year-chips:empty::before {
+      content: "No years selected yet";
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-style: italic;
+    }
+    .year-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 3px 8px 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      animation: chipPop 0.2s ease;
+    }
+    @keyframes chipPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .year-chip .remove-year {
+      background: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 0.65rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+      font-weight: 700;
+    }
+    .year-chip .remove-year:hover { background: #b91c1c; }
+    .add-year-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .add-year-row select {
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #d0dfe8;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      background: white;
+      font-family: "Inter", sans-serif;
+    }
+    .add-year-row input.custom-year-input {
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #d0dfe8;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      background: white;
+      font-family: "Inter", sans-serif;
+      display: none;
+    }
+    .add-year-row .btn-add-year {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .add-year-row .btn-add-year:hover { background: #15803d; }
+    .add-year-row .btn-add-custom {
+      background: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid #d0dfe8;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .add-year-row .btn-add-custom:hover { background: #e2e8f0; }
+
+    .filter-year-multiselect {
+      position: relative;
+      display: inline-block;
+    }
+    .filter-year-multiselect-btn {
+      padding: 8px 16px;
+      border-radius: 40px;
+      border: 1px solid #d0dfe8;
+      background: white;
+      font-family: "Inter", sans-serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      min-width: 140px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-year-multiselect-btn:hover { border-color: #2563eb; }
+    .filter-year-multiselect-panel {
+      position: absolute;
+      top: 110%;
+      left: 0;
+      background: white;
+      border: 1px solid #eef2ff;
+      border-radius: 16px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      padding: 8px;
+      min-width: 180px;
+      z-index: 500;
+      display: none;
+    }
+    .filter-year-multiselect-panel.open { display: block; }
+    .filter-year-multiselect-panel label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    .filter-year-multiselect-panel label:hover { background: #f1f5f9; }
+    .filter-year-multiselect-panel input[type="checkbox"] {
+      accent-color: #2563eb;
+      width: 14px; height: 14px;
+    }
+    .filter-year-panel-actions {
+      display: flex;
+      gap: 6px;
+      padding: 6px 4px 2px;
+      border-top: 1px solid #eef2ff;
+      margin-top: 4px;
+    }
+    .filter-year-panel-actions button {
+      flex: 1;
+      padding: 5px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-year-panel-actions .apply-btn { background: #2563eb; color: white; }
+    .filter-year-panel-actions .clear-btn { background: #f1f5f9; color: #1e293b; }
+
+    .chart-box h4 select.chart-dropdown {
+      font-weight: 400;
+      text-transform: none;
+      font-size: 0.65rem;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 40px;
+      padding: 3px 10px;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      max-width: 150px;
+    }
+
     @keyframes modalSlideIn {
       from { transform: scale(0.95) translateY(20px); opacity: 0; }
       to { transform: scale(1) translateY(0); opacity: 1; }
@@ -588,7 +779,6 @@
     </div>
   </header>
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="container">
     </div>
@@ -602,22 +792,32 @@
       <div class="stat-card"><div class="stat-number" id="statUnderReview">0</div><div class="stat-label">📋 Under Review</div></div>
     </div>
 
-    <!-- FILTERS -->
     <div class="filter-bar">
       <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
       <select id="filterProvince"><option value="">All Provinces</option></select>
       <select id="filterLgu"><option value="">All LGUs</option></select>
       
       <div class="filter-year-group">
-        <label for="filterYear">Year of Approval :</label>
-        <select id="filterYear"><option value="">(All Years)</option></select>
+        <label for="targetYearFilterBtn">Target Year :</label>
+        <div class="filter-year-multiselect" id="targetYearFilterWrapper">
+          <button type="button" class="filter-year-multiselect-btn" id="targetYearFilterBtn">
+            <span id="targetYearFilterLabel">All Years</span>
+            <span>▾</span>
+          </button>
+          <div class="filter-year-multiselect-panel" id="targetYearFilterPanel">
+            <div id="targetYearCheckboxList"></div>
+            <div class="filter-year-panel-actions">
+              <button type="button" class="clear-btn" id="targetYearClearBtn">Clear</button>
+              <button type="button" class="apply-btn" id="targetYearApplyBtn">Apply</button>
+            </div>
+          </div>
+        </div>
       </div>
       
       <button class="reset-btn" id="resetFiltersBtn">↺ Reset</button>
       <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
     </div>
 
-    <!-- CHARTS - Row 1 -->
     <div class="chart-grid">
       <div class="chart-box">
         <h4>
@@ -671,10 +871,9 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 2 -->
     <div class="charts-row-2col">
       <div class="chart-box">
-        <h4>📊 Province Status Summary (Updated / For Updating / Under Review)</h4>
+        <h4>📊 Province Status Summary </h4>
         <div class="chart-controls">
           <label for="filterStackedProvince">Province:</label>
           <select id="filterStackedProvince">
@@ -696,11 +895,10 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 3: Risk-Informed (SWAPPED) -->
     <div class="charts-row-risk">
       <div class="chart-box">
         <h4>
-          ⚠️ Risk-Informed Total (Yes / No / Not Specified)
+          ⚠️ Risk-Informed Total 
           <select class="chart-dropdown" id="filterRiskTotal">
             <option value="all">All</option>
             <option value="Yes">Yes</option>
@@ -711,12 +909,11 @@
         <canvas id="riskTotalChart"></canvas>
       </div>
       <div class="chart-box">
-        <h4>⚠️ Risk-Informed by Province (Yes / No / Not Specified)</h4>
+        <h4>⚠️ Risk-Informed by Province</h4>
         <canvas id="riskStackedChart"></canvas>
       </div>
     </div>
 
-    <!-- CHARTS - Row 4: Pie Charts -->
     <div class="pie-chart-grid">
       <div class="chart-box">
         <h4>🏠 LGU with Local Shelter Plan</h4>
@@ -732,16 +929,55 @@
       </div>
     </div>
 
-    <!-- TABLE -->
+    <div class="chart-grid" style="margin-bottom: 28px;">
+      <div class="chart-box">
+        <h4>
+          🎯 PLANADO Target by Province
+          <select class="chart-dropdown" id="filterPlanadoTarget">
+            <option value="all">All</option>
+            <option value="PlanSmart">PlanSmart</option>
+            <option value="CAMI">CAMI</option>
+            <option value="Not Specified">Not Specified</option>
+          </select>
+        </h4>
+        <canvas id="planadoTargetChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>
+          📅 Target Year Distribution
+          <select class="chart-dropdown" id="filterTargetYearChart">
+            <option value="all">All Years</option>
+          </select>
+        </h4>
+        <canvas id="targetYearChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h4>
+          🏙️ Urban Development by Province
+          <select class="chart-dropdown" id="filterUrbanDev">
+            <option value="all">All</option>
+            <option value="RUDD">RUDD</option>
+            <option value="OSD">OSD</option>
+            <option value="PCE">PCE</option>
+            <option value="RUDD & OSD">RUDD &amp; OSD</option>
+            <option value="RUDD & PCE">RUDD &amp; PCE</option>
+            <option value="OSD & PCE">OSD &amp; PCE</option>
+            <option value="RUDD, OSD, & PCE">RUDD, OSD, &amp; PCE</option>
+          </select>
+        </h4>
+        <canvas id="urbanDevChart"></canvas>
+      </div>
+    </div>
+
     <div class="table-section">
       <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;" id="tableSubtitle">(from LGUstatus sheet)</span></h4>
       <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
         <table class="lgu-table" id="lguTable">
           <thead><tr>
-            <th>Region</th>
+            <th style="display:none;">Region</th>
             <th>Province</th>
             <th>City/Municipality</th>
-            <th>Income Class</th>
+            <th style="display:none;">Income Class</th>
             <th>CLUP Status</th>
             <th>Planning Period</th>
             <th>Status of CLUP Updating</th>
@@ -749,9 +985,12 @@
             <th>Housing Subsector</th>
             <th>Comm Plan</th>
             <th>Risk-Informed</th>
+            <th>PLANADO Target</th>
+            <th>Target Year</th>
+            <th>Urban Development</th>
             <th>Action</th>
           </tr></thead>
-          <tbody id="lguTableBody"><tr><td colspan="12" style="text-align:center;">Loading LGU data...</td></tr></tbody>
+          <tbody id="lguTableBody"><tr><td colspan="15" style="text-align:center;">Loading LGU data...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -907,6 +1146,46 @@
             <option value="No">No</option>
           </select>
         </div>
+        
+        <div class="edit-form-row">
+          <div class="edit-form-group">
+            <label>PLANADO Target</label>
+            <select id="editPlanadoTarget" name="PLANADO Target">
+              <option value="">Select...</option>
+              <option value="PlanSmart">PlanSmart</option>
+              <option value="CAMI">CAMI</option>
+            </select>
+          </div>
+          <div class="edit-form-group">
+            <label>Target Year</label>
+            <div class="target-year-widget" id="targetYearWidget">
+              <div class="target-year-chips" id="targetYearChips"></div>
+              <div class="add-year-row">
+                <select id="yearPickerSelect">
+                  <option value="">Select a year…</option>
+                </select>
+                <button type="button" class="btn-add-custom" id="toggleCustomYearBtn" title="Add a custom year">+ Custom</button>
+                <button type="button" class="btn-add-year" id="addYearBtn">+ Add</button>
+              </div>
+              <input type="text" class="custom-year-input" id="customYearInput" placeholder="e.g. 2029" maxlength="4">
+              <input type="hidden" id="editTargetYear" name="Target Year">
+            </div>
+          </div>
+        </div>
+        <div class="edit-form-group">
+          <label>Urban Development</label>
+          <select id="editUrbanDev" name="Urban Development">
+            <option value="">Select...</option>
+            <option value="RUDD">RUDD</option>
+            <option value="OSD">OSD</option>
+            <option value="PCE">PCE</option>
+            <option value="RUDD & OSD">RUDD &amp; OSD</option>
+            <option value="RUDD & PCE">RUDD &amp; PCE</option>
+            <option value="OSD & PCE">OSD &amp; PCE</option>
+            <option value="RUDD, OSD, & PCE">RUDD, OSD, &amp; PCE</option>
+          </select>
+        </div>
+        
         <div class="edit-form-group">
           <label>Remarks</label>
           <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
@@ -965,78 +1244,107 @@
   </footer>
 
   <script>
-    // ========== INTEGRATED SCRIPT ==========
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5HNm3xTnO-pRTF3VRLjT41SxulUp9sEM8UkS8y0gLsjDMuRAF85rH5yQreDX2f3M/exec";
+    // ========== GLOBAL FUNCTIONS (must be accessible from inline onclick) ==========
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuO8VcCtGjqm6NqWHa42ZkSUBaODr2WtAUn-Pn_Sr8xbfnZrQmw62AOIzObQcw/exec";
     let currentUser = null;
     let currentBarMode = 'all';
     let currentEditRecord = null;
     let isSaving = false;
-    
-    // ========== FIELD MAPPING ==========
+
+    // ✅ GLOBAL RECORD STORE — keyed by unique ID
+    const recordStore = new Map();
+    let recordStoreCounter = 0;
+
+    function storeRecord(record) {
+      const id = 'rec_' + (++recordStoreCounter) + '_' + Date.now();
+      recordStore.set(id, record);
+      return id;
+    }
+    function getStoredRecord(id) {
+      return recordStore.get(id) || null;
+    }
+
+    // ✅ GLOBAL HANDLER — called via inline onclick from rendered buttons
+    window.handleRecordAction = function(action, recordId) {
+      console.log('handleRecordAction called:', action, recordId);
+      const record = getStoredRecord(recordId);
+      if (!record) {
+        console.error('Record not found for ID:', recordId);
+        showToast('Record data not found.', 'error');
+        return;
+      }
+      if (action === 'view') {
+        showDetailModal(record);
+      } else if (action === 'edit') {
+        openEditModal(record);
+      }
+    };
+
+    // Target Year state
+    let selectedTargetYears = [];
+    let filterTargetYears = [];
+    let availableYearsGlobal = ['2026', '2027', '2028'];
+    const DEFAULT_YEARS = ['2026', '2027', '2028'];
+
+    let planadoChartFilter = 'all';
+    let targetYearChartFilter = 'all';
+    let urbanDevChartFilter = 'all';
+
     const FIELD_ALIASES = {
       "LGU with Local Shelter Plan": [
-        "LGU with Local Shelter Plan",
-        "Local Shelter Plan",
-        "Shelter Plan",
-        "LGU Local Shelter Plan",
-        "ShelterPlan",
-        "local_shelter_plan"
+        "LGU with Local Shelter Plan", "Local Shelter Plan", "Shelter Plan",
+        "LGU Local Shelter Plan", "ShelterPlan", "local_shelter_plan"
       ],
       "LGU with Integrated Housing Subsector": [
-        "LGU with Integrated Housing Subsector",
-        "Integrated Housing Subsector",
-        "Housing Subsector",
-        "Housing",
-        "LGU Housing Subsector",
-        "housing_subsector"
+        "LGU with Integrated Housing Subsector", "Integrated Housing Subsector",
+        "Housing Subsector", "Housing", "LGU Housing Subsector", "housing_subsector"
       ],
       "LGU with Integrated Communications Plan": [
-        "LGU with Integrated Communications Plan",
-        "LGU with Communications Plan",
-        "Integrated Communications Plan",
-        "Communications Plan",
-        "Comm Plan",
-        "LGU Communications Plan",
-        "communications_plan",
-        "CommPlan",
-        "Communications"
+        "LGU with Integrated Communications Plan", "LGU with Communications Plan",
+        "Integrated Communications Plan", "Communications Plan", "Comm Plan",
+        "LGU Communications Plan", "communications_plan", "CommPlan", "Communications"
       ],
       "Risk-Informed": [
-        "Risk-Informed",
-        "Risk Informed",
-        "RiskInformed",
-        "risk_informed",
-        "Risk-Information",
-        "Risk Information",
-        "RiskInformation",
-        "risk_information",
-        "risk",
-        "Risk"
+        "Risk-Informed", "Risk Informed", "RiskInformed", "risk_informed",
+        "Risk-Information", "Risk Information", "RiskInformation",
+        "risk_information", "risk", "Risk"
       ],
-      "CLUP Status": [
-        "CLUP Status",
-        "CLUPStatus",
-        "Status",
-        "clup_status"
-      ],
+      "CLUP Status": ["CLUP Status", "CLUPStatus", "Status", "clup_status"],
       "CLUPStatus/Updates": [
-        "CLUPStatus/Updates",
-        "Status of CLUP Updating",
-        "CLUP Updates",
-        "Updates",
-        "clup_updates"
+        "CLUPStatus/Updates", "Status of CLUP Updating", "CLUP Updates",
+        "Updates", "clup_updates"
       ],
       "Support from Other Institutions": [
-        "Support from Other Institutions",
-        "Support",
-        "Institutions Support",
+        "Support from Other Institutions", "Support", "Institutions Support",
         "support_from_other_institutions"
+      ],
+      "PLANADO Target": [
+        "PLANADO Target", "Planado Target", "planado_target", "PLANADO", "Planado"
+      ],
+      "Target Year": [
+        "Target Year", "target_year", "TargetYear", "target"
+      ],
+      "Urban Development": [
+        "Urban Development", "urban_development", "UrbanDevelopment",
+        "Urban Dev", "urban"
       ]
     };
     
     function escapeHtml(s){ 
       if (s === undefined || s === null) return "—";
       return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); 
+    }
+
+    function sanitizeRecord(obj) {
+      const clean = {};
+      for (const k in obj) {
+        let v = obj[k];
+        if (typeof v === 'string') {
+          v = v.replace(/[\u0000-\u001F\u007F]/g, ' ').trim();
+        }
+        clean[k] = v;
+      }
+      return clean;
     }
     
     function showToast(msg, type){ 
@@ -1169,11 +1477,8 @@
         const encodedPassword = btoa(password);
         if (user.password === encodedPassword) {
           const session = {
-            userId: user.id,
-            email: user.email,
-            fullName: user.fullName,
-            office: user.office || "ELUPDD",
-            role: user.role,
+            userId: user.id, email: user.email, fullName: user.fullName,
+            office: user.office || "ELUPDD", role: user.role,
             loggedInAt: new Date().toISOString(),
           };
           localStorage.setItem("dhsud_session", JSON.stringify(session));
@@ -1198,6 +1503,7 @@
     let pieChartInstance=null, barChartInstance=null, columnChartInstance=null, stackedChartInstance=null;
     let shelterPieInstance=null, housingPieInstance=null, commPieInstance=null, supportPieInstance=null;
     let riskStackedChartInstance=null, riskTotalChartInstance=null;
+    let planadoTargetChartInstance=null, targetYearChartInstance=null, urbanDevChartInstance=null;
 
     function getField(record, field) {
       if (!record) return "—";
@@ -1215,16 +1521,12 @@
       }
       
       for (let key of Object.keys(record)) {
-        if (key.trim() === field.trim()) {
-          return record[key];
-        }
+        if (key.trim() === field.trim()) return record[key];
       }
       
       const lowerField = field.toLowerCase().trim();
       for (let key of Object.keys(record)) {
-        if (key.toLowerCase().trim() === lowerField) {
-          return record[key];
-        }
+        if (key.toLowerCase().trim() === lowerField) return record[key];
       }
       
       for (let key of Object.keys(record)) {
@@ -1263,9 +1565,7 @@
         return `${month}/${day}/${year}`;
       }
       
-      if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-        return value;
-      }
+      if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) return value;
       
       try {
         const date = new Date(value);
@@ -1280,25 +1580,13 @@
       return value;
     }
 
-    function extractYearFromApproval(record) {
-      const approvalDate = getField(record, "Approval date of the Latest plan (MM/DD/YYYY)");
-      if (!approvalDate || approvalDate === "—" || approvalDate === "") return null;
-      
-      const yearMatch = String(approvalDate).match(/\b(19|20)\d{2}\b/);
-      if (yearMatch) {
-        return parseInt(yearMatch[0]);
-      }
-      
-      return null;
-    }
-
-    function deriveClupStatus(record){
-      let status = getField(record, "CLUP Status");
-      if (status === "—" || status === "") status = getField(record, "CLUPStatus/Updates");
-      if (status === "—" || status === "") status = getField(record, "PDPFP/CLUP Status");
-      if (status === "—" || status === "") status = getField(record, "Status");
-      if (status === "—" || status === "") status = "Unknown";
-      return status;
+    function deriveTargetYear(record){
+      const start = getField(record, "Start Year");
+      const end = getField(record, "End Year");
+      if (start !== "—" && end !== "—") return `${start}-${end}`;
+      if (start !== "—") return start;
+      if (end !== "—") return end;
+      return "—";
     }
     
     function getClupStatusCategory(record) {
@@ -1313,17 +1601,10 @@
         const updatesLower = String(updates).toLowerCase().trim();
         const raPatterns = ['ra 1', 'ra1', 'ra 2', 'ra2', 'ra 3', 'ra3', 'ra 4', 'ra4', 'ra 5', 'ra5', 'ra 6', 'ra6', 'ra 7', 'ra7'];
         for (let pattern of raPatterns) {
-          if (updatesLower.includes(pattern)) {
-            return "Under Review";
-          }
+          if (updatesLower.includes(pattern)) return "Under Review";
         }
-        
-        if (updatesLower.includes('updated') || updatesLower === 'yes') {
-          return "Updated";
-        }
-        if (updatesLower.includes('for updating') || updatesLower.includes('due')) {
-          return "For Updating";
-        }
+        if (updatesLower.includes('updated') || updatesLower === 'yes') return "Updated";
+        if (updatesLower.includes('for updating') || updatesLower.includes('due')) return "For Updating";
       }
       
       if (clupStatus && clupStatus !== "—" && clupStatus !== "") {
@@ -1342,53 +1623,17 @@
       return null;
     }
 
-    function deriveTargetYear(record){
-      const start = getField(record, "Start Year");
-      const end = getField(record, "End Year");
-      if (start !== "—" && end !== "—") return `${start}-${end}`;
-      if (start !== "—") return start;
-      if (end !== "—") return end;
-      return "—";
-    }
-
-    function normalizeStatus(status){
-      if (!status) return "Other";
-      const s = String(status).toLowerCase().trim();
-      if (s === "updated" || s.includes("updated") || s === "yes") return "Updated";
-      if (s === "for updating" || s === "forupdating" || s.includes("for updating") || s.includes("due for") || s === "due") return "For Updating";
-      if (s === "under review" || s === "underreview" || s.includes("under review") || s.includes("review")) return "Under Review";
-      if (s === "no clup" || s.includes("no clup") || s === "none" || s === "no") return "No CLUP";
-      return "Other";
-    }
-
-    function getPhaseCategory(phaseName){
-      const key = phaseName?.trim() || "";
-      if (key.includes("Preparatory") || key.includes("preparatory")) return "Preparatory";
-      if (key.includes("Phase") || key.includes("Formulation")) return "Formulation";
-      if (key.includes("RA") || key.includes("Review") || key.includes("Approval")) return "Review & Approval";
-      if (key.includes("None") || key.includes("Unspecified")) return "Unspecified";
-      return "Unspecified";
-    }
-
     function filterByStatusUpdates(records, mode) {
       if (mode === 'all') return records;
-      
-      const validOptions = [
-        'Pre-Phase', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5',
-        'RA 1', 'RA 2', 'RA 3', 'RA 4', 'RA 5', 'RA 6', 'RA 7',
-        'None Indicated'
-      ];
-      
+      const validOptions = ['Pre-Phase', 'Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5',
+        'RA 1', 'RA 2', 'RA 3', 'RA 4', 'RA 5', 'RA 6', 'RA 7', 'None Indicated'];
       if (!validOptions.includes(mode)) return records;
       
       return records.filter(r => {
         const updatesField = getField(r, "CLUPStatus/Updates");
         let combined = String(updatesField || "").toLowerCase().trim();
-        
         const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-        if (!combined && clupStatus) {
-          combined = clupStatus;
-        }
+        if (!combined && clupStatus) combined = clupStatus;
         
         if (mode === 'None Indicated') {
           return !combined || combined === '' || combined === 'none' || combined === 'n/a';
@@ -1397,35 +1642,17 @@
         const modeLower = mode.toLowerCase();
         const modeNoSpace = modeLower.replace(/\s/g, '');
         const modeWithHyphen = modeLower.replace(/\s/g, '-');
-        
-        return combined.includes(modeLower) || 
-               combined.includes(modeNoSpace) ||
-               combined.includes(modeWithHyphen);
+        return combined.includes(modeLower) || combined.includes(modeNoSpace) || combined.includes(modeWithHyphen);
       });
     }
     
     function filterByClupStatusCategory(records, category) {
       if (category === 'all') return records;
-      
-      return records.filter(r => {
-        const categoryValue = getClupStatusCategory(r);
-        return categoryValue === category;
-      });
-    }
-    
-    function filterBySupportCategory(records, category) {
-      if (category === 'all') return records;
-      
-      return records.filter(r => {
-        const supportValue = getField(r, "Support from Other Institutions");
-        return supportValue === category;
-      });
+      return records.filter(r => getClupStatusCategory(r) === category);
     }
 
-    // NEW: Filter by Risk-Informed value
     function filterByRiskTotalCategory(records, category) {
       if (category === 'all') return records;
-      
       return records.filter(r => {
         const riskVal = getField(r, "Risk-Informed");
         if (category === 'Not Specified') {
@@ -1435,15 +1662,14 @@
       });
     }
 
-    function filterByYear(records, year) {
-      if (!year || year === 'all' || year === '') return records;
-      
-      const targetYear = parseInt(year);
-      if (isNaN(targetYear)) return records;
-      
+    function filterByTargetYear(records, selectedYears) {
+      if (!selectedYears || selectedYears.length === 0) return records;
+      const yearSet = new Set(selectedYears.map(y => String(y).trim()));
       return records.filter(r => {
-        const extractedYear = extractYearFromApproval(r);
-        return extractedYear === targetYear;
+        const raw = getField(r, "Target Year");
+        if (!raw || raw === "—" || raw === "") return false;
+        const recordYears = String(raw).split(/[,;\/]+/).map(y => y.trim()).filter(Boolean);
+        return recordYears.some(y => yearSet.has(y));
       });
     }
 
@@ -1458,30 +1684,21 @@
           const updatesField = getField(r, "CLUPStatus/Updates");
           let combined = String(updatesField || "").toLowerCase().trim();
           const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-          if (!combined && clupStatus) {
-            combined = clupStatus;
-          }
+          if (!combined && clupStatus) combined = clupStatus;
           
           let matched = false;
           for (let label of allLabels) {
             const labelLower = label.toLowerCase();
-            if (combined.includes(labelLower) || 
-                combined.includes(labelLower.replace(/\s/g, '')) ||
-                combined.includes(labelLower.replace('-', ''))) {
+            if (combined.includes(labelLower) || combined.includes(labelLower.replace(/\s/g, '')) || combined.includes(labelLower.replace('-', ''))) {
               counts[label] = (counts[label] || 0) + 1;
               matched = true;
               break;
             }
           }
-          if (!matched) {
-            counts["None Indicated"] = (counts["None Indicated"] || 0) + 1;
-          }
+          if (!matched) counts["None Indicated"] = (counts["None Indicated"] || 0) + 1;
         });
         
-        return { 
-          labels: allLabels, 
-          data: allLabels.map(l => counts[l] || 0) 
-        };
+        return { labels: allLabels, data: allLabels.map(l => counts[l] || 0) };
       }
       
       const labels = [mode];
@@ -1492,21 +1709,15 @@
         const updatesField = getField(r, "CLUPStatus/Updates");
         let combined = String(updatesField || "").toLowerCase().trim();
         const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-        if (!combined && clupStatus) {
-          combined = clupStatus;
-        }
+        if (!combined && clupStatus) combined = clupStatus;
         
         const modeLower = mode.toLowerCase();
         const modeNoSpace = modeLower.replace(/\s/g, '');
         const modeWithHyphen = modeLower.replace(/\s/g, '-');
         
         if (mode === 'None Indicated') {
-          if (!combined || combined === '' || combined === 'none' || combined === 'n/a') {
-            counts[mode] = (counts[mode] || 0) + 1;
-          }
-        } else if (combined.includes(modeLower) || 
-                   combined.includes(modeNoSpace) ||
-                   combined.includes(modeWithHyphen)) {
+          if (!combined || combined === '' || combined === 'none' || combined === 'n/a') counts[mode] = (counts[mode] || 0) + 1;
+        } else if (combined.includes(modeLower) || combined.includes(modeNoSpace) || combined.includes(modeWithHyphen)) {
           counts[mode] = (counts[mode] || 0) + 1;
         }
       });
@@ -1518,62 +1729,37 @@
       const statusMap = { "Updated":0, "For Updating":0, "Under Review":0 };
       records.forEach(r => {
         const category = getClupStatusCategory(r);
-        if (category === "Updated") {
-          statusMap["Updated"]++;
-        } else if (category === "For Updating") {
-          statusMap["For Updating"]++;
-        } else if (category === "Under Review") {
-          statusMap["Under Review"]++;
-        }
+        if (category === "Updated") statusMap["Updated"]++;
+        else if (category === "For Updating") statusMap["For Updating"]++;
+        else if (category === "Under Review") statusMap["Under Review"]++;
       });
       return { labels: Object.keys(statusMap), data: Object.values(statusMap) };
     }
 
     function getSupportPieData(records, filterCategory) {
       const supportMap = {
-        "None": 0,
-        "National Government Agency": 0,
-        "Donor Agency": 0,
-        "Consultant": 0,
-        "Academe": 0,
-        "Others": 0,
-        "Not Specified": 0
+        "None": 0, "National Government Agency": 0, "Donor Agency": 0,
+        "Consultant": 0, "Academe": 0, "Others": 0, "Not Specified": 0
       };
       
       let filteredRecords = records;
       if (filterCategory && filterCategory !== 'all') {
-        filteredRecords = records.filter(r => {
-          const value = getField(r, "Support from Other Institutions");
-          return value === filterCategory;
-        });
+        filteredRecords = records.filter(r => getField(r, "Support from Other Institutions") === filterCategory);
       }
       
       filteredRecords.forEach(r => {
         const value = getField(r, "Support from Other Institutions");
         if (value && value !== "—" && value !== "") {
-          if (supportMap.hasOwnProperty(value)) {
-            supportMap[value]++;
-          } else {
-            supportMap["Others"]++;
-          }
-        } else {
-          supportMap["Not Specified"]++;
-        }
+          if (supportMap.hasOwnProperty(value)) supportMap[value]++;
+          else supportMap["Others"]++;
+        } else supportMap["Not Specified"]++;
       });
       
-      const labels = [];
-      const data = [];
+      const labels = [], data = [];
       for (let [key, val] of Object.entries(supportMap)) {
-        if (val > 0 || key === "Not Specified") {
-          labels.push(key);
-          data.push(val);
-        }
+        if (val > 0 || key === "Not Specified") { labels.push(key); data.push(val); }
       }
-      
-      if (data.every(d => d === 0)) {
-        return { labels: ["No Data"], data: [1] };
-      }
-      
+      if (data.every(d => d === 0)) return { labels: ["No Data"], data: [1] };
       return { labels, data };
     }
 
@@ -1588,7 +1774,6 @@
       return { labels: ["Yes", "No", "Not Specified"], data: [yesCount, noCount, emptyCount] };
     }
 
-    // ========== RISK-INFORMED CHART DATA ==========
     function getRiskStackedChartData(records) {
       const provinceData = {};
       const allProvinces = [];
@@ -1608,19 +1793,14 @@
       });
       
       const sortedProvinces = allProvinces.sort();
-      
       const categories = ['Yes', 'No', 'Not Specified'];
       const datasets = categories.map(cat => ({
         label: cat,
         data: sortedProvinces.map(p => provinceData[p]?.[cat] || 0),
-        backgroundColor: cat === 'Yes' ? '#16a34a' : 
-                         cat === 'No' ? '#dc2626' : '#94a3b8'
+        backgroundColor: cat === 'Yes' ? '#16a34a' : cat === 'No' ? '#dc2626' : '#94a3b8'
       }));
       
-      return {
-        labels: sortedProvinces,
-        datasets: datasets
-      };
+      return { labels: sortedProvinces, datasets };
     }
 
     function getRiskTotalChartData(records) {
@@ -1631,27 +1811,164 @@
         else if (riskVal === "No") noCount++;
         else notSpecifiedCount++;
       });
-      return {
-        labels: ["Yes", "No", "Not Specified"],
-        data: [yesCount, noCount, notSpecifiedCount]
+      return { labels: ["Yes", "No", "Not Specified"], data: [yesCount, noCount, notSpecifiedCount] };
+    }
+
+    function getPlanadoTargetData(records, filterCategory = 'all') {
+      const provinceData = {};
+      const allProvinces = [];
+      
+      const categoriesToShow = filterCategory === 'all' 
+        ? ['PlanSmart', 'CAMI', 'Not Specified'] 
+        : [filterCategory];
+      
+      records.forEach(r => {
+        const province = getField(r, "Province");
+        if (province && province !== "—") {
+          if (!provinceData[province]) {
+            provinceData[province] = {};
+            categoriesToShow.forEach(c => provinceData[province][c] = 0);
+            allProvinces.push(province);
+          }
+          const val = getField(r, "PLANADO Target");
+          let category = 'Not Specified';
+          if (val === 'PlanSmart') category = 'PlanSmart';
+          else if (val === 'CAMI') category = 'CAMI';
+          
+          if (categoriesToShow.includes(category)) {
+            provinceData[province][category] = (provinceData[province][category] || 0) + 1;
+          }
+        }
+      });
+      
+      const sortedProvinces = allProvinces.sort();
+      const colorMap = { 'PlanSmart': '#3b82f6', 'CAMI': '#f59e0b', 'Not Specified': '#94a3b8' };
+      
+      const datasets = categoriesToShow.map(cat => ({
+        label: cat,
+        data: sortedProvinces.map(p => provinceData[p]?.[cat] || 0),
+        backgroundColor: colorMap[cat] || '#94a3b8'
+      }));
+      
+      return { labels: sortedProvinces, datasets };
+    }
+
+    function getTargetYearData(records, filterYear = 'all') {
+      const yearSet = new Set();
+      records.forEach(r => {
+        const val = getField(r, "Target Year");
+        if (val && val !== "—" && val !== "") {
+          String(val).split(/[,;\/]+/).forEach(y => {
+            const trimmed = y.trim();
+            if (trimmed) yearSet.add(trimmed);
+          });
+        }
+      });
+      
+      DEFAULT_YEARS.forEach(y => yearSet.add(y));
+      availableYearsGlobal.forEach(y => yearSet.add(y));
+      
+      let allYears = [...yearSet].sort();
+      
+      if (filterYear !== 'all' && filterYear !== '') {
+        allYears = allYears.filter(y => y === filterYear);
+      }
+      
+      const yearData = {};
+      allYears.forEach(y => yearData[y] = { 'PlanSmart': 0, 'CAMI': 0, 'Not Specified': 0 });
+      
+      records.forEach(r => {
+        const yearVal = getField(r, "Target Year");
+        const planadoVal = getField(r, "PLANADO Target");
+        if (yearVal && yearVal !== "—" && yearVal !== "") {
+          String(yearVal).split(/[,;\/]+/).forEach(y => {
+            const trimmed = y.trim();
+            if (yearData[trimmed]) {
+              if (planadoVal === 'PlanSmart') yearData[trimmed]['PlanSmart']++;
+              else if (planadoVal === 'CAMI') yearData[trimmed]['CAMI']++;
+              else yearData[trimmed]['Not Specified']++;
+            }
+          });
+        }
+      });
+      
+      const categories = ['PlanSmart', 'CAMI', 'Not Specified'];
+      const datasets = categories.map(cat => ({
+        label: cat,
+        data: allYears.map(y => yearData[y]?.[cat] || 0),
+        backgroundColor: cat === 'PlanSmart' ? '#3b82f6' : cat === 'CAMI' ? '#f59e0b' : '#94a3b8'
+      }));
+      
+      return { labels: allYears, datasets };
+    }
+
+    function getUrbanDevData(records, filterCategory = 'all') {
+      const provinceData = {};
+      const allProvinces = [];
+      const allCategories = ['RUDD', 'OSD', 'PCE', 'RUDD & OSD', 'RUDD & PCE', 'OSD & PCE', 'RUDD, OSD, & PCE'];
+      
+      const categoriesToShow = filterCategory === 'all' ? allCategories : [filterCategory];
+      
+      records.forEach(r => {
+        const province = getField(r, "Province");
+        if (province && province !== "—") {
+          if (!provinceData[province]) {
+            provinceData[province] = {};
+            categoriesToShow.forEach(c => provinceData[province][c] = 0);
+            allProvinces.push(province);
+          }
+          const val = getField(r, "Urban Development");
+          if (val && val !== "—" && val !== "") {
+            const normalized = String(val).trim();
+            let matchedCategory = null;
+            
+            if (allCategories.includes(normalized)) {
+              matchedCategory = normalized;
+            } else {
+              const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
+              matchedCategory = allCategories.find(c => {
+                const cParts = c.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
+                return cParts.length === parts.length && cParts.every(p => parts.includes(p));
+              });
+              if (!matchedCategory) {
+                for (let cat of allCategories) {
+                  if (normalized.includes(cat)) { matchedCategory = cat; break; }
+                }
+              }
+            }
+            
+            if (matchedCategory && categoriesToShow.includes(matchedCategory)) {
+              provinceData[province][matchedCategory] = (provinceData[province][matchedCategory] || 0) + 1;
+            }
+          }
+        }
+      });
+      
+      const sortedProvinces = allProvinces.sort();
+      
+      const colorMap = {
+        'RUDD': '#3b82f6', 'OSD': '#10b981', 'PCE': '#f59e0b',
+        'RUDD & OSD': '#8b5cf6', 'RUDD & PCE': '#ec4899',
+        'OSD & PCE': '#06b6d4', 'RUDD, OSD, & PCE': '#ef4444'
       };
+      
+      const datasets = categoriesToShow.map(cat => ({
+        label: cat,
+        data: sortedProvinces.map(p => provinceData[p]?.[cat] || 0),
+        backgroundColor: colorMap[cat] || '#94a3b8'
+      }));
+      
+      return { labels: sortedProvinces, datasets };
     }
 
     function getColumnData(records, view){
-      const phaseCounts = {
-        "Preparatory": 0,
-        "Formulation": 0,
-        "Review & Approval": 0,
-        "Unspecified": 0
-      };
+      const phaseCounts = { "Preparatory": 0, "Formulation": 0, "Review & Approval": 0, "Unspecified": 0 };
       
       records.forEach(r => {
         const updatesField = getField(r, "CLUPStatus/Updates");
         let combined = String(updatesField || "").toLowerCase().trim();
         const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
-        if (!combined && clupStatus) {
-          combined = clupStatus;
-        }
+        if (!combined && clupStatus) combined = clupStatus;
         
         let category = null;
         
@@ -1678,11 +1995,8 @@
           category = "Unspecified";
         }
         
-        if (category && phaseCounts.hasOwnProperty(category)) {
-          phaseCounts[category]++;
-        } else {
-          phaseCounts["Unspecified"]++;
-        }
+        if (category && phaseCounts.hasOwnProperty(category)) phaseCounts[category]++;
+        else phaseCounts["Unspecified"]++;
       });
       
       const viewMap = {
@@ -1693,10 +2007,7 @@
       };
       
       const target = viewMap[view] || viewMap["preparatory"];
-      return { 
-        labels: target, 
-        values: target.map(p => phaseCounts[p] || 0) 
-      };
+      return { labels: target, values: target.map(p => phaseCounts[p] || 0) };
     }
 
     function getStackedChartData(records, filterProvince) {
@@ -1718,11 +2029,9 @@
       });
       
       let sortedProvinces = allProvinces.sort();
-      
       if (filterProvince && filterProvince !== 'all') {
         sortedProvinces = sortedProvinces.filter(p => p === filterProvince);
       }
-      
       if (sortedProvinces.length === 0 && filterProvince !== 'all') {
         sortedProvinces = allProvinces.sort();
       }
@@ -1731,14 +2040,10 @@
       const datasets = statuses.map(status => ({
         label: status,
         data: sortedProvinces.map(p => provinceData[p]?.[status] || 0),
-        backgroundColor: status === 'Updated' ? '#16a34a' : 
-                         status === 'For Updating' ? '#f59e0b' : '#3b82f6'
+        backgroundColor: status === 'Updated' ? '#16a34a' : status === 'For Updating' ? '#f59e0b' : '#3b82f6'
       }));
       
-      return {
-        labels: sortedProvinces,
-        datasets: datasets
-      };
+      return { labels: sortedProvinces, datasets };
     }
 
     function renderStats(records){
@@ -1766,10 +2071,7 @@
         type: 'pie',
         data: { 
           labels: data.labels, 
-          datasets: [{ 
-            data: data.data, 
-            backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6']
-          }] 
+          datasets: [{ data: data.data, backgroundColor: ['#16a34a', '#f59e0b', '#3b82f6'] }] 
         },
         options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
       });
@@ -1781,36 +2083,17 @@
       if (supportPieInstance) supportPieInstance.destroy();
       
       const colorMap = {
-        "None": "#94a3b8",
-        "National Government Agency": "#3b82f6",
-        "Donor Agency": "#8b5cf6",
-        "Consultant": "#f59e0b",
-        "Academe": "#10b981",
-        "Others": "#ef4444",
-        "Not Specified": "#e2e8f0",
-        "No Data": "#e2e8f0"
+        "None": "#94a3b8", "National Government Agency": "#3b82f6",
+        "Donor Agency": "#8b5cf6", "Consultant": "#f59e0b",
+        "Academe": "#10b981", "Others": "#ef4444",
+        "Not Specified": "#e2e8f0", "No Data": "#e2e8f0"
       };
-      
       const colors = data.labels.map(l => colorMap[l] || '#e2e8f0');
       
       supportPieInstance = new Chart(ctx, {
         type: 'pie',
-        data: { 
-          labels: data.labels, 
-          datasets: [{ 
-            data: data.data, 
-            backgroundColor: colors
-          }] 
-        },
-        options: { 
-          responsive: true, 
-          plugins: { 
-            legend: { 
-              position: 'bottom', 
-              labels: { font: { size: 9 } } 
-            } 
-          } 
-        }
+        data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: colors }] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 9 } } } } }
       });
     }
 
@@ -1820,13 +2103,7 @@
       if (shelterPieInstance) shelterPieInstance.destroy();
       shelterPieInstance = new Chart(ctx, {
         type: 'pie',
-        data: { 
-          labels: data.labels, 
-          datasets: [{ 
-            data: data.data, 
-            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
-          }] 
-        },
+        data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: ['#16a34a', '#dc2626', '#94a3b8'] }] },
         options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
       });
     }
@@ -1837,13 +2114,7 @@
       if (housingPieInstance) housingPieInstance.destroy();
       housingPieInstance = new Chart(ctx, {
         type: 'pie',
-        data: { 
-          labels: data.labels, 
-          datasets: [{ 
-            data: data.data, 
-            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
-          }] 
-        },
+        data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: ['#16a34a', '#dc2626', '#94a3b8'] }] },
         options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
       });
     }
@@ -1854,13 +2125,7 @@
       if (commPieInstance) commPieInstance.destroy();
       commPieInstance = new Chart(ctx, {
         type: 'pie',
-        data: { 
-          labels: data.labels, 
-          datasets: [{ 
-            data: data.data, 
-            backgroundColor: ['#16a34a', '#dc2626', '#94a3b8']
-          }] 
-        },
+        data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: ['#16a34a', '#dc2626', '#94a3b8'] }] },
         options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
       });
     }
@@ -1876,20 +2141,8 @@
       
       barChartInstance = new Chart(ctx, {
         type: 'bar',
-        data: { 
-          labels: data.labels, 
-          datasets: [{ 
-            label: 'Count', 
-            data: data.data, 
-            backgroundColor: colors,
-            borderRadius: 4
-          }] 
-        },
-        options: { 
-          responsive: true, 
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, stepSize: 1 } }
-        }
+        data: { labels: data.labels, datasets: [{ label: 'Count', data: data.data, backgroundColor: colors, borderRadius: 4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, stepSize: 1 } } }
       });
     }
 
@@ -1898,31 +2151,13 @@
       const ctx = document.getElementById("columnChart").getContext("2d");
       if (columnChartInstance) columnChartInstance.destroy();
       
-      const colorMap = {
-        "Preparatory": "#3b82f6",
-        "Formulation": "#8b5cf6",
-        "Review & Approval": "#f59e0b",
-        "Unspecified": "#94a3b8"
-      };
-      
+      const colorMap = { "Preparatory": "#3b82f6", "Formulation": "#8b5cf6", "Review & Approval": "#f59e0b", "Unspecified": "#94a3b8" };
       const colors = data.labels.map(l => colorMap[l] || '#94a3b8');
       
       columnChartInstance = new Chart(ctx, {
         type: 'bar',
-        data: { 
-          labels: data.labels, 
-          datasets: [{ 
-            label: 'Count', 
-            data: data.values, 
-            backgroundColor: colors,
-            borderRadius: 4
-          }] 
-        },
-        options: { 
-          responsive: true, 
-          plugins: { legend: { display: false } }, 
-          scales: { y: { beginAtZero: true, stepSize: 1 } }
-        }
+        data: { labels: data.labels, datasets: [{ label: 'Count', data: data.values, backgroundColor: colors, borderRadius: 4 }] },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, stepSize: 1 } } }
       });
     }
 
@@ -1945,28 +2180,15 @@
         data: data,
         options: {
           responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-              labels: { font: { size: 11 } }
-            }
-          },
+          plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
           scales: {
-            x: {
-              stacked: true,
-              ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 }
-            },
-            y: {
-              stacked: true,
-              beginAtZero: true,
-              ticks: { stepSize: 1 }
-            }
+            x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } },
+            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
           }
         }
       });
     }
 
-    // ========== RISK-INFORMED RENDERERS ==========
     function renderRiskStackedChart(records) {
       const data = getRiskStackedChartData(records);
       const ctx = document.getElementById("riskStackedChart").getContext("2d");
@@ -1987,28 +2209,12 @@
         options: {
           responsive: true,
           plugins: {
-            legend: {
-              position: 'top',
-              labels: { font: { size: 11 } }
-            },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return `${context.dataset.label}: ${context.raw}`;
-                }
-              }
-            }
+            legend: { position: 'top', labels: { font: { size: 11 } } },
+            tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } }
           },
           scales: {
-            x: {
-              stacked: true,
-              ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 }
-            },
-            y: {
-              stacked: true,
-              beginAtZero: true,
-              ticks: { stepSize: 1 }
-            }
+            x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } },
+            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
           }
         }
       });
@@ -2019,7 +2225,6 @@
       const ctx = document.getElementById("riskTotalChart").getContext("2d");
       if (riskTotalChartInstance) riskTotalChartInstance.destroy();
       
-      // Highlight the active category bar, mute the others
       const baseColors = ['#16a34a', '#dc2626', '#94a3b8'];
       const mutedColors = ['#bbf7d0', '#fecaca', '#e2e8f0'];
       const colors = data.labels.map((label, i) => 
@@ -2030,13 +2235,7 @@
         type: 'bar',
         data: {
           labels: data.labels,
-          datasets: [{
-            label: 'Count',
-            data: data.data,
-            backgroundColor: colors,
-            borderRadius: 6,
-            barThickness: 60
-          }]
+          datasets: [{ label: 'Count', data: data.data, backgroundColor: colors, borderRadius: 6, barThickness: 60 }]
         },
         options: {
           responsive: true,
@@ -2052,42 +2251,134 @@
               }
             }
           },
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+      });
+    }
+
+    function renderPlanadoTargetChart(records) {
+      const data = getPlanadoTargetData(records, planadoChartFilter);
+      const ctx = document.getElementById("planadoTargetChart").getContext("2d");
+      if (planadoTargetChartInstance) planadoTargetChartInstance.destroy();
+      
+      if (data.labels.length === 0 || data.datasets.every(d => d.data.every(v => v === 0))) {
+        planadoTargetChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
+          options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        return;
+      }
+      
+      planadoTargetChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', labels: { font: { size: 10 } } },
+            tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } }
+          },
           scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { stepSize: 1 }
-            }
+            x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45 } },
+            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
           }
         }
       });
     }
 
+    function renderTargetYearChart(records) {
+      const data = getTargetYearData(records, targetYearChartFilter);
+      const ctx = document.getElementById("targetYearChart").getContext("2d");
+      if (targetYearChartInstance) targetYearChartInstance.destroy();
+      
+      if (data.labels.length === 0) {
+        targetYearChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
+          options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        return;
+      }
+      
+      targetYearChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', labels: { font: { size: 10 } } },
+            tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } }
+          },
+          scales: {
+            x: { stacked: true, ticks: { font: { size: 10 } } },
+            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+          }
+        }
+      });
+    }
+
+    function renderUrbanDevChart(records) {
+      const data = getUrbanDevData(records, urbanDevChartFilter);
+      const ctx = document.getElementById("urbanDevChart").getContext("2d");
+      if (urbanDevChartInstance) urbanDevChartInstance.destroy();
+      
+      if (data.labels.length === 0 || data.datasets.every(d => d.data.every(v => v === 0))) {
+        urbanDevChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
+          options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        return;
+      }
+      
+      urbanDevChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top', labels: { font: { size: 9 } } },
+            tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } }
+          },
+          scales: {
+            x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45 } },
+            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+          }
+        }
+      });
+    }
+
+    // ========== RENDER TABLE (uses inline onclick for guaranteed reliability) ==========
+       // ========== RENDER TABLE (bulletproof version with body-level delegation) ==========
     function renderTable(records){
       const tbody = document.getElementById("lguTableBody");
       if (!records || records.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`;
         return;
       }
       let html = '';
-      records.forEach((r, index) => {
+      records.forEach((r) => {
         const region = getField(r, "Region") || "—";
         const province = getField(r, "Province") || "—";
         const municipality = getField(r, "City/Municipality") || "—";
         const income = getField(r, "Income Class") || "—";
-        const status = deriveClupStatus(r) || "—";
         const target = deriveTargetYear(r) || "—";
         const clupUpdates = getField(r, "CLUPStatus/Updates") || "—";
         const shelterPlan = getField(r, "LGU with Local Shelter Plan") || "—";
         const housingSubsector = getField(r, "LGU with Integrated Housing Subsector") || "—";
         const commPlan = getField(r, "LGU with Integrated Communications Plan") || "—";
         const riskInfo = getField(r, "Risk-Informed") || "—";
+        const planadoTarget = getField(r, "PLANADO Target") || "—";
+        const targetYearRaw = getField(r, "Target Year");
+        const urbanDev = getField(r, "Urban Development") || "—";
         
         const category = getClupStatusCategory(r);
         const statusClass = category === "Updated" ? "badge-updated" : 
                             category === "For Updating" ? "badge-due" : 
                             category === "Under Review" ? "badge-under-review" : "badge-other";
         
-        const recordJson = JSON.stringify(r).replace(/"/g, '&quot;');
+        const recordId = storeRecord(r);
         
         const getColor = (val) => {
           if (val === 'Yes') return '#166534';
@@ -2095,11 +2386,26 @@
           return '#6b7280';
         };
         
+        const getPlanadoColor = (val) => {
+          if (val === 'PlanSmart') return '#1e40af';
+          if (val === 'CAMI') return '#92400e';
+          return '#6b7280';
+        };
+        
+        let targetYearHtml = "—";
+        if (targetYearRaw && targetYearRaw !== "—" && targetYearRaw !== "") {
+          const years = String(targetYearRaw).split(/[,;\/]+/).map(y => y.trim()).filter(Boolean);
+          if (years.length > 0) {
+            targetYearHtml = years.map(y => `<span class="badge-year">${escapeHtml(y)}</span>`).join('');
+          }
+        }
+        
+        // ✅ Store recordId directly as data attribute on the button
         html += `<tr>
-          <td>${escapeHtml(region)}</td>
+          <td style="display:none;">${escapeHtml(region)}</td>
           <td>${escapeHtml(province)}</td>
           <td><strong>${escapeHtml(municipality)}</strong></td>
-          <td>${escapeHtml(income)}</td>
+          <td style="display:none;">${escapeHtml(income)}</td>
           <td><span class="badge-status ${statusClass}">${escapeHtml(category)}</span></td>
           <td>${escapeHtml(target)}</td>
           <td>${escapeHtml(clupUpdates)}</td>
@@ -2107,41 +2413,30 @@
           <td><span style="font-weight:600;color:${getColor(housingSubsector)};">${escapeHtml(housingSubsector)}</span></td>
           <td><span style="font-weight:600;color:${getColor(commPlan)};">${escapeHtml(commPlan)}</span></td>
           <td><span style="font-weight:600;color:${getColor(riskInfo)};">${escapeHtml(riskInfo)}</span></td>
+          <td><span style="font-weight:600;color:${getPlanadoColor(planadoTarget)};">${escapeHtml(planadoTarget)}</span></td>
+          <td>${targetYearHtml}</td>
+          <td>${escapeHtml(urbanDev)}</td>
           <td>
             <div class="action-cell">
-              <button class="btn-view" data-record='${recordJson}'>View</button>
-              <button class="btn-edit" data-record='${recordJson}'>Edit</button>
+              <button type="button" class="btn-view record-action-btn" data-action="view" data-record-id="${recordId}">View</button>
+              <button type="button" class="btn-edit record-action-btn" data-action="edit" data-record-id="${recordId}">Edit</button>
             </div>
           </td>
         </tr>`;
       });
       tbody.innerHTML = html;
       
-      tbody.querySelectorAll('.btn-view').forEach(btn => {
-        btn.addEventListener('click', function(){
-          const record = JSON.parse(this.dataset.record);
-          showDetailModal(record);
-        });
-      });
-      
-      tbody.querySelectorAll('.btn-edit').forEach(btn => {
-        btn.addEventListener('click', function(){
-          const record = JSON.parse(this.dataset.record);
-          openEditModal(record);
-        });
-      });
-      
-      // Update the count text with a note about the Risk-Informed filter
-      const riskFilterVal = document.getElementById("filterRiskTotal").value || 'all';
       const tableSubtitle = document.getElementById("tableSubtitle");
       let countText = `${records.length} LGUs shown`;
-      if (riskFilterVal !== 'all') {
-        countText += ` (Risk-Informed: ${riskFilterVal})`;
-        if (tableSubtitle) tableSubtitle.innerHTML = `(from LGUstatus sheet · filtered by Risk-Informed: ${riskFilterVal})`;
+      if (filterTargetYears.length > 0) {
+        countText += ` (Target Year: ${filterTargetYears.join(', ')})`;
+        if (tableSubtitle) tableSubtitle.innerHTML = `(from LGUstatus sheet · filtered by Target Year: ${filterTargetYears.join(', ')})`;
       } else {
         if (tableSubtitle) tableSubtitle.innerHTML = `(from LGUstatus sheet)`;
       }
       document.getElementById("filterCount").innerText = countText;
+      
+      console.log("[renderTable] Rendered", records.length, "rows. Delegated listener active.");
     }
 
     function showDetailModal(record){
@@ -2167,6 +2462,9 @@
         { label: "Integrated Housing Subsector", key: "LGU with Integrated Housing Subsector" },
         { label: "Integrated Communications Plan", key: "LGU with Integrated Communications Plan" },
         { label: "Risk-Informed", key: "Risk-Informed" },
+        { label: "PLANADO Target", key: "PLANADO Target" },
+        { label: "Target Year", key: "Target Year" },
+        { label: "Urban Development", key: "Urban Development" },
         { label: "Remarks", key: "Remarks" }
       ];
       
@@ -2183,6 +2481,86 @@
       });
       body.innerHTML = html;
       modal.classList.add('active');
+    }
+
+    function renderTargetYearChips() {
+      const container = document.getElementById("targetYearChips");
+      if (!container) return;
+      container.innerHTML = selectedTargetYears.map(y => 
+        `<span class="year-chip">${escapeHtml(y)}<button type="button" class="remove-year" data-year="${escapeHtml(y)}">×</button></span>`
+      ).join('');
+      
+      container.querySelectorAll(".remove-year").forEach(btn => {
+        btn.addEventListener("click", function() {
+          const y = this.dataset.year;
+          selectedTargetYears = selectedTargetYears.filter(x => x !== y);
+          renderTargetYearChips();
+          syncTargetYearHiddenInput();
+          refreshYearPickerSelect();
+        });
+      });
+    }
+    
+    function syncTargetYearHiddenInput() {
+      const hidden = document.getElementById("editTargetYear");
+      if (hidden) hidden.value = selectedTargetYears.join(", ");
+    }
+    
+    function refreshYearPickerSelect() {
+      const sel = document.getElementById("yearPickerSelect");
+      if (!sel) return;
+      const pool = new Set([...DEFAULT_YEARS, ...availableYearsGlobal, ...selectedTargetYears]);
+      const sorted = [...pool].sort();
+      sel.innerHTML = `<option value="">Select a year…</option>` + 
+        sorted.filter(y => !selectedTargetYears.includes(y))
+              .map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+    }
+    
+    function loadTargetYearsFromRecord(record) {
+      selectedTargetYears = [];
+      const raw = getFieldValue(record, "Target Year");
+      if (raw && raw.trim()) {
+        String(raw).split(/[,;\/]+/).forEach(y => {
+          const trimmed = y.trim();
+          if (trimmed) selectedTargetYears.push(trimmed);
+        });
+      }
+      renderTargetYearChips();
+      syncTargetYearHiddenInput();
+      refreshYearPickerSelect();
+    }
+
+    function refreshFilterYearCheckboxes() {
+      const list = document.getElementById("targetYearCheckboxList");
+      if (!list) return;
+      const pool = new Set([...DEFAULT_YEARS, ...availableYearsGlobal, ...filterTargetYears]);
+      const sorted = [...pool].sort();
+      list.innerHTML = sorted.map(y => 
+        `<label><input type="checkbox" value="${escapeHtml(y)}" ${filterTargetYears.includes(y) ? 'checked' : ''}> ${escapeHtml(y)}</label>`
+      ).join('');
+    }
+    
+    function updateFilterYearLabel() {
+      const label = document.getElementById("targetYearFilterLabel");
+      if (!label) return;
+      if (filterTargetYears.length === 0) label.textContent = "All Years";
+      else if (filterTargetYears.length <= 2) label.textContent = filterTargetYears.join(", ");
+      else label.textContent = `${filterTargetYears.length} years selected`;
+    }
+
+    function populateTargetYearChartFilter() {
+      const sel = document.getElementById("filterTargetYearChart");
+      if (!sel) return;
+      const currentVal = sel.value;
+      const pool = new Set([...DEFAULT_YEARS, ...availableYearsGlobal]);
+      const sorted = [...pool].sort();
+      sel.innerHTML = `<option value="all">All Years</option>` + 
+        sorted.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+      if (currentVal && [...sel.options].some(o => o.value === currentVal)) {
+        sel.value = currentVal;
+      } else {
+        sel.value = 'all';
+      }
     }
 
     function openEditModal(record) {
@@ -2210,7 +2588,16 @@
       document.getElementById("editHousingSubsector").value = getFieldValue(record, "LGU with Integrated Housing Subsector");
       document.getElementById("editCommPlan").value = getFieldValue(record, "LGU with Integrated Communications Plan");
       document.getElementById("editRiskInfo").value = getFieldValue(record, "Risk-Informed");
+      document.getElementById("editPlanadoTarget").value = getFieldValue(record, "PLANADO Target");
+      document.getElementById("editUrbanDev").value = getFieldValue(record, "Urban Development");
       document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
+      
+      loadTargetYearsFromRecord(record);
+      
+      const customInput = document.getElementById("customYearInput");
+      if (customInput) { customInput.value = ""; customInput.style.display = "none"; }
+      const toggleBtn = document.getElementById("toggleCustomYearBtn");
+      if (toggleBtn) toggleBtn.textContent = "+ Custom";
       
       document.getElementById("editSaveBtn").disabled = false;
       modal.classList.add('active');
@@ -2226,6 +2613,7 @@
         const province = formData.get('Province') || '';
         const city = formData.get('City/Municipality') || '';
         const commPlanValue = formData.get('LGU with Integrated Communications Plan') || '';
+        const targetYearValue = selectedTargetYears.join(", ");
         
         const record = {
           'PSGC': formData.get('PSGC') || '',
@@ -2246,6 +2634,9 @@
           'LGU with Integrated Housing Subsector': formData.get('LGU with Integrated Housing Subsector') || '',
           'LGU with Integrated Communications Plan': commPlanValue,
           'Risk-Informed': formData.get('Risk-Informed') || '',
+          'PLANADO Target': formData.get('PLANADO Target') || '',
+          'Target Year': targetYearValue,
+          'Urban Development': formData.get('Urban Development') || '',
           'Remarks': formData.get('Remarks') || ''
         };
         
@@ -2261,7 +2652,7 @@
         params.append('data_type', 'lgu_status');
         
         for (let [key, value] of Object.entries(record)) {
-          if (value !== undefined && value !== null && value !== '') {
+          if (value !== undefined && value !== null) {
             params.append(key, value);
           }
         }
@@ -2276,17 +2667,16 @@
         
         const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
         
-        const response = await fetch(url, {
-          method: 'GET',
-          mode: 'no-cors'
-        });
+        console.log("═══ SAVE DEBUG ═══");
+        console.log("selectedTargetYears:", selectedTargetYears);
+        console.log("targetYearValue:", targetYearValue);
+        
+        await fetch(url, { method: 'GET', mode: 'no-cors' });
         
         showToast("✅ Save request sent successfully!", "");
         document.getElementById("editModal").classList.remove('active');
         
-        setTimeout(async () => {
-          await refreshData();
-        }, 2500);
+        setTimeout(async () => { await refreshData(); }, 2500);
         
         return { success: true };
         
@@ -2308,7 +2698,10 @@
         const data = await resp.json();
         if (Array.isArray(data) && data.length > 0) {
           rawLguData = data;
+          collectAvailableYears(rawLguData);
           populateFilters(rawLguData);
+          refreshFilterYearCheckboxes();
+          populateTargetYearChartFilter();
           applyFilters();
           showToast("✅ Data refreshed successfully!", "");
         } else {
@@ -2319,69 +2712,75 @@
         showToast("❌ Error refreshing data: " + e.message, "error");
       }
     }
+    
+    function collectAvailableYears(records) {
+      records.forEach(r => {
+        const val = getField(r, "Target Year");
+        if (val && val !== "—" && val !== "") {
+          String(val).split(/[,;\/]+/).forEach(y => {
+            const trimmed = y.trim();
+            if (trimmed && !availableYearsGlobal.includes(trimmed)) {
+              availableYearsGlobal.push(trimmed);
+            }
+          });
+        }
+      });
+      DEFAULT_YEARS.forEach(y => {
+        if (!availableYearsGlobal.includes(y)) availableYearsGlobal.push(y);
+      });
+      availableYearsGlobal.sort();
+    }
 
     function populateFilters(records){
       const provinceSet = new Set();
       const lguSet = new Set();
-      const yearSet = new Set();
       
       records.forEach(r => {
         const p = getField(r, "Province") || "—";
         const m = getField(r, "City/Municipality") || "—";
         if (p !== "—") provinceSet.add(p);
         if (m !== "—") lguSet.add(m);
-        
-        const year = extractYearFromApproval(r);
-        if (year) yearSet.add(year);
       });
       
       const provSelect = document.getElementById("filterProvince");
       const lguSelect = document.getElementById("filterLgu");
-      const yearSelect = document.getElementById("filterYear");
       const stackedProvSelect = document.getElementById("filterStackedProvince");
       
       const currentProv = provSelect.value;
       const currentLgu = lguSelect.value;
-      const currentYear = yearSelect.value;
       const currentStackedProv = stackedProvSelect.value;
       
       const sortedProvinces = [...provinceSet].sort();
       provSelect.innerHTML = `<option value="">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
       lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
-      
-      const sortedYears = [...yearSet].sort((a, b) => b - a);
-      yearSelect.innerHTML = `<option value="">(All Years)</option>` + sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
-      
       stackedProvSelect.innerHTML = `<option value="all">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
       
       if (currentProv) provSelect.value = currentProv;
       if (currentLgu) lguSelect.value = currentLgu;
-      if (currentYear) yearSelect.value = currentYear;
       if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
     }
 
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
       const lgu = document.getElementById("filterLgu").value;
-      const year = document.getElementById("filterYear").value;
       const barMode = document.getElementById("barChartDropdown").value || 'all';
       const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
       const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
       const supportFilter = document.getElementById("filterSupportPie").value || 'all';
       const riskTotalFilter = document.getElementById("filterRiskTotal").value || 'all';
       
+      planadoChartFilter = document.getElementById("filterPlanadoTarget").value || 'all';
+      targetYearChartFilter = document.getElementById("filterTargetYearChart").value || 'all';
+      urbanDevChartFilter = document.getElementById("filterUrbanDev").value || 'all';
+      
       let filtered = rawLguData;
       if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
       if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
-      if (year) filtered = filterByYear(filtered, year);
       
+      filtered = filterByTargetYear(filtered, filterTargetYears);
       filtered = filterByClupStatusCategory(filtered, clupStatusFilter);
       
-      // Risk-Informed filter — applied to both the Total chart AND the table
       let riskFiltered = filterByRiskTotalCategory(filtered, riskTotalFilter);
-      
-      // Table uses riskFiltered (so it respects the Risk-Informed filter)
-      // but still needs the barMode / status-updates filter applied on top
       let tableFiltered = filterByStatusUpdates(riskFiltered, barMode);
       
       filteredData = filtered;
@@ -2394,9 +2793,12 @@
       renderCommPie(filtered);
       renderBar(filtered, barMode);
       
-      // Render Risk-Informed charts
-      renderRiskStackedChart(filtered);                      // By Province uses base filtered data
-      renderRiskTotalChart(riskFiltered, riskTotalFilter);   // Total uses the risk-specific filter
+      renderRiskStackedChart(filtered);
+      renderRiskTotalChart(riskFiltered, riskTotalFilter);
+      
+      renderPlanadoTargetChart(filtered);
+      renderTargetYearChart(filtered);
+      renderUrbanDevChart(filtered);
       
       const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
       renderColumn(filtered, activeView);
@@ -2426,45 +2828,56 @@
 
     function getFallbackData() {
       return [
-        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "Remarks": "" },
-        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "Remarks": "Needs updating" },
-        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "Remarks": "" }
+        { "PSGC": "060000000", "Region": "VI", "Province": "Aklan", "City/Municipality": "Kalibo", "Income Class": "3rd", "Start Year": "2020", "End Year": "2029", "Resolution Number of the Latest Plan": "2023-01", "Approval date of the Latest plan (MM/DD/YYYY)": "12/15/2023", "CLUP Status": "Updated", "CLUPStatus/Updates": "Phase 5", "Technical Assistance Provided": "Trained", "Support from Other Institutions": "National Government Agency", "If with Support from other institutions, Name/s of Institutions": "NEDA", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2026, 2027", "Urban Development": "RUDD", "Remarks": "" },
+        { "PSGC": "060000001", "Region": "VI", "Province": "Antique", "City/Municipality": "San Jose", "Income Class": "2nd", "Start Year": "2019", "End Year": "2028", "Resolution Number of the Latest Plan": "2022-05", "Approval date of the Latest plan (MM/DD/YYYY)": "05/20/2022", "CLUP Status": "For Updating", "CLUPStatus/Updates": "Phase 3", "Technical Assistance Provided": "Assisted", "Support from Other Institutions": "Donor Agency", "If with Support from other institutions, Name/s of Institutions": "USAID", "LGU with Local Shelter Plan": "No", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "No", "Risk-Informed": "No", "PLANADO Target": "CAMI", "Target Year": "2027", "Urban Development": "OSD & PCE", "Remarks": "Needs updating" },
+        { "PSGC": "060000002", "Region": "VI", "Province": "Capiz", "City/Municipality": "Roxas City", "Income Class": "1st", "Start Year": "2021", "End Year": "2030", "Resolution Number of the Latest Plan": "2024-12", "Approval date of the Latest plan (MM/DD/YYYY)": "01/10/2024", "CLUP Status": "Under Review", "CLUPStatus/Updates": "RA 3", "Technical Assistance Provided": "Trained and Assisted", "Support from Other Institutions": "Consultant", "If with Support from other institutions, Name/s of Institutions": "PALAFOX", "LGU with Local Shelter Plan": "Yes", "LGU with Integrated Housing Subsector": "Yes", "LGU with Integrated Communications Plan": "Yes", "Risk-Informed": "Yes", "PLANADO Target": "PlanSmart", "Target Year": "2028", "Urban Development": "RUDD, OSD, & PCE", "Remarks": "" }
       ];
     }
 
-    document.addEventListener('DOMContentLoaded', async function(){
-      checkSession(); renderMainNavigation(); renderUserMenu();
-
-      const data = await fetchLguStatusData();
-      if (data.length > 0) {
-        rawLguData = data;
-      } else {
-        rawLguData = getFallbackData();
-      }
-      populateFilters(rawLguData);
-      applyFilters();
-
+    function setupAllEventListeners() {
       document.getElementById("barChartDropdown").addEventListener('change', function() {
         applyFilters();
       });
-
       document.getElementById("filterProvince").addEventListener('change', applyFilters);
       document.getElementById("filterLgu").addEventListener('change', applyFilters);
-      document.getElementById("filterYear").addEventListener('change', applyFilters);
       document.getElementById("filterClupStatus").addEventListener('change', applyFilters);
       document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
       document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
       document.getElementById("filterRiskTotal").addEventListener('change', applyFilters);
       
+      document.getElementById("filterPlanadoTarget").addEventListener('change', function() {
+        planadoChartFilter = this.value;
+        applyFilters();
+      });
+      document.getElementById("filterTargetYearChart").addEventListener('change', function() {
+        targetYearChartFilter = this.value;
+        applyFilters();
+      });
+      document.getElementById("filterUrbanDev").addEventListener('change', function() {
+        urbanDevChartFilter = this.value;
+        applyFilters();
+      });
+      
       document.getElementById("resetFiltersBtn").addEventListener('click', function(){
         document.getElementById("filterProvince").value = "";
         document.getElementById("filterLgu").value = "";
-        document.getElementById("filterYear").value = "";
         document.getElementById("filterClupStatus").value = "all";
         document.getElementById("barChartDropdown").value = "all";
         document.getElementById("filterStackedProvince").value = "all";
         document.getElementById("filterSupportPie").value = "all";
         document.getElementById("filterRiskTotal").value = "all";
+        
+        document.getElementById("filterPlanadoTarget").value = "all";
+        document.getElementById("filterTargetYearChart").value = "all";
+        document.getElementById("filterUrbanDev").value = "all";
+        planadoChartFilter = 'all';
+        targetYearChartFilter = 'all';
+        urbanDevChartFilter = 'all';
+        
+        filterTargetYears = [];
+        document.querySelectorAll("#targetYearCheckboxList input").forEach(c => c.checked = false);
+        updateFilterYearLabel();
+        
         applyFilters();
       });
       
@@ -2503,6 +2916,171 @@
         const formData = new FormData(this);
         await saveEditedRecord(formData);
       });
+      
+      const filterBtn = document.getElementById("targetYearFilterBtn");
+      const filterPanel = document.getElementById("targetYearFilterPanel");
+      const applyBtn = document.getElementById("targetYearApplyBtn");
+      const clearBtn = document.getElementById("targetYearClearBtn");
+      
+      if (filterBtn) {
+        filterBtn.addEventListener("click", function(e) {
+          e.stopPropagation();
+          filterPanel.classList.toggle("open");
+        });
+      }
+      
+      if (applyBtn) {
+        applyBtn.addEventListener("click", function() {
+          const checked = [...document.querySelectorAll("#targetYearCheckboxList input:checked")].map(c => c.value);
+          filterTargetYears = checked;
+          updateFilterYearLabel();
+          filterPanel.classList.remove("open");
+          applyFilters();
+        });
+      }
+      
+      if (clearBtn) {
+        clearBtn.addEventListener("click", function() {
+          filterTargetYears = [];
+          document.querySelectorAll("#targetYearCheckboxList input").forEach(c => c.checked = false);
+          updateFilterYearLabel();
+          filterPanel.classList.remove("open");
+          applyFilters();
+        });
+      }
+      
+      document.addEventListener("click", function(e) {
+        if (filterPanel && filterBtn && !e.target.closest("#targetYearFilterWrapper")) {
+          filterPanel.classList.remove("open");
+        }
+      });
+      
+      const addBtn = document.getElementById("addYearBtn");
+      const yearSelect = document.getElementById("yearPickerSelect");
+      const customToggleBtn = document.getElementById("toggleCustomYearBtn");
+      const customInput = document.getElementById("customYearInput");
+      
+      if (addBtn) {
+        addBtn.addEventListener("click", function() {
+          if (customInput && customInput.style.display !== "none" && customInput.value.trim()) {
+            const y = customInput.value.trim();
+            if (/^\d{4}$/.test(y)) {
+              if (!selectedTargetYears.includes(y)) {
+                selectedTargetYears.push(y);
+                if (!availableYearsGlobal.includes(y)) availableYearsGlobal.push(y);
+                renderTargetYearChips();
+                syncTargetYearHiddenInput();
+                refreshYearPickerSelect();
+                refreshFilterYearCheckboxes();
+                populateTargetYearChartFilter();
+              } else {
+                showToast("Year already added.", "info");
+              }
+              customInput.value = "";
+              customInput.style.display = "none";
+              if (customToggleBtn) customToggleBtn.textContent = "+ Custom";
+            } else {
+              showToast("Please enter a valid 4-digit year.", "error");
+            }
+            return;
+          }
+          
+          const val = yearSelect.value;
+          if (!val) { showToast("Please select a year first.", "info"); return; }
+          if (!selectedTargetYears.includes(val)) {
+            selectedTargetYears.push(val);
+            renderTargetYearChips();
+            syncTargetYearHiddenInput();
+            refreshYearPickerSelect();
+            refreshFilterYearCheckboxes();
+            populateTargetYearChartFilter();
+          } else {
+            showToast("Year already added.", "info");
+          }
+          yearSelect.value = "";
+        });
+      }
+      
+      if (customToggleBtn && customInput) {
+        customToggleBtn.addEventListener("click", function() {
+          if (customInput.style.display === "none" || !customInput.style.display) {
+            customInput.style.display = "block";
+            customInput.focus();
+            customToggleBtn.textContent = "✕";
+          } else {
+            customInput.style.display = "none";
+            customInput.value = "";
+            customToggleBtn.textContent = "+ Custom";
+          }
+        });
+      }
+      
+      if (customInput) {
+        customInput.addEventListener("keypress", function(e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addBtn.click();
+          }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async function(){
+      checkSession(); 
+      renderMainNavigation(); 
+      renderUserMenu();
+
+      const data = await fetchLguStatusData();
+      if (data.length > 0) {
+        rawLguData = data;
+      } else {
+        rawLguData = getFallbackData();
+      }
+      
+      collectAvailableYears(rawLguData);
+      populateFilters(rawLguData);
+      
+      refreshFilterYearCheckboxes();
+      updateFilterYearLabel();
+      refreshYearPickerSelect();
+      populateTargetYearChartFilter();
+      
+      setupAllEventListeners();
+      
+      applyFilters();
+    });
+	    // ========== BULLETPROOF GLOBAL DELEGATED CLICK HANDLER ==========
+    // Attached to document — survives ANY re-render of the table
+    document.addEventListener("click", function(e) {
+      // Find if the click was on (or inside) a record action button
+      const btn = e.target.closest(".record-action-btn");
+      if (!btn) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const action = btn.getAttribute("data-action");
+      const recordId = btn.getAttribute("data-record-id");
+      
+      console.log("🔥 DELEGATED CLICK:", action, "| recordId:", recordId);
+      
+      if (!recordId) {
+        showToast("Missing record ID.", "error");
+        return;
+      }
+      
+      const record = getStoredRecord(recordId);
+      if (!record) {
+        console.error("Record not in store:", recordId);
+        showToast("Record data not found. Try refreshing.", "error");
+        return;
+      }
+      
+      if (action === "view") {
+        showDetailModal(record);
+      } else if (action === "edit") {
+        openEditModal(record);
+      }
     });
   </script>
 </body>
