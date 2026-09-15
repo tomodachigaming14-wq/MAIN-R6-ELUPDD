@@ -2060,6 +2060,15 @@
         });
       }
 
+      // --- Apply TARGET YEAR filter to the data used for the table and charts ---
+      if (targetYearChartFilter && targetYearChartFilter !== 'all') {
+        filtered = filtered.filter(r => {
+          const val = getField(r, "Target Year");
+          const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
+          return years.includes(targetYearChartFilter);
+        });
+      }
+
       if (prov) filtered = filtered.filter(r => (getField(r, "Province") || "") === prov);
       if (lgu) filtered = filtered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
       
