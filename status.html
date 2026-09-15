@@ -2276,111 +2276,137 @@
     }
 
     // ============================================================
-    // ✅ applyFilters — PLANADO Target + Target Year sync is now
-    //    ISOLATED to the LGU STATUS LIST (table) only.
-    //    All other charts always use the full dataset (plus their
-    //    own independent filters), so they don't get narrowed by
-    //    PLANADO / Target Year selections.
-    // ============================================================
-    function applyFilters(){
-      const prov = document.getElementById("filterProvince").value;
-      const lgu = document.getElementById("filterLgu").value;
-      const barMode = document.getElementById("barChartDropdown").value || 'all';
-      const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
-      const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
-      const supportFilter = document.getElementById("filterSupportPie").value || 'all';
-      const riskTotalFilter = document.getElementById("filterRiskTotal").value || 'all';
+// ✅ applyFilters — PLANADO Target + Target Year sync is now
+//    ISOLATED to the LGU STATUS LIST (table) only.
+//    All other charts always use the full dataset (plus their
+//    own independent filters), so they don't get narrowed by
+//    PLANADO / Target Year selections.
+//
+// ✅ NEW: Urban Development Year filter + Risk-Informed Total
+//    filter now ALSO narrow the LGU STATUS LIST table.
+// ============================================================
+function applyFilters(){
+  const prov = document.getElementById("filterProvince").value;
+  const lgu = document.getElementById("filterLgu").value;
+  const barMode = document.getElementById("barChartDropdown").value || 'all';
+  const clupStatusFilter = document.getElementById("filterClupStatus").value || 'all';
+  const stackedProvFilter = document.getElementById("filterStackedProvince").value || 'all';
+  const supportFilter = document.getElementById("filterSupportPie").value || 'all';
+  const riskTotalFilter = document.getElementById("filterRiskTotal").value || 'all';
 
-      planadoChartFilter = document.getElementById("filterPlanadoTarget").value || 'all';
-      targetYearChartFilter = document.getElementById("filterTargetYearChart").value || 'all';
-      urbanDevChartFilter = document.getElementById("filterUrbanDev").value || 'all';
-      urbanDevYearFilter = document.getElementById("filterUrbanDevYear").value || 'all';
+  planadoChartFilter = document.getElementById("filterPlanadoTarget").value || 'all';
+  targetYearChartFilter = document.getElementById("filterTargetYearChart").value || 'all';
+  urbanDevChartFilter = document.getElementById("filterUrbanDev").value || 'all';
+  urbanDevYearFilter = document.getElementById("filterUrbanDevYear").value || 'all';
 
-      // ============ BASE POOL (used by all charts) ============
-      // Charts get the full dataset PLUS only their own independent filters.
-      let baseFiltered = rawLguData;
-      if (prov) baseFiltered = baseFiltered.filter(r => (getField(r, "Province") || "") === prov);
-      if (lgu) baseFiltered = baseFiltered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
+  // ============ BASE POOL (used by all charts) ============
+  // Charts get the full dataset PLUS only their own independent filters.
+  let baseFiltered = rawLguData;
+  if (prov) baseFiltered = baseFiltered.filter(r => (getField(r, "Province") || "") === prov);
+  if (lgu) baseFiltered = baseFiltered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
 
-      // ============================================================
-      // ✅ TABLE POOL — PLANADO Target + Target Year ONLY affect this pool.
-      //    This pool is ONLY consumed by the LGU STATUS LIST table.
-      // ============================================================
-      let tableFiltered = baseFiltered.slice();
+  // ============================================================
+  // ✅ TABLE POOL — These filters ONLY affect the LGU STATUS LIST:
+  //    • PLANADO Target
+  //    • Target Year (chart dropdown)
+  //    • Urban Development category
+  //    • Urban Development Year (NEW)
+  //    • Risk-Informed Total (NEW)
+  // ============================================================
+  let tableFiltered = baseFiltered.slice();
 
-      if (planadoChartFilter && planadoChartFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const val = getField(r, "PLANADO Target");
-          if (planadoChartFilter === 'Not Specified') {
-            return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
-          }
-          return val === planadoChartFilter;
-        });
+  // --- PLANADO Target ---
+  if (planadoChartFilter && planadoChartFilter !== 'all') {
+    tableFiltered = tableFiltered.filter(r => {
+      const val = getField(r, "PLANADO Target");
+      if (planadoChartFilter === 'Not Specified') {
+        return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
       }
+      return val === planadoChartFilter;
+    });
+  }
 
-      if (targetYearChartFilter && targetYearChartFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const val = getField(r, "Target Year");
-          const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
-          return years.includes(targetYearChartFilter);
-        });
+  // --- Target Year (from Target Year chart dropdown) ---
+  if (targetYearChartFilter && targetYearChartFilter !== 'all') {
+    tableFiltered = tableFiltered.filter(r => {
+      const val = getField(r, "Target Year");
+      const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
+      return years.includes(targetYearChartFilter);
+    });
+  }
+
+  // --- Urban Development category ---
+  if (urbanDevChartFilter && urbanDevChartFilter !== 'all') {
+    tableFiltered = tableFiltered.filter(r => {
+      const val = getField(r, "Urban Development");
+      if (!val || val === "—") return false;
+      const normalized = String(val).trim();
+      if (normalized === urbanDevChartFilter) return true;
+      const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
+      const targetParts = urbanDevChartFilter.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
+      return targetParts.length === parts.length && targetParts.every(p => parts.includes(p));
+    });
+  }
+
+  // --- ✅ NEW: Urban Development Year ---
+  // When a specific year is selected, only keep records whose
+  // Target Year_Urban Devt contains that year.
+  if (urbanDevYearFilter && urbanDevYearFilter !== 'all') {
+    tableFiltered = tableFiltered.filter(r => {
+      const tyud = getField(r, "Target Year_Urban Devt");
+      const years = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
+      return years.includes(urbanDevYearFilter);
+    });
+  }
+
+  // --- ✅ NEW: Risk-Informed Total ---
+  // When Yes / No / Not Specified is selected, only keep matching records.
+  if (riskTotalFilter && riskTotalFilter !== 'all') {
+    tableFiltered = tableFiltered.filter(r => {
+      const riskVal = getField(r, "Risk-Informed");
+      if (riskTotalFilter === 'Not Specified') {
+        return !riskVal || riskVal === "—" || riskVal === "" || (riskVal !== "Yes" && riskVal !== "No");
       }
+      return riskVal === riskTotalFilter;
+    });
+  }
 
-      // ------------------------------------------------------------
-      // Urban Development ↔ Target Year_Urban Devt connection:
-      // The Urban Development filter narrows what shows in the table
-      // (so the Target Year_Urban Devt column reflects only matching
-      // records). It does NOT affect other charts beyond the Urban
-      // Development chart itself.
-      // ------------------------------------------------------------
-      if (urbanDevChartFilter && urbanDevChartFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const val = getField(r, "Urban Development");
-          if (!val || val === "—") return false;
-          const normalized = String(val).trim();
-          if (normalized === urbanDevChartFilter) return true;
-          const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
-          const targetParts = urbanDevChartFilter.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
-          return targetParts.length === parts.length && targetParts.every(p => parts.includes(p));
-        });
-      }
+  // CLUP Status filter for the pie chart — applied to baseFiltered only
+  const piePool = filterByClupStatusCategory(baseFiltered, clupStatusFilter);
+  // Risk Total filter pool (for the Risk chart itself)
+  const riskPool = filterByRiskTotalCategory(baseFiltered, riskTotalFilter);
+  // Status updates filter pool for the table (in addition to other table filters)
+  const tableWithStatus = filterByStatusUpdates(tableFiltered, barMode);
 
-      // CLUP Status filter for the pie chart — applied to baseFiltered only
-      const piePool = filterByClupStatusCategory(baseFiltered, clupStatusFilter);
-      // Risk Total filter pool
-      const riskPool = filterByRiskTotalCategory(baseFiltered, riskTotalFilter);
-      // Status updates filter pool for the table (in addition to PLANADO/Target Year)
-      const tableWithStatus = filterByStatusUpdates(tableFiltered, barMode);
+  filteredData = baseFiltered;
 
-      filteredData = baseFiltered;
+  // ============ RENDER CHARTS (independent pools) ============
+  renderStats(baseFiltered);
+  renderPie(piePool);
+  renderSupportPie(baseFiltered, supportFilter);
+  renderShelterPie(baseFiltered);
+  renderHousingPie(baseFiltered);
+  renderCommPie(baseFiltered);
+  renderBar(baseFiltered, barMode);
 
-      // ============ RENDER CHARTS (independent pools) ============
-      renderStats(baseFiltered);
-      renderPie(piePool);
-      renderSupportPie(baseFiltered, supportFilter);
-      renderShelterPie(baseFiltered);
-      renderHousingPie(baseFiltered);
-      renderCommPie(baseFiltered);
-      renderBar(baseFiltered, barMode);
+  renderRiskStackedChart(baseFiltered);
+  renderRiskTotalChart(riskPool, riskTotalFilter);
 
-      renderRiskStackedChart(baseFiltered);
-      renderRiskTotalChart(riskPool, riskTotalFilter);
+  // PLANADO & Target Year charts use baseFiltered (do NOT react to each other's dropdown)
+  renderPlanadoTargetChart(baseFiltered);
+  renderTargetYearChart(baseFiltered);
 
-      // PLANADO & Target Year charts use baseFiltered (do NOT react to each other's dropdown)
-      renderPlanadoTargetChart(baseFiltered);
-      renderTargetYearChart(baseFiltered);
+  // Urban Development chart uses baseFiltered but respects its own 2 dropdowns
+  renderUrbanDevChart(baseFiltered);
 
-      // Urban Development chart uses baseFiltered but respects its own 2 dropdowns
-      renderUrbanDevChart(baseFiltered);
+  const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
+  renderColumn(baseFiltered, activeView);
 
-      const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
-      renderColumn(baseFiltered, activeView);
+  renderStackedChart(baseFiltered, stackedProvFilter);
 
-      renderStackedChart(baseFiltered, stackedProvFilter);
-
-      // ============ RENDER TABLE (uses PLANADO + Target Year + Urban Dev + Status Updates) ============
-      renderTable(tableWithStatus);
-    }
+  // ============ RENDER TABLE (uses PLANADO + Target Year + Urban Dev + Urban Dev Year + Risk-Informed + Status Updates) ============
+  renderTable(tableWithStatus);
+}
 
     function filterByStatusUpdates(records, mode) {
       if (mode === 'all') return records;
