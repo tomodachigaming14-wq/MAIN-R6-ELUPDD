@@ -2327,11 +2327,12 @@
 
     // ============================================================
     // ✅ applyFilters — Now includes:
-    //    • CLUP Status filter → Province Status Summary (stacked) (NEW)
-    //    • Risk-Informed Total filter → Risk-Informed by Province (NEW)
+    //    • CLUP Status filter → Province Status Summary (stacked)
+    //    • Risk-Informed Total filter → Risk-Informed by Province
     //    • CLUP Status filter → LGU STATUS LIST (table)
     //    • PLANADO Target filter → Target Year chart
     //    • Target Year filter → PLANADO Target chart
+    //    • Province Status Summary dropdown → LGU STATUS LIST (NEW)
     // ============================================================
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
@@ -2364,8 +2365,22 @@
 
       // ============================================================
       // ✅ TABLE POOL — These filters ONLY affect the LGU STATUS LIST:
+      //    • Province (from Province Status Summary dropdown) (NEW)
+      //    • CLUP Status
+      //    • PLANADO Target
+      //    • Target Year
+      //    • Urban Development category
+      //    • Urban Development Year
+      //    • Risk-Informed Total
       // ============================================================
       let tableFiltered = baseFiltered.slice();
+
+      // --- ✅ Province Status Summary dropdown (NEW) ---
+      // When a province is picked in the Province Status Summary chart's
+      // own dropdown, only show that province's LGUs in the table.
+      if (stackedProvFilter && stackedProvFilter !== 'all') {
+        tableFiltered = tableFiltered.filter(r => (getField(r, "Province") || "") === stackedProvFilter);
+      }
 
       // --- CLUP Status (pie chart dropdown) ---
       if (clupStatusFilter && clupStatusFilter !== 'all') {
