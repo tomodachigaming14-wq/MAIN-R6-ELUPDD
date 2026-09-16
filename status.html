@@ -1813,20 +1813,48 @@
       columnChartInstance = new Chart(ctx, { type: 'bar', data: { labels: data.labels, datasets: [{ label: 'Count', data: data.values, backgroundColor: colors, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, stepSize: 1 } } } });
     }
 
-    function renderStackedChart(records, filterProvince) {
+    function renderStackedChart(records, filterProvince, activeStatus = 'all') {
       const data = getStackedChartData(records, filterProvince);
       const ctx = document.getElementById("stackedChart").getContext("2d");
       if (stackedChartInstance) stackedChartInstance.destroy();
-      if (data.labels.length === 0) { stackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
-      stackedChartInstance = new Chart(ctx, { type: 'bar', data: data, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
+
+      if (data.labels.length === 0) {
+        stackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+        return;
+      }
+
+      // ✅ NEW: When a specific CLUP Status is selected, only show that status dataset
+      let displayData = data;
+      if (activeStatus && activeStatus !== 'all') {
+        const filteredDatasets = data.datasets.filter(ds => ds.label === activeStatus);
+        if (filteredDatasets.length > 0) {
+          displayData = { labels: data.labels, datasets: filteredDatasets };
+        }
+      }
+
+      stackedChartInstance = new Chart(ctx, { type: 'bar', data: displayData, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
     }
 
-    function renderRiskStackedChart(records) {
+    function renderRiskStackedChart(records, activeRisk = 'all') {
       const data = getRiskStackedChartData(records);
       const ctx = document.getElementById("riskStackedChart").getContext("2d");
       if (riskStackedChartInstance) riskStackedChartInstance.destroy();
-      if (data.labels.length === 0) { riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
-      riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: data, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
+
+      if (data.labels.length === 0) {
+        riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+        return;
+      }
+
+      // ✅ NEW: When a specific Risk category is selected, only show that dataset
+      let displayData = data;
+      if (activeRisk && activeRisk !== 'all') {
+        const filteredDatasets = data.datasets.filter(ds => ds.label === activeRisk);
+        if (filteredDatasets.length > 0) {
+          displayData = { labels: data.labels, datasets: filteredDatasets };
+        }
+      }
+
+      riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: displayData, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
     }
 
     function renderRiskTotalChart(records, activeCategory = 'all') {
@@ -2299,17 +2327,11 @@
 
     // ============================================================
     // ✅ applyFilters — Now includes:
+    //    • CLUP Status filter → Province Status Summary (stacked) (NEW)
+    //    • Risk-Informed Total filter → Risk-Informed by Province (NEW)
     //    • CLUP Status filter → LGU STATUS LIST (table)
     //    • PLANADO Target filter → Target Year chart
-    //    • Target Year filter → PLANADO Target chart (NEW)
-    //
-    //    PLANADO Target chart pool:
-    //    • Narrowed by the Target Year dropdown, so selecting 2026
-    //      shows only LGUs whose Target Year includes 2026.
-    //
-    //    TARGET YEAR chart pool:
-    //    • Narrowed by the PLANADO Target dropdown, so selecting
-    //      PlanSmart shows only PlanSmart LGUs' year counts.
+    //    • Target Year filter → PLANADO Target chart
     // ============================================================
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
@@ -2336,9 +2358,7 @@
       const targetYearPool = filterByPlanadoTarget(baseFiltered, planadoChartFilter);
 
       // ============================================================
-      // ✅ PLANADO TARGET CHART POOL — narrowed by Target Year filter (NEW)
-      //    Selecting 2026 in Target Year → PLANADO chart shows only
-      //    LGUs whose Target Year contains 2026.
+      // ✅ PLANADO TARGET CHART POOL — narrowed by Target Year filter
       // ============================================================
       const planadoPool = filterByTargetYear(baseFiltered, targetYearChartFilter);
 
@@ -2423,7 +2443,8 @@
       renderCommPie(baseFiltered);
       renderBar(baseFiltered, barMode);
 
-      renderRiskStackedChart(baseFiltered);
+      // ✅ Risk-Informed by Province now reacts to Risk-Informed Total filter
+      renderRiskStackedChart(baseFiltered, riskTotalFilter);
       renderRiskTotalChart(riskPool, riskTotalFilter);
 
       // ✅ PLANADO Target chart uses the Target Year-narrowed pool
@@ -2438,7 +2459,8 @@
       const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
       renderColumn(baseFiltered, activeView);
 
-      renderStackedChart(baseFiltered, stackedProvFilter);
+      // ✅ Province Status Summary now reacts to CLUP Status filter
+      renderStackedChart(baseFiltered, stackedProvFilter, clupStatusFilter);
 
       // ============ RENDER TABLE ============
       renderTable(tableWithStatus);
