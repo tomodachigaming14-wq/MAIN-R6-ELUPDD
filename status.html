@@ -1489,6 +1489,16 @@
       });
     }
 
+    // ========== FILTER BY TARGET YEAR (helper for PLANADO chart) ==========
+    function filterByTargetYear(records, year) {
+      if (year === 'all') return records;
+      return records.filter(r => {
+        const val = getField(r, "Target Year");
+        const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
+        return years.includes(year);
+      });
+    }
+
     // ========== TARGET YEAR CHART DATA ==========
     function getTargetYearChartData(records, filterYear = 'all') {
       const yearCounts = {};
@@ -2290,14 +2300,16 @@
     // ============================================================
     // ✅ applyFilters — Now includes:
     //    • CLUP Status filter → LGU STATUS LIST (table)
-    //    • PLANADO Target filter → Target Year chart (NEW)
+    //    • PLANADO Target filter → Target Year chart
+    //    • Target Year filter → PLANADO Target chart (NEW)
     //
-    //    TARGET YEAR CHART POOL:
-    //    • The Target Year chart now uses a pool narrowed by the
-    //      PLANADO Target dropdown, so selecting PlanSmart / CAMI /
-    //      Not Specified shows only those LGUs' target year counts.
-    //    • The chart's own Target Year dropdown still further narrows
-    //      which year(s) are displayed.
+    //    PLANADO Target chart pool:
+    //    • Narrowed by the Target Year dropdown, so selecting 2026
+    //      shows only LGUs whose Target Year includes 2026.
+    //
+    //    TARGET YEAR chart pool:
+    //    • Narrowed by the PLANADO Target dropdown, so selecting
+    //      PlanSmart shows only PlanSmart LGUs' year counts.
     // ============================================================
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
@@ -2320,19 +2332,18 @@
 
       // ============================================================
       // ✅ TARGET YEAR CHART POOL — narrowed by PLANADO Target filter
-      //    so the Target Year chart reflects the selected PLANADO
-      //    category (PlanSmart / CAMI / Not Specified).
       // ============================================================
       const targetYearPool = filterByPlanadoTarget(baseFiltered, planadoChartFilter);
 
       // ============================================================
+      // ✅ PLANADO TARGET CHART POOL — narrowed by Target Year filter (NEW)
+      //    Selecting 2026 in Target Year → PLANADO chart shows only
+      //    LGUs whose Target Year contains 2026.
+      // ============================================================
+      const planadoPool = filterByTargetYear(baseFiltered, targetYearChartFilter);
+
+      // ============================================================
       // ✅ TABLE POOL — These filters ONLY affect the LGU STATUS LIST:
-      //    • CLUP Status
-      //    • PLANADO Target
-      //    • Target Year (chart dropdown)
-      //    • Urban Development category
-      //    • Urban Development Year
-      //    • Risk-Informed Total
       // ============================================================
       let tableFiltered = baseFiltered.slice();
 
@@ -2415,10 +2426,10 @@
       renderRiskStackedChart(baseFiltered);
       renderRiskTotalChart(riskPool, riskTotalFilter);
 
-      // PLANADO chart uses baseFiltered with its own dropdown
-      renderPlanadoTargetChart(baseFiltered);
+      // ✅ PLANADO Target chart uses the Target Year-narrowed pool
+      renderPlanadoTargetChart(planadoPool);
 
-      // ✅ Target Year chart now uses the PLANADO-narrowed pool
+      // ✅ Target Year chart uses the PLANADO-narrowed pool
       renderTargetYearChart(targetYearPool);
 
       // Urban Development chart uses baseFiltered but respects its own 2 dropdowns
