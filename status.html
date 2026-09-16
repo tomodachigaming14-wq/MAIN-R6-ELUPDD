@@ -1477,6 +1477,18 @@
       return { labels: sortedProvinces, datasets };
     }
 
+    // ========== FILTER BY PLANADO TARGET (helper for Target Year chart) ==========
+    function filterByPlanadoTarget(records, category) {
+      if (category === 'all') return records;
+      return records.filter(r => {
+        const val = getField(r, "PLANADO Target");
+        if (category === 'Not Specified') {
+          return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
+        }
+        return val === category;
+      });
+    }
+
     // ========== TARGET YEAR CHART DATA ==========
     function getTargetYearChartData(records, filterYear = 'all') {
       const yearCounts = {};
@@ -2276,21 +2288,16 @@
     }
 
     // ============================================================
-    // ✅ applyFilters — Now includes CLUP Status filter connection
-    //    to the LGU STATUS LIST (table).
+    // ✅ applyFilters — Now includes:
+    //    • CLUP Status filter → LGU STATUS LIST (table)
+    //    • PLANADO Target filter → Target Year chart (NEW)
     //
-    //    TABLE FILTERS (all narrow the LGU STATUS LIST):
-    //    • Province / LGU (top filter bar)
-    //    • CLUP Status (pie chart dropdown) ✅ NEW
-    //    • Status of CLUP Updating (bar chart dropdown)
-    //    • PLANADO Target
-    //    • Target Year
-    //    • Urban Development category
-    //    • Urban Development Year
-    //    • Risk-Informed Total
-    //
-    //    All other charts always use the full dataset (plus their
-    //    own independent filters).
+    //    TARGET YEAR CHART POOL:
+    //    • The Target Year chart now uses a pool narrowed by the
+    //      PLANADO Target dropdown, so selecting PlanSmart / CAMI /
+    //      Not Specified shows only those LGUs' target year counts.
+    //    • The chart's own Target Year dropdown still further narrows
+    //      which year(s) are displayed.
     // ============================================================
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
@@ -2312,8 +2319,15 @@
       if (lgu) baseFiltered = baseFiltered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
 
       // ============================================================
+      // ✅ TARGET YEAR CHART POOL — narrowed by PLANADO Target filter
+      //    so the Target Year chart reflects the selected PLANADO
+      //    category (PlanSmart / CAMI / Not Specified).
+      // ============================================================
+      const targetYearPool = filterByPlanadoTarget(baseFiltered, planadoChartFilter);
+
+      // ============================================================
       // ✅ TABLE POOL — These filters ONLY affect the LGU STATUS LIST:
-      //    • CLUP Status (NEW)
+      //    • CLUP Status
       //    • PLANADO Target
       //    • Target Year (chart dropdown)
       //    • Urban Development category
@@ -2322,7 +2336,7 @@
       // ============================================================
       let tableFiltered = baseFiltered.slice();
 
-      // --- ✅ CLUP Status (pie chart dropdown) ---
+      // --- CLUP Status (pie chart dropdown) ---
       if (clupStatusFilter && clupStatusFilter !== 'all') {
         tableFiltered = tableFiltered.filter(r => getClupStatusCategory(r) === clupStatusFilter);
       }
@@ -2401,9 +2415,11 @@
       renderRiskStackedChart(baseFiltered);
       renderRiskTotalChart(riskPool, riskTotalFilter);
 
-      // PLANADO & Target Year charts use baseFiltered (do NOT react to each other's dropdown)
+      // PLANADO chart uses baseFiltered with its own dropdown
       renderPlanadoTargetChart(baseFiltered);
-      renderTargetYearChart(baseFiltered);
+
+      // ✅ Target Year chart now uses the PLANADO-narrowed pool
+      renderTargetYearChart(targetYearPool);
 
       // Urban Development chart uses baseFiltered but respects its own 2 dropdowns
       renderUrbanDevChart(baseFiltered);
@@ -2413,7 +2429,7 @@
 
       renderStackedChart(baseFiltered, stackedProvFilter);
 
-      // ============ RENDER TABLE (uses CLUP Status + PLANADO + Target Year + Urban Dev + Urban Dev Year + Risk-Informed + Status Updates) ============
+      // ============ RENDER TABLE ============
       renderTable(tableWithStatus);
     }
 
