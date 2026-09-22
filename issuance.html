@@ -11,14 +11,10 @@
     body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
-    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
-    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
-    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
     .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
     .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    /* ===== HEADER / NAV ===== */
     header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
     .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
     .logo-area-header { display: flex; align-items: center; gap: 16px; }
@@ -27,26 +23,67 @@
     .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
     .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
     .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+
+    /* ===== NAVIGATION BAR (centered) ===== */
     .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
-    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
-    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
-    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
+    .nav-bottom .container { display: flex; justify-content: center; }
+    .main-nav-links { display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.2rem 0; }
+
+    /* ===== NAV ITEM BOXES ===== */
+    .main-nav-links > a,
+    .main-nav-links > .dropdown > .dropbtn {
+      display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; font-weight: 600; font-size: 0.82rem;
+      color: #1f3a5f; padding: 0.55rem 1rem; border-radius: 12px;
+      border: 1.5px solid transparent; background: transparent;
+      transition: all 0.25s ease; letter-spacing: -0.2px;
+      cursor: pointer; white-space: nowrap; position: relative;
+      font-family: inherit; line-height: 1.2;
+    }
+    .main-nav-links > a:hover,
+    .main-nav-links > .dropdown > .dropbtn:hover {
+      background: #eff6ff; border-color: #bfdbfe; color: #2563eb;
+      transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+    .main-nav-links > a.active,
+    .main-nav-links > .dropdown > .dropbtn.active {
+      background: #2563eb; border-color: #2563eb; color: #ffffff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30); transform: translateY(-2px);
+    }
+    .main-nav-links > a.active:hover,
+    .main-nav-links > .dropdown > .dropbtn.active:hover {
+      background: #1d4ed8; border-color: #1d4ed8; color: #ffffff;
+    }
+    .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
+    .dropbtn::after { content: " ▾"; font-size: 0.65rem; opacity: 0.6; margin-left: 4px; transition: opacity 0.2s; }
+    .dropdown:hover .dropbtn::after { opacity: 1; }
+
+    /* ===== DROPDOWN MENUS ===== */
+    .dropdown { position: relative; display: inline-block; padding-bottom: 6px; margin-bottom: -6px; }
+    .dropbtn { background: none; border: none; font-family: inherit; }
+    .dropdown-content {
+      display: none; position: absolute; background: white;
+      min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      border-radius: 16px; z-index: 1000; top: 100%; left: 50%;
+      transform: translateX(-50%); border: 1px solid #eef2ff;
+      padding: 0.3rem 0; animation: dropFade 0.2s ease;
+    }
+    .dropdown-content::before { content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 12px; background: transparent; }
+    @keyframes dropFade { from { opacity: 0; transform: translateX(-50%) translateY(-6px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
     .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
-    .dropdown-content a:hover { background: #eff6ff; }
-    .dropdown-submenu { position: relative; }
-    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
-    .submenu-trigger:hover { background: #eff6ff; }
-    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; }
+    .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
+    .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 2rem 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; transition: background 0.15s ease, color 0.15s ease; }
+    .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
+    .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
     .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
-    .dropdown-submenu:hover .submenu-content { display: block; }
+    .submenu-content::before { content: ""; position: absolute; top: 0; left: -10px; bottom: 0; width: 10px; background: transparent; }
+    .dropdown-submenu:hover .submenu-content, .dropdown-submenu.open .submenu-content { display: block; }
     .submenu-content a { padding: 0.7rem 1.2rem; }
-    .dropdown-submenu.open .submenu-content { display: block; }
-    .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
-    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
+
+    /* ===== USER DROPDOWN ===== */
     .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
     .user-name { font-size: 0.7rem; font-weight: 500; }
     .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
@@ -55,12 +92,13 @@
     .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
     .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
     .user-dropdown-item:hover { background: #f8fafc; }
+
     .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
     .login-modal.active { display: flex; }
     .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
     .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
     .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
-    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; }
     .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
     .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
     .login-modal-body .input-group { margin-bottom: 1.3rem; }
@@ -81,7 +119,7 @@
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Issuance Styles - Preserved from original */
+    /* Issuance Styles */
     .tabs-container { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.25rem; margin-top: 1rem; }
     .tab-btn { background: none; border: none; padding: 0.6rem 1.4rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border-radius: 40px 40px 12px 12px; transition: all 0.2s; color: #475569; }
     .tab-btn.active { background: #2563eb; color: white; box-shadow: 0 -2px 0 #2563eb; }
@@ -103,11 +141,21 @@
     .btn-download:hover { background: #1e3a8a; }
     .empty-state { text-align: center; padding: 3rem; background: white; border-radius: 2rem; color: #64748b; }
 
-    @media (max-width: 700px) { 
-      .doc-grid { grid-template-columns: 1fr; } 
+    @media (max-width: 900px) {
+      .main-nav-links { gap: 0.35rem; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
+    }
+    @media (max-width: 700px) {
+      .doc-grid { grid-template-columns: 1fr; }
       .top-bar { flex-direction: column; align-items: stretch; }
       .header-logo-img span { white-space: normal; font-size: 0.7rem; }
       .login-modal-brand img { width: 100px; }
+      .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
+      .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
+      .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
+      .dropdown-submenu.open .submenu-content { display: block; }
     }
   </style>
 </head>
@@ -125,9 +173,7 @@
       </div>
     </div>
     <div class="nav-bottom">
-      <div class="container">
-        <div class="main-nav-links" id="mainNavContainer"></div>
-      </div>
+      <div class="container"><div class="main-nav-links" id="mainNavContainer"></div></div>
     </div>
   </header>
 
@@ -145,7 +191,6 @@
     <div id="devcontrolsPane" class="tab-pane"><div class="doc-grid" id="devcontrolsGrid"></div></div>
   </div>
 
-  <!-- LOGIN MODAL -->
   <div id="loginModal" class="login-modal">
     <div class="login-modal-content">
       <div class="login-modal-brand">
@@ -156,15 +201,8 @@
       </div>
       <div class="login-modal-body">
         <form id="modalLoginForm" onsubmit="return handleModalLogin(event)">
-          <div class="input-group">
-            <label><i class="fas fa-envelope"></i> Email Address</label>
-            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
-          </div>
-          <div class="input-group">
-            <label><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-            <button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button>
-          </div>
+          <div class="input-group"><label><i class="fas fa-envelope"></i> Email Address</label><input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required /></div>
+          <div class="input-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="modalLoginPassword" placeholder="Enter your password" required /><button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button></div>
           <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
         </form>
       </div>
@@ -175,16 +213,8 @@
   <footer class="footer-new">
     <div class="container">
       <div class="footer-grid">
-        <div>
-          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br />
-          <strong>DHSUD Region VI</strong><br />ELUPDD<br />
-        </div>
-        <div>
-          <strong>Our Social Networks</strong><br />Follow us for updates<br />
-          <div class="social-icons">
-            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-          </div>
-        </div>
+        <div><img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD<br /></div>
+        <div><strong>Our Social Networks</strong><br />Follow us for updates<br /><div class="social-icons"><a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a></div></div>
       </div>
       <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
     </div>
@@ -195,26 +225,9 @@
     let currentUser = null;
 
     function escapeHtml(str) { if(!str) return ''; return String(str).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[m]); }
-    function showToastMessage(msg, type="info") {
-      let t = document.querySelector(".toast-msg"); if(t) t.remove();
-      let toast = document.createElement("div"); toast.className = "toast-msg";
-      toast.style.background = type === "error" ? "#b91c1c" : "#166534";
-      toast.innerText = msg; document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
+    function showToastMessage(msg, type="info") { let t = document.querySelector(".toast-msg"); if(t) t.remove(); let toast = document.createElement("div"); toast.className = "toast-msg"; toast.style.background = type === "error" ? "#b91c1c" : "#166534"; toast.innerText = msg; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
     function encodePassword(p) { return btoa(p); }
-    function checkSession() {
-      const raw = localStorage.getItem("dhsud_session");
-      if (raw) {
-        try {
-          const s = JSON.parse(raw);
-          const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60);
-          if (diff < 12 && s.email) { currentUser = s; return true; }
-          else localStorage.removeItem("dhsud_session");
-        } catch(e) { localStorage.removeItem("dhsud_session"); }
-      }
-      currentUser = null; return false;
-    }
+    function checkSession() { const raw = localStorage.getItem("dhsud_session"); if (raw) { try { const s = JSON.parse(raw); const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60); if (diff < 12 && s.email) { currentUser = s; return true; } else localStorage.removeItem("dhsud_session"); } catch(e) { localStorage.removeItem("dhsud_session"); } } currentUser = null; return false; }
     function getUserInitials(n) { if(!n) return "U"; let p = n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
     function getRoleLabel(r) { if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r) { if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
@@ -222,40 +235,30 @@
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
-      let navHtml = `<a href="index.html">Home</a>`;
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+      let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
       if (currentUser) {
-        navHtml +=
-          `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-            <a href="lc.html">Locational Clearance</a>
-            <a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-          </div></div>
-          <a href="Techsamp.html">Technical Assistance</a>
-          <a href="training.html">CLUP/ZO Trainings</a>
-          <a href="p_monitoring.html">Plan Monitoring</a>
-          <a href="lgu-info.html">LGU Information</a>
-          <a href="report.html">Reports</a>
-          <a href="calendar.html">Calendar of Activities</a>
-          <a href="issuance.html">Issuances</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>`;
+        const isCertActive = isActive('lc.html') || isActive('SZC.html');
+        const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+        const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+        navHtml += `
+          <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+          <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+          <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+          <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+          <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+          <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+          <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+          <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>`;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
         document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const submenu = trigger.closest(".dropdown-submenu");
-            if (submenu) submenu.classList.toggle("open");
-          });
+          trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
         });
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".dropdown-submenu")) {
-            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-          }
-        });
+        document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
       }, 10);
     }
 
@@ -296,8 +299,7 @@
         const users = await resp.json();
         const user = users.find(u => u.email?.toLowerCase() === email);
         if (!user) { showToastMessage("Account not found.", "error"); btn.innerHTML = originalText; btn.disabled = false; return false; }
-        const encodedPassword = encodePassword(password);
-        if (user.password === encodedPassword) {
+        if (user.password === encodePassword(password)) {
           const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
           localStorage.setItem("dhsud_session", JSON.stringify(session));
           showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
@@ -391,7 +393,6 @@
       { id:78, title:"PD 957 - Subdivision & Condominium Buyers Decree", category:"Development Control", sub:"Real Estate", description:"Regulating subdivision and condominium development.", refNumber:"PD 957", year:"1976", tags:["subdivision","condo"], docUrl:"https://drive.google.com/drive/folders/1LtXMrfk2Fh1IW2YV1Wp1SI2CkQCf_BXg?usp=drive_link" }
     ];
 
-    // ----- RENDER -----
     function renderCards(docArray, containerId) {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -402,9 +403,7 @@
           <div class="doc-title">${escapeHtml(doc.title)}</div></div>
           <div class="doc-meta"><span class="doc-category">${escapeHtml(doc.category)}${doc.sub ? ` / ${escapeHtml(doc.sub)}` : ''}</span><span>📅 ${doc.year || '—'}</span><span>🔖 ${escapeHtml(doc.refNumber || 'N/A')}</span></div>
           <div class="doc-desc">${escapeHtml(doc.description)}</div>
-          <div class="doc-footer">
-            <a href="${escapeHtml(doc.docUrl)}" class="btn-download" target="_blank" rel="noopener noreferrer">📥 View Reference</a>
-          </div>
+          <div class="doc-footer"><a href="${escapeHtml(doc.docUrl)}" class="btn-download" target="_blank" rel="noopener noreferrer">📥 View Reference</a></div>
         </div>
       `).join('');
     }
@@ -414,7 +413,6 @@
       const guidelines = documents.filter(d => d.category === "Guideline");
       const lawsCombined = documents.filter(d => d.category === "Law" || d.category === "Memorandum");
       const devControls = documents.filter(d => d.category === "Development Control");
-
       renderCards(templates, "templatesGrid");
       renderCards(guidelines, "guidelinesGrid");
       renderCards(lawsCombined, "lawsGrid");
@@ -428,23 +426,10 @@
       document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
     }
 
-    // ----- INIT -----
     document.addEventListener("DOMContentLoaded", () => {
-      checkSession();
-      renderMainNavigation();
-      renderUserMenu();
-      renderAll();
-
-      document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          switchTab(btn.getAttribute("data-tab"));
-        });
-      });
-
-      window.onclick = function(e) {
-        const modal = document.getElementById("loginModal");
-        if(e.target === modal) modal.classList.remove("active");
-      };
+      checkSession(); renderMainNavigation(); renderUserMenu(); renderAll();
+      document.querySelectorAll(".tab-btn").forEach(btn => { btn.addEventListener("click", (e) => { switchTab(btn.getAttribute("data-tab")); }); });
+      window.onclick = function(e) { const modal = document.getElementById("loginModal"); if(e.target === modal) modal.classList.remove("active"); };
     });
   </script>
 </body>

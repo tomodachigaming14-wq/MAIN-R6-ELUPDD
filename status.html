@@ -11,15 +11,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
-    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
-    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
-    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
-    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    /* ===== HEADER / NAV ===== */
     header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
     .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
     .logo-area-header { display: flex; align-items: center; gap: 16px; }
@@ -28,26 +21,63 @@
     .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
     .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
     .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+
+    /* ===== NAVIGATION BAR (centered) ===== */
     .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
-    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
-    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
-    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
+    .nav-bottom .container { display: flex; justify-content: center; }
+    .main-nav-links { display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.2rem 0; }
+    .main-nav-links > a,
+    .main-nav-links > .dropdown > .dropbtn {
+      display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; font-weight: 600; font-size: 0.82rem;
+      color: #1f3a5f; padding: 0.55rem 1rem; border-radius: 12px;
+      border: 1.5px solid transparent; background: transparent;
+      transition: all 0.25s ease; letter-spacing: -0.2px;
+      cursor: pointer; white-space: nowrap; position: relative;
+      font-family: inherit; line-height: 1.2;
+    }
+    .main-nav-links > a:hover,
+    .main-nav-links > .dropdown > .dropbtn:hover {
+      background: #eff6ff; border-color: #bfdbfe; color: #2563eb;
+      transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+    .main-nav-links > a.active,
+    .main-nav-links > .dropdown > .dropbtn.active {
+      background: #2563eb; border-color: #2563eb; color: #ffffff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30); transform: translateY(-2px);
+    }
+    .main-nav-links > a.active:hover,
+    .main-nav-links > .dropdown > .dropbtn.active:hover {
+      background: #1d4ed8; border-color: #1d4ed8; color: #ffffff;
+    }
+    .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
+    .dropbtn::after { content: " ▾"; font-size: 0.65rem; opacity: 0.6; margin-left: 4px; transition: opacity 0.2s; }
+    .dropdown:hover .dropbtn::after { opacity: 1; }
+
+    .dropdown { position: relative; display: inline-block; padding-bottom: 6px; margin-bottom: -6px; }
+    .dropbtn { background: none; border: none; font-family: inherit; }
+    .dropdown-content {
+      display: none; position: absolute; background: white;
+      min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      border-radius: 16px; z-index: 1000; top: 100%; left: 50%;
+      transform: translateX(-50%); border: 1px solid #eef2ff;
+      padding: 0.3rem 0; animation: dropFade 0.2s ease;
+    }
+    .dropdown-content::before { content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 12px; background: transparent; }
+    @keyframes dropFade { from { opacity: 0; transform: translateX(-50%) translateY(-6px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
     .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
-    .dropdown-content a:hover { background: #eff6ff; }
-    .dropdown-submenu { position: relative; }
-    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
-    .submenu-trigger:hover { background: #eff6ff; }
-    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; }
+    .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
+    .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 2rem 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; transition: background 0.15s ease, color 0.15s ease; }
+    .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
+    .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
     .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
-    .dropdown-submenu:hover .submenu-content { display: block; }
+    .submenu-content::before { content: ""; position: absolute; top: 0; left: -10px; bottom: 0; width: 10px; background: transparent; }
+    .dropdown-submenu:hover .submenu-content, .dropdown-submenu.open .submenu-content { display: block; }
     .submenu-content a { padding: 0.7rem 1.2rem; }
-    .dropdown-submenu.open .submenu-content { display: block; }
-    .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
-    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
+
     .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
     .user-name { font-size: 0.7rem; font-weight: 500; }
     .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
@@ -82,533 +112,113 @@
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Status Page Styles */
-    .page-header {
-      background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%);
-      padding: 2rem 0;
-      margin-bottom: 2rem;
-      text-align: center;
-      color: white;
-      border-radius: 0 0 2rem 2rem;
-    }
+    @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes modalSlideIn { from { transform: scale(0.95) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+    /* Status page specific styles */
+    .page-header { background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%); padding: 2rem 0; margin-bottom: 2rem; text-align: center; color: white; border-radius: 0 0 2rem 2rem; }
     .page-header h1 { font-weight: 600; font-size: 1.8rem; }
     .page-header p { opacity: 0.8; }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-    .stat-card {
-      background: white;
-      border-radius: 24px;
-      padding: 20px 18px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      border: 1px solid #eef2ff;
-      text-align: center;
-    }
-    .stat-number {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #1e3a8a;
-      line-height: 1.1;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: #4a6f88;
-      margin-top: 4px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 28px; }
+    .stat-card { background: white; border-radius: 24px; padding: 20px 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #eef2ff; text-align: center; }
+    .stat-number { font-size: 2.2rem; font-weight: 700; color: #1e3a8a; line-height: 1.1; }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.4px; color: #4a6f88; margin-top: 4px; }
 
-    .filter-bar {
-      background: white;
-      border-radius: 60px;
-      padding: 12px 24px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 18px;
-      border: 1px solid #eef2ff;
-      margin-bottom: 28px;
-    }
-    .filter-bar select {
-      padding: 8px 16px;
-      border-radius: 40px;
-      border: 1px solid #d0dfe8;
-      background: white;
-      font-family: "Inter", sans-serif;
-      min-width: 160px;
-      font-size: 0.85rem;
-    }
-    .filter-bar .reset-btn {
-      background: #f1f5f9;
-      border: none;
-      padding: 8px 22px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      color: #1e293b;
-    }
+    .filter-bar { background: white; border-radius: 60px; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; border: 1px solid #eef2ff; margin-bottom: 28px; }
+    .filter-bar select { padding: 8px 16px; border-radius: 40px; border: 1px solid #d0dfe8; background: white; font-family: "Inter", sans-serif; min-width: 160px; font-size: 0.85rem; }
+    .filter-bar .reset-btn { background: #f1f5f9; border: none; padding: 8px 22px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #1e293b; }
     .filter-bar .reset-btn:hover { background: #e2e8f0; }
 
-    .chart-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr 0.8fr;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-    .chart-box {
-      background: white;
-      border-radius: 28px;
-      padding: 20px 20px 16px;
-      border: 1px solid #eef2ff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-    }
-    .chart-box h4 {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #4a6f88;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .chart-box h4 .chart-dropdown {
-      font-weight: 400;
-      text-transform: none;
-      font-size: 0.65rem;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 40px;
-      padding: 3px 10px;
-      cursor: pointer;
-      font-family: "Inter", sans-serif;
-    }
+    .chart-grid { display: grid; grid-template-columns: 1fr 1.2fr 0.8fr; gap: 24px; margin-bottom: 28px; }
+    .chart-box { background: white; border-radius: 28px; padding: 20px 20px 16px; border: 1px solid #eef2ff; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .chart-box h4 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #4a6f88; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .chart-box h4 .chart-dropdown { font-weight: 400; text-transform: none; font-size: 0.65rem; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 40px; padding: 3px 10px; cursor: pointer; font-family: "Inter", sans-serif; }
     .chart-box canvas { max-height: 200px; max-width: 100%; }
 
-    .charts-row-2col {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-    .charts-row-2col .chart-box {
-      background: white;
-      border-radius: 28px;
-      padding: 20px 20px 16px;
-      border: 1px solid #eef2ff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-    }
-    .charts-row-2col .chart-box h4 {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #4a6f88;
-      margin-bottom: 12px;
-    }
+    .charts-row-2col { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; margin-bottom: 28px; }
+    .charts-row-2col .chart-box { background: white; border-radius: 28px; padding: 20px 20px 16px; border: 1px solid #eef2ff; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .charts-row-2col .chart-box h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #4a6f88; margin-bottom: 12px; }
     .charts-row-2col .chart-box canvas { max-height: 280px; max-width: 100%; }
-    .charts-row-2col .chart-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .charts-row-2col .chart-controls select {
-      padding: 4px 12px;
-      border-radius: 40px;
-      border: 1px solid #d0dfe8;
-      background: white;
-      font-family: "Inter", sans-serif;
-      font-size: 0.7rem;
-      min-width: 150px;
-    }
-    .charts-row-2col .chart-controls label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: #4a6f88;
-    }
-    .charts-row-2col .chart-controls .reset-btn {
-      background: #f1f5f9;
-      border: none;
-      padding: 4px 14px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.7rem;
-      cursor: pointer;
-      color: #1e293b;
-    }
+    .charts-row-2col .chart-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+    .charts-row-2col .chart-controls select { padding: 4px 12px; border-radius: 40px; border: 1px solid #d0dfe8; background: white; font-family: "Inter", sans-serif; font-size: 0.7rem; min-width: 150px; }
+    .charts-row-2col .chart-controls label { font-size: 0.7rem; font-weight: 600; color: #4a6f88; }
+    .charts-row-2col .chart-controls .reset-btn { background: #f1f5f9; border: none; padding: 4px 14px; border-radius: 40px; font-weight: 600; font-size: 0.7rem; cursor: pointer; color: #1e293b; }
     .charts-row-2col .chart-controls .reset-btn:hover { background: #e2e8f0; }
-    .charts-row-2col .chart-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-    .charts-row-2col .chart-tabs button {
-      padding: 4px 14px;
-      border-radius: 40px;
-      border: 1px solid #d0dfe8;
-      background: white;
-      font-size: 0.65rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #2c4e6b;
-      transition: 0.15s;
-    }
-    .charts-row-2col .chart-tabs button.active {
-      background: #1e3a8a;
-      color: white;
-      border-color: #1e3a8a;
-    }
+    .charts-row-2col .chart-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .charts-row-2col .chart-tabs button { padding: 4px 14px; border-radius: 40px; border: 1px solid #d0dfe8; background: white; font-size: 0.65rem; font-weight: 600; cursor: pointer; color: #2c4e6b; transition: 0.15s; }
+    .charts-row-2col .chart-tabs button.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
     .charts-row-2col .chart-tabs button:hover:not(.active) { background: #f1f5f9; }
 
-    .charts-row-risk {
-      display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
-      gap: 24px;
-      margin-bottom: 28px;
-      max-width: 950px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .charts-row-risk .chart-box {
-      background: white;
-      border-radius: 28px;
-      padding: 16px 18px 12px;
-      border: 1px solid #eef2ff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-    }
-    .charts-row-risk .chart-box h4 {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #4a6f88;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .charts-row-risk .chart-box h4 .chart-dropdown {
-      font-weight: 400;
-      text-transform: none;
-      font-size: 0.65rem;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 40px;
-      padding: 3px 10px;
-      cursor: pointer;
-      font-family: "Inter", sans-serif;
-    }
+    .charts-row-risk { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 24px; margin-bottom: 28px; max-width: 950px; margin-left: auto; margin-right: auto; }
+    .charts-row-risk .chart-box { background: white; border-radius: 28px; padding: 16px 18px 12px; border: 1px solid #eef2ff; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .charts-row-risk .chart-box h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #4a6f88; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .charts-row-risk .chart-box h4 .chart-dropdown { font-weight: 400; text-transform: none; font-size: 0.65rem; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 40px; padding: 3px 10px; cursor: pointer; font-family: "Inter", sans-serif; }
     .charts-row-risk .chart-box canvas { max-height: 200px; max-width: 100%; }
 
-    .pie-chart-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-    .pie-chart-grid .chart-box {
-      background: white;
-      border-radius: 28px;
-      padding: 20px 20px 16px;
-      border: 1px solid #eef2ff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-    }
-    .pie-chart-grid .chart-box h4 {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #4a6f88;
-      margin-bottom: 12px;
-      text-align: center;
-    }
+    .pie-chart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 28px; }
+    .pie-chart-grid .chart-box { background: white; border-radius: 28px; padding: 20px 20px 16px; border: 1px solid #eef2ff; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .pie-chart-grid .chart-box h4 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #4a6f88; margin-bottom: 12px; text-align: center; }
     .pie-chart-grid .chart-box canvas { max-height: 180px; max-width: 100%; }
 
-    .table-section {
-      background: white;
-      border-radius: 28px;
-      padding: 20px 24px 24px;
-      border: 1px solid #eef2ff;
-      margin-bottom: 28px;
-      overflow-x: auto;
-    }
-    .table-section h4 {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #4a6f88;
-      margin-bottom: 14px;
-    }
-    .lgu-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.75rem;
-    }
-    .lgu-table th {
-      background: #f2f9f6;
-      padding: 0.6rem 0.4rem;
-      font-weight: 700;
-      color: #0f5a46;
-      text-align: left;
-      white-space: nowrap;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .lgu-table td {
-      padding: 0.5rem 0.4rem;
-      border-bottom: 1px solid #eaf1ed;
-      vertical-align: middle;
-    }
+    .table-section { background: white; border-radius: 28px; padding: 20px 24px 24px; border: 1px solid #eef2ff; margin-bottom: 28px; overflow-x: auto; }
+    .table-section h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #4a6f88; margin-bottom: 14px; }
+    .lgu-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+    .lgu-table th { background: #f2f9f6; padding: 0.6rem 0.4rem; font-weight: 700; color: #0f5a46; text-align: left; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
+    .lgu-table td { padding: 0.5rem 0.4rem; border-bottom: 1px solid #eaf1ed; vertical-align: middle; }
     .lgu-table tr:hover { background: #fafcff; }
-    .badge-status {
-      padding: 2px 12px;
-      border-radius: 40px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      display: inline-block;
-      white-space: nowrap;
-    }
+    .badge-status { padding: 2px 12px; border-radius: 40px; font-size: 0.65rem; font-weight: 600; display: inline-block; white-space: nowrap; }
     .badge-updated { background: #dcfce7; color: #166534; }
     .badge-due { background: #fef3c7; color: #92400e; }
     .badge-none { background: #fee2e2; color: #991b1b; }
     .badge-other { background: #f1f5f9; color: #475569; }
     .badge-under-review { background: #dbeafe; color: #1e40af; }
-    .btn-view {
-      background: #d9efff;
-      color: #0369a1;
-      border: none;
-      padding: 3px 12px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.65rem;
-      cursor: pointer;
-    }
+    .btn-view { background: #d9efff; color: #0369a1; border: none; padding: 3px 12px; border-radius: 30px; font-weight: 600; font-size: 0.65rem; cursor: pointer; }
     .btn-view:hover { background: #b8dfff; }
-    .btn-edit {
-      background: #fef3c7;
-      color: #92400e;
-      border: none;
-      padding: 3px 12px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.65rem;
-      cursor: pointer;
-      margin-left: 4px;
-    }
+    .btn-edit { background: #fef3c7; color: #92400e; border: none; padding: 3px 12px; border-radius: 30px; font-weight: 600; font-size: 0.65rem; cursor: pointer; margin-left: 4px; }
     .btn-edit:hover { background: #fde68a; }
-    .action-cell {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
+    .action-cell { display: flex; gap: 4px; flex-wrap: wrap; }
 
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-      justify-content: center;
-      align-items: center;
-      z-index: 20000;
-      padding: 20px;
-    }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 20000; padding: 20px; }
     .modal-overlay.active { display: flex; }
-    .modal-content {
-      background: white;
-      border-radius: 32px;
-      max-width: 800px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 32px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-      animation: modalSlideIn 0.3s ease;
-    }
+    .modal-content { background: white; border-radius: 32px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); animation: modalSlideIn 0.3s ease; }
     .modal-content h2 { margin-bottom: 16px; color: #1e3a8a; }
-    .modal-close {
-      float: right;
-      background: #f1f5f9;
-      border: none;
-      font-size: 1.8rem;
-      width: 44px; height: 44px;
-      border-radius: 60px;
-      cursor: pointer;
-    }
+    .modal-close { float: right; background: #f1f5f9; border: none; font-size: 1.8rem; width: 44px; height: 44px; border-radius: 60px; cursor: pointer; }
     .modal-close:hover { background: #e2e8f0; }
-    .detail-row {
-      display: flex;
-      padding: 8px 0;
-      border-bottom: 1px solid #eef2ff;
-    }
-    .detail-label {
-      width: 220px;
-      font-weight: 600;
-      color: #4a6f88;
-      font-size: 0.8rem;
-    }
-    .detail-value {
-      flex: 1;
-      font-size: 0.85rem;
-      color: #1f3e54;
-    }
+    .detail-row { display: flex; padding: 8px 0; border-bottom: 1px solid #eef2ff; }
+    .detail-label { width: 220px; font-weight: 600; color: #4a6f88; font-size: 0.8rem; }
+    .detail-value { flex: 1; font-size: 0.85rem; color: #1f3e54; }
 
-    .edit-form-group {
-      margin-bottom: 14px;
-    }
-    .edit-form-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.75rem;
-      color: #4a6f88;
-      margin-bottom: 3px;
-    }
-    .edit-form-group input, .edit-form-group select, .edit-form-group textarea {
-      width: 100%;
-      padding: 7px 12px;
-      border: 1px solid #d0dfe8;
-      border-radius: 8px;
-      font-family: "Inter", sans-serif;
-      font-size: 0.82rem;
-      background: #fafcff;
-      transition: border 0.2s;
-    }
-    .edit-form-group input:focus, .edit-form-group select:focus, .edit-form-group textarea:focus {
-      border-color: #2563eb;
-      outline: none;
-      background: white;
-    }
-    .edit-form-group input:read-only {
-      background: #f1f5f9;
-      color: #475569;
-    }
-    .edit-form-group select {
-      appearance: auto;
-    }
-    .edit-form-group textarea {
-      resize: vertical;
-      min-height: 50px;
-    }
-    .edit-form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .edit-form-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-      justify-content: flex-end;
-    }
-    .edit-form-actions button {
-      padding: 10px 28px;
-      border-radius: 40px;
-      border: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-save {
-      background: #1e3a8a;
-      color: white;
-    }
+    .edit-form-group { margin-bottom: 14px; }
+    .edit-form-group label { display: block; font-weight: 600; font-size: 0.75rem; color: #4a6f88; margin-bottom: 3px; }
+    .edit-form-group input, .edit-form-group select, .edit-form-group textarea { width: 100%; padding: 7px 12px; border: 1px solid #d0dfe8; border-radius: 8px; font-family: "Inter", sans-serif; font-size: 0.82rem; background: #fafcff; transition: border 0.2s; }
+    .edit-form-group input:focus, .edit-form-group select:focus, .edit-form-group textarea:focus { border-color: #2563eb; outline: none; background: white; }
+    .edit-form-group input:read-only { background: #f1f5f9; color: #475569; }
+    .edit-form-group select { appearance: auto; }
+    .edit-form-group textarea { resize: vertical; min-height: 50px; }
+    .edit-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .edit-form-actions { display: flex; gap: 12px; margin-top: 20px; justify-content: flex-end; }
+    .edit-form-actions button { padding: 10px 28px; border-radius: 40px; border: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+    .btn-save { background: #1e3a8a; color: white; }
     .btn-save:hover { background: #1e4a9a; }
     .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-cancel {
-      background: #f1f5f9;
-      color: #1e293b;
-    }
+    .btn-cancel { background: #f1f5f9; color: #1e293b; }
     .btn-cancel:hover { background: #e2e8f0; }
 
-    .chart-box h4 select.chart-dropdown {
-      font-weight: 400;
-      text-transform: none;
-      font-size: 0.65rem;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 40px;
-      padding: 3px 10px;
-      cursor: pointer;
-      font-family: "Inter", sans-serif;
-      max-width: 150px;
-    }
-
-    /* ===== Target Year multi-select styles ===== */
-    .target-year-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-      margin-top: 4px;
-    }
-    .target-year-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #eef6ff;
-      border: 1px solid #c7ddf7;
-      color: #1e3a8a;
-      border-radius: 40px;
-      padding: 3px 10px;
-      font-size: 0.72rem;
-      font-weight: 600;
-    }
-    .target-year-pill .remove-year {
-      background: #dbe9ff;
-      border: none;
-      color: #1e3a8a;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      cursor: pointer;
-      line-height: 1;
-      font-weight: 700;
-    }
+    .target-year-selector { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
+    .target-year-pill { display: inline-flex; align-items: center; gap: 4px; background: #eef6ff; border: 1px solid #c7ddf7; color: #1e3a8a; border-radius: 40px; padding: 3px 10px; font-size: 0.72rem; font-weight: 600; }
+    .target-year-pill .remove-year { background: #dbe9ff; border: none; color: #1e3a8a; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; cursor: pointer; line-height: 1; font-weight: 700; }
     .target-year-pill .remove-year:hover { background: #fecaca; color: #991b1b; }
-    .add-year-row {
-      display: flex;
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .add-year-row input {
-      flex: 1;
-      padding: 6px 10px;
-      border: 1px solid #d0dfe8;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-family: "Inter", sans-serif;
-      background: #fafcff;
-    }
-    .add-year-row button {
-      background: #1e3a8a;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 6px 14px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
+    .add-year-row { display: flex; gap: 6px; margin-top: 6px; }
+    .add-year-row input { flex: 1; padding: 6px 10px; border: 1px solid #d0dfe8; border-radius: 8px; font-size: 0.78rem; font-family: "Inter", sans-serif; background: #fafcff; }
+    .add-year-row button { background: #1e3a8a; color: white; border: none; border-radius: 8px; padding: 6px 14px; font-size: 0.72rem; font-weight: 700; cursor: pointer; }
     .add-year-row button:hover { background: #1e4a9a; }
 
-    @keyframes modalSlideIn {
-      from { transform: scale(0.95) translateY(20px); opacity: 0; }
-      to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
     @media print { .filter-bar, .chart-tabs, .btn-view, header { display: none !important; } }
+    @media (max-width: 900px) {
+      .main-nav-links { gap: 0.35rem; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
+    }
     @media (max-width: 760px) {
       .chart-grid { grid-template-columns: 1fr; }
       .charts-row-2col { grid-template-columns: 1fr; }
@@ -620,6 +230,14 @@
       .top-bar { flex-direction: column; align-items: stretch; }
       .header-logo-img span { white-space: normal; font-size: 0.7rem; }
       .login-modal-brand img { width: 100px; }
+    }
+    @media (max-width: 700px) {
+      .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
+      .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
+      .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
+      .dropdown-submenu.open .submenu-content { display: block; }
     }
   </style>
 </head>
@@ -643,10 +261,8 @@
     </div>
   </header>
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
-    <div class="container">
-    </div>
+    <div class="container"></div>
   </div>
 
   <div class="container">
@@ -657,7 +273,6 @@
       <div class="stat-card"><div class="stat-number" id="statUnderReview">0</div><div class="stat-label">📋 Under Review</div></div>
     </div>
 
-    <!-- FILTERS -->
     <div class="filter-bar">
       <label style="font-size:0.8rem; font-weight:600; color:#1e3a8a;">Filter</label>
       <select id="filterProvince"><option value="">All Provinces</option></select>
@@ -666,7 +281,6 @@
       <span style="margin-left:auto; font-size:0.7rem; color:#6b8a9e;" id="filterCount"></span>
     </div>
 
-    <!-- CHARTS - Row 1 -->
     <div class="chart-grid">
       <div class="chart-box">
         <h4>
@@ -720,7 +334,6 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 2 -->
     <div class="charts-row-2col">
       <div class="chart-box">
         <h4>📊 Province Status Summary </h4>
@@ -745,7 +358,6 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 3: Risk-Informed -->
     <div class="charts-row-risk">
       <div class="chart-box">
         <h4>
@@ -765,7 +377,6 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 4: Pie Charts -->
     <div class="pie-chart-grid">
       <div class="chart-box">
         <h4>🏠 LGU with Local Shelter Plan</h4>
@@ -781,7 +392,6 @@
       </div>
     </div>
 
-    <!-- CHARTS - Row 5: PLANADO + Target Year + Urban Development -->
     <div class="chart-grid" style="margin-bottom: 28px; grid-template-columns: 1fr 1fr 1fr;">
       <div class="chart-box">
         <h4>
@@ -828,13 +438,11 @@
       </div>
     </div>
 
-    <!-- TABLE -->
     <div class="table-section">
       <h4>📋 LGU Status List <span style="font-weight:400;font-size:0.7rem;color:#6b8a9e;" id="tableSubtitle">(from LGUstatus sheet)</span></h4>
       <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
         <table class="lgu-table" id="lguTable">
           <thead><tr>
-            <!-- HIDDEN: Region and Income Class columns removed from view -->
             <th style="display:none;">Region</th>
             <th>Province</th>
             <th>City/Municipality</th>
@@ -858,7 +466,6 @@
     </div>
   </div>
 
-  <!-- DETAIL MODAL -->
   <div class="modal-overlay" id="detailModal">
     <div class="modal-content">
       <button class="modal-close" id="modalCloseBtn">&times;</button>
@@ -867,7 +474,6 @@
     </div>
   </div>
 
-  <!-- EDIT MODAL -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-content">
       <button class="modal-close" id="editModalCloseBtn">&times;</button>
@@ -875,51 +481,23 @@
       <form id="editForm">
         <input type="hidden" name="action" value="update">
         <input type="hidden" name="data_type" value="lgu_status">
-
         <div class="edit-form-row">
-          <div class="edit-form-group">
-            <label>PSGC</label>
-            <input type="text" id="editPsgc" name="PSGC" readonly>
-          </div>
-          <div class="edit-form-group">
-            <label>Income Class</label>
-            <input type="text" id="editIncome" name="Income Class">
-          </div>
+          <div class="edit-form-group"><label>PSGC</label><input type="text" id="editPsgc" name="PSGC" readonly></div>
+          <div class="edit-form-group"><label>Income Class</label><input type="text" id="editIncome" name="Income Class"></div>
         </div>
         <div class="edit-form-row">
-          <div class="edit-form-group">
-            <label>Region</label>
-            <input type="text" id="editRegion" name="Region">
-          </div>
-          <div class="edit-form-group">
-            <label>Province</label>
-            <input type="text" id="editProvince" name="Province" readonly>
-          </div>
+          <div class="edit-form-group"><label>Region</label><input type="text" id="editRegion" name="Region"></div>
+          <div class="edit-form-group"><label>Province</label><input type="text" id="editProvince" name="Province" readonly></div>
         </div>
         <div class="edit-form-row">
-          <div class="edit-form-group">
-            <label>City/Municipality</label>
-            <input type="text" id="editCity" name="City/Municipality" readonly>
-          </div>
-          <div class="edit-form-group">
-            <label>Start Year</label>
-            <input type="text" id="editStartYear" name="Start Year">
-          </div>
+          <div class="edit-form-group"><label>City/Municipality</label><input type="text" id="editCity" name="City/Municipality" readonly></div>
+          <div class="edit-form-group"><label>Start Year</label><input type="text" id="editStartYear" name="Start Year"></div>
         </div>
         <div class="edit-form-row">
-          <div class="edit-form-group">
-            <label>End Year</label>
-            <input type="text" id="editEndYear" name="End Year">
-          </div>
-          <div class="edit-form-group">
-            <label>Resolution Number of the Latest Plan</label>
-            <input type="text" id="editResolution" name="Resolution Number of the Latest Plan">
-          </div>
+          <div class="edit-form-group"><label>End Year</label><input type="text" id="editEndYear" name="End Year"></div>
+          <div class="edit-form-group"><label>Resolution Number of the Latest Plan</label><input type="text" id="editResolution" name="Resolution Number of the Latest Plan"></div>
         </div>
-        <div class="edit-form-group">
-          <label>Approval Date (MM/DD/YYYY)</label>
-          <input type="text" id="editApprovalDate" name="Approval date of the Latest plan (MM/DD/YYYY)" placeholder="MM/DD/YYYY">
-        </div>
+        <div class="edit-form-group"><label>Approval Date (MM/DD/YYYY)</label><input type="text" id="editApprovalDate" name="Approval date of the Latest plan (MM/DD/YYYY)" placeholder="MM/DD/YYYY"></div>
         <div class="edit-form-group">
           <label>CLUP Status</label>
           <select id="editClupStatus" name="CLUP Status">
@@ -972,65 +550,46 @@
             <option value="Others">Others</option>
           </select>
         </div>
-        <div class="edit-form-group">
-          <label>Name/s of Institutions</label>
-          <input type="text" id="editInstitutions" name="If with Support from other institutions, Name/s of Institutions">
-        </div>
+        <div class="edit-form-group"><label>Name/s of Institutions</label><input type="text" id="editInstitutions" name="If with Support from other institutions, Name/s of Institutions"></div>
         <div class="edit-form-group">
           <label>LGU with Local Shelter Plan</label>
           <select id="editShelterPlan" name="LGU with Local Shelter Plan">
-            <option value="">Select...</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option>
           </select>
         </div>
         <div class="edit-form-group">
           <label>LGU with Integrated Housing Subsector</label>
           <select id="editHousingSubsector" name="LGU with Integrated Housing Subsector">
-            <option value="">Select...</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option>
           </select>
         </div>
         <div class="edit-form-group">
           <label>LGU with Integrated Communications Plan</label>
           <select id="editCommPlan" name="LGU with Integrated Communications Plan">
-            <option value="">Select...</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option>
           </select>
         </div>
         <div class="edit-form-group">
           <label>Risk-Informed</label>
           <select id="editRiskInfo" name="Risk-Informed">
-            <option value="">Select...</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="">Select...</option><option value="Yes">Yes</option><option value="No">No</option>
           </select>
         </div>
-
         <div class="edit-form-group">
           <label>PLANADO Target</label>
           <select id="editPlanadoTarget" name="PLANADO Target">
-            <option value="">Select...</option>
-            <option value="PlanSmart">PlanSmart</option>
-            <option value="CAMI">CAMI</option>
+            <option value="">Select...</option><option value="PlanSmart">PlanSmart</option><option value="CAMI">CAMI</option>
           </select>
         </div>
-
-        <!-- ===== TARGET YEAR ===== -->
         <div class="edit-form-group">
           <label>Target Year</label>
-          <div class="target-year-selector" id="editTargetYearPills">
-            <!-- dynamic pills go here -->
-          </div>
+          <div class="target-year-selector" id="editTargetYearPills"></div>
           <div class="add-year-row">
             <input type="text" id="editTargetYearInput" placeholder="e.g. 2026 (press Enter or click Add)" />
             <button type="button" id="editTargetYearAddBtn">+ Add</button>
           </div>
           <input type="hidden" id="editTargetYear" name="Target Year" value="">
         </div>
-
         <div class="edit-form-group">
           <label>Urban Development</label>
           <select id="editUrbanDev" name="Urban Development">
@@ -1044,24 +603,16 @@
             <option value="RUDD, OSD, & PCE">RUDD, OSD, &amp; PCE</option>
           </select>
         </div>
-
-        <!-- ===== TARGET YEAR_URBAN DEVT ===== -->
         <div class="edit-form-group">
           <label>Target Year_Urban Devt</label>
-          <div class="target-year-selector" id="editTargetYearUrbanDevtPills">
-            <!-- dynamic pills go here -->
-          </div>
+          <div class="target-year-selector" id="editTargetYearUrbanDevtPills"></div>
           <div class="add-year-row">
             <input type="text" id="editTargetYearUrbanDevtInput" placeholder="e.g. 2026 (press Enter or click Add)" />
             <button type="button" id="editTargetYearUrbanDevtAddBtn">+ Add</button>
           </div>
           <input type="hidden" id="editTargetYearUrbanDevt" name="Target Year_Urban Devt" value="">
         </div>
-
-        <div class="edit-form-group">
-          <label>Remarks</label>
-          <textarea id="editRemarks" name="Remarks" rows="3"></textarea>
-        </div>
+        <div class="edit-form-group"><label>Remarks</label><textarea id="editRemarks" name="Remarks" rows="3"></textarea></div>
         <div class="edit-form-actions">
           <button type="button" class="btn-cancel" id="editCancelBtn">Cancel</button>
           <button type="submit" class="btn-save" id="editSaveBtn">💾 Save Changes</button>
@@ -1070,7 +621,6 @@
     </div>
   </div>
 
-  <!-- LOGIN MODAL -->
   <div id="loginModal" class="login-modal">
     <div class="login-modal-content">
       <div class="login-modal-brand">
@@ -1081,15 +631,8 @@
       </div>
       <div class="login-modal-body">
         <form id="modalLoginForm" onsubmit="return handleModalLogin(event)">
-          <div class="input-group">
-            <label><i class="fas fa-envelope"></i> Email Address</label>
-            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
-          </div>
-          <div class="input-group">
-            <label><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-            <button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button>
-          </div>
+          <div class="input-group"><label><i class="fas fa-envelope"></i> Email Address</label><input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required /></div>
+          <div class="input-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="modalLoginPassword" placeholder="Enter your password" required /><button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button></div>
           <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
         </form>
       </div>
@@ -1106,9 +649,7 @@
         </div>
         <div>
           <strong>Our Social Networks</strong><br />Follow us for updates<br />
-          <div class="social-icons">
-            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-          </div>
+          <div class="social-icons"><a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a></div>
         </div>
       </div>
       <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
@@ -1123,33 +664,13 @@
     let currentEditRecord = null;
     let isSaving = false;
 
-    // Chart filter states
     let planadoChartFilter = 'all';
     let urbanDevChartFilter = 'all';
     let urbanDevYearFilter = 'all';
     let targetYearChartFilter = 'all';
 
-    // ========== FIELD MAPPING ==========
-    const FIELD_ALIASES = {
-      "LGU with Local Shelter Plan": ["LGU with Local Shelter Plan", "Local Shelter Plan", "Shelter Plan", "LGU Local Shelter Plan", "ShelterPlan", "local_shelter_plan"],
-      "LGU with Integrated Housing Subsector": ["LGU with Integrated Housing Subsector", "Integrated Housing Subsector", "Housing Subsector", "Housing", "LGU Housing Subsector", "housing_subsector"],
-      "LGU with Integrated Communications Plan": ["LGU with Integrated Communications Plan", "LGU with Communications Plan", "Integrated Communications Plan", "Communications Plan", "Comm Plan", "LGU Communications Plan", "communications_plan", "CommPlan", "Communications"],
-      "Risk-Informed": ["Risk-Informed", "Risk Informed", "RiskInformed", "risk_informed", "Risk-Information", "Risk Information", "RiskInformation", "risk_information", "risk", "Risk"],
-      "CLUP Status": ["CLUP Status", "CLUPStatus", "Status", "clup_status"],
-      "CLUPStatus/Updates": ["CLUPStatus/Updates", "Status of CLUP Updating", "CLUP Updates", "Updates", "clup_updates"],
-      "Support from Other Institutions": ["Support from Other Institutions", "Support", "Institutions Support", "support_from_other_institutions"],
-      "PLANADO Target": ["PLANADO Target", "Planado Target", "planado_target", "PLANADO", "Planado"],
-      "Target Year": ["Target Year", "TargetYear", "target_year", "Target year", "target year"],
-      "Urban Development": ["Urban Development", "urban_development", "UrbanDevelopment", "Urban Dev", "urban"],
-      "Target Year_Urban Devt": ["Target Year_Urban Devt", "TargetYearUrbanDevt", "target_year_urban_devt", "Target year urban devt", "target year urban devt", "TargetYear_Urban_Devt"]
-    };
+    function escapeHtml(s){ if (s === undefined || s === null) return "—"; return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); }
 
-    function escapeHtml(s){
-      if (s === undefined || s === null) return "—";
-      return String(s).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
-    }
-
-    // ========== SAFE BASE64 ENCODE / DECODE ==========
     function encodeRecord(obj) {
       try {
         const json = JSON.stringify(obj);
@@ -1157,10 +678,7 @@
         let binary = '';
         utf8Bytes.forEach(b => binary += String.fromCharCode(b));
         return btoa(binary);
-      } catch (e) {
-        console.error("encodeRecord failed:", e);
-        return "";
-      }
+      } catch (e) { console.error("encodeRecord failed:", e); return ""; }
     }
 
     function decodeRecord(str) {
@@ -1170,19 +688,14 @@
         for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
         const json = new TextDecoder().decode(bytes);
         return JSON.parse(json);
-      } catch (e) {
-        console.error("decodeRecord failed:", e);
-        return null;
-      }
+      } catch (e) { console.error("decodeRecord failed:", e); return null; }
     }
 
     function sanitizeRecord(obj) {
       const clean = {};
       for (const k in obj) {
         let v = obj[k];
-        if (typeof v === 'string') {
-          v = v.replace(/[\u0000-\u001F\u007F\u2028\u2029]/g, ' ').replace(/\s+/g, ' ').trim();
-        }
+        if (typeof v === 'string') v = v.replace(/[\u0000-\u001F\u007F\u2028\u2029]/g, ' ').replace(/\s+/g, ' ').trim();
         clean[k] = v;
       }
       return clean;
@@ -1202,72 +715,49 @@
         try{
           const s=JSON.parse(raw);
           const diff=(new Date()-new Date(s.loggedInAt))/(1000*60*60);
-          if(diff<12&&s.email){
-            currentUser=s;
-            return true;
-          } else localStorage.removeItem("dhsud_session");
+          if(diff<12&&s.email){ currentUser=s; return true; }
+          else localStorage.removeItem("dhsud_session");
         }catch(e){localStorage.removeItem("dhsud_session");}
       }
       currentUser=null;
       return false;
     }
 
-    function getUserInitials(n){
-      if(!n) return "U";
-      let p=n.split(" ");
-      if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase();
-      return n.substring(0,2).toUpperCase();
-    }
+    function getUserInitials(n){ if(!n) return "U"; let p=n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
+    function getRoleLabel(r){ if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
+    function getRoleClass(r){ if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
 
-    function getRoleLabel(r){
-      if(r==="admin") return "👑 Admin";
-      if(r==="encoder"||r==="staff") return "📋 Staff/Officer";
-      return "👁️ Viewer";
-    }
-
-    function getRoleClass(r){
-      if(r==="admin") return "admin";
-      if(r==="encoder"||r==="staff") return "staff";
-      return "viewer";
-    }
-
+    // ===== NAVIGATION =====
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
-      let navHtml = `<a href="index.html">Home</a>`;
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+
+      let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
       if (currentUser) {
-        navHtml +=
-          `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-            <a href="lc.html">Locational Clearance</a>
-            <a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-          </div></div>
-          <a href="Techsamp.html">Technical Assistance</a>
-          <a href="training.html">CLUP/ZO Trainings</a>
-          <a href="p_monitoring.html">Plan Monitoring</a>
-          <a href="lgu-info.html">LGU Information</a>
-          <a href="report.html">Reports</a>
-          <a href="calendar.html">Calendar of Activities</a>
-          <a href="issuance.html">Issuances</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>`;
+        const isCertActive = isActive('lc.html') || isActive('SZC.html');
+        const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+        const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+        navHtml += `
+          <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+          <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+          <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+          <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+          <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+          <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+          <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+          <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+        `;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
         document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const submenu = trigger.closest(".dropdown-submenu");
-            if (submenu) submenu.classList.toggle("open");
-          });
+          trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
         });
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".dropdown-submenu")) {
-            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-          }
-        });
+        document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
       }, 10);
     }
 
@@ -1285,17 +775,12 @@
         if (isAdmin) { const adminBtn = document.getElementById("adminConsoleLink"); if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); }
         const logoutBtn = document.getElementById("logoutDropdownBtn");
         if(logoutBtn) logoutBtn.addEventListener("click", () => { localStorage.removeItem("dhsud_session"); showToast("Logged out successfully.", "info"); setTimeout(() => window.location.reload(), 700); });
-      } else {
-        container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
-      }
+      } else { container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`; }
     }
 
     function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
     function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
-    function toggleModalPassword() {
-      let pwd = document.getElementById("modalLoginPassword");
-      pwd.type = pwd.type === "password" ? "text" : "password";
-    }
+    function toggleModalPassword() { let pwd = document.getElementById("modalLoginPassword"); pwd.type = pwd.type === "password" ? "text" : "password"; }
 
     async function handleModalLogin(e) {
       e.preventDefault();
@@ -1303,18 +788,12 @@
       const password = document.getElementById("modalLoginPassword").value;
       const btn = e.submitter || document.getElementById("loginModalBtn");
       const originalText = btn.innerHTML;
-      btn.innerHTML = "⏳ Authenticating...";
-      btn.disabled = true;
+      btn.innerHTML = "⏳ Authenticating..."; btn.disabled = true;
       try {
         const resp = await fetch(`https://script.google.com/macros/s/AKfycbw8fpw0CcxnNel8hqyYuOwpEWIlVEZX2lRCutAIzSylhwt4zJzJmMdum6Eo4JteHMItmQ/exec?action=get&data_type=users&_=${Date.now()}`);
         const users = await resp.json();
         const user = users.find((u) => u.email?.toLowerCase() === email);
-        if (!user) {
-          showToast("Account not found.", "error");
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-          return false;
-        }
+        if (!user) { showToast("Account not found.", "error"); btn.innerHTML = originalText; btn.disabled = false; return false; }
         const encodedPassword = btoa(password);
         if (user.password === encodedPassword) {
           const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
@@ -1322,19 +801,13 @@
           showToast(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
           document.getElementById("loginModal").classList.remove("active");
           setTimeout(() => window.location.reload(), 1000);
-        } else {
-          showToast("Invalid password.", "error");
-        }
-      } catch (error) {
-        showToast("Connection error. Please try again.", "error");
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
+        } else { showToast("Invalid password.", "error"); }
+      } catch (error) { showToast("Connection error. Please try again.", "error"); }
+      finally { btn.innerHTML = originalText; btn.disabled = false; }
       return false;
     }
 
-    // ========== DASHBOARD LOGIC ==========
+    // ========== DASHBOARD LOGIC (Original preserved) ==========
     let rawLguData = [];
     let filteredData = [];
     let pieChartInstance=null, barChartInstance=null, columnChartInstance=null, stackedChartInstance=null;
@@ -1342,14 +815,24 @@
     let riskStackedChartInstance=null, riskTotalChartInstance=null;
     let planadoTargetChartInstance=null, urbanDevChartInstance=null, targetYearChartInstance=null;
 
+    const FIELD_ALIASES = {
+      "LGU with Local Shelter Plan": ["LGU with Local Shelter Plan", "Local Shelter Plan", "Shelter Plan", "LGU Local Shelter Plan", "ShelterPlan", "local_shelter_plan"],
+      "LGU with Integrated Housing Subsector": ["LGU with Integrated Housing Subsector", "Integrated Housing Subsector", "Housing Subsector", "Housing", "LGU Housing Subsector", "housing_subsector"],
+      "LGU with Integrated Communications Plan": ["LGU with Integrated Communications Plan", "LGU with Communications Plan", "Integrated Communications Plan", "Communications Plan", "Comm Plan", "LGU Communications Plan", "communications_plan", "CommPlan", "Communications"],
+      "Risk-Informed": ["Risk-Informed", "Risk Informed", "RiskInformed", "risk_informed", "Risk-Information", "Risk Information", "RiskInformation", "risk_information", "risk", "Risk"],
+      "CLUP Status": ["CLUP Status", "CLUPStatus", "Status", "clup_status"],
+      "CLUPStatus/Updates": ["CLUPStatus/Updates", "Status of CLUP Updating", "CLUP Updates", "Updates", "clup_updates"],
+      "Support from Other Institutions": ["Support from Other Institutions", "Support", "Institutions Support", "support_from_other_institutions"],
+      "PLANADO Target": ["PLANADO Target", "Planado Target", "planado_target", "PLANADO", "Planado"],
+      "Target Year": ["Target Year", "TargetYear", "target_year", "Target year", "target year"],
+      "Urban Development": ["Urban Development", "urban_development", "UrbanDevelopment", "Urban Dev", "urban"],
+      "Target Year_Urban Devt": ["Target Year_Urban Devt", "TargetYearUrbanDevt", "target_year_urban_devt", "Target year urban devt", "target year urban devt", "TargetYear_Urban_Devt"]
+    };
+
     function getField(record, field) {
       if (!record) return "—";
       if (record[field] !== undefined && record[field] !== null && record[field] !== "") return record[field];
-      if (FIELD_ALIASES[field]) {
-        for (let alias of FIELD_ALIASES[field]) {
-          if (record[alias] !== undefined && record[alias] !== null && record[alias] !== "") return record[alias];
-        }
-      }
+      if (FIELD_ALIASES[field]) { for (let alias of FIELD_ALIASES[field]) { if (record[alias] !== undefined && record[alias] !== null && record[alias] !== "") return record[alias]; } }
       for (let key of Object.keys(record)) { if (key.trim() === field.trim()) return record[key]; }
       const lowerField = field.toLowerCase().trim();
       for (let key of Object.keys(record)) { if (key.toLowerCase().trim() === lowerField) return record[key]; }
@@ -1361,20 +844,14 @@
       return "—";
     }
 
-    function getFieldValue(record, field) {
-      const val = getField(record, field);
-      return val === "—" ? "" : val;
-    }
+    function getFieldValue(record, field) { const val = getField(record, field); return val === "—" ? "" : val; }
 
     function formatDate(value) {
       if (!value || value === "—" || value === "") return "";
-      if (typeof value === 'string' && value.includes('T')) {
-        const date = new Date(value);
-        if (!isNaN(date.getTime())) { const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const year = date.getFullYear(); return `${month}/${day}/${year}`; }
-      }
-      if (value instanceof Date) { const month = String(value.getMonth() + 1).padStart(2, '0'); const day = String(value.getDate()).padStart(2, '0'); const year = value.getFullYear(); return `${month}/${day}/${year}`; }
+      if (typeof value === 'string' && value.includes('T')) { const date = new Date(value); if (!isNaN(date.getTime())) { return `${String(date.getMonth()+1).padStart(2,'0')}/${String(date.getDate()).padStart(2,'0')}/${date.getFullYear()}`; } }
+      if (value instanceof Date) return `${String(value.getMonth()+1).padStart(2,'0')}/${String(value.getDate()).padStart(2,'0')}/${value.getFullYear()}`;
       if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) return value;
-      try { const date = new Date(value); if (!isNaN(date.getTime())) { const month = String(date.getMonth() + 1).padStart(2, '0'); const day = String(date.getDate()).padStart(2, '0'); const year = date.getFullYear(); return `${month}/${day}/${year}`; } } catch (e) {}
+      try { const date = new Date(value); if (!isNaN(date.getTime())) return `${String(date.getMonth()+1).padStart(2,'0')}/${String(date.getDate()).padStart(2,'0')}/${date.getFullYear()}`; } catch (e) {}
       return value;
     }
 
@@ -1403,8 +880,7 @@
     }
 
     function deriveTargetYear(record){
-      const start = getField(record, "Start Year");
-      const end = getField(record, "End Year");
+      const start = getField(record, "Start Year"); const end = getField(record, "End Year");
       if (start !== "—" && end !== "—") return `${start}-${end}`;
       if (start !== "—") return start;
       if (end !== "—") return end;
@@ -1420,7 +896,7 @@
     function getSupportPieData(records, filterCategory) {
       const supportMap = { "None": 0, "National Government Agency": 0, "Donor Agency": 0, "Consultant": 0, "Academe": 0, "Others": 0, "Not Specified": 0 };
       let filteredRecords = records;
-      if (filterCategory && filterCategory !== 'all') { filteredRecords = records.filter(r => getField(r, "Support from Other Institutions") === filterCategory); }
+      if (filterCategory && filterCategory !== 'all') filteredRecords = records.filter(r => getField(r, "Support from Other Institutions") === filterCategory);
       filteredRecords.forEach(r => { const value = getField(r, "Support from Other Institutions"); if (value && value !== "—" && value !== "") { if (supportMap.hasOwnProperty(value)) supportMap[value]++; else supportMap["Others"]++; } else supportMap["Not Specified"]++; });
       const labels = [], data = [];
       for (let [key, val] of Object.entries(supportMap)) { if (val > 0 || key === "Not Specified") { labels.push(key); data.push(val); } }
@@ -1435,8 +911,7 @@
     }
 
     function getRiskStackedChartData(records) {
-      const provinceData = {};
-      const allProvinces = [];
+      const provinceData = {}; const allProvinces = [];
       records.forEach(r => {
         const province = getField(r, "Province");
         if (province && province !== "—") {
@@ -1458,8 +933,7 @@
     }
 
     function getPlanadoTargetData(records, filterCategory = 'all') {
-      const provinceData = {};
-      const allProvinces = [];
+      const provinceData = {}; const allProvinces = [];
       const categoriesToShow = filterCategory === 'all' ? ['PlanSmart', 'CAMI', 'Not Specified'] : [filterCategory];
       records.forEach(r => {
         const province = getField(r, "Province");
@@ -1477,19 +951,15 @@
       return { labels: sortedProvinces, datasets };
     }
 
-    // ========== FILTER BY PLANADO TARGET (helper for Target Year chart) ==========
     function filterByPlanadoTarget(records, category) {
       if (category === 'all') return records;
       return records.filter(r => {
         const val = getField(r, "PLANADO Target");
-        if (category === 'Not Specified') {
-          return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
-        }
+        if (category === 'Not Specified') return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
         return val === category;
       });
     }
 
-    // ========== FILTER BY TARGET YEAR (helper for PLANADO chart) ==========
     function filterByTargetYear(records, year) {
       if (year === 'all') return records;
       return records.filter(r => {
@@ -1499,19 +969,12 @@
       });
     }
 
-    // ========== TARGET YEAR CHART DATA ==========
     function getTargetYearChartData(records, filterYear = 'all') {
-      const yearCounts = {};
-      const yearProvinceBreakdown = {};
-      const allYearsSet = new Set();
-
+      const yearCounts = {}; const yearProvinceBreakdown = {}; const allYearsSet = new Set();
       records.forEach(r => {
         const province = getField(r, "Province") || "Unknown";
         const val = getField(r, "Target Year");
-        const years = String(val || "")
-          .split(/[;,]\s*/)
-          .map(s => s.trim())
-          .filter(Boolean);
+        const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
         years.forEach(y => {
           allYearsSet.add(y);
           yearCounts[y] = (yearCounts[y] || 0) + 1;
@@ -1519,164 +982,66 @@
           yearProvinceBreakdown[y][province] = (yearProvinceBreakdown[y][province] || 0) + 1;
         });
       });
-
       const allYears = [...allYearsSet].sort();
-
       let yearsToShow;
-      if (filterYear === 'all') {
-        yearsToShow = allYears;
-      } else {
-        yearsToShow = allYears.includes(filterYear) ? [filterYear] : allYears;
-      }
-
-      if (yearsToShow.length === 0) {
-        return { labels: ['No Data'], datasets: [{ label: 'Count', data: [0], backgroundColor: '#e2e8f0' }], allYears };
-      }
-
+      if (filterYear === 'all') yearsToShow = allYears;
+      else yearsToShow = allYears.includes(filterYear) ? [filterYear] : allYears;
+      if (yearsToShow.length === 0) return { labels: ['No Data'], datasets: [{ label: 'Count', data: [0], backgroundColor: '#e2e8f0' }], allYears };
       const colorPalette = ['#3b82f6','#8b5cf6','#f59e0b','#ef4444','#06b6d4','#10b981','#f97316','#ec4899','#14b8a6','#6366f1','#f43f5e','#94a3b8'];
-
       const labels = yearsToShow;
       const data = yearsToShow.map(y => yearCounts[y] || 0);
-      const colors = yearsToShow.map((y, i) => {
-        if (filterYear !== 'all' && y === filterYear) return '#1e3a8a';
-        return colorPalette[i % colorPalette.length];
-      });
-
-      const datasets = [{
-        label: 'LGUs with this Target Year',
-        data: data,
-        backgroundColor: colors,
-        borderRadius: 6
-      }];
-
+      const colors = yearsToShow.map((y, i) => { if (filterYear !== 'all' && y === filterYear) return '#1e3a8a'; return colorPalette[i % colorPalette.length]; });
+      const datasets = [{ label: 'LGUs with this Target Year', data: data, backgroundColor: colors, borderRadius: 6 }];
       return { labels, datasets, allYears, yearProvinceBreakdown, yearCounts };
     }
 
-    // ============================================================
-    // ✅ URBAN DEVELOPMENT CHART DATA (now with year breakdown)
-    // ============================================================
     function getUrbanDevData(records, filterCategory = 'all', filterYear = 'all') {
-      // Collect the years present in Target Year_Urban Devt across records
       const yearSet = new Set();
-      records.forEach(r => {
-        const tyud = getField(r, "Target Year_Urban Devt");
-        String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => yearSet.add(y));
-      });
+      records.forEach(r => { const tyud = getField(r, "Target Year_Urban Devt"); String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => yearSet.add(y)); });
       const allYears = [...yearSet].sort();
-
-      // If a specific year is selected, only include records whose
-      // Target Year_Urban Devt contains that year
-      const filteredRecords = (filterYear === 'all')
-        ? records
-        : records.filter(r => {
-            const tyud = getField(r, "Target Year_Urban Devt");
-            const years = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
-            return years.includes(filterYear);
-          });
-
-      const provinceData = {};
-      const allProvinces = [];
+      const filteredRecords = (filterYear === 'all') ? records : records.filter(r => { const tyud = getField(r, "Target Year_Urban Devt"); const years = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean); return years.includes(filterYear); });
+      const provinceData = {}; const allProvinces = [];
       const allCategories = ['RUDD', 'OSD', 'PCE', 'RUDD & OSD', 'RUDD & PCE', 'OSD & PCE', 'RUDD, OSD, & PCE'];
       const categoriesToShow = filterCategory === 'all' ? allCategories : [filterCategory];
-
-      // Determine the year dimension for the bars.
-      // If a specific year is selected → single segment per category (that year)
-      // If "all" → one segment per year (stacked by year)
-      const yearsToShow = (filterYear === 'all')
-        ? (allYears.length > 0 ? allYears : ['Not Specified'])
-        : [filterYear];
-
+      const yearsToShow = (filterYear === 'all') ? (allYears.length > 0 ? allYears : ['Not Specified']) : [filterYear];
       filteredRecords.forEach(r => {
         const province = getField(r, "Province");
         if (province && province !== "—") {
-          if (!provinceData[province]) {
-            provinceData[province] = {};
-            categoriesToShow.forEach(c => {
-              provinceData[province][c] = {};
-              yearsToShow.forEach(y => provinceData[province][c][y] = 0);
-            });
-            allProvinces.push(province);
-          }
+          if (!provinceData[province]) { provinceData[province] = {}; categoriesToShow.forEach(c => { provinceData[province][c] = {}; yearsToShow.forEach(y => provinceData[province][c][y] = 0); }); allProvinces.push(province); }
           const val = getField(r, "Urban Development");
           if (val && val !== "—" && val !== "") {
             const normalized = String(val).trim();
             let matchedCategory = null;
-            if (allCategories.includes(normalized)) { matchedCategory = normalized; }
+            if (allCategories.includes(normalized)) matchedCategory = normalized;
             else {
               const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
               matchedCategory = allCategories.find(c => { const cParts = c.split(/[,&]+/).map(s => s.trim()).filter(Boolean); return cParts.length === parts.length && cParts.every(p => parts.includes(p)); });
               if (!matchedCategory) { for (let cat of allCategories) { if (normalized.includes(cat)) { matchedCategory = cat; break; } } }
             }
             if (matchedCategory && categoriesToShow.includes(matchedCategory)) {
-              // Which year(s) does this record belong to?
               let recordYears = [];
               if (filterYear === 'all') {
                 const tyud = getField(r, "Target Year_Urban Devt");
                 recordYears = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
                 if (recordYears.length === 0) recordYears = ['Not Specified'];
-                // Only keep years we care about
                 recordYears = recordYears.filter(y => yearsToShow.includes(y));
-              } else {
-                recordYears = [filterYear];
-              }
-              recordYears.forEach(y => {
-                if (provinceData[province][matchedCategory][y] === undefined) {
-                  provinceData[province][matchedCategory][y] = 0;
-                }
-                provinceData[province][matchedCategory][y]++;
-              });
+              } else recordYears = [filterYear];
+              recordYears.forEach(y => { if (provinceData[province][matchedCategory][y] === undefined) provinceData[province][matchedCategory][y] = 0; provinceData[province][matchedCategory][y]++; });
             }
           }
         }
       });
-
       const sortedProvinces = allProvinces.sort();
       const catColorMap = { 'RUDD': '#3b82f6', 'OSD': '#10b981', 'PCE': '#f59e0b', 'RUDD & OSD': '#8b5cf6', 'RUDD & PCE': '#ec4899', 'OSD & PCE': '#06b6d4', 'RUDD, OSD, & PCE': '#ef4444' };
-      const yearShadeMap = ['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe'];
-
-      // Build one dataset per (category × year) combination
       const datasets = [];
       categoriesToShow.forEach(cat => {
         yearsToShow.forEach((yr, yIdx) => {
           const data = sortedProvinces.map(p => provinceData[p]?.[cat]?.[yr] || 0);
-          // Skip entirely empty year-datasets when showing all years, to reduce clutter
           if (filterYear === 'all' && data.every(v => v === 0) && yearsToShow.length > 1) return;
-
-          // For "all years" view, tint each year with a shade of the category's base color.
-          // We use the category color directly and rely on Chart.js legend/tooltip for year context.
-          const baseColor = catColorMap[cat] || '#94a3b8';
-          let bgColor = baseColor;
-          if (filterYear === 'all' && yearsToShow.length > 1) {
-            // Blend the year index into the base color for visual distinction
-            const shade = yearShadeMap[yIdx % yearShadeMap.length];
-            bgColor = cat === 'RUDD' ? shade : baseColor;
-          }
-
-          datasets.push({
-            label: filterYear === 'all' ? `${cat} — ${yr}` : cat,
-            data: data,
-            backgroundColor: filterYear === 'all' ? (yIdx === 0 ? baseColor : shadeForYear(yIdx, baseColor)) : baseColor,
-            stack: filterYear === 'all' ? `${cat}` : undefined,
-            _year: yr,
-            _category: cat
-          });
+          datasets.push({ label: filterYear === 'all' ? `${cat} — ${yr}` : cat, data: data, backgroundColor: catColorMap[cat] || '#94a3b8', stack: filterYear === 'all' ? `${cat}` : undefined, _year: yr, _category: cat });
         });
       });
-
       return { labels: sortedProvinces, datasets, allYears };
-    }
-
-    // Helper: generate a lighter/darker shade of a hex color
-    function shadeForYear(index, hex) {
-      if (!hex || hex[0] !== '#') return hex;
-      const num = parseInt(hex.slice(1), 16);
-      let r = (num >> 16) & 0xff, g = (num >> 8) & 0xff, b = num & 0xff;
-      // Darken for odd indexes, lighten for even
-      const factor = index % 2 === 0 ? 0.75 : 1.25;
-      r = Math.min(255, Math.max(0, Math.round(r * factor)));
-      g = Math.min(255, Math.max(0, Math.round(g * factor)));
-      b = Math.min(255, Math.max(0, Math.round(b * factor)));
-      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
     }
 
     function getColumnData(records, view){
@@ -1687,10 +1052,10 @@
         const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
         if (!combined && clupStatus) combined = clupStatus;
         let category = null;
-        if (combined.includes('pre-phase') || combined.includes('prephase') || combined.includes('pre phase')) { category = "Preparatory"; }
-        else if (combined.includes('phase 1') || combined.includes('phase1') || combined.includes('phase 2') || combined.includes('phase2') || combined.includes('phase 3') || combined.includes('phase3') || combined.includes('phase 4') || combined.includes('phase4') || combined.includes('phase 5') || combined.includes('phase5')) { category = "Formulation"; }
-        else if (combined.includes('ra 1') || combined.includes('ra1') || combined.includes('ra 2') || combined.includes('ra2') || combined.includes('ra 3') || combined.includes('ra3') || combined.includes('ra 4') || combined.includes('ra4') || combined.includes('ra 5') || combined.includes('ra5') || combined.includes('ra 6') || combined.includes('ra6') || combined.includes('ra 7') || combined.includes('ra7')) { category = "Review & Approval"; }
-        else if (!combined || combined === '' || combined === 'none' || combined === 'n/a' || combined === 'none indicated') { category = "Unspecified"; }
+        if (combined.includes('pre-phase') || combined.includes('prephase') || combined.includes('pre phase')) category = "Preparatory";
+        else if (combined.includes('phase 1') || combined.includes('phase1') || combined.includes('phase 2') || combined.includes('phase2') || combined.includes('phase 3') || combined.includes('phase3') || combined.includes('phase 4') || combined.includes('phase4') || combined.includes('phase 5') || combined.includes('phase5')) category = "Formulation";
+        else if (combined.includes('ra 1') || combined.includes('ra1') || combined.includes('ra 2') || combined.includes('ra2') || combined.includes('ra 3') || combined.includes('ra3') || combined.includes('ra 4') || combined.includes('ra4') || combined.includes('ra 5') || combined.includes('ra5') || combined.includes('ra 6') || combined.includes('ra6') || combined.includes('ra 7') || combined.includes('ra7')) category = "Review & Approval";
+        else if (!combined || combined === '' || combined === 'none' || combined === 'n/a' || combined === 'none indicated') category = "Unspecified";
         if (category && phaseCounts.hasOwnProperty(category)) phaseCounts[category]++; else phaseCounts["Unspecified"]++;
       });
       const viewMap = { "preparatory": ["Preparatory"], "formulation": ["Formulation"], "review": ["Review & Approval"], "unspecified": ["Unspecified"] };
@@ -1699,8 +1064,7 @@
     }
 
     function getStackedChartData(records, filterProvince) {
-      const provinceData = {};
-      const allProvinces = [];
+      const provinceData = {}; const allProvinces = [];
       records.forEach(r => {
         const province = getField(r, "Province");
         if (province && province !== "—") {
@@ -1710,8 +1074,8 @@
         }
       });
       let sortedProvinces = allProvinces.sort();
-      if (filterProvince && filterProvince !== 'all') { sortedProvinces = sortedProvinces.filter(p => p === filterProvince); }
-      if (sortedProvinces.length === 0 && filterProvince !== 'all') { sortedProvinces = allProvinces.sort(); }
+      if (filterProvince && filterProvince !== 'all') sortedProvinces = sortedProvinces.filter(p => p === filterProvince);
+      if (sortedProvinces.length === 0 && filterProvince !== 'all') sortedProvinces = allProvinces.sort();
       const statuses = ['Updated', 'For Updating', 'Under Review'];
       const datasets = statuses.map(status => ({ label: status, data: sortedProvinces.map(p => provinceData[p]?.[status] || 0), backgroundColor: status === 'Updated' ? '#16a34a' : status === 'For Updating' ? '#f59e0b' : '#3b82f6' }));
       return { labels: sortedProvinces, datasets };
@@ -1764,16 +1128,6 @@
       commPieInstance = new Chart(ctx, { type: 'pie', data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: ['#16a34a', '#dc2626', '#94a3b8'] }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } } });
     }
 
-    function renderBar(records, mode = 'all'){
-      currentBarMode = mode;
-      const data = getBarData(records, mode);
-      const ctx = document.getElementById("barChart").getContext("2d");
-      if (barChartInstance) barChartInstance.destroy();
-      const colorPalette = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#10b981', '#f97316', '#94a3b8', '#6366f1', '#ec4899', '#14b8a6', '#f43f5e', '#8b5cf6', '#6b7280'];
-      const colors = data.labels.map((_, i) => colorPalette[i % colorPalette.length]);
-      barChartInstance = new Chart(ctx, { type: 'bar', data: { labels: data.labels, datasets: [{ label: 'Count', data: data.data, backgroundColor: colors, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, stepSize: 1 } } } });
-    }
-
     function getBarData(records, mode) {
       if (mode === 'all') {
         const allLabels = ["Pre-Phase", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "RA 1", "RA 2", "RA 3", "RA 4", "RA 5", "RA 6", "RA 7", "None Indicated"];
@@ -1799,9 +1153,19 @@
         if (!combined && clupStatus) combined = clupStatus;
         const modeLower = mode.toLowerCase(); const modeNoSpace = modeLower.replace(/\s/g, ''); const modeWithHyphen = modeLower.replace(/\s/g, '-');
         if (mode === 'None Indicated') { if (!combined || combined === '' || combined === 'none' || combined === 'n/a') counts[mode] = (counts[mode] || 0) + 1; }
-        else if (combined.includes(modeLower) || combined.includes(modeNoSpace) || combined.includes(modeWithHyphen)) { counts[mode] = (counts[mode] || 0) + 1; }
+        else if (combined.includes(modeLower) || combined.includes(modeNoSpace) || combined.includes(modeWithHyphen)) counts[mode] = (counts[mode] || 0) + 1;
       });
       return { labels: [mode], data: [counts[mode] || 0] };
+    }
+
+    function renderBar(records, mode = 'all'){
+      currentBarMode = mode;
+      const data = getBarData(records, mode);
+      const ctx = document.getElementById("barChart").getContext("2d");
+      if (barChartInstance) barChartInstance.destroy();
+      const colorPalette = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#10b981', '#f97316', '#94a3b8', '#6366f1', '#ec4899', '#14b8a6', '#f43f5e', '#8b5cf6', '#6b7280'];
+      const colors = data.labels.map((_, i) => colorPalette[i % colorPalette.length]);
+      barChartInstance = new Chart(ctx, { type: 'bar', data: { labels: data.labels, datasets: [{ label: 'Count', data: data.data, backgroundColor: colors, borderRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, stepSize: 1 } } } });
     }
 
     function renderColumn(records, view='preparatory'){
@@ -1817,21 +1181,12 @@
       const data = getStackedChartData(records, filterProvince);
       const ctx = document.getElementById("stackedChart").getContext("2d");
       if (stackedChartInstance) stackedChartInstance.destroy();
-
-      if (data.labels.length === 0) {
-        stackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
-        return;
-      }
-
-      // ✅ NEW: When a specific CLUP Status is selected, only show that status dataset
+      if (data.labels.length === 0) { stackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
       let displayData = data;
       if (activeStatus && activeStatus !== 'all') {
         const filteredDatasets = data.datasets.filter(ds => ds.label === activeStatus);
-        if (filteredDatasets.length > 0) {
-          displayData = { labels: data.labels, datasets: filteredDatasets };
-        }
+        if (filteredDatasets.length > 0) displayData = { labels: data.labels, datasets: filteredDatasets };
       }
-
       stackedChartInstance = new Chart(ctx, { type: 'bar', data: displayData, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
     }
 
@@ -1839,21 +1194,12 @@
       const data = getRiskStackedChartData(records);
       const ctx = document.getElementById("riskStackedChart").getContext("2d");
       if (riskStackedChartInstance) riskStackedChartInstance.destroy();
-
-      if (data.labels.length === 0) {
-        riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
-        return;
-      }
-
-      // ✅ NEW: When a specific Risk category is selected, only show that dataset
+      if (data.labels.length === 0) { riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
       let displayData = data;
       if (activeRisk && activeRisk !== 'all') {
         const filteredDatasets = data.datasets.filter(ds => ds.label === activeRisk);
-        if (filteredDatasets.length > 0) {
-          displayData = { labels: data.labels, datasets: filteredDatasets };
-        }
+        if (filteredDatasets.length > 0) displayData = { labels: data.labels, datasets: filteredDatasets };
       }
-
       riskStackedChartInstance = new Chart(ctx, { type: 'bar', data: displayData, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}`; } } } }, scales: { x: { stacked: true, ticks: { font: { size: 9 }, maxRotation: 45, minRotation: 0 } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } } } });
     }
 
@@ -1879,102 +1225,19 @@
       const chartData = getTargetYearChartData(records, targetYearChartFilter);
       const ctx = document.getElementById("targetYearChart").getContext("2d");
       if (targetYearChartInstance) targetYearChartInstance.destroy();
-
-      if (!chartData.labels || chartData.labels.length === 0 || chartData.datasets.every(d => d.data.every(v => v === 0))) {
-        targetYearChartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
-          options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-        return;
-      }
-
-      targetYearChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: chartData.labels,
-          datasets: chartData.datasets
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  const year = context.label;
-                  const total = context.raw;
-                  const breakdown = chartData.yearProvinceBreakdown?.[year] || {};
-                  const parts = Object.entries(breakdown).map(([p, c]) => `${p}: ${c}`).join(', ');
-                  return `Total: ${total}${parts ? ' (' + parts + ')' : ''}`;
-                }
-              }
-            }
-          },
-          scales: {
-            x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
-            y: { beginAtZero: true, ticks: { stepSize: 1 } }
-          }
-        }
-      });
+      if (!chartData.labels || chartData.labels.length === 0 || chartData.datasets.every(d => d.data.every(v => v === 0))) { targetYearChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
+      targetYearChartInstance = new Chart(ctx, { type: 'bar', data: { labels: chartData.labels, datasets: chartData.datasets }, options: { responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { const year = context.label; const total = context.raw; const breakdown = chartData.yearProvinceBreakdown?.[year] || {}; const parts = Object.entries(breakdown).map(([p, c]) => `${p}: ${c}`).join(', '); return `Total: ${total}${parts ? ' (' + parts + ')' : ''}`; } } } }, scales: { x: { ticks: { font: { size: 10 }, maxRotation: 45 } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } } } });
     }
 
-    // ============================================================
-    // ✅ URBAN DEV CHART RENDERER (now supports year breakdown)
-    // ============================================================
     function renderUrbanDevChart(records) {
       const data = getUrbanDevData(records, urbanDevChartFilter, urbanDevYearFilter);
       const ctx = document.getElementById("urbanDevChart").getContext("2d");
       if (urbanDevChartInstance) urbanDevChartInstance.destroy();
-
-      if (!data.labels || data.labels.length === 0 || data.datasets.every(d => d.data.every(v => v === 0))) {
-        urbanDevChartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] },
-          options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-        return;
-      }
-
-      // Stack by category when showing all years (so within a province,
-      // RUDD+2025 and RUDD+2026 are stacked on top of each other),
-      // otherwise just show plain bars for the single-year view.
+      if (!data.labels || data.labels.length === 0 || data.datasets.every(d => d.data.every(v => v === 0))) { urbanDevChartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['No Data'], datasets: [{ data: [0], backgroundColor: '#e2e8f0' }] }, options: { responsive: true, plugins: { legend: { display: false } } } }); return; }
       const isStacked = (urbanDevYearFilter === 'all');
-
-      urbanDevChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: data,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'top', labels: { font: { size: 8 }, boxWidth: 10 } },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  const ds = context.dataset;
-                  const label = ds.label || '';
-                  const val = context.raw;
-                  return `${label}: ${val}`;
-                }
-              }
-            }
-          },
-          scales: {
-            x: {
-              stacked: isStacked,
-              ticks: { font: { size: 9 }, maxRotation: 45 }
-            },
-            y: {
-              stacked: isStacked,
-              beginAtZero: true,
-              ticks: { stepSize: 1 }
-            }
-          }
-        }
-      });
+      urbanDevChartInstance = new Chart(ctx, { type: 'bar', data: data, options: { responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 8 }, boxWidth: 10 } }, tooltip: { callbacks: { label: function(context) { const ds = context.dataset; const label = ds.label || ''; const val = context.raw; return `${label}: ${val}`; } } } }, scales: { x: { stacked: isStacked, ticks: { font: { size: 9 }, maxRotation: 45 } }, y: { stacked: isStacked, beginAtZero: true, ticks: { stepSize: 1 } } } } });
     }
 
-    // ========== TABLE RENDER ==========
     function renderTable(records){
       const tbody = document.getElementById("lguTableBody");
       if (!records || records.length === 0) { tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">No LGU records found in LGUstatus sheet.</td></tr>`; return; }
@@ -1996,12 +1259,9 @@
         const targetYearUrbanDevt = getField(r, "Target Year_Urban Devt") || "—";
         const category = getClupStatusCategory(r);
         const statusClass = category === "Updated" ? "badge-updated" : category === "For Updating" ? "badge-due" : category === "Under Review" ? "badge-under-review" : "badge-other";
-
         const recordJson = encodeRecord(sanitizeRecord(r));
-
         const getColor = (val) => { if (val === 'Yes') return '#166534'; if (val === 'No') return '#991b1b'; return '#6b7280'; };
         const getPlanadoColor = (val) => { if (val === 'PlanSmart') return '#1e40af'; if (val === 'CAMI') return '#92400e'; return '#6b7280'; };
-
         html += `<tr>
           <td style="display:none;">${escapeHtml(region)}</td>
           <td>${escapeHtml(province)}</td>
@@ -2027,7 +1287,6 @@
         </tr>`;
       });
       tbody.innerHTML = html;
-
       tbody.onclick = function(e) {
         const viewBtn = e.target.closest(".btn-view");
         const editBtn = e.target.closest(".btn-edit");
@@ -2035,12 +1294,9 @@
         const btn = viewBtn || editBtn;
         const raw = btn.getAttribute("data-record");
         const record = decodeRecord(raw);
-        if (!record) { console.error("Decode failed. Raw value:", raw); showToast("Could not read record data.", "error"); return; }
-        if (viewBtn) { showDetailModal(record); } else { openEditModal(record); }
+        if (!record) { showToast("Could not read record data.", "error"); return; }
+        if (viewBtn) showDetailModal(record); else openEditModal(record);
       };
-
-      const tableSubtitle = document.getElementById("tableSubtitle");
-      if (tableSubtitle) tableSubtitle.innerHTML = `(from LGUstatus sheet)`;
       document.getElementById("filterCount").innerText = `${records.length} LGUs shown`;
     }
 
@@ -2070,22 +1326,19 @@
       let html = '';
       fields.forEach(f => {
         let value = getField(record, f.key);
-        if (f.key === "Approval date of the Latest plan (MM/DD/YYYY)") { value = formatDate(value); }
+        if (f.key === "Approval date of the Latest plan (MM/DD/YYYY)") value = formatDate(value);
         html += `<div class="detail-row"><div class="detail-label">${f.label}</div><div class="detail-value">${escapeHtml(value)}</div></div>`;
       });
       body.innerHTML = html;
       modal.classList.add('active');
     }
 
-    // ========== TARGET YEAR EDIT UI (Target Year) ==========
     let editTargetYears = [];
-
     function renderEditTargetYearPills() {
       const container = document.getElementById("editTargetYearPills");
       container.innerHTML = '';
-      if (editTargetYears.length === 0) {
-        container.innerHTML = `<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">No target years selected yet.</span>`;
-      } else {
+      if (editTargetYears.length === 0) container.innerHTML = `<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">No target years selected yet.</span>`;
+      else {
         editTargetYears.forEach(y => {
           const pill = document.createElement('span');
           pill.className = 'target-year-pill';
@@ -2093,11 +1346,7 @@
           container.appendChild(pill);
         });
         container.querySelectorAll('.remove-year').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const y = this.getAttribute('data-year');
-            editTargetYears = editTargetYears.filter(x => x !== y);
-            renderEditTargetYearPills();
-          });
+          btn.addEventListener('click', function() { const y = this.getAttribute('data-year'); editTargetYears = editTargetYears.filter(x => x !== y); renderEditTargetYearPills(); });
         });
       }
       document.getElementById("editTargetYear").value = editTargetYears.join("; ");
@@ -2108,23 +1357,16 @@
       if (!y) return;
       if (editTargetYears.includes(y)) { showToast("Year already added.", "info"); return; }
       editTargetYears.push(y);
-      editTargetYears.sort((a, b) => {
-        const na = parseInt(a, 10), nb = parseInt(b, 10);
-        if (!isNaN(na) && !isNaN(nb)) return na - nb;
-        return String(a).localeCompare(String(b));
-      });
+      editTargetYears.sort((a, b) => { const na = parseInt(a, 10), nb = parseInt(b, 10); if (!isNaN(na) && !isNaN(nb)) return na - nb; return String(a).localeCompare(String(b)); });
       renderEditTargetYearPills();
     }
 
-    // ========== TARGET YEAR_URBAN DEVT EDIT UI ==========
     let editTargetYearUrbanDevts = [];
-
     function renderEditTargetYearUrbanDevtPills() {
       const container = document.getElementById("editTargetYearUrbanDevtPills");
       container.innerHTML = '';
-      if (editTargetYearUrbanDevts.length === 0) {
-        container.innerHTML = `<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">No target years selected yet.</span>`;
-      } else {
+      if (editTargetYearUrbanDevts.length === 0) container.innerHTML = `<span style="font-size:0.72rem;color:#94a3b8;font-style:italic;">No target years selected yet.</span>`;
+      else {
         editTargetYearUrbanDevts.forEach(y => {
           const pill = document.createElement('span');
           pill.className = 'target-year-pill';
@@ -2132,11 +1374,7 @@
           container.appendChild(pill);
         });
         container.querySelectorAll('.remove-year').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const y = this.getAttribute('data-year');
-            editTargetYearUrbanDevts = editTargetYearUrbanDevts.filter(x => x !== y);
-            renderEditTargetYearUrbanDevtPills();
-          });
+          btn.addEventListener('click', function() { const y = this.getAttribute('data-year'); editTargetYearUrbanDevts = editTargetYearUrbanDevts.filter(x => x !== y); renderEditTargetYearUrbanDevtPills(); });
         });
       }
       document.getElementById("editTargetYearUrbanDevt").value = editTargetYearUrbanDevts.join("; ");
@@ -2147,15 +1385,10 @@
       if (!y) return;
       if (editTargetYearUrbanDevts.includes(y)) { showToast("Year already added.", "info"); return; }
       editTargetYearUrbanDevts.push(y);
-      editTargetYearUrbanDevts.sort((a, b) => {
-        const na = parseInt(a, 10), nb = parseInt(b, 10);
-        if (!isNaN(na) && !isNaN(nb)) return na - nb;
-        return String(a).localeCompare(String(b));
-      });
+      editTargetYearUrbanDevts.sort((a, b) => { const na = parseInt(a, 10), nb = parseInt(b, 10); if (!isNaN(na) && !isNaN(nb)) return na - nb; return String(a).localeCompare(String(b)); });
       renderEditTargetYearUrbanDevtPills();
     }
 
-    // ========== OPEN EDIT MODAL ==========
     function openEditModal(record) {
       currentEditRecord = record;
       const modal = document.getElementById("editModal");
@@ -2181,25 +1414,14 @@
       document.getElementById("editPlanadoTarget").value = getFieldValue(record, "PLANADO Target");
       document.getElementById("editUrbanDev").value = getFieldValue(record, "Urban Development");
       document.getElementById("editRemarks").value = getFieldValue(record, "Remarks");
-
-      // Target Year pills
       const tyRaw = getFieldValue(record, "Target Year");
-      editTargetYears = String(tyRaw || "")
-        .split(/[;,]\s*/)
-        .map(s => s.trim())
-        .filter(Boolean);
+      editTargetYears = String(tyRaw || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
       renderEditTargetYearPills();
       document.getElementById("editTargetYearInput").value = '';
-
-      // Target Year_Urban Devt pills
       const tyudRaw = getFieldValue(record, "Target Year_Urban Devt");
-      editTargetYearUrbanDevts = String(tyudRaw || "")
-        .split(/[;,]\s*/)
-        .map(s => s.trim())
-        .filter(Boolean);
+      editTargetYearUrbanDevts = String(tyudRaw || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
       renderEditTargetYearUrbanDevtPills();
       document.getElementById("editTargetYearUrbanDevtInput").value = '';
-
       document.getElementById("editSaveBtn").disabled = false;
       modal.classList.add('active');
     }
@@ -2236,9 +1458,8 @@
         };
         const altRecord = { ...record, 'LGU with Communications Plan': commPlanValue, 'Communications Plan': commPlanValue, 'Comm Plan': commPlanValue };
         const params = new URLSearchParams();
-        params.append('action', 'update');
-        params.append('data_type', 'lgu_status');
-        for (let [key, value] of Object.entries(record)) { if (value !== undefined && value !== null) { params.append(key, value); } }
+        params.append('action', 'update'); params.append('data_type', 'lgu_status');
+        for (let [key, value] of Object.entries(record)) { if (value !== undefined && value !== null) params.append(key, value); }
         if (commPlanValue) { params.append('LGU with Communications Plan', commPlanValue); params.append('Communications Plan', commPlanValue); params.append('Comm Plan', commPlanValue); }
         params.append('data', JSON.stringify(altRecord));
         const url = GOOGLE_SCRIPT_URL + '?' + params.toString();
@@ -2247,15 +1468,8 @@
         document.getElementById("editModal").classList.remove('active');
         setTimeout(async () => { await refreshData(); }, 2500);
         return { success: true };
-      } catch (error) {
-        console.error("❌ Error saving record:", error);
-        showToast("❌ Error saving record: " + error.message, "error");
-        return { success: false, error: error.message };
-      } finally {
-        isSaving = false;
-        document.getElementById("editSaveBtn").disabled = false;
-        document.getElementById("editSaveBtn").innerHTML = "💾 Save Changes";
-      }
+      } catch (error) { showToast("❌ Error saving record: " + error.message, "error"); return { success: false, error: error.message }; }
+      finally { isSaving = false; document.getElementById("editSaveBtn").disabled = false; document.getElementById("editSaveBtn").innerHTML = "💾 Save Changes"; }
     }
 
     async function refreshData() {
@@ -2268,20 +1482,15 @@
           populateFilters(rawLguData);
           applyFilters();
           showToast("✅ Data refreshed successfully!", "");
-        } else { showToast("⚠️ No data returned from server", "error"); }
-      } catch (e) { console.error("Refresh error", e); showToast("❌ Error refreshing data: " + e.message, "error"); }
+        } else showToast("⚠️ No data returned from server", "error");
+      } catch (e) { showToast("❌ Error refreshing data: " + e.message, "error"); }
     }
 
     function populateFilters(records){
-      const provinceSet = new Set();
-      const lguSet = new Set();
+      const provinceSet = new Set(); const lguSet = new Set();
       records.forEach(r => { const p = getField(r, "Province") || "—"; const m = getField(r, "City/Municipality") || "—"; if (p !== "—") provinceSet.add(p); if (m !== "—") lguSet.add(m); });
-      const provSelect = document.getElementById("filterProvince");
-      const lguSelect = document.getElementById("filterLgu");
-      const stackedProvSelect = document.getElementById("filterStackedProvince");
-      const currentProv = provSelect.value;
-      const currentLgu = lguSelect.value;
-      const currentStackedProv = stackedProvSelect.value;
+      const provSelect = document.getElementById("filterProvince"); const lguSelect = document.getElementById("filterLgu"); const stackedProvSelect = document.getElementById("filterStackedProvince");
+      const currentProv = provSelect.value; const currentLgu = lguSelect.value; const currentStackedProv = stackedProvSelect.value;
       const sortedProvinces = [...provinceSet].sort();
       provSelect.innerHTML = `<option value="">All Provinces</option>` + sortedProvinces.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
       lguSelect.innerHTML = `<option value="">All LGUs</option>` + [...lguSet].sort().map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('');
@@ -2290,50 +1499,25 @@
       if (currentLgu) lguSelect.value = currentLgu;
       if (currentStackedProv) stackedProvSelect.value = currentStackedProv;
 
-      // Populate target year chart filter — only years that exist in data (Target Year column)
       const targetYearSelect = document.getElementById("filterTargetYearChart");
       const allYears = new Set();
-      records.forEach(r => {
-        const val = getField(r, "Target Year");
-        String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => allYears.add(y));
-      });
+      records.forEach(r => { const val = getField(r, "Target Year"); String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => allYears.add(y)); });
       const sortedYears = [...allYears].sort();
       const currentYearFilter = targetYearSelect.value || 'all';
       targetYearSelect.innerHTML = `<option value="all">All Years</option>` + sortedYears.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
-      if (currentYearFilter && [...targetYearSelect.options].some(o => o.value === currentYearFilter)) {
-        targetYearSelect.value = currentYearFilter;
-      } else {
-        targetYearSelect.value = 'all';
-        targetYearChartFilter = 'all';
-      }
+      if (currentYearFilter && [...targetYearSelect.options].some(o => o.value === currentYearFilter)) targetYearSelect.value = currentYearFilter;
+      else { targetYearSelect.value = 'all'; targetYearChartFilter = 'all'; }
 
-      // ✅ Populate Urban Development Year filter — from Target Year_Urban Devt column
       const urbanDevYearSelect = document.getElementById("filterUrbanDevYear");
       const allUrbanDevYears = new Set();
-      records.forEach(r => {
-        const val = getField(r, "Target Year_Urban Devt");
-        String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => allUrbanDevYears.add(y));
-      });
+      records.forEach(r => { const val = getField(r, "Target Year_Urban Devt"); String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean).forEach(y => allUrbanDevYears.add(y)); });
       const sortedUrbanDevYears = [...allUrbanDevYears].sort();
       const currentUrbanDevYear = urbanDevYearSelect.value || 'all';
       urbanDevYearSelect.innerHTML = `<option value="all">All Years</option>` + sortedUrbanDevYears.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
-      if (currentUrbanDevYear && [...urbanDevYearSelect.options].some(o => o.value === currentUrbanDevYear)) {
-        urbanDevYearSelect.value = currentUrbanDevYear;
-      } else {
-        urbanDevYearSelect.value = 'all';
-        urbanDevYearFilter = 'all';
-      }
+      if (currentUrbanDevYear && [...urbanDevYearSelect.options].some(o => o.value === currentUrbanDevYear)) urbanDevYearSelect.value = currentUrbanDevYear;
+      else { urbanDevYearSelect.value = 'all'; urbanDevYearFilter = 'all'; }
     }
 
-    // ============================================================
-    // ✅ applyFilters — Now includes:
-    //    • CLUP Status filter → Province Status Summary (stacked)
-    //    • Risk-Informed Total filter → Risk-Informed by Province
-    //    • CLUP Status filter → LGU STATUS LIST (table)
-    //    • PLANADO Target filter → Target Year chart
-    //    • Target Year filter → PLANADO Target chart
-    //    • Province Status Summary dropdown → LGU STATUS LIST (NEW)
-    // ============================================================
     function applyFilters(){
       const prov = document.getElementById("filterProvince").value;
       const lgu = document.getElementById("filterLgu").value;
@@ -2348,108 +1532,28 @@
       urbanDevChartFilter = document.getElementById("filterUrbanDev").value || 'all';
       urbanDevYearFilter = document.getElementById("filterUrbanDevYear").value || 'all';
 
-      // ============ BASE POOL (used by all charts) ============
       let baseFiltered = rawLguData;
       if (prov) baseFiltered = baseFiltered.filter(r => (getField(r, "Province") || "") === prov);
       if (lgu) baseFiltered = baseFiltered.filter(r => (getField(r, "City/Municipality") || "") === lgu);
 
-      // ============================================================
-      // ✅ TARGET YEAR CHART POOL — narrowed by PLANADO Target filter
-      // ============================================================
       const targetYearPool = filterByPlanadoTarget(baseFiltered, planadoChartFilter);
-
-      // ============================================================
-      // ✅ PLANADO TARGET CHART POOL — narrowed by Target Year filter
-      // ============================================================
       const planadoPool = filterByTargetYear(baseFiltered, targetYearChartFilter);
 
-      // ============================================================
-      // ✅ TABLE POOL — These filters ONLY affect the LGU STATUS LIST:
-      //    • Province (from Province Status Summary dropdown) (NEW)
-      //    • CLUP Status
-      //    • PLANADO Target
-      //    • Target Year
-      //    • Urban Development category
-      //    • Urban Development Year
-      //    • Risk-Informed Total
-      // ============================================================
       let tableFiltered = baseFiltered.slice();
+      if (stackedProvFilter && stackedProvFilter !== 'all') tableFiltered = tableFiltered.filter(r => (getField(r, "Province") || "") === stackedProvFilter);
+      if (clupStatusFilter && clupStatusFilter !== 'all') tableFiltered = tableFiltered.filter(r => getClupStatusCategory(r) === clupStatusFilter);
+      if (planadoChartFilter && planadoChartFilter !== 'all') tableFiltered = tableFiltered.filter(r => { const val = getField(r, "PLANADO Target"); if (planadoChartFilter === 'Not Specified') return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI"); return val === planadoChartFilter; });
+      if (targetYearChartFilter && targetYearChartFilter !== 'all') tableFiltered = tableFiltered.filter(r => { const val = getField(r, "Target Year"); const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean); return years.includes(targetYearChartFilter); });
+      if (urbanDevChartFilter && urbanDevChartFilter !== 'all') tableFiltered = tableFiltered.filter(r => { const val = getField(r, "Urban Development"); if (!val || val === "—") return false; const normalized = String(val).trim(); if (normalized === urbanDevChartFilter) return true; const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean); const targetParts = urbanDevChartFilter.split(/[,&]+/).map(s => s.trim()).filter(Boolean); return targetParts.length === parts.length && targetParts.every(p => parts.includes(p)); });
+      if (urbanDevYearFilter && urbanDevYearFilter !== 'all') tableFiltered = tableFiltered.filter(r => { const tyud = getField(r, "Target Year_Urban Devt"); const years = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean); return years.includes(urbanDevYearFilter); });
+      if (riskTotalFilter && riskTotalFilter !== 'all') tableFiltered = tableFiltered.filter(r => { const riskVal = getField(r, "Risk-Informed"); if (riskTotalFilter === 'Not Specified') return !riskVal || riskVal === "—" || riskVal === "" || (riskVal !== "Yes" && riskVal !== "No"); return riskVal === riskTotalFilter; });
 
-      // --- ✅ Province Status Summary dropdown (NEW) ---
-      // When a province is picked in the Province Status Summary chart's
-      // own dropdown, only show that province's LGUs in the table.
-      if (stackedProvFilter && stackedProvFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => (getField(r, "Province") || "") === stackedProvFilter);
-      }
-
-      // --- CLUP Status (pie chart dropdown) ---
-      if (clupStatusFilter && clupStatusFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => getClupStatusCategory(r) === clupStatusFilter);
-      }
-
-      // --- PLANADO Target ---
-      if (planadoChartFilter && planadoChartFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const val = getField(r, "PLANADO Target");
-          if (planadoChartFilter === 'Not Specified') {
-            return !val || val === "—" || val === "" || (val !== "PlanSmart" && val !== "CAMI");
-          }
-          return val === planadoChartFilter;
-        });
-      }
-
-      // --- Target Year (from Target Year chart dropdown) ---
-      if (targetYearChartFilter && targetYearChartFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const val = getField(r, "Target Year");
-          const years = String(val || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
-          return years.includes(targetYearChartFilter);
-        });
-      }
-
-      // --- Urban Development category ---
-      if (urbanDevChartFilter && urbanDevChartFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const val = getField(r, "Urban Development");
-          if (!val || val === "—") return false;
-          const normalized = String(val).trim();
-          if (normalized === urbanDevChartFilter) return true;
-          const parts = normalized.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
-          const targetParts = urbanDevChartFilter.split(/[,&]+/).map(s => s.trim()).filter(Boolean);
-          return targetParts.length === parts.length && targetParts.every(p => parts.includes(p));
-        });
-      }
-
-      // --- Urban Development Year ---
-      if (urbanDevYearFilter && urbanDevYearFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const tyud = getField(r, "Target Year_Urban Devt");
-          const years = String(tyud || "").split(/[;,]\s*/).map(s => s.trim()).filter(Boolean);
-          return years.includes(urbanDevYearFilter);
-        });
-      }
-
-      // --- Risk-Informed Total ---
-      if (riskTotalFilter && riskTotalFilter !== 'all') {
-        tableFiltered = tableFiltered.filter(r => {
-          const riskVal = getField(r, "Risk-Informed");
-          if (riskTotalFilter === 'Not Specified') {
-            return !riskVal || riskVal === "—" || riskVal === "" || (riskVal !== "Yes" && riskVal !== "No");
-          }
-          return riskVal === riskTotalFilter;
-        });
-      }
-
-      // CLUP Status filter for the pie chart — applied to baseFiltered only
       const piePool = filterByClupStatusCategory(baseFiltered, clupStatusFilter);
-      // Risk Total filter pool (for the Risk chart itself)
       const riskPool = filterByRiskTotalCategory(baseFiltered, riskTotalFilter);
-      // Status updates filter pool for the table (in addition to other table filters)
       const tableWithStatus = filterByStatusUpdates(tableFiltered, barMode);
 
       filteredData = baseFiltered;
 
-      // ============ RENDER CHARTS (independent pools) ============
       renderStats(baseFiltered);
       renderPie(piePool);
       renderSupportPie(baseFiltered, supportFilter);
@@ -2457,27 +1561,14 @@
       renderHousingPie(baseFiltered);
       renderCommPie(baseFiltered);
       renderBar(baseFiltered, barMode);
-
-      // ✅ Risk-Informed by Province now reacts to Risk-Informed Total filter
       renderRiskStackedChart(baseFiltered, riskTotalFilter);
       renderRiskTotalChart(riskPool, riskTotalFilter);
-
-      // ✅ PLANADO Target chart uses the Target Year-narrowed pool
       renderPlanadoTargetChart(planadoPool);
-
-      // ✅ Target Year chart uses the PLANADO-narrowed pool
       renderTargetYearChart(targetYearPool);
-
-      // Urban Development chart uses baseFiltered but respects its own 2 dropdowns
       renderUrbanDevChart(baseFiltered);
-
       const activeView = document.querySelector('#columnTabs .active')?.dataset.view || 'preparatory';
       renderColumn(baseFiltered, activeView);
-
-      // ✅ Province Status Summary now reacts to CLUP Status filter
       renderStackedChart(baseFiltered, stackedProvFilter, clupStatusFilter);
-
-      // ============ RENDER TABLE ============
       renderTable(tableWithStatus);
     }
 
@@ -2490,33 +1581,22 @@
         let combined = String(updatesField || "").toLowerCase().trim();
         const clupStatus = String(getField(r, "CLUP Status") || "").toLowerCase().trim();
         if (!combined && clupStatus) combined = clupStatus;
-        if (mode === 'None Indicated') { return !combined || combined === '' || combined === 'none' || combined === 'n/a'; }
+        if (mode === 'None Indicated') return !combined || combined === '' || combined === 'none' || combined === 'n/a';
         const modeLower = mode.toLowerCase(); const modeNoSpace = modeLower.replace(/\s/g, ''); const modeWithHyphen = modeLower.replace(/\s/g, '-');
         return combined.includes(modeLower) || combined.includes(modeNoSpace) || combined.includes(modeWithHyphen);
       });
     }
 
-    function filterByClupStatusCategory(records, category) {
-      if (category === 'all') return records;
-      return records.filter(r => getClupStatusCategory(r) === category);
-    }
-
-    function filterByRiskTotalCategory(records, category) {
-      if (category === 'all') return records;
-      return records.filter(r => {
-        const riskVal = getField(r, "Risk-Informed");
-        if (category === 'Not Specified') { return !riskVal || riskVal === "—" || riskVal === "" || (riskVal !== "Yes" && riskVal !== "No"); }
-        return riskVal === category;
-      });
-    }
+    function filterByClupStatusCategory(records, category) { if (category === 'all') return records; return records.filter(r => getClupStatusCategory(r) === category); }
+    function filterByRiskTotalCategory(records, category) { if (category === 'all') return records; return records.filter(r => { const riskVal = getField(r, "Risk-Informed"); if (category === 'Not Specified') return !riskVal || riskVal === "—" || riskVal === "" || (riskVal !== "Yes" && riskVal !== "No"); return riskVal === category; }); }
 
     async function fetchLguStatusData(){
       try {
         const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
         const data = await resp.json();
         if (Array.isArray(data) && data.length > 0) { rawLguData = data; return rawLguData; }
-        else { console.warn("No data from LGUstatus, using fallback"); return getFallbackData(); }
-      } catch(e){ console.error("Fetch error", e); return getFallbackData(); }
+        else { return getFallbackData(); }
+      } catch(e){ return getFallbackData(); }
     }
 
     function getFallbackData() {
@@ -2527,7 +1607,6 @@
       ];
     }
 
-    // ========== EVENT SETUP ==========
     function setupAllEventListeners() {
       document.getElementById("barChartDropdown").addEventListener('change', function() { applyFilters(); });
       document.getElementById("filterProvince").addEventListener('change', applyFilters);
@@ -2536,7 +1615,6 @@
       document.getElementById("filterStackedProvince").addEventListener('change', applyFilters);
       document.getElementById("filterSupportPie").addEventListener('change', applyFilters);
       document.getElementById("filterRiskTotal").addEventListener('change', applyFilters);
-
       document.getElementById("filterPlanadoTarget").addEventListener('change', function() { planadoChartFilter = this.value; applyFilters(); });
       document.getElementById("filterTargetYearChart").addEventListener('change', function() { targetYearChartFilter = this.value; applyFilters(); });
       document.getElementById("filterUrbanDev").addEventListener('change', function() { urbanDevChartFilter = this.value; applyFilters(); });
@@ -2546,10 +1624,8 @@
         document.getElementById("filterProvince").value = ""; document.getElementById("filterLgu").value = "";
         document.getElementById("filterClupStatus").value = "all"; document.getElementById("barChartDropdown").value = "all";
         document.getElementById("filterStackedProvince").value = "all"; document.getElementById("filterSupportPie").value = "all";
-        document.getElementById("filterRiskTotal").value = "all";
-        document.getElementById("filterPlanadoTarget").value = "all";
-        document.getElementById("filterTargetYearChart").value = "all";
-        document.getElementById("filterUrbanDev").value = "all";
+        document.getElementById("filterRiskTotal").value = "all"; document.getElementById("filterPlanadoTarget").value = "all";
+        document.getElementById("filterTargetYearChart").value = "all"; document.getElementById("filterUrbanDev").value = "all";
         document.getElementById("filterUrbanDevYear").value = "all";
         planadoChartFilter = 'all'; urbanDevChartFilter = 'all'; targetYearChartFilter = 'all'; urbanDevYearFilter = 'all';
         applyFilters();
@@ -2570,52 +1646,23 @@
       document.getElementById('editModalCloseBtn').addEventListener('click', function(){ document.getElementById('editModal').classList.remove('active'); });
       document.getElementById('editCancelBtn').addEventListener('click', function(){ document.getElementById('editModal').classList.remove('active'); });
       document.getElementById('editModal').addEventListener('click', function(e){ if (e.target === this) this.classList.remove('active'); });
-
       document.getElementById('editForm').addEventListener('submit', async function(e) { e.preventDefault(); const formData = new FormData(this); await saveEditedRecord(formData); });
-
-      // Target Year pills
-      document.getElementById('editTargetYearAddBtn').addEventListener('click', function() {
-        const input = document.getElementById('editTargetYearInput');
-        addEditTargetYear(input.value);
-        input.value = '';
-        input.focus();
-      });
-      document.getElementById('editTargetYearInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          addEditTargetYear(this.value);
-          this.value = '';
-        }
-      });
-
-      // Target Year_Urban Devt pills
-      document.getElementById('editTargetYearUrbanDevtAddBtn').addEventListener('click', function() {
-        const input = document.getElementById('editTargetYearUrbanDevtInput');
-        addEditTargetYearUrbanDevt(input.value);
-        input.value = '';
-        input.focus();
-      });
-      document.getElementById('editTargetYearUrbanDevtInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          addEditTargetYearUrbanDevt(this.value);
-          this.value = '';
-        }
-      });
+      document.getElementById('editTargetYearAddBtn').addEventListener('click', function() { const input = document.getElementById('editTargetYearInput'); addEditTargetYear(input.value); input.value = ''; input.focus(); });
+      document.getElementById('editTargetYearInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); addEditTargetYear(this.value); this.value = ''; } });
+      document.getElementById('editTargetYearUrbanDevtAddBtn').addEventListener('click', function() { const input = document.getElementById('editTargetYearUrbanDevtInput'); addEditTargetYearUrbanDevt(input.value); input.value = ''; input.focus(); });
+      document.getElementById('editTargetYearUrbanDevtInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); addEditTargetYearUrbanDevt(this.value); this.value = ''; } });
     }
 
     document.addEventListener('DOMContentLoaded', async function(){
       checkSession(); renderMainNavigation(); renderUserMenu();
-
       const data = await fetchLguStatusData();
       if (data.length > 0) { rawLguData = data; } else { rawLguData = getFallbackData(); }
-
       populateFilters(rawLguData);
-
       setupAllEventListeners();
-
       applyFilters();
     });
+
+    window.onclick = function(e) { const modal = document.getElementById("loginModal"); if (e.target === modal) closeLoginModal(); };
   </script>
 </body>
 </html>

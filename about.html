@@ -19,31 +19,333 @@
     .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
     .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
     .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
-    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
-    .logo-area-header { display: flex; align-items: center; gap: 16px; }
-    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
-    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
-    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
-    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
-    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
-    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
-    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
-    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
-    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
-    .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
-    .dropdown-content a:hover { background: #eff6ff; }
-    .dropdown-submenu { position: relative; }
-    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
-    .submenu-trigger:hover { background: #eff6ff; }
-    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
-    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
-    .dropdown-submenu:hover .submenu-content { display: block; }
-    .submenu-content a { padding: 0.7rem 1.2rem; }
+
+    /* ===== HEADER / NAV (copied from m_attended.html) ===== */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2edf7;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(2px);
+      background: rgba(255, 255, 255, 0.98);
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .logo-area-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-logo-img {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f0f6fe;
+      padding: 6px 20px;
+      border-radius: 60px;
+      transition: all 0.2s;
+    }
+    .header-logo-img img {
+      height: 40px;
+      width: auto;
+      transition: transform 0.2s;
+    }
+    .header-logo-img span {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1e3a8a;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+    }
+    .nav-right .login-prompt,
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f1f5f9;
+      padding: 0.2rem 0.6rem 0.2rem 0.8rem;
+      border-radius: 60px;
+      cursor: pointer;
+      position: relative;
+    }
+    .login-prompt:hover {
+      background: #2563eb;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ===== NAVIGATION BAR (centered) ===== */
+    .nav-bottom {
+      background: white;
+      border-top: 1px solid #eef2ff;
+      padding: 0.5rem 0;
+    }
+    .nav-bottom .container {
+      display: flex;
+      justify-content: center;
+    }
+    .main-nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 0.2rem 0;
+    }
+
+    /* ===== NAV ITEM BOXES ===== */
+    .main-nav-links > a,
+    .main-nav-links > .dropdown > .dropbtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: #1f3a5f;
+      padding: 0.55rem 1rem;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      background: transparent;
+      transition: all 0.25s ease;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      font-family: inherit;
+      line-height: 1.2;
+    }
+
+    /* Hover effect – box style */
+    .main-nav-links > a:hover,
+    .main-nav-links > .dropdown > .dropbtn:hover {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+
+    /* Active / Highlighted state */
+    .main-nav-links > a.active,
+    .main-nav-links > .dropdown > .dropbtn.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30);
+      transform: translateY(-2px);
+    }
+    .main-nav-links > a.active:hover,
+    .main-nav-links > .dropdown > .dropbtn.active:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+      color: #ffffff;
+    }
+
+    /* Dropdown arrow for active state */
+    .main-nav-links > .dropdown > .dropbtn.active::after {
+      opacity: 1;
+    }
+
+    .dropbtn::after {
+      content: " ▾";
+      font-size: 0.65rem;
+      opacity: 0.6;
+      margin-left: 4px;
+      transition: opacity 0.2s;
+    }
+    .dropdown:hover .dropbtn::after {
+      opacity: 1;
+    }
+
+    /* ===== DROPDOWN MENUS ===== */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropbtn {
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: white;
+      min-width: 220px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+      z-index: 1000;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 1px solid #eef2ff;
+      padding: 0.3rem 0;
+      animation: dropFade 0.2s ease;
+      margin-top: 0;
+    }
+    /* Invisible "bridge" that fills the gap between button and dropdown */
+    .dropdown-content::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 0;
+      right: 0;
+      height: 12px;
+      background: transparent;
+    }
+    @keyframes dropFade {
+      from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    /* Slight delay on close so small mouse slips don't kill it */
+    .dropdown {
+      padding-bottom: 6px;
+      margin-bottom: -6px;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.7rem 1.2rem;
+      color: #1e293b;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .dropdown-content a:hover {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    /* Submenus */
+    .dropdown-submenu {
+      position: relative;
+    }
+    .submenu-trigger {
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: inherit;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .submenu-trigger:hover {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+    .arrow-right {
+      font-size: 0.7rem;
+      margin-left: 1rem;
+      transition: transform 0.2s ease;
+    }
+    .dropdown-submenu.open .arrow-right {
+      transform: rotate(90deg);
+    }
+    .submenu-content {
+      display: none;
+      position: absolute;
+      left: 100%;
+      top: 0;
+      background: white;
+      min-width: 180px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+      border: 1px solid #eef2ff;
+      z-index: 1001;
+      padding: 0.3rem 0;
+    }
+    /* Invisible bridge on the left side of the submenu */
+    .submenu-content::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -10px;
+      bottom: 0;
+      width: 10px;
+      background: transparent;
+    }
+    .dropdown-submenu:hover .submenu-content,
+    .dropdown-submenu.open .submenu-content {
+      display: block;
+    }
+    /* Extend hover zone for submenu trigger */
+    .submenu-trigger {
+      padding-right: 2rem;
+    }
+    .dropdown-submenu {
+      padding-right: 6px;
+      margin-right: -6px;
+    }
+    .submenu-content a {
+      padding: 0.7rem 1.2rem;
+    }
+
+    /* ===== USER DROPDOWN ===== */
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      background: #2563eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    .user-name {
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    .role-badge-header {
+      background: #e2e8f0;
+      padding: 0.15rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      margin-left: 0.3rem;
+    }
+    .role-badge-header.admin { background: #dcfce7; color: #166534; }
+    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
+    .user-dropdown-menu {
+      position: absolute;
+      top: 48px;
+      right: 0;
+      background: white;
+      border-radius: 20px;
+      min-width: 180px;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+      border: 1px solid #eef2ff;
+      overflow: hidden;
+      display: none;
+      z-index: 200;
+    }
+    .user-dropdown-item {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .user-dropdown-item:hover {
+      background: #f8fafc;
+    }
 
     /* About page specific */
     .page-title-block { padding: 2.5rem 0 1rem; }
@@ -95,73 +397,13 @@
     .dev-person .desc { font-size: 0.85rem; color: #475569; margin-top: 0.3rem; }
     .dev-person i { color: #2563eb; margin-right: 4px; }
 
-    /* User Dropdown Menu Styles - FIXED */
-    .user-menu { position: relative; cursor: pointer; }
-    .user-dropdown-menu { 
-      display: none; 
-      position: absolute; 
-      top: 48px; 
-      right: 0; 
-      background: white; 
-      border-radius: 20px; 
-      min-width: 200px; 
-      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); 
-      border: 1px solid #eef2ff; 
-      overflow: hidden; 
-      z-index: 2000; 
-    }
-    .user-dropdown-menu.show { display: block; }
-    .user-dropdown-item { 
-      padding: 0.8rem 1.2rem; 
-      border-bottom: 1px solid #f1f5f9; 
-      cursor: pointer; 
-      font-size: 0.8rem; 
-      transition: background 0.15s;
-      color: #1e293b;
-    }
-    .user-dropdown-item:hover { background: #f8fafc; }
-    .user-dropdown-item:last-child { border-bottom: none; }
-    .user-dropdown-item.danger { color: #dc2626; }
-    .user-dropdown-item.danger:hover { background: #fef2f2; }
-    
-    .user-avatar { 
-      width: 28px; 
-      height: 28px; 
-      background: #2563eb; 
-      border-radius: 50%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      color: white; 
-      font-weight: 700; 
-      font-size: 0.75rem; 
-      flex-shrink: 0;
-    }
-    .user-name { font-size: 0.7rem; font-weight: 500; }
-    .role-badge-header { 
-      padding: 0.15rem 0.5rem; 
-      border-radius: 20px; 
-      font-size: 0.6rem; 
-      font-weight: 600; 
-      margin-left: 0.3rem; 
-    }
-    .role-badge-header.admin { background: #dcfce7; color: #166534; }
-    .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
-    .role-badge-header.viewer { background: #f1f5f9; color: #475569; }
-
-    @media (max-width: 800px) { 
-      .about-grid-2 { grid-template-columns: 1fr; } 
-      .dev-grid { grid-template-columns: 1fr; } 
-      .top-bar { flex-direction: column; align-items: stretch; } 
-      .header-logo-img span { white-space: normal; font-size: 0.7rem; } 
-    }
-
-    /* reuse footer, modal styles from index */
+    /* ===== FOOTER ===== */
     .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
     .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
+    /* ===== LOGIN MODAL ===== */
     .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
     .login-modal.active { display: flex; }
     .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
@@ -182,6 +424,65 @@
     .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .toast-msg.success { background: #166534; }
     .toast-msg.error { background: #b91c1c; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .main-nav-links { gap: 0.35rem; }
+      .main-nav-links > a,
+      .main-nav-links > .dropdown > .dropbtn {
+        font-size: 0.75rem;
+        padding: 0.45rem 0.75rem;
+      }
+    }
+    @media (max-width: 800px) {
+      .about-grid-2 { grid-template-columns: 1fr; }
+      .dev-grid { grid-template-columns: 1fr; }
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+    }
+    @media (max-width: 700px) {
+      .nav-bottom .container {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .main-nav-links {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+        padding: 0.1rem 0;
+      }
+      .main-nav-links > a,
+      .main-nav-links > .dropdown > .dropbtn {
+        font-size: 0.68rem;
+        padding: 0.4rem 0.6rem;
+        white-space: nowrap;
+      }
+      .dropdown-content {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        top: auto;
+        bottom: 20px;
+        min-width: 260px;
+        max-width: 90vw;
+        z-index: 2000;
+      }
+      .submenu-content {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        top: auto;
+        bottom: 20px;
+        min-width: 200px;
+        max-width: 85vw;
+        z-index: 2001;
+      }
+      .dropdown-submenu.open .submenu-content {
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
@@ -204,7 +505,6 @@
   <main>
     <div class="container">
       <!-- PAGE TITLE -->
-
 
       <!-- OUR FOUNDATION (moved from index) -->
       <div class="values-section scroll-reveal">
@@ -310,9 +610,6 @@
           <i class="fas fa-handshake" style="color:#2563eb;"></i> This project represents a joint initiative to enhance digital accessibility, organize division resources, and optimize service delivery for the ELUPDD.
         </div>
       </div>
-
-      <!-- Back to Home Link -->
-
     </div>
   </main>
 
@@ -360,7 +657,9 @@
   </div>
 
   <script>
-    // Minimal script to replicate header/nav functionality from index
+    // ============================================
+    // CONFIGURATION
+    // ============================================
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
     let currentUser = null;
 
@@ -373,44 +672,95 @@
     function getRoleLabel(r) { if (r === "admin") return "👑 Admin"; if (r === "encoder" || r === "staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r) { if (r === "admin") return "admin"; if (r === "encoder" || r === "staff") return "staff"; return "viewer"; }
 
-   function renderMainNavigation() {
+    // ============================================
+    // NAVIGATION RENDERING — WITH ACTIVE HIGHLIGHT
+    // ============================================
+    function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
-        let navHtml = `<a href="index.html">Home</a>`;
+
+        // Determine current page
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+        // Helper to check active state
+        function isActive(page) {
+            return currentPage === page || (currentPage === '' && page === 'index.html');
+        }
+
+        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+
         if (currentUser) {
-            navHtml +=
-                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-                    <a href="lc.html">Locational Clearance</a>
-                    <a href="SZC.html">Site Zoning Certification</a></div></div>
-                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-                </div></div>
-                <a href="Techsamp.html">Technical Assistance</a>
-                <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
-                <a href="lgu-info.html">LGU Information</a>
-                <a href="report.html">Reports</a>
-                <a href="calendar.html">Calendar of Activities</a>
-                <a href="issuance.html">Issuances</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>`;
-      } else { navHtml += `<a href="about.html">About</a><a href="#contact">Contact</a>`; }
-      container.innerHTML = navHtml;
-      setTimeout(() => {
-        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const submenu = trigger.closest(".dropdown-submenu");
-            if (submenu) submenu.classList.toggle("open");
-          });
-        });
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".dropdown-submenu")) {
-            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-          }
-        });
-      }, 10);
+            const isCertActive = isActive('lc.html') || isActive('SZC.html');
+            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+            const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+            navHtml += `
+                <div class="dropdown" id="certDropdown">
+                    <button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button>
+                    <div class="dropdown-content">
+                        <a href="lc.html" class="${isActive('lc.html') ? 'active-sub' : ''}">Locational Clearance</a>
+                        <a href="SZC.html" class="${isActive('SZC.html') ? 'active-sub' : ''}">Site Zoning Certification</a>
+                    </div>
+                </div>
+                <div class="dropdown" id="landUseDropdown">
+                    <button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button>
+                    <div class="dropdown-content">
+                        <div class="dropdown-submenu" id="clupSubmenu">
+                            <button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button>
+                            <div class="submenu-content">
+                                <a href="status.html" class="${isActive('status.html') ? 'active-sub' : ''}">Status</a>
+                                <a href="inventory.html" class="${isActive('inventory.html') ? 'active-sub' : ''}">Inventory</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-submenu" id="pdpfpSubmenu">
+                            <button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button>
+                            <div class="submenu-content">
+                                <a href="status_pdpfp.html" class="${isActive('status_pdpfp.html') ? 'active-sub' : ''}">Status</a>
+                                <a href="inventory_pdpfp.html" class="${isActive('inventory_pdpfp.html') ? 'active-sub' : ''}">Inventory</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown" id="techServicesDropdown">
+                    <button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button>
+                    <div class="dropdown-content">
+                        <a href="Techsamp.html" class="${isActive('Techsamp.html') ? 'active-sub' : ''}">Technical Assistance</a>
+                        <a href="training.html" class="${isActive('training.html') ? 'active-sub' : ''}">CLUP/ZO Trainings</a>
+                        <a href="p_monitoring.html" class="${isActive('p_monitoring.html') ? 'active-sub' : ''}">Plan Monitoring</a>
+                        <a href="meetings.html" class="${isActive('meetings.html') ? 'active-sub' : ''}">Meetings Attended</a>
+                    </div>
+                </div>
+                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+            `;
+        } else {
+            navHtml += `
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="#contact" class="">Contact</a>
+            `;
+        }
+
+        container.innerHTML = navHtml;
+
+        // Submenu toggle logic
+        setTimeout(() => {
+            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+                trigger.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const submenu = trigger.closest(".dropdown-submenu");
+                    if (submenu) submenu.classList.toggle("open");
+                });
+            });
+            document.addEventListener("click", function (e) {
+                if (!e.target.closest(".dropdown-submenu")) {
+                    document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+                }
+            });
+        }, 10);
     }
 
     function renderUserMenu() {
@@ -434,30 +784,27 @@
               <div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div>
               <div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>
               ${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}
-              <div class="user-dropdown-item danger" id="logoutDropdownBtn">🚪 Sign Out</div>
+              <div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div>
             </div>
           </div>
         `;
         
-        // Toggle dropdown on click
         const userDiv = document.getElementById("userMenuDropdown");
         const dropdownMenu = document.getElementById("userDropdownMenu");
         
         if (userDiv && dropdownMenu) {
           userDiv.addEventListener("click", function(e) {
             e.stopPropagation();
-            dropdownMenu.classList.toggle("show");
+            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
           });
           
-          // Close dropdown when clicking outside
           document.addEventListener("click", function(e) {
             if (!userDiv.contains(e.target)) {
-              dropdownMenu.classList.remove("show");
+              dropdownMenu.style.display = "none";
             }
           });
         }
         
-        // Admin console link
         if (isAdmin) {
           const adminBtn = document.getElementById("adminConsoleLink");
           if (adminBtn) {
@@ -468,7 +815,6 @@
           }
         }
         
-        // Logout
         const logoutBtn = document.getElementById("logoutDropdownBtn");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", function(e) {

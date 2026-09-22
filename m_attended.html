@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>DHSUD VI | MEETINGS ATTENDED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* ===== GLOBAL ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", sans-serif;
+            background: #f4f9fe;
+            color: #0a2540;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== HEADER / NAV ===== */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2edf7;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+            background: rgba(255, 255, 255, 0.98);
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo-area-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header-logo-img {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0f6fe;
+            padding: 6px 20px;
+            border-radius: 60px;
+            transition: all 0.2s;
+        }
+        .header-logo-img img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.2s;
+        }
+        .header-logo-img span {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1e3a8a;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+        }
+        .nav-right .login-prompt,
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 0.2rem 0.6rem 0.2rem 0.8rem;
+            border-radius: 60px;
+            cursor: pointer;
+            position: relative;
+        }
+        .login-prompt:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ===== NAVIGATION BAR (centered) ===== */
+        .nav-bottom {
+            background: white;
+            border-top: 1px solid #eef2ff;
+            padding: 0.5rem 0;
+        }
+        .nav-bottom .container {
+            display: flex;
+            justify-content: center;
+        }
+        .main-nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 0.2rem 0;
+        }
+
+        /* ===== NAV ITEM BOXES ===== */
+        .main-nav-links > a,
+        .main-nav-links > .dropdown > .dropbtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: #1f3a5f;
+            padding: 0.55rem 1rem;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            transition: all 0.25s ease;
+            letter-spacing: -0.2px;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            font-family: inherit;
+            line-height: 1.2;
+        }
+
+        /* Hover effect – box style */
+        .main-nav-links > a:hover,
+        .main-nav-links > .dropdown > .dropbtn:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+        }
+
+        /* Active / Highlighted state */
+        .main-nav-links > a.active,
+        .main-nav-links > .dropdown > .dropbtn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30);
+            transform: translateY(-2px);
+        }
+        .main-nav-links > a.active:hover,
+        .main-nav-links > .dropdown > .dropbtn.active:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* Dropdown arrow for active state */
+        .main-nav-links > .dropdown > .dropbtn.active::after {
+            opacity: 1;
+        }
+
+        .dropbtn::after {
+            content: " ▾";
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-left: 4px;
+            transition: opacity 0.2s;
+        }
+        .dropdown:hover .dropbtn::after {
+            opacity: 1;
+        }
+
+        /* ===== DROPDOWN MENUS ===== */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+        .dropdown-content {
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 220px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    z-index: 1000;
+    top: 100%;              /* was calc(100% + 8px) — remove the gap */
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #eef2ff;
+    padding: 0.3rem 0;
+    animation: dropFade 0.2s ease;
+    /* Add extra invisible padding at top so mouse doesn't leave the hover zone */
+    margin-top: 0;
+}
+/* Invisible "bridge" that fills the gap between button and dropdown */
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -12px;             /* covers the visual gap */
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: transparent;
+}
+@keyframes dropFade {
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+/* Slight delay on close so small mouse slips don't kill it */
+.dropdown {
+    padding-bottom: 6px;    /* extends the hover zone downward */
+    margin-bottom: -6px;    /* compensates visually */
+}
+        .dropdown-content a {
+            display: block;
+            padding: 0.7rem 1.2rem;
+            color: #1e293b;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .dropdown-content a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        /* Submenus */
+        .dropdown-submenu {
+            position: relative;
+        }
+        .submenu-trigger {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: inherit;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .submenu-trigger:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        .arrow-right {
+            font-size: 0.7rem;
+            margin-left: 1rem;
+            transition: transform 0.2s ease;
+        }
+        .dropdown-submenu.open .arrow-right {
+            transform: rotate(90deg);
+        }
+        .submenu-content {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    min-width: 180px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    border: 1px solid #eef2ff;
+    z-index: 1001;
+    padding: 0.3rem 0;
+}
+/* Invisible bridge on the left side of the submenu */
+.submenu-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10px;
+    bottom: 0;
+    width: 10px;
+    background: transparent;
+}
+        .dropdown-submenu:hover .submenu-content,
+.dropdown-submenu.open .submenu-content {
+    display: block;
+}
+/* Extend hover zone for submenu trigger */
+.submenu-trigger {
+    padding-right: 2rem; /* larger clickable/hover area to the right */
+}
+.dropdown-submenu {
+    padding-right: 6px;  /* extend hover to the right */
+    margin-right: -6px;
+}
+        .submenu-content a {
+            padding: 0.7rem 1.2rem;
+        }
+
+        /* ===== USER DROPDOWN ===== */
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        .user-name {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .role-badge-header {
+            background: #e2e8f0;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            margin-left: 0.3rem;
+        }
+        .role-badge-header.admin { background: #dcfce7; color: #166534; }
+        .role-badge-header.staff { background: #dbeafe; color: #1e40af; }
+        .user-dropdown-menu {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            min-width: 180px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #eef2ff;
+            overflow: hidden;
+            display: none;
+            z-index: 200;
+        }
+        .user-dropdown-item {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .user-dropdown-item:hover {
+            background: #f8fafc;
+        }
+
+        /* ===== MEETINGS ATTENDED CARD ===== */
+        .meetings-card {
+            max-width: 880px;
+            width: 100%;
+            background: white;
+            border-radius: 28px;
+            padding: 2.5rem 3rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin: 2rem auto;
+            position: relative;
+            z-index: 1;
+        }
+        .meetings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .meetings-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .meetings-header-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .meetings-header-icon img {
+            height: 52px;
+            width: auto;
+            display: block;
+        }
+        .meetings-header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            letter-spacing: -0.5px;
+        }
+        .meetings-header h1 small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #64748b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .meetings-header-badge {
+            background: rgba(0, 200, 150, 0.15);
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: #00c896;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== FORM GRID ===== */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 1.8rem; }
+        .full-width { grid-column: 1 / -1; }
+        .field-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .field-group label {
+            font-weight: 700; font-size: 0.7rem; text-transform: uppercase;
+            letter-spacing: 0.6px; color: #334155; display: flex; align-items: center; gap: 8px;
+        }
+        .field-group label i { color: #2563eb; font-size: 0.75rem; width: 16px; }
+        .field-group label .required { color: #dc2626; font-size: 0.6rem; }
+        .field-group input, .field-group select, .field-group textarea {
+            background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px;
+            padding: 0.75rem 1.1rem; font-size: 0.9rem; transition: all 0.25s ease;
+            outline: none; width: 100%; color: #0f172a; font-weight: 400;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        }
+        .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
+            border-color: #2563eb; background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .field-group textarea { resize: vertical; min-height: 70px; }
+        .field-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center;
+            cursor: pointer; color: #0f172a; min-height: 50px;
+        }
+        .field-group select option { background: #ffffff; color: #0f172a; padding: 6px 12px !important; line-height: 1.4 !important; }
+
+        /* ===== DATE RANGE CONTAINER ===== */
+        .date-list-container { display: flex; flex-direction: column; gap: 12px; }
+        .date-range-entry {
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+            background: #f8fafc; padding: 12px 16px; border-radius: 16px;
+            border: 1.5px solid #e2e8f0;
+        }
+        .date-range-entry .range-label {
+            font-size: 0.7rem; font-weight: 700; color: #475569;
+            text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+        }
+        .date-range-entry input[type="date"] {
+            flex: 1; min-width: 130px; padding: 0.6rem 0.9rem;
+            border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 0.85rem;
+            transition: all 0.25s ease; outline: none; color: #0f172a;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif; background: #ffffff;
+        }
+        .date-range-entry input[type="date"]:focus {
+            border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .date-range-entry .range-separator { font-weight: 700; color: #2563eb; font-size: 1rem; padding: 0 4px; }
+        .date-range-entry .btn-remove-date {
+            background: #ef4444; color: white; border: none; border-radius: 12px;
+            width: 40px; height: 40px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; transition: all 0.3s ease;
+            flex-shrink: 0; font-size: 0.85rem;
+        }
+        .date-range-entry .btn-remove-date:hover { background: #dc2626; transform: scale(1.05); }
+        .date-range-entry .btn-remove-date:active { transform: scale(0.95); }
+        .btn-add-date {
+            background: #10b981; color: white; border: none; border-radius: 12px;
+            padding: 0.7rem 1.4rem; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; gap: 8px; font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            align-self: flex-start;
+        }
+        .btn-add-date:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .btn-add-date:active { transform: scale(0.95); }
+
+        /* ===== PIC CONTAINER ===== */
+        .pic-container { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .pic-container select { flex: 1; min-width: 200px; }
+        .pic-btn {
+            padding: 0.5rem 1rem; border: none; border-radius: 12px;
+            font-weight: 600; font-size: 0.75rem; cursor: pointer; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif; white-space: nowrap;
+        }
+        .pic-btn-add { background: #10b981; color: white; }
+        .pic-btn-add:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .pic-btn-add:active { transform: scale(0.95); }
+        .pic-btn-delete { background: #ef4444; color: white; }
+        .pic-btn-delete:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .pic-btn-delete:active { transform: scale(0.95); }
+        .pic-btn i { font-size: 0.7rem; }
+
+        /* ===== SUBMIT BUTTON ===== */
+        .btn-submit {
+            background: linear-gradient(135deg, #2563eb, #1e3a8a); border: none;
+            padding: 1rem 2rem; border-radius: 60px; font-weight: 700; font-size: 1rem;
+            color: white; display: inline-flex; align-items: center; justify-content: center;
+            gap: 12px; cursor: pointer; transition: all 0.3s ease; width: 100%;
+            margin-top: 1.2rem; letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25); position: relative;
+            overflow: hidden; font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        }
+        .btn-submit::before {
+            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-submit:hover::before { left: 100%; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); }
+        .btn-submit:active { transform: scale(0.97); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+        .spinner {
+            display: inline-block; width: 20px; height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15); border-top: 2px solid white;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* ===== BUTTONS ===== */
+        .btn-group { display: flex; gap: 10px; margin-top: 1.2rem; flex-wrap: wrap; }
+        .btn-test {
+            background: #f1f5f9; border: 1px solid #e2e8f0; padding: 0.6rem 1.2rem;
+            border-radius: 40px; color: #475569; cursor: pointer; font-size: 0.8rem;
+            font-weight: 600; transition: all 0.3s ease; flex: 1;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif; display: inline-flex;
+            align-items: center; justify-content: center; gap: 6px;
+        }
+        .btn-test:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+        .btn-test:active { transform: scale(0.97); }
+        .btn-view-all { background: #1e3a8a; border: 1px solid #1e3a8a; color: white; }
+        .btn-view-all:hover { background: #2563eb; border-color: #2563eb; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3); }
+        .btn-view-chart { background: #8b5cf6; border: 1px solid #8b5cf6; color: white; }
+        .btn-view-chart:hover { background: #7c3aed; border-color: #7c3aed; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
+        .btn-sheet { background: #0f9d58; border: 1px solid #0f9d58; color: white; }
+        .btn-sheet:hover { background: #0b7e48; border-color: #0b7e48; box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3); }
+
+        /* ===== STATUS MESSAGE ===== */
+        .status-message {
+            margin-top: 1.2rem; padding: 0.8rem 1.2rem; border-radius: 16px;
+            background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
+            display: flex; align-items: center; gap: 12px; transition: all 0.3s ease;
+            font-size: 0.85rem; min-height: 52px;
+        }
+        .status-message i { font-size: 1rem; color: #2563eb; flex-shrink: 0; }
+        .status-message.success { background: #f0fdf4; border-color: #86efac; color: #166534; }
+        .status-message.success i { color: #10b981; }
+        .status-message.error { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+        .status-message.error i { color: #dc2626; }
+        .footer-note {
+            margin-top: 1.5rem; font-size: 0.65rem; color: #94a3b8;
+            text-align: center; border-top: 1px solid #e2e8f0;
+            padding-top: 1.2rem; letter-spacing: 0.5px;
+        }
+
+        /* ===== MODAL STYLES ===== */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 99999;
+            justify-content: center; align-items: center; padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box {
+            background: white; border-radius: 24px; max-width: 95vw; width: 100%;
+            max-height: 92vh; display: flex; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease; overflow: hidden;
+        }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 1.5rem; border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap; gap: 0.5rem; flex-shrink: 0;
+        }
+        .modal-header h2 {
+            font-size: 1.1rem; font-weight: 700; color: #1e3a8a;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .modal-header h2 i { color: #2563eb; }
+        .modal-header .close-btn {
+            background: #f1f5f9; border: none; width: 36px; height: 36px;
+            border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+            transition: all 0.3s ease; display: flex; align-items: center;
+            justify-content: center; color: #475569;
+        }
+        .modal-header .close-btn:hover { background: #fee2e2; color: #dc2626; transform: rotate(90deg); }
+
+        .modal-filters {
+            padding: 0.8rem 1.5rem; border-bottom: 1px solid #e2e8f0;
+            display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;
+            background: #f8fafc; flex-shrink: 0;
+        }
+        .modal-filters .filter-group { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; }
+        .modal-filters label {
+            font-weight: 600; font-size: 0.65rem; color: #334155;
+            text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap;
+        }
+        .modal-filters select, .modal-filters input {
+            padding: 0.3rem 0.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px;
+            font-size: 0.75rem; outline: none; background: white;
+            transition: all 0.3s ease; min-width: 80px; max-width: 140px;
+        }
+        .modal-filters select:focus, .modal-filters input:focus {
+            border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .modal-filters .filter-btn {
+            background: #2563eb; border: none; padding: 0.3rem 1rem;
+            border-radius: 30px; color: white; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; font-size: 0.7rem;
+        }
+        .modal-filters .filter-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .modal-filters .filter-btn:active { transform: scale(0.95); }
+        .modal-filters .filter-btn.reset-btn { background: #64748b; }
+        .modal-filters .filter-btn.reset-btn:hover { background: #475569; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
+
+        .modal-search {
+            padding: 0.6rem 1.5rem; border-bottom: 1px solid #e2e8f0;
+            display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;
+            background: #fafbfc; flex-shrink: 0;
+        }
+        .modal-search input {
+            flex: 1; min-width: 150px; padding: 0.4rem 0.8rem;
+            border: 1.5px solid #cbd5e1; border-radius: 10px;
+            font-size: 0.8rem; outline: none; transition: all 0.3s ease;
+        }
+        .modal-search input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+        .modal-search .search-info { font-size: 0.75rem; color: #64748b; white-space: nowrap; }
+        .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
+
+        .table-wrapper {
+            overflow: auto; flex: 1; padding: 0.5rem 0;
+            position: relative; max-height: calc(92vh - 300px); min-height: 200px;
+        }
+        .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
+        .table-wrapper::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        .modal-body { padding: 0 1.5rem; overflow: visible; flex: 1; display: flex; flex-direction: column; }
+        .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 1200px; }
+        .modal-body table th {
+            background: #f1f5f9; color: #1e3a8a; font-weight: 700; font-size: 0.6rem;
+            text-transform: uppercase; letter-spacing: 0.3px; padding: 0.4rem 0.3rem;
+            text-align: left; border-bottom: 2px solid #e2e8f0;
+            position: sticky; top: 0; z-index: 10; white-space: nowrap;
+        }
+        .modal-body table td {
+            padding: 0.3rem 0.3rem; border-bottom: 1px solid #f1f5f9;
+            color: #334155; max-width: 120px; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap;
+        }
+        .modal-body table tr.clickable-row { cursor: pointer; transition: background 0.15s ease; }
+        .modal-body table tr.clickable-row:hover td { background: #e0f2fe !important; }
+        .modal-body table tr.clickable-row:hover td:first-child { border-left: 3px solid #2563eb; }
+        .modal-body table tr:hover td { background: #f8fafc; }
+        .modal-body table .no-records td { text-align: center; padding: 2rem 0; color: #94a3b8; font-size: 0.9rem; }
+        .modal-body .action-cell { display: flex; gap: 3px; flex-wrap: nowrap; }
+        .modal-body .action-cell .btn-action {
+            padding: 0.15rem 0.4rem; border: none; border-radius: 6px;
+            font-size: 0.6rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            display: inline-flex !important; align-items: center; gap: 3px;
+        }
+        .modal-body .editing td { background: #fef3c7 !important; }
+        .modal-body .editing input, .modal-body .editing select, .modal-body .editing textarea {
+            background: white; border: 1.5px solid #f59e0b; border-radius: 4px;
+            padding: 0.1rem 0.2rem; font-size: 0.65rem; width: 100%; outline: none;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif; min-width: 50px;
+        }
+        .modal-body .editing input:focus, .modal-body .editing select:focus, .modal-body .editing textarea:focus {
+            border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+        .modal-body table select {
+            appearance: auto !important; -webkit-appearance: auto !important; -moz-appearance: auto !important;
+            z-index: 100 !important; position: relative !important; overflow: visible !important;
+            min-height: 28px !important; padding: 2px 6px !important; font-size: 0.65rem !important;
+            background-color: white !important; border: 2px solid #f59e0b !important;
+            border-radius: 4px !important; color: #0f172a !important; cursor: pointer !important;
+            max-width: 130px !important;
+        }
+        .modal-body table select option {
+            display: block !important; padding: 4px 8px !important; min-height: 28px !important;
+            height: auto !important; white-space: normal !important; word-wrap: break-word !important;
+            background: white !important; color: #0f172a !important; font-size: 0.65rem !important;
+        }
+        .modal-body table td { overflow: visible !important; position: relative !important; z-index: 1 !important; }
+        .modal-body table tr.editing-row td { overflow: visible !important; position: relative !important; z-index: 10 !important; }
+        .modal-body table tr.editing-row td select { z-index: 1000 !important; position: relative !important; min-height: 28px !important; }
+
+        .modal-footer {
+            padding: 0.8rem 1.5rem; border-top: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 0.8rem; background: #f8fafc;
+            border-radius: 0 0 24px 24px; flex-shrink: 0;
+        }
+        .modal-footer .record-count { font-size: 0.8rem; color: #475569; }
+        .modal-footer .record-count span { font-weight: 700; color: #1e3a8a; }
+        .modal-footer .btn-close-modal {
+            background: #2563eb; border: none; padding: 0.4rem 1.2rem;
+            border-radius: 40px; color: white; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem;
+        }
+        .modal-footer .btn-close-modal:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .modal-footer .btn-close-modal:active { transform: scale(0.95); }
+
+        /* ===== ADD PERSON MODAL ===== */
+        .add-person-modal .modal-box { max-width: 500px; }
+        .add-person-modal .modal-body { padding: 2rem; }
+        .add-person-modal .field-group { margin-bottom: 1rem; }
+        .add-person-modal .btn-add-person {
+            background: #10b981; border: none; padding: 0.8rem 2rem;
+            border-radius: 40px; color: white; font-weight: 700;
+            cursor: pointer; transition: all 0.3s ease; width: 100%;
+            font-size: 1rem; font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        }
+        .add-person-modal .btn-add-person:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .add-person-modal .btn-add-person:active { transform: scale(0.97); }
+        .add-person-modal .btn-add-person:disabled { opacity: 0.6; cursor: not-allowed; }
+        .add-person-modal .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 0.3rem; display: none; }
+        .add-person-modal .error-msg.show { display: block; }
+
+        /* ===== DETAIL VIEW MODAL ===== */
+        .detail-modal .modal-box { max-width: 720px; }
+        .detail-modal .modal-body { padding: 1.5rem 2rem; overflow-y: auto; }
+        .detail-view-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;
+            padding: 1.5rem 2rem; border-radius: 0; margin: -1.5rem -2rem 1.5rem -2rem;
+        }
+        .detail-view-header h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 10px; }
+        .detail-view-header p { font-size: 0.8rem; opacity: 0.9; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; margin-bottom: 1rem; }
+        .detail-item {
+            display: flex; flex-direction: column; gap: 0.3rem;
+            padding: 0.8rem 1rem; background: #f8fafc;
+            border-radius: 12px; border-left: 4px solid #2563eb;
+            transition: all 0.2s ease;
+        }
+        .detail-item:hover { background: #f1f5f9; transform: translateX(3px); }
+        .detail-item.full-width { grid-column: 1 / -1; }
+        .detail-item .detail-label {
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #64748b; display: flex; align-items: center; gap: 6px;
+        }
+        .detail-item .detail-label i { color: #2563eb; font-size: 0.7rem; }
+        .detail-item .detail-value { font-size: 0.9rem; color: #0f172a; font-weight: 500; word-wrap: break-word; line-height: 1.5; }
+        .detail-item .detail-value.empty { color: #94a3b8; font-style: italic; font-weight: 400; }
+        .detail-item .detail-value a { color: #2563eb; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
+        .detail-item .detail-value a:hover { text-decoration: underline; color: #1d4ed8; }
+        .detail-badge {
+            display: inline-block; padding: 0.25rem 0.7rem; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .detail-badge.month { background: #dbeafe; color: #1e40af; }
+        .detail-footer {
+            display: flex; justify-content: flex-end; gap: 0.8rem;
+            padding-top: 1rem; border-top: 1px solid #e2e8f0; margin-top: 0.5rem;
+        }
+        .detail-footer .btn-edit-detail {
+            background: #f59e0b; color: white; border: none; padding: 0.7rem 1.5rem;
+            border-radius: 40px; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; gap: 8px; font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        }
+        .detail-footer .btn-edit-detail:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
+        .detail-footer .btn-close-detail {
+            background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;
+            padding: 0.7rem 1.5rem; border-radius: 40px; font-weight: 600;
+            font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        }
+        .detail-footer .btn-close-detail:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+
+        /* ===== CHART MODAL ===== */
+        .chart-modal .modal-box { max-width: 900px; }
+        .chart-modal .modal-body { padding: 1rem 1.5rem 1.5rem; overflow-y: auto; }
+        .chart-filter-row {
+            display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;
+            padding: 0.8rem 0 1.2rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 1rem;
+        }
+        .chart-filter-row .filter-group { display: flex; flex-direction: column; gap: 0.2rem; min-width: 130px; }
+        .chart-filter-row .filter-group label {
+            font-weight: 700; font-size: 0.6rem; text-transform: uppercase;
+            letter-spacing: 0.4px; color: #475569;
+        }
+        .chart-filter-row select {
+            padding: 0.4rem 0.7rem; border: 1.5px solid #cbd5e1;
+            border-radius: 10px; font-size: 0.8rem; outline: none;
+            background: white; font-family: "Inter", sans-serif;
+        }
+        .chart-filter-row select:focus { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15); }
+        .chart-filter-row .btn-apply-chart {
+            background: #8b5cf6; border: none; padding: 0.5rem 1.4rem;
+            border-radius: 30px; color: white; font-weight: 700; font-size: 0.8rem;
+            cursor: pointer; transition: all 0.3s ease; font-family: "Inter", sans-serif;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .chart-filter-row .btn-apply-chart:hover { background: #7c3aed; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
+        .chart-filter-row .btn-apply-chart:active { transform: scale(0.96); }
+        .chart-container-wrapper { position: relative; width: 100%; min-height: 350px; }
+        .chart-container-wrapper canvas { width: 100% !important; height: 350px !important; }
+        .chart-empty-msg { text-align: center; padding: 3rem 1rem; color: #94a3b8; font-size: 0.95rem; }
+
+        .editing-row td { background: #fef3c7 !important; }
+        .editing-row .action-cell .btn-action { display: none; }
+        .editing-row .action-cell .btn-save-edit, .editing-row .action-cell .btn-cancel-edit { display: inline-flex !important; }
+        .action-cell .btn-save-edit, .action-cell .btn-cancel-edit { display: none !important; }
+
+        /* ===== COLUMN WIDTHS ===== */
+        .col-meeting { min-width: 130px; max-width: 160px; }
+        .col-agenda { min-width: 160px; max-width: 220px; }
+        .col-date { min-width: 100px; max-width: 130px; }
+        .col-proponents { min-width: 110px; max-width: 140px; }
+        .col-month { min-width: 80px; max-width: 100px; }
+        .col-remarks { min-width: 100px; max-width: 130px; }
+        .col-mov { min-width: 100px; max-width: 130px; }
+        .col-personnel { min-width: 90px; max-width: 120px; }
+        .col-actions { min-width: 70px; max-width: 90px; }
+
+        /* ===== FOOTER ===== */
+        .footer-new {
+            background: #0a2540;
+            color: #b9d0e7;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #2d4f6e;
+        }
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .social-icons i {
+            font-size: 1.6rem;
+            margin-right: 1rem;
+            color: white;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .social-icons i:hover {
+            transform: translateY(-4px);
+            color: #3b82f6;
+        }
+        .footer-new .logo-image {
+            height: 40px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            margin-bottom: 12px;
+        }
+
+        /* ===== LOGIN MODAL ===== */
+        .login-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .login-modal.active {
+            display: flex;
+        }
+        .login-modal-content {
+            background: white;
+            border-radius: 2.5rem;
+            max-width: 460px;
+            width: 92%;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
+            animation: fadeUp 0.3s ease;
+        }
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .login-modal-brand {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            padding: 2rem 1.5rem 1.8rem;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        .login-modal-brand img {
+            width: 130px;
+            height: auto;
+            background: white;
+            border-radius: 20px;
+            padding: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            display: inline-block;
+            margin-bottom: 0.8rem;
+            transition: transform 0.2s;
+        }
+        .login-modal-brand img:hover {
+            transform: scale(1.02);
+        }
+        .login-modal-brand h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .login-modal-brand p {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            margin: 0;
+        }
+        .login-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .login-modal-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .login-modal-body {
+            padding: 2rem 1.8rem 1.8rem;
+        }
+        .login-modal-body .input-group {
+            margin-bottom: 1.3rem;
+        }
+        .login-modal-body .input-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #54708f;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.3px;
+        }
+        .login-modal-body .input-group input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .login-modal-body .input-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .login-submit-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 1.2rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.3rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-submit-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .login-submit-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .login-modal-footer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            padding: 0.4rem 0 1.2rem;
+            border-top: 1px solid #eef2ff;
+            margin: 0 1.8rem;
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            z-index: 9999;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast-msg.success { background: #166534; }
+        .toast-msg.error { background: #b91c1c; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .main-nav-links {
+                gap: 0.35rem;
+            }
+            .main-nav-links > a,
+            .main-nav-links > .dropdown > .dropbtn {
+                font-size: 0.75rem;
+                padding: 0.45rem 0.75rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .meetings-card { padding: 1.5rem; border-radius: 2rem; }
+            .form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+            .full-width { grid-column: 1; }
+            .meetings-header h1 { font-size: 1.2rem; }
+            .meetings-header-icon img { height: 42px; }
+            .meetings-header-badge { display: none; }
+            .btn-group { flex-direction: column; }
+            .pic-container { flex-direction: column; }
+            .pic-container select { width: 100%; }
+            .pic-btn { width: 100%; justify-content: center; }
+            .modal-box { max-width: 100vw; max-height: 98vh; border-radius: 16px; }
+            .modal-header { padding: 0.8rem 1rem; }
+            .modal-filters { padding: 0.6rem 1rem; flex-direction: column; align-items: stretch; }
+            .modal-filters select, .modal-filters input { min-width: 100%; max-width: 100%; }
+            .modal-search { padding: 0.6rem 1rem; flex-direction: column; }
+            .modal-search input { width: 100%; min-width: unset; }
+            .modal-body { padding: 0 0.8rem; }
+            .table-wrapper { max-height: calc(92vh - 350px); }
+            .modal-body table { font-size: 0.55rem; min-width: 1000px; }
+            .modal-body table th, .modal-body table td { padding: 0.15rem 0.15rem; }
+            .modal-body .action-cell .btn-action { font-size: 0.5rem; padding: 0.1rem 0.3rem; }
+            .modal-footer { padding: 0.6rem 1rem; flex-direction: column; text-align: center; }
+            .modal-overlay { padding: 0.3rem; }
+            .date-range-entry { flex-direction: column; align-items: stretch; padding: 10px 12px; }
+            .date-range-entry .range-label { text-align: center; }
+            .date-range-entry input[type="date"] { min-width: unset; }
+            .date-range-entry .range-separator { text-align: center; }
+            .date-range-entry .btn-remove-date { width: 100%; height: 36px; }
+            .detail-grid { grid-template-columns: 1fr; }
+            .detail-modal .modal-body { padding: 1rem; }
+            .detail-view-header { margin: -1rem -1rem 1rem -1rem; padding: 1.2rem 1rem; }
+            .detail-footer { flex-direction: column; }
+            .detail-footer button { width: 100%; justify-content: center; }
+            .chart-filter-row { flex-direction: column; align-items: stretch; }
+            .chart-filter-row .filter-group { min-width: 100%; }
+            .chart-filter-row .btn-apply-chart { width: 100%; justify-content: center; }
+            .top-bar { flex-direction: column; align-items: stretch; }
+            .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+
+            /* Mobile nav: allow wrapping and scroll */
+            .nav-bottom .container {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .main-nav-links {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                gap: 0.25rem;
+                padding: 0.1rem 0;
+            }
+            .main-nav-links > a,
+            .main-nav-links > .dropdown > .dropbtn {
+                font-size: 0.68rem;
+                padding: 0.4rem 0.6rem;
+                white-space: nowrap;
+            }
+            .dropdown-content {
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                top: auto;
+                bottom: 20px;
+                min-width: 260px;
+                max-width: 90vw;
+                z-index: 2000;
+            }
+            .submenu-content {
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                top: auto;
+                bottom: 20px;
+                min-width: 200px;
+                max-width: 85vw;
+                z-index: 2001;
+            }
+            .dropdown-submenu.open .submenu-content {
+                display: block;
+            }
+        }
+        @media (max-width: 400px) {
+            .meetings-card { padding: 1rem; }
+            .field-group input, .field-group select, .field-group textarea {
+                padding: 0.6rem 0.9rem; font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <div class="container">
+        <div class="top-bar">
+            <div class="logo-area-header">
+                <div class="header-logo-img">
+                    <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="height:40px"/>
+                    <span>DHSUD VI - ELUPDD | CLUP & ZO Integrated System</span>
+                </div>
+            </div>
+            <div class="nav-right" id="userMenuContainer"></div>
+        </div>
+    </div>
+    <div class="nav-bottom">
+        <div class="container">
+            <div class="main-nav-links" id="mainNavContainer"></div>
+        </div>
+    </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main>
+    <div class="container">
+        <div class="meetings-card" id="mainCard">
+            <div class="meetings-header">
+                <div class="meetings-header-left">
+                    <div class="meetings-header-icon">
+                        <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-handshake\' style=\'font-size:1.6rem;color:#1e3a8a;\'></i>';" />
+                    </div>
+                    <div>
+                        <h1>
+                            ELUPDD Meetings Attended
+                            <small>Meetings and Attendances Management System</small>
+                        </h1>
+                    </div>
+                </div>
+                <div class="meetings-header-badge">
+                    <i class="fas fa-circle" style="font-size: 0.4rem; color: #00c896;"></i>
+                    <span>Live</span>
+                </div>
+            </div>
+
+            <!-- ===== MEETINGS ATTENDED FORM ===== -->
+            <form id="meetingsForm">
+                <div class="form-grid">
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-handshake"></i> Meeting <span class="required">*</span></label>
+                        <input type="text" id="meeting" placeholder="Enter meeting title or description..." required>
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-list-check"></i> Agenda / Objectives <span class="required">*</span></label>
+                        <textarea id="agenda" placeholder="Enter agenda or objectives..." rows="3" required></textarea>
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-calendar-alt"></i> Date of Meeting (MM/DD/YYYY) <span class="required">*</span></label>
+                        <div class="date-list-container" id="dateListContainer"></div>
+                        <button type="button" class="btn-add-date" id="addDateBtn">
+                            <i class="fas fa-plus-circle"></i> Add Another Date Range
+                        </button>
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-users"></i> Proponents <span class="required">*</span></label>
+                        <input type="text" id="proponents" placeholder="Enter proponents / organizers..." required>
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
+                        <select id="reportingMonth" required>
+                            <option value="">Select Month...</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-pencil-alt"></i> Remarks</label>
+                        <input type="text" id="remarks" placeholder="N/A or additional notes">
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-link"></i> Link to MOV</label>
+                        <input type="url" id="linkMov" placeholder="https://drive.google.com/...">
+                    </div>
+
+                    <div class="field-group full-width">
+                        <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
+                        <div class="pic-container">
+                            <select id="pic" required>
+                                <option value="">Select Person...</option>
+                            </select>
+                            <button type="button" class="pic-btn pic-btn-add" id="addPic">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                            <button type="button" class="pic-btn pic-btn-delete" id="deletePic">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Save to Google Sheet</span>
+                </button>
+            </form>
+
+            <div class="btn-group">
+                <button type="button" class="btn-test btn-view-all" id="viewAllBtn">
+                    <i class="fas fa-database"></i> View All Records
+                </button>
+                <button type="button" class="btn-test btn-view-chart" id="viewChartBtn">
+                    <i class="fas fa-chart-bar"></i> View Chart
+                </button>
+                <button type="button" class="btn-test btn-sheet" id="sheetBtn">
+                    <i class="fas fa-external-link-alt"></i> View Google Sheet
+                </button>
+            </div>
+
+            <div id="statusMessage" class="status-message">
+                <i class="fas fa-info-circle"></i>
+                <span id="statusText">Ready · fill in all required fields</span>
+            </div>
+
+            <div class="footer-note">
+                <i class="fas fa-database"></i> Data saved directly to Google Sheets via Apps Script
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer-new">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <img src="img/DHSUD_LOGO.png" alt="logo" class="logo-image" /><br />
+                <strong>DHSUD Region VI</strong><br />ELUPDD – CLUP & ZO Platform<br />Geospatial Innovation for Resilience
+            </div>
+            <div>
+                <strong>Our Social Networks</strong><br />Follow us for updates<br />
+                <div class="social-icons">
+                    <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
+    </div>
+</footer>
+
+<!-- ===== RECORDS MODAL ===== -->
+<div class="modal-overlay" id="recordsModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">All Meetings Attended</span></h2>
+            <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-filters">
+            <div class="filter-group">
+                <label for="filterReportingMonth">Reporting Month:</label>
+                <select id="filterReportingMonth">
+                    <option value="all">All Months</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filterPIC">Personnel:</label>
+                <select id="filterPIC">
+                    <option value="all">All Personnel</option>
+                </select>
+            </div>
+            <button class="filter-btn" id="applyRecordFilter"><i class="fas fa-filter"></i> Apply</button>
+            <button class="filter-btn reset-btn" id="resetRecordFilter"><i class="fas fa-undo"></i> Reset</button>
+        </div>
+        <div class="modal-search">
+            <input type="text" id="searchInput" placeholder="🔍 Search by meeting, agenda, proponents...">
+            <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
+        </div>
+        <div class="modal-body">
+            <div class="table-wrapper" id="tableWrapper">
+                <div id="modalBodyContent">
+                    <div style="text-align:center; padding: 2rem; color: #94a3b8;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                        <p style="margin-top: 1rem;">Loading records...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="record-count">Total: <span id="footerTotalCount">0</span> record(s) · 💡 <em>Click any row to view details</em></span>
+            <button class="btn-close-modal" id="closeModalBtn2">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== DETAIL VIEW MODAL ===== -->
+<div class="modal-overlay detail-modal" id="detailModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-file-alt"></i> Record Details</h2>
+            <button class="close-btn" id="closeDetailBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" id="detailBodyContent"></div>
+    </div>
+</div>
+
+<!-- ===== ADD PERSON MODAL ===== -->
+<div class="modal-overlay add-person-modal" id="addPersonModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-user-plus"></i> Add Person</h2>
+            <button class="close-btn" id="closeAddPersonBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="field-group">
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" id="newPersonName" placeholder="Enter full name..." style="padding: 0.75rem 1.1rem; border: 1.5px solid #cbd5e1; border-radius: 16px; font-size: 0.9rem; width: 100%; outline: none; font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;">
+                <div class="error-msg" id="personError">Please enter a name.</div>
+            </div>
+            <button class="btn-add-person" id="confirmAddPerson">
+                <i class="fas fa-check"></i> Add Person
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CHART MODAL ===== -->
+<div class="modal-overlay chart-modal" id="chartModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-chart-bar"></i> Meetings Attended · Monthly Overview</h2>
+            <button class="close-btn" id="closeChartBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="chart-filter-row">
+                <div class="filter-group">
+                    <label for="chartFilterMonth">Month</label>
+                    <select id="chartFilterMonth">
+                        <option value="all">All Months</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="chartFilterYear">Year</label>
+                    <select id="chartFilterYear">
+                        <option value="all">All Years</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="chartFilterPIC">Personnel In-Charge</label>
+                    <select id="chartFilterPIC">
+                        <option value="all">All Personnel</option>
+                    </select>
+                </div>
+                <button class="btn-apply-chart" id="applyChartFilter"><i class="fas fa-chart-simple"></i> Apply Filter</button>
+            </div>
+
+            <div class="chart-container-wrapper" id="chartWrapper">
+                <canvas id="meetingsChart"></canvas>
+            </div>
+            <div class="chart-empty-msg" id="chartEmptyMsg" style="display:none;">
+                <i class="fas fa-chart-bar" style="font-size:2rem; opacity:0.5; margin-bottom:0.5rem; display:block;"></i>
+                No data available for the selected filters.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="record-count">📊 Data grouped by <strong>Reporting Month</strong></span>
+            <button class="btn-close-modal" id="closeChartBtn2">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+        <div class="login-modal-brand">
+            <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <h3>DHSUD Region VI</h3>
+            <p>ELUPDD · CLUP & ZO Platform</p>
+        </div>
+        <div class="login-modal-body">
+            <form id="modalLoginForm">
+                <div class="input-group">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+                </div>
+                <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
+            </form>
+        </div>
+        <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzbfyX8R6EKi4BEU5Zem-BKrdchTSGJOqBL9-PU_I1XNLoFMEquW1AZvxht5rNyz9yn/exec';
+    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1asn7RHb2UTGhj1WZLH_fVulU9mxK4cu6C1kNy71PAsM/edit?usp=sharing';
+
+    // ============================================
+    // PERSONNEL IN-CHARGE DATA
+    // ============================================
+    let picNames = [];
+
+    async function loadPICNamesFromSheet() {
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=getPIC', { method: 'GET' });
+            const result = await response.json();
+            if (result.result === 'success' && result.names) {
+                picNames = result.names;
+            } else {
+                picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+            }
+        } catch (error) {
+            console.error('Error loading PIC names:', error);
+            picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+        }
+        populatePicDropdowns();
+        updatePICFilters();
+        updateChartPICFilter();
+        return picNames;
+    }
+
+    async function savePICNamesToSheet(names) {
+        try {
+            const encodedNames = encodeURIComponent(JSON.stringify(names));
+            const url = WEB_APP_URL + '?action=savePIC&names=' + encodedNames;
+            await fetch(url, { method: 'GET', mode: 'no-cors' });
+            return true;
+        } catch (error) {
+            console.error('Error saving PIC names:', error);
+            return false;
+        }
+    }
+
+    function populatePicDropdowns() {
+        const select = document.getElementById('pic');
+        if (!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Select Person...</option>';
+        picNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            select.appendChild(opt);
+        });
+        if (currentValue && picNames.includes(currentValue)) select.value = currentValue;
+    }
+
+    function updatePICFilters() {
+        const filterPIC = document.getElementById('filterPIC');
+        if (filterPIC) {
+            const currentValue = filterPIC.value;
+            filterPIC.innerHTML = '<option value="all">All Personnel</option>';
+            picNames.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                filterPIC.appendChild(opt);
+            });
+            if (currentValue && picNames.includes(currentValue)) filterPIC.value = currentValue;
+            else filterPIC.value = 'all';
+        }
+    }
+
+    function updateChartPICFilter() {
+        const chartPIC = document.getElementById('chartFilterPIC');
+        if (!chartPIC) return;
+        const currentValue = chartPIC.value;
+        chartPIC.innerHTML = '<option value="all">All Personnel</option>';
+        picNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            chartPIC.appendChild(opt);
+        });
+        if (currentValue && picNames.includes(currentValue)) chartPIC.value = currentValue;
+        else chartPIC.value = 'all';
+    }
+
+    // ============================================
+    // ADD PERSON MODAL
+    // ============================================
+    const addPersonModal = document.getElementById('addPersonModal');
+    const newPersonName = document.getElementById('newPersonName');
+    const personError = document.getElementById('personError');
+
+    function openAddPersonModal() {
+        newPersonName.value = '';
+        personError.classList.remove('show');
+        addPersonModal.classList.add('active');
+        setTimeout(() => newPersonName.focus(), 100);
+    }
+
+    function closeAddPersonModal() { addPersonModal.classList.remove('active'); }
+
+    document.getElementById('closeAddPersonBtn').addEventListener('click', closeAddPersonModal);
+    addPersonModal.addEventListener('click', function(e) { if (e.target === addPersonModal) closeAddPersonModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAddPersonModal(); });
+
+    document.getElementById('confirmAddPerson').addEventListener('click', async function() {
+        const name = newPersonName.value.trim();
+        if (!name) { personError.classList.add('show'); return; }
+        personError.classList.remove('show');
+        if (picNames.includes(name)) {
+            personError.textContent = 'This name already exists.';
+            personError.classList.add('show');
+            return;
+        }
+        picNames.push(name);
+        populatePicDropdowns();
+        updatePICFilters();
+        updateChartPICFilter();
+        await savePICNamesToSheet(picNames);
+        const targetSelect = document.getElementById('pic');
+        if (targetSelect) targetSelect.value = name;
+        showToast('✅ Success', `"${name}" added to Personnel In-Charge list.`, 'success');
+        closeAddPersonModal();
+    });
+
+    newPersonName.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('confirmAddPerson').click(); }
+    });
+
+    // ============================================
+    // DELETE PERSON
+    // ============================================
+    async function deleteSelectedPerson() {
+        const select = document.getElementById('pic');
+        const selectedName = select.value;
+        if (!selectedName) { showToast('⚠️ Warning', 'Please select a person to delete.', 'warning'); return; }
+        if (!confirm('Are you sure you want to remove "' + selectedName + '" from the list?')) return;
+        const index = picNames.indexOf(selectedName);
+        if (index > -1) {
+            picNames.splice(index, 1);
+            populatePicDropdowns();
+            updatePICFilters();
+            updateChartPICFilter();
+            await savePICNamesToSheet(picNames);
+            showToast('🗑️ Removed', `"${selectedName}" removed from Personnel In-Charge list.`, 'info');
+        }
+    }
+
+    // ============================================
+    // DATE RANGE ENTRY MANAGEMENT
+    // ============================================
+    let dateCounter = 0;
+
+    function createDateRangeEntry(startValue = '', endValue = '') {
+        dateCounter++;
+        const entry = document.createElement('div');
+        entry.className = 'date-range-entry';
+        entry.dataset.dateId = dateCounter;
+        entry.innerHTML = `
+            <span class="range-label"><i class="fas fa-calendar-alt"></i> From</span>
+            <input type="date" class="date-start" value="${startValue}">
+            <span class="range-separator">→</span>
+            <span class="range-label"><i class="fas fa-calendar-check"></i> To</span>
+            <input type="date" class="date-end" value="${endValue}">
+            <button type="button" class="btn-remove-date" title="Remove this date range">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        entry.querySelector('.btn-remove-date').addEventListener('click', function() {
+            const container = document.getElementById('dateListContainer');
+            if (container.children.length > 1) entry.remove();
+            else showToast('⚠️ Warning', 'At least one date range is required.', 'warning');
+        });
+        return entry;
+    }
+
+    function addDateRangeEntry(startValue = '', endValue = '') {
+        const container = document.getElementById('dateListContainer');
+        container.appendChild(createDateRangeEntry(startValue, endValue));
+    }
+
+    function getDateRangeValues() {
+        const entries = document.querySelectorAll('#dateListContainer .date-range-entry');
+        const ranges = [];
+        entries.forEach(entry => {
+            const start = entry.querySelector('.date-start').value;
+            const end = entry.querySelector('.date-end').value;
+            if (start || end) {
+                ranges.push({ start: start, end: end });
+            }
+        });
+        return ranges;
+    }
+
+    function resetDateEntries() {
+        const container = document.getElementById('dateListContainer');
+        container.innerHTML = '';
+        dateCounter = 0;
+        addDateRangeEntry();
+    }
+
+    function attachAddDateButtonListener() {
+        const addDateBtn = document.getElementById('addDateBtn');
+        if (addDateBtn) {
+            const newBtn = addDateBtn.cloneNode(true);
+            addDateBtn.parentNode.replaceChild(newBtn, addDateBtn);
+            newBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                addDateRangeEntry();
+                showToast('📅 Added', 'Another date range entry was added. Please select start and end dates.', 'info', 2000);
+            });
+        }
+    }
+
+    // ============================================
+    // FORMAT DATE (always MM/DD/YYYY)
+    // ============================================
+    function formatDate(dateValue) {
+        if (dateValue === null || dateValue === undefined || dateValue === '' || dateValue === '-') return '-';
+
+        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) return dateValue;
+
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(dateValue)) {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+                const day   = String(d.getUTCDate()).padStart(2, '0');
+                const year  = d.getUTCFullYear();
+                return month + '/' + day + '/' + year;
+            }
+        }
+
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            const parts = dateValue.split('-');
+            return parts[1] + '/' + parts[2] + '/' + parts[0];
+        }
+
+        if (dateValue instanceof Date) {
+            const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+            const day = String(dateValue.getDate()).padStart(2, '0');
+            const year = dateValue.getFullYear();
+            return month + '/' + day + '/' + year;
+        }
+
+        try {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                const year = d.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+        } catch (e) {}
+
+        return dateValue;
+    }
+
+    function formatDateRange(start, end) {
+        const startFormatted = formatDate(start);
+        const endFormatted = formatDate(end);
+        if (startFormatted && endFormatted && startFormatted !== '-' && endFormatted !== '-') {
+            return startFormatted + ' - ' + endFormatted;
+        } else if (startFormatted && startFormatted !== '-') {
+            return startFormatted;
+        } else if (endFormatted && endFormatted !== '-') {
+            return endFormatted;
+        }
+        return '-';
+    }
+
+    function escapeHtml(text) {
+        if (text === null || text === undefined) return '';
+        const div = document.createElement('div');
+        div.textContent = String(text);
+        return div.innerHTML;
+    }
+
+    // ============================================
+    // GET FORM DATA
+    // ============================================
+    function getFormData() {
+        const ranges = getDateRangeValues();
+        const formattedDates = ranges.map(r => formatDateRange(r.start, r.end)).filter(s => s !== '-').join(', ');
+        return {
+            meeting: document.getElementById('meeting').value.trim(),
+            agenda: document.getElementById('agenda').value.trim(),
+            dateOfMeeting: formattedDates,
+            proponents: document.getElementById('proponents').value.trim(),
+            reportingMonth: document.getElementById('reportingMonth').value,
+            remarks: document.getElementById('remarks').value.trim() || 'N/A',
+            linkMov: document.getElementById('linkMov').value.trim() || '',
+            personnelInCharge: document.getElementById('pic').value
+        };
+    }
+
+    function validateForm(payload) {
+        const required = ['meeting', 'agenda', 'dateOfMeeting', 'proponents', 'reportingMonth', 'personnelInCharge'];
+        for (const field of required) {
+            if (!payload[field]) {
+                showToast('❌ Validation Error', 'Please fill in all required fields (including at least one date range).', 'error');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function resetForm() {
+        document.getElementById('meetingsForm').reset();
+        resetDateEntries();
+        document.getElementById('reportingMonth').value = '';
+        document.getElementById('pic').value = '';
+        setStatus('Ready · fill in all required fields', 'info');
+    }
+
+    // ============================================
+    // STATUS MESSAGE
+    // ============================================
+    const statusDiv = document.getElementById('statusMessage');
+    const statusText = document.getElementById('statusText');
+
+    function setStatus(message, type = 'info') {
+        statusText.textContent = message;
+        statusDiv.className = 'status-message';
+        const icon = statusDiv.querySelector('i');
+        if (type === 'success') { statusDiv.classList.add('success'); icon.className = 'fas fa-check-circle'; }
+        else if (type === 'error') { statusDiv.classList.add('error'); icon.className = 'fas fa-exclamation-circle'; }
+        else { icon.className = 'fas fa-info-circle'; }
+    }
+
+    // ============================================
+    // TOAST NOTIFICATION (simple version)
+    // ============================================
+    function showToast(title, message, type = 'info', duration = 4000) {
+        const existing = document.querySelector('.toast-msg');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-msg ' + (type === 'success' ? 'success' : type === 'error' ? 'error' : '');
+        toast.textContent = title + ' ' + message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), duration);
+    }
+
+    // ============================================
+    // FORM SUBMIT
+    // ============================================
+    document.getElementById('meetingsForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const payload = getFormData();
+        if (!validateForm(payload)) return;
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Saving...';
+        try {
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            showToast('✅ Success', 'Meeting record saved to Google Sheet!', 'success');
+            setStatus('✅ Record saved successfully!', 'success');
+            resetForm();
+        } catch (error) {
+            showToast('❌ Error', 'Failed to save record: ' + error.message, 'error');
+            setStatus('❌ Failed to save record.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet</span>';
+        }
+    });
+
+    // ============================================
+    // RECORDS MODAL
+    // ============================================
+    const recordsModal = document.getElementById('recordsModal');
+    const searchInput = document.getElementById('searchInput');
+    const displayCount = document.getElementById('displayCount');
+    const totalCount = document.getElementById('totalCount');
+    const footerTotalCount = document.getElementById('footerTotalCount');
+    const modalBodyContent = document.getElementById('modalBodyContent');
+    const filterReportingMonth = document.getElementById('filterReportingMonth');
+    const filterPIC = document.getElementById('filterPIC');
+
+    let allRecords = [];
+    let filteredRecords = [];
+    let editingRowNumber = null;
+
+    function closeRecordsModal() { recordsModal.classList.remove('active'); document.body.style.overflow = 'auto'; editingRowNumber = null; }
+    function openRecordsModal() { recordsModal.classList.add('active'); document.body.style.overflow = 'hidden'; loadRecords(); }
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeRecordsModal);
+    document.getElementById('closeModalBtn2').addEventListener('click', closeRecordsModal);
+    recordsModal.addEventListener('click', function(e) { if (e.target === recordsModal) closeRecordsModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeRecordsModal(); });
+
+    async function loadRecords() {
+        modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p style="margin-top: 1rem;">Loading records...</p></div>`;
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=records', { method: 'GET' });
+            const result = await response.json();
+            if (result.result === 'success') {
+                allRecords = result.records || [];
+                filteredRecords = [...allRecords];
+                totalCount.textContent = allRecords.length;
+                footerTotalCount.textContent = allRecords.length;
+                renderTable(allRecords);
+                displayCount.textContent = allRecords.length;
+            } else {
+                modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error loading records: ${result.message}</div>`;
+            }
+        } catch (error) {
+            modalBodyContent.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load records: ${error.message}</div>`;
+        }
+    }
+
+    // ===== RENDER TABLE =====
+    function renderTable(records) {
+        if (picNames.length === 0) picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
+
+        if (!records || records.length === 0) {
+            modalBodyContent.innerHTML = `<table><thead><tr><th>#</th><th class="col-meeting">Meeting</th><th class="col-agenda">Agenda / Objectives</th><th class="col-date">Date of Meeting</th><th class="col-proponents">Proponents</th><th class="col-month">Reporting Month</th><th class="col-remarks">Remarks</th><th class="col-mov">Link to MOV</th><th class="col-personnel">Personnel</th><th class="col-actions">Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="10">📭 No records found.</td></tr></tbody></table>`;
+            displayCount.textContent = '0';
+            return;
+        }
+
+        const columns = [
+            { key: 'Meeting', label: 'Meeting', cls: 'col-meeting' },
+            { key: 'Agenda / Objectives', label: 'Agenda / Objectives', cls: 'col-agenda' },
+            { key: 'Date of Meeting', label: 'Date of Meeting', cls: 'col-date' },
+            { key: 'Proponents', label: 'Proponents', cls: 'col-proponents' },
+            { key: 'Reporting Month', label: 'Reporting Month', cls: 'col-month' },
+            { key: 'Remarks', label: 'Remarks', cls: 'col-remarks' },
+            { key: 'Link to MOV', label: 'Link to MOV', cls: 'col-mov' },
+            { key: 'Personnel In-Charge', label: 'Personnel', cls: 'col-personnel' }
+        ];
+
+        let html = `<table><thead><tr><th style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; min-width:30px;">#</th>`;
+        columns.forEach(col => html += `<th class="${col.cls}" style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; white-space:nowrap;">${col.label}</th>`);
+        html += `<th class="col-actions" style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; white-space:nowrap;">Actions</th></tr></thead><tbody>`;
+
+        records.forEach((record, index) => {
+            const rowNum = index + 1;
+            const actualRow = index + 2;
+            const isEditing = editingRowNumber === actualRow;
+            const rowClass = isEditing ? 'editing-row' : 'clickable-row';
+
+            html += `<tr class="${rowClass}" data-row="${actualRow}" ${!isEditing ? `onclick="openDetailView(${actualRow})"` : ''}>`;
+            html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; text-align:center;">${rowNum}</td>`;
+
+            columns.forEach(col => {
+                let value = record[col.key] || '-';
+
+                if (col.key === 'Date of Meeting') value = formatDate(value);
+
+                if (isEditing) {
+                    const fieldName = col.key.replace(/ /g, '_').replace(/\//g, '_');
+                    if (col.key === 'Agenda / Objectives' || col.key === 'Remarks' || col.key === 'Link to MOV') {
+                        html += `<td><textarea name="${fieldName}" data-key="${col.key}" rows="1" style="width:100%; min-width:80px; max-width:150px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;" onclick="event.stopPropagation()">${value}</textarea></td>`;
+                    } else if (col.key === 'Personnel In-Charge') {
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:80px; max-width:120px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;" onclick="event.stopPropagation()"><option value="">Select...</option>`;
+                        picNames.forEach(name => { html += `<option value="${name}" ${name === value ? 'selected' : ''}>${name}</option>`; });
+                        html += `</select></td>`;
+                    } else if (col.key === 'Reporting Month') {
+                        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;"><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:100px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;" onclick="event.stopPropagation()">`;
+                        months.forEach(m => { html += `<option value="${m}" ${m === value ? 'selected' : ''}>${m}</option>`; });
+                        html += `</select></td>`;
+                    } else {
+                        html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;"><input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; max-width:130px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;" onclick="event.stopPropagation()"></td>`;
+                    }
+                } else {
+                    let displayValue = value;
+                    if (displayValue.length > 18) displayValue = displayValue.substring(0, 18) + '…';
+                    if (col.key === 'Link to MOV' && value && value !== '-') {
+                        html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; font-size:0.65rem; max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><a href="${value}" target="_blank" style="color:#2563eb; text-decoration:underline;" onclick="event.stopPropagation()">Open Link</a></td>`;
+                    } else {
+                        html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${displayValue}</td>`;
+                    }
+                }
+            });
+
+            html += `<td class="action-cell" style="padding:0.2rem 0.2rem; border-bottom:1px solid #f1f5f9; white-space:nowrap;">`;
+            if (isEditing) {
+                html += `<button class="btn-action btn-save-edit" onclick="event.stopPropagation(); saveEditRow(${actualRow})" id="saveBtn_${actualRow}" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#10b981; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-save"></i><span class="btn-spinner"></span></button>`;
+                html += `<button class="btn-action btn-cancel-edit" onclick="event.stopPropagation(); cancelEditRow()" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#6b7280; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-times"></i></button>`;
+            } else {
+                html += `<button class="btn-action btn-edit" onclick="event.stopPropagation(); startEditRow(${actualRow})" title="Edit" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#f59e0b; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-pen"></i></button>`;
+                html += `<button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteRecord(${actualRow})" id="deleteBtn_${actualRow}" title="Delete" style="padding:0.1rem 0.4rem; border:none; border-radius:4px; font-size:0.55rem; font-weight:600; cursor:pointer; background:#ef4444; color:white; font-family:'Inter',sans-serif;"><i class="fas fa-trash"></i><span class="btn-spinner"></span></button>`;
+            }
+            html += `</td></tr>`;
+        });
+
+        html += `</tbody></table>`;
+        modalBodyContent.innerHTML = html;
+        displayCount.textContent = records.length;
+    }
+
+    // ============================================
+    // DETAIL VIEW MODAL
+    // ============================================
+    const detailModal = document.getElementById('detailModal');
+    const detailBodyContent = document.getElementById('detailBodyContent');
+
+    function openDetailView(rowNumber) {
+        const recordIndex = rowNumber - 2;
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); return; }
+
+        const record = filteredRecords[recordIndex];
+        const meeting = record['Meeting'] || 'Untitled Meeting';
+        const reportingMonth = record['Reporting Month'] || '';
+        const linkMov = record['Link to MOV'] || '';
+
+        let linkHtml = '<span class="empty">Not provided</span>';
+        if (linkMov && linkMov !== '-' && linkMov !== 'N/A') linkHtml = `<a href="${escapeHtml(linkMov)}" target="_blank"><i class="fas fa-external-link-alt"></i> Open MOV Link</a>`;
+
+        const html = `
+            <div class="detail-view-header">
+                <h3><i class="fas fa-handshake"></i> ${escapeHtml(meeting)}</h3>
+                <p><i class="fas fa-calendar-check"></i> ${escapeHtml(reportingMonth || 'No reporting month')}</p>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item full-width">
+                    <div class="detail-label"><i class="fas fa-list-check"></i> Agenda / Objectives</div>
+                    <div class="detail-value ${!record['Agenda / Objectives'] ? 'empty' : ''}">${escapeHtml(record['Agenda / Objectives']) || 'Not provided'}</div>
+                </div>
+                <div class="detail-item full-width">
+                    <div class="detail-label"><i class="fas fa-calendar-alt"></i> Date of Meeting</div>
+                    <div class="detail-value ${!record['Date of Meeting'] ? 'empty' : ''}">${escapeHtml(record['Date of Meeting']) || 'Not provided'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label"><i class="fas fa-users"></i> Proponents</div>
+                    <div class="detail-value ${!record['Proponents'] ? 'empty' : ''}">${escapeHtml(record['Proponents']) || 'Not provided'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label"><i class="fas fa-calendar-check"></i> Reporting Month</div>
+                    <div class="detail-value">${reportingMonth ? `<span class="detail-badge month">${escapeHtml(reportingMonth)}</span>` : '<span class="empty">Not set</span>'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label"><i class="fas fa-user"></i> Personnel In-Charge</div>
+                    <div class="detail-value ${!record['Personnel In-Charge'] ? 'empty' : ''}">${escapeHtml(record['Personnel In-Charge']) || 'Not assigned'}</div>
+                </div>
+                <div class="detail-item full-width">
+                    <div class="detail-label"><i class="fas fa-pencil-alt"></i> Remarks</div>
+                    <div class="detail-value ${!record['Remarks'] ? 'empty' : ''}">${escapeHtml(record['Remarks']) || 'N/A'}</div>
+                </div>
+                <div class="detail-item full-width">
+                    <div class="detail-label"><i class="fas fa-link"></i> Link to MOV</div>
+                    <div class="detail-value">${linkHtml}</div>
+                </div>
+            </div>
+            <div class="detail-footer">
+                <button class="btn-close-detail" onclick="closeDetailView()"><i class="fas fa-times"></i> Close</button>
+                <button class="btn-edit-detail" onclick="editFromDetail(${rowNumber})"><i class="fas fa-pen"></i> Edit This Record</button>
+            </div>
+        `;
+        detailBodyContent.innerHTML = html;
+        detailModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailView() {
+        detailModal.classList.remove('active');
+        if (!recordsModal.classList.contains('active')) document.body.style.overflow = 'auto';
+    }
+
+    function editFromDetail(rowNumber) { closeDetailView(); startEditRow(rowNumber); }
+
+    document.getElementById('closeDetailBtn').addEventListener('click', closeDetailView);
+    detailModal.addEventListener('click', function(e) { if (e.target === detailModal) closeDetailView(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { if (detailModal.classList.contains('active')) closeDetailView(); } });
+
+    window.openDetailView = openDetailView;
+    window.closeDetailView = closeDetailView;
+    window.editFromDetail = editFromDetail;
+
+    window.startEditRow = function(rowNumber) {
+        if (detailModal.classList.contains('active')) closeDetailView();
+        editingRowNumber = rowNumber;
+        applyRecordFilters();
+    };
+
+    window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
+
+    window.saveEditRow = async function(rowNumber) {
+        const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
+        if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
+        const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
+        if (!row) { showToast('❌ Error', 'Row not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
+
+        const inputs = row.querySelectorAll('input, select, textarea');
+        const updatedData = {};
+        inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
+
+        const recordIndex = rowNumber - 2;
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
+        const originalRecord = filteredRecords[recordIndex];
+
+        const payload = {
+            action: 'updateRecord',
+            rowNumber: rowNumber,
+            formType: 'MEETINGS',
+            data: {
+                meeting: updatedData['Meeting'] || originalRecord['Meeting'] || '',
+                agenda: updatedData['Agenda / Objectives'] || originalRecord['Agenda / Objectives'] || '',
+                dateOfMeeting: updatedData['Date of Meeting'] || originalRecord['Date of Meeting'] || '',
+                proponents: updatedData['Proponents'] || originalRecord['Proponents'] || '',
+                reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
+                remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
+                linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
+                personnelInCharge: updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || ''
+            }
+        };
+
+        try {
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            showToast('✅ Success', 'Record updated successfully!', 'success');
+            editingRowNumber = null;
+            await loadRecords();
+        } catch (error) {
+            showToast('❌ Error', 'Failed to update record: ' + error.message, 'error');
+        } finally {
+            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+        }
+    };
+
+    window.deleteRecord = async function(rowNumber) {
+        if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) return;
+        const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
+        if (deleteBtn) { deleteBtn.classList.add('loading'); deleteBtn.disabled = true; }
+        try {
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'MEETINGS' }) });
+            showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
+            editingRowNumber = null;
+            await loadRecords();
+        } catch (error) {
+            showToast('❌ Error', 'Failed to delete record: ' + error.message, 'error');
+        } finally {
+            if (deleteBtn) { deleteBtn.classList.remove('loading'); deleteBtn.disabled = false; }
+        }
+    };
+
+    // ============================================
+    // FILTERS
+    // ============================================
+    function applyRecordFilters() {
+        const monthFilter = filterReportingMonth.value;
+        const picFilter = filterPIC.value;
+        filteredRecords = allRecords.filter(record => {
+            if (monthFilter !== 'all') { if ((record['Reporting Month'] || '') !== monthFilter) return false; }
+            if (picFilter !== 'all') { if ((record['Personnel In-Charge'] || '') !== picFilter) return false; }
+            return true;
+        });
+        renderTable(filteredRecords);
+        displayCount.textContent = filteredRecords.length;
+        footerTotalCount.textContent = filteredRecords.length;
+        editingRowNumber = null;
+    }
+
+    document.getElementById('applyRecordFilter').addEventListener('click', applyRecordFilters);
+    document.getElementById('resetRecordFilter').addEventListener('click', function() {
+        filterReportingMonth.value = 'all';
+        filterPIC.value = 'all';
+        applyRecordFilters();
+    });
+
+    searchInput.addEventListener('input', function() {
+        const term = this.value.trim().toLowerCase();
+        if (!term) { applyRecordFilters(); return; }
+        const filtered = filteredRecords.filter(r => {
+            const meeting = (r['Meeting'] || '').toLowerCase();
+            const agenda = (r['Agenda / Objectives'] || '').toLowerCase();
+            const proponents = (r['Proponents'] || '').toLowerCase();
+            return meeting.includes(term) || agenda.includes(term) || proponents.includes(term);
+        });
+        renderTable(filtered);
+        displayCount.textContent = filtered.length;
+        editingRowNumber = null;
+    });
+
+    // ============================================
+    // CHART MODAL
+    // ============================================
+    const chartModal = document.getElementById('chartModal');
+    const chartFilterMonth = document.getElementById('chartFilterMonth');
+    const chartFilterYear = document.getElementById('chartFilterYear');
+    const chartFilterPIC = document.getElementById('chartFilterPIC');
+    const applyChartFilter = document.getElementById('applyChartFilter');
+    let meetingsChartInstance = null;
+    let chartRecords = [];
+
+    async function fetchChartRecords() {
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=records', { method: 'GET' });
+            const result = await response.json();
+            if (result.result === 'success') {
+                chartRecords = result.records || [];
+            } else {
+                chartRecords = [];
+                showToast('⚠️ Warning', 'Could not load chart data: ' + result.message, 'warning');
+            }
+        } catch (error) {
+            chartRecords = [];
+            showToast('❌ Error', 'Failed to load chart data: ' + error.message, 'error');
+        }
+    }
+
+    async function openChartModal() {
+        chartModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('chartWrapper').innerHTML = '<div style="text-align:center; padding: 3rem; color:#94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size:2rem;"></i><p style="margin-top:1rem;">Loading chart data...</p></div>';
+        document.getElementById('chartEmptyMsg').style.display = 'none';
+
+        await fetchChartRecords();
+        populateChartYearFilter();
+        renderChart();
+    }
+
+    function closeChartModal() {
+        chartModal.classList.remove('active');
+        if (!recordsModal.classList.contains('active')) document.body.style.overflow = 'auto';
+        if (meetingsChartInstance) { meetingsChartInstance.destroy(); meetingsChartInstance = null; }
+    }
+
+    document.getElementById('closeChartBtn').addEventListener('click', closeChartModal);
+    document.getElementById('closeChartBtn2').addEventListener('click', closeChartModal);
+    chartModal.addEventListener('click', function(e) { if (e.target === chartModal) closeChartModal(); });
+
+    function populateChartYearFilter() {
+        const yearSelect = document.getElementById('chartFilterYear');
+        const currentValue = yearSelect.value;
+        const yearsSet = new Set();
+        chartRecords.forEach(record => {
+            const dateStr = record['Date of Meeting'] || '';
+            const matches = dateStr.match(/\d{4}/g);
+            if (matches) matches.forEach(y => yearsSet.add(y));
+        });
+        const sortedYears = Array.from(yearsSet).sort();
+        yearSelect.innerHTML = '<option value="all">All Years</option>';
+        sortedYears.forEach(y => {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            yearSelect.appendChild(opt);
+        });
+        if (currentValue && sortedYears.includes(currentValue)) yearSelect.value = currentValue;
+        else yearSelect.value = 'all';
+    }
+
+    function getFilteredChartRecords() {
+        const monthFilter = chartFilterMonth.value;
+        const yearFilter = chartFilterYear.value;
+        const picFilter = chartFilterPIC.value;
+
+        return chartRecords.filter(record => {
+            if (monthFilter !== 'all') {
+                if ((record['Reporting Month'] || '') !== monthFilter) return false;
+            }
+            if (yearFilter !== 'all') {
+                const dateStr = record['Date of Meeting'] || '';
+                if (!dateStr.includes(yearFilter)) return false;
+            }
+            if (picFilter !== 'all') {
+                if ((record['Personnel In-Charge'] || '') !== picFilter) return false;
+            }
+            return true;
+        });
+    }
+
+    function renderChart() {
+        const records = getFilteredChartRecords();
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const monthCounts = {};
+        monthNames.forEach(m => monthCounts[m] = 0);
+
+        records.forEach(record => {
+            const month = record['Reporting Month'];
+            if (month && monthCounts.hasOwnProperty(month)) {
+                monthCounts[month]++;
+            }
+        });
+
+        const dataValues = monthNames.map(m => monthCounts[m]);
+        const total = dataValues.reduce((a, b) => a + b, 0);
+
+        const wrapper = document.getElementById('chartWrapper');
+        const emptyMsg = document.getElementById('chartEmptyMsg');
+
+        if (meetingsChartInstance) { meetingsChartInstance.destroy(); meetingsChartInstance = null; }
+
+        if (total === 0) {
+            wrapper.innerHTML = '';
+            wrapper.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            return;
+        } else {
+            wrapper.style.display = 'block';
+            emptyMsg.style.display = 'none';
+            if (!wrapper.querySelector('canvas')) {
+                wrapper.innerHTML = '<canvas id="meetingsChart"></canvas>';
+            }
+        }
+
+        const ctx = document.getElementById('meetingsChart').getContext('2d');
+
+        const valueLabelPlugin = {
+            id: 'valueLabel',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                const meta = chart.getDatasetMeta(0);
+                if (!meta || !meta.data) return;
+                meta.data.forEach((bar, index) => {
+                    const value = chart.data.datasets[0].data[index];
+                    if (value > 0) {
+                        ctx.save();
+                        ctx.fillStyle = '#1e293b';
+                        ctx.font = '700 11px "Inter", sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+                        ctx.fillText(value, bar.x, bar.y - 4);
+                        ctx.restore();
+                    }
+                });
+            }
+        };
+
+        const maxVal = Math.max(...dataValues, 0);
+        let yMax = Math.ceil(maxVal / 5) * 5;
+        if (yMax === 0) yMax = 5;
+
+        meetingsChartInstance = new Chart(ctx, {
+            type: 'bar',
+            plugins: [valueLabelPlugin],
+            data: {
+                labels: monthNames,
+                datasets: [{
+                    label: 'Number of Meetings',
+                    data: dataValues,
+                    backgroundColor: [
+                        'rgba(37, 99, 235, 0.85)', 'rgba(59, 130, 246, 0.85)', 'rgba(96, 165, 250, 0.85)',
+                        'rgba(16, 185, 129, 0.85)', 'rgba(52, 211, 153, 0.85)', 'rgba(251, 191, 36, 0.85)',
+                        'rgba(245, 158, 11, 0.85)', 'rgba(239, 68, 68, 0.85)', 'rgba(248, 113, 113, 0.85)',
+                        'rgba(139, 92, 246, 0.85)', 'rgba(167, 139, 250, 0.85)', 'rgba(236, 72, 153, 0.85)'
+                    ],
+                    borderColor: [
+                        'rgba(37, 99, 235, 1)', 'rgba(59, 130, 246, 1)', 'rgba(96, 165, 250, 1)',
+                        'rgba(16, 185, 129, 1)', 'rgba(52, 211, 153, 1)', 'rgba(251, 191, 36, 1)',
+                        'rgba(245, 158, 11, 1)', 'rgba(239, 68, 68, 1)', 'rgba(248, 113, 113, 1)',
+                        'rgba(139, 92, 246, 1)', 'rgba(167, 139, 250, 1)', 'rgba(236, 72, 153, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.85
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { top: 25 } },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleFont: { size: 13, weight: '700', family: 'Inter' },
+                        bodyFont: { size: 12, family: 'Inter' },
+                        padding: 12,
+                        cornerRadius: 10,
+                        displayColors: false,
+                        callbacks: {
+                            title: function(context) { return context[0].label; },
+                            label: function(context) { return `Total Meetings: ${context.parsed.y}`; }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: yMax,
+                        ticks: { font: { size: 11, family: 'Inter', weight: '500' }, color: '#64748b', padding: 8 },
+                        grid: { color: 'rgba(0, 0, 0, 0.04)', drawBorder: false, drawTicks: false }
+                    },
+                    x: {
+                        ticks: { font: { size: 11, family: 'Inter', weight: '600' }, color: '#334155', maxRotation: 45, minRotation: 45, padding: 8 },
+                        grid: { display: false }
+                    }
+                },
+                animation: { duration: 1000, easing: 'easeOutQuart' }
+            }
+        });
+    }
+
+    document.getElementById('viewChartBtn').addEventListener('click', openChartModal);
+    applyChartFilter.addEventListener('click', renderChart);
+
+    // ============================================
+    // VIEW BUTTONS
+    // ============================================
+    document.getElementById('viewAllBtn').addEventListener('click', openRecordsModal);
+    document.getElementById('sheetBtn').addEventListener('click', function() {
+        window.open(GOOGLE_SHEET_URL, '_blank');
+        showToast('📊 Info', 'Opening Google Sheet in new tab...', 'info');
+    });
+
+    // ============================================
+    // PERSONNEL IN-CHARGE BUTTON EVENTS
+    // ============================================
+    document.getElementById('addPic').addEventListener('click', openAddPersonModal);
+    document.getElementById('deletePic').addEventListener('click', deleteSelectedPerson);
+
+    // ============================================
+    // NAVIGATION & USER MENU (from Techsamp)
+    // ============================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
+    let currentUser = null;
+
+    function checkSession() {
+        const raw = localStorage.getItem("dhsud_session");
+        if (raw) {
+            try {
+                const s = JSON.parse(raw);
+                const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60);
+                if (diff < 12 && s.email) { currentUser = s; return true; }
+                else localStorage.removeItem("dhsud_session");
+            } catch(e) { localStorage.removeItem("dhsud_session"); }
+        }
+        currentUser = null;
+        return false;
+    }
+
+    function getUserInitials(n) {
+        if (!n) return "U";
+        let p = n.split(" ");
+        if (p.length >= 2) return (p[0][0] + p[1][0]).toUpperCase();
+        return n.substring(0,2).toUpperCase();
+    }
+
+    function getRoleLabel(r) {
+        if (r === "admin") return "👑 Admin";
+        if (r === "encoder" || r === "staff") return "📋 Staff/Officer";
+        return "👁️ Viewer";
+    }
+
+    function getRoleClass(r) {
+        if (r === "admin") return "admin";
+        if (r === "encoder" || r === "staff") return "staff";
+        return "viewer";
+    }
+
+    // ============================================
+    // NAVIGATION RENDERING — WITH ACTIVE HIGHLIGHT
+    // ============================================
+    function renderMainNavigation() {
+        const container = document.getElementById("mainNavContainer");
+        if (!container) return;
+
+        // Determine current page
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+        // Helper to check active state
+        function isActive(page) {
+            return currentPage === page || (currentPage === '' && page === 'index.html');
+        }
+
+        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+
+        if (currentUser) {
+            // Determine active states for each main item
+            const isCertActive = isActive('lc.html') || isActive('SZC.html');
+            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+            const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+            navHtml += `
+                <div class="dropdown" id="certDropdown">
+                    <button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button>
+                    <div class="dropdown-content">
+                        <a href="lc.html" class="${isActive('lc.html') ? 'active-sub' : ''}">Locational Clearance</a>
+                        <a href="SZC.html" class="${isActive('SZC.html') ? 'active-sub' : ''}">Site Zoning Certification</a>
+                    </div>
+                </div>
+                <div class="dropdown" id="landUseDropdown">
+                    <button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button>
+                    <div class="dropdown-content">
+                        <div class="dropdown-submenu" id="clupSubmenu">
+                            <button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button>
+                            <div class="submenu-content">
+                                <a href="status.html" class="${isActive('status.html') ? 'active-sub' : ''}">Status</a>
+                                <a href="inventory.html" class="${isActive('inventory.html') ? 'active-sub' : ''}">Inventory</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-submenu" id="pdpfpSubmenu">
+                            <button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button>
+                            <div class="submenu-content">
+                                <a href="status_pdpfp.html" class="${isActive('status_pdpfp.html') ? 'active-sub' : ''}">Status</a>
+                                <a href="inventory_pdpfp.html" class="${isActive('inventory_pdpfp.html') ? 'active-sub' : ''}">Inventory</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown" id="techServicesDropdown">
+                    <button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button>
+                    <div class="dropdown-content">
+                        <a href="Techsamp.html" class="${isActive('Techsamp.html') ? 'active-sub' : ''}">Technical Assistance</a>
+                        <a href="training.html" class="${isActive('training.html') ? 'active-sub' : ''}">CLUP/ZO Trainings</a>
+                        <a href="p_monitoring.html" class="${isActive('p_monitoring.html') ? 'active-sub' : ''}">Plan Monitoring</a>
+                        <a href="meetings.html" class="${isActive('meetings.html') ? 'active-sub' : ''}">Meetings Attended</a>
+                    </div>
+                </div>
+                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+            `;
+        } else {
+            navHtml += `
+                <a href="#about" class="">About</a>
+                <a href="#contact" class="">Contact</a>
+            `;
+        }
+
+        container.innerHTML = navHtml;
+
+        // Submenu toggle logic
+        setTimeout(() => {
+            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+                trigger.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const submenu = trigger.closest(".dropdown-submenu");
+                    if (submenu) submenu.classList.toggle("open");
+                });
+            });
+            document.addEventListener("click", function (e) {
+                if (!e.target.closest(".dropdown-submenu")) {
+                    document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
+                }
+            });
+        }, 10);
+    }
+
+    function renderUserMenu() {
+        const container = document.getElementById("userMenuContainer");
+        if (!container) return;
+        if (currentUser) {
+            const initials = getUserInitials(currentUser.fullName);
+            const firstName = currentUser.fullName?.split(" ")[0] || "User";
+            const isAdmin = currentUser.role === "admin";
+            const roleLabel = getRoleLabel(currentUser.role);
+            const roleClass = getRoleClass(currentUser.role);
+            container.innerHTML = `<div class="user-menu" id="userMenuDropdown" style="position:relative;"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
+            const userDiv = document.getElementById("userMenuDropdown");
+            if (userDiv) {
+                userDiv.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const menu = userDiv.querySelector(".user-dropdown-menu");
+                    if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
+                });
+                document.addEventListener("click", () => {
+                    const menu = userDiv?.querySelector(".user-dropdown-menu");
+                    if (menu) menu.style.display = "none";
+                });
+            }
+            if (isAdmin) {
+                const adminBtn = document.getElementById("adminConsoleLink");
+                if (adminBtn) adminBtn.addEventListener("click", () => (window.location.href = "admin.html"));
+            }
+            const logoutBtn = document.getElementById("logoutDropdownBtn");
+            if (logoutBtn) logoutBtn.addEventListener("click", () => {
+                localStorage.removeItem("dhsud_session");
+                showToastMessage("Logged out successfully.", "success");
+                setTimeout(() => { window.location.href = "Techsamp.html"; }, 700);
+            });
+        } else {
+            container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
+        }
+    }
+
+    function escapeHtml(s) {
+        if (!s) return "";
+        return String(s).replace(/[&<>]/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" })[m]);
+    }
+
+    function showToastMessage(msg, type = "info") {
+        let t = document.querySelector(".toast-msg");
+        if (t) t.remove();
+        let toast = document.createElement("div");
+        toast.className = "toast-msg" + (type === "error" ? " error" : type === "success" ? " success" : "");
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function openLoginModal() {
+        document.getElementById("loginModal").classList.add("active");
+    }
+
+    function closeLoginModal() {
+        document.getElementById("loginModal").classList.remove("active");
+    }
+
+    async function handleModalLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
+        const password = document.getElementById("modalLoginPassword").value;
+        const btn = document.getElementById("loginModalBtn");
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = "⏳ Authenticating...";
+        try {
+            const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=users&_=${Date.now()}`);
+            const users = await resp.json();
+            const user = users.find((u) => u.email?.toLowerCase() === email);
+            if (!user) {
+                showToastMessage("Account not found.", "error");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return false;
+            }
+            if (user.password === btoa(password)) {
+                const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
+                localStorage.setItem("dhsud_session", JSON.stringify(session));
+                showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+                closeLoginModal();
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showToastMessage("Invalid password.", "error");
+            }
+        } catch (error) {
+            showToastMessage("Connection error.", "error");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+        return false;
+    }
+
+    // ============================================
+    // INIT
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        resetDateEntries();
+        attachAddDateButtonListener();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const currentMonth = monthNames[new Date().getMonth()];
+        document.getElementById('reportingMonth').value = currentMonth;
+
+        checkSession();
+        renderMainNavigation();
+        renderUserMenu();
+
+        const form = document.getElementById("modalLoginForm");
+        if (form) form.addEventListener("submit", handleModalLogin);
+
+        loadPICNamesFromSheet();
+        setStatus('Ready · fill in all required fields', 'info');
+    });
+
+    window.openLoginModal = openLoginModal;
+    window.closeLoginModal = closeLoginModal;
+</script>
+</body>
+</html>

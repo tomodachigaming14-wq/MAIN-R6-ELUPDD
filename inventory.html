@@ -11,14 +11,10 @@
     body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes slideInRight { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
-    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
-    .animate-fadeUp { animation: fadeUp 0.7s ease forwards; }
-    .animate-slideLeft { animation: slideInLeft 0.6s ease forwards; }
-    .animate-slideRight { animation: slideInRight 0.6s ease forwards; }
     .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
     .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    /* ===== HEADER / NAV ===== */
     header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
     .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
     .logo-area-header { display: flex; align-items: center; gap: 16px; }
@@ -27,26 +23,67 @@
     .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
     .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
     .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
+
+    /* ===== NAVIGATION BAR (centered) ===== */
     .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
-    .main-nav-links { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .main-nav-links a, .dropbtn { text-decoration: none; font-weight: 500; font-size: 0.85rem; color: #1f3a5f; padding: 0.5rem 0; transition: 0.2s; letter-spacing: -0.2px; }
-    .main-nav-links a:hover, .dropbtn:hover { color: #2563eb; transform: translateY(-1px); }
-    .dropdown { position: relative; display: inline-block; }
-    .dropbtn { background: none; border: none; font-family: inherit; cursor: pointer; }
-    .dropdown-content { display: none; position: absolute; background: white; min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; z-index: 1000; top: 30px; left: 0; border: 1px solid #eef2ff; padding: 0.3rem 0; }
+    .nav-bottom .container { display: flex; justify-content: center; }
+    .main-nav-links { display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.2rem 0; }
+
+    /* ===== NAV ITEM BOXES ===== */
+    .main-nav-links > a,
+    .main-nav-links > .dropdown > .dropbtn {
+      display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; font-weight: 600; font-size: 0.82rem;
+      color: #1f3a5f; padding: 0.55rem 1rem; border-radius: 12px;
+      border: 1.5px solid transparent; background: transparent;
+      transition: all 0.25s ease; letter-spacing: -0.2px;
+      cursor: pointer; white-space: nowrap; position: relative;
+      font-family: inherit; line-height: 1.2;
+    }
+    .main-nav-links > a:hover,
+    .main-nav-links > .dropdown > .dropbtn:hover {
+      background: #eff6ff; border-color: #bfdbfe; color: #2563eb;
+      transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+    .main-nav-links > a.active,
+    .main-nav-links > .dropdown > .dropbtn.active {
+      background: #2563eb; border-color: #2563eb; color: #ffffff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30); transform: translateY(-2px);
+    }
+    .main-nav-links > a.active:hover,
+    .main-nav-links > .dropdown > .dropbtn.active:hover {
+      background: #1d4ed8; border-color: #1d4ed8; color: #ffffff;
+    }
+    .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
+    .dropbtn::after { content: " ▾"; font-size: 0.65rem; opacity: 0.6; margin-left: 4px; transition: opacity 0.2s; }
+    .dropdown:hover .dropbtn::after { opacity: 1; }
+
+    /* ===== DROPDOWN MENUS ===== */
+    .dropdown { position: relative; display: inline-block; padding-bottom: 6px; margin-bottom: -6px; }
+    .dropbtn { background: none; border: none; font-family: inherit; }
+    .dropdown-content {
+      display: none; position: absolute; background: white;
+      min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      border-radius: 16px; z-index: 1000; top: 100%; left: 50%;
+      transform: translateX(-50%); border: 1px solid #eef2ff;
+      padding: 0.3rem 0; animation: dropFade 0.2s ease;
+    }
+    .dropdown-content::before { content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 12px; background: transparent; }
+    @keyframes dropFade { from { opacity: 0; transform: translateX(-50%) translateY(-6px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
     .dropdown:hover .dropdown-content { display: block; }
-    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; }
-    .dropdown-content a:hover { background: #eff6ff; }
-    .dropdown-submenu { position: relative; }
-    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; }
-    .submenu-trigger:hover { background: #eff6ff; }
-    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; }
+    .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
+    .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 2rem 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; transition: background 0.15s ease, color 0.15s ease; }
+    .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
+    .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
     .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
-    .dropdown-submenu:hover .submenu-content { display: block; }
+    .submenu-content::before { content: ""; position: absolute; top: 0; left: -10px; bottom: 0; width: 10px; background: transparent; }
+    .dropdown-submenu:hover .submenu-content, .dropdown-submenu.open .submenu-content { display: block; }
     .submenu-content a { padding: 0.7rem 1.2rem; }
-    .dropdown-submenu.open .submenu-content { display: block; }
-    .dropbtn::after { content: " ▾"; font-size: 0.7rem; opacity: 0.6; }
-    .dropdown:hover .dropbtn::after { content: " ▾"; opacity: 1; }
+
+    /* ===== USER DROPDOWN ===== */
     .user-avatar { width: 28px; height: 28px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
     .user-name { font-size: 0.7rem; font-weight: 500; }
     .role-badge-header { background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: 0.3rem; }
@@ -55,12 +92,13 @@
     .user-dropdown-menu { position: absolute; top: 48px; right: 0; background: white; border-radius: 20px; min-width: 180px; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15); border: 1px solid #eef2ff; overflow: hidden; display: none; z-index: 200; }
     .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
     .user-dropdown-item:hover { background: #f8fafc; }
+
     .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
     .login-modal.active { display: flex; }
     .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
     .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
     .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
-    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; }
     .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
     .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
     .login-modal-body .input-group { margin-bottom: 1.3rem; }
@@ -81,535 +119,104 @@
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Inventory Page Styles - Preserved from original */
-    .page-header {
-      background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%);
-      color: white;
-      padding: 2rem 0;
-      margin-bottom: 2rem;
-      border-radius: 0 0 2rem 2rem;
-      text-align: center;
-    }
-    .page-header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .page-header p {
-      opacity: 0.9;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin: 32px 0;
-    }
-    .stat-card {
-      background: white;
-      padding: 24px;
-      border-radius: 28px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-      border: 1px solid #e2e8f0;
-      transition: all 0.2s;
-    }
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.08);
-    }
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #1e3a8a;
-    }
-    .stat-loading {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-      border: 3px solid #e2e8f0;
-      border-top-color: #2563eb;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .lgu-hyperlink {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      border-radius: 28px;
-      padding: 20px;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-    .lgu-hyperlink a {
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 28px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 50px;
-      transition: 0.3s;
-    }
-    .lgu-hyperlink a:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: translateY(-2px);
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      backdrop-filter: blur(4px);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background: white;
-      border-radius: 32px;
-      max-width: 900px;
-      width: 95%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      margin: 0 auto;
-    }
-    .modal-header {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      color: white;
-      padding: 20px 24px;
-      border-radius: 32px 32px 0 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .modal-header h3 {
-      font-size: 1.3rem;
-      margin: 0;
-    }
-    .close-modal {
-      color: white;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .close-modal:hover {
-      color: #94a3b8;
-    }
-    .modal-body {
-      padding: 24px;
-      max-height: 70vh;
-      overflow-y: auto;
-    }
-    .selector-group {
-      margin-bottom: 20px;
-    }
-    .selector-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #1e293b;
-      font-size: 0.85rem;
-    }
-    .selector-group select,
-    .selector-group input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      font-family: "Inter", sans-serif;
-      background: white;
-      font-size: 0.9rem;
-    }
-    .hidden {
-      display: none;
-    }
-    .selected-info {
-      background: #eef2ff;
-      padding: 12px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: 500;
-      color: #1e40af;
-    }
-    .drive-folder {
-      background: #f8fafc;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 20px;
-      border: 1px solid #eef2ff;
-    }
-    .drive-folder h4 {
-      color: #0f172a;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-weight: 700;
-    }
-    .drive-doc-list {
-      list-style: none;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    .drive-doc-list li {
-      padding: 12px 0;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .drive-doc-list li:last-child {
-      border-bottom: none;
-    }
-    .drive-doc-list a {
-      text-decoration: none;
-      color: #2563eb;
-      font-weight: 500;
-      flex: 1;
-      cursor: pointer;
-    }
-    .drive-doc-list a:hover {
-      text-decoration: underline;
-      color: #1e40af;
-    }
-    .drive-doc-list .file-icon {
-      font-size: 1.2rem;
-    }
-    .drive-doc-list .file-size {
-      font-size: 0.7rem;
-      color: #94a3b8;
-    }
-    .google-drive-link {
-      background: #eef2ff;
-      border-radius: 20px;
-      padding: 16px;
-      margin-top: 16px;
-      text-align: center;
-    }
-    .btn-drive {
-      display: inline-block;
-      background: #1e3a8a;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 40px;
-      text-decoration: none;
-      margin-top: 10px;
-      font-size: 0.85rem;
-      transition: 0.2s;
-    }
-    .btn-drive:hover {
-      background: #2563eb;
-    }
-    .submit-doc-btn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 40px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 16px;
-      transition: 0.2s;
-    }
-    .submit-doc-btn:hover {
-      background: #1e3a8a;
-      transform: translateY(-1px);
-    }
-    .note-text {
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-top: 16px;
-      text-align: center;
-    }
-    .upload-btn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-    }
-    .upload-btn:hover {
-      background: #1e3a8a;
-      transform: translateY(-1px);
-    }
-    .upload-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .upload-status {
-      font-size: 0.75rem;
-      color: #166534;
-      margin-left: 8px;
-    }
-    .upload-progress {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid #e2e8f0;
-      border-top-color: #2563eb;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    .file-input-hidden {
-      display: none;
-    }
-    .doc-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .doc-header h4 {
-      margin: 0;
-    }
-    .upload-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .file-preview-modal {
-      display: none;
-      position: fixed;
-      z-index: 10000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(8px);
-    }
-    .file-preview-modal.active {
-      display: flex;
-    }
-    .file-preview-content {
-      background: white;
-      border-radius: 20px;
-      max-width: 90%;
-      max-height: 90%;
-      width: auto;
-      padding: 20px;
-      position: relative;
-      overflow: auto;
-    }
-    .file-preview-content img,
-    .file-preview-content iframe {
-      max-width: 100%;
-      max-height: 80vh;
-      border-radius: 12px;
-    }
-    .file-preview-content iframe {
-      width: 800px;
-      height: 600px;
-      border: none;
-    }
-    .file-preview-close {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      font-size: 2rem;
-      cursor: pointer;
-      color: #1e293b;
-      background: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: 0.2s;
-    }
-    .file-preview-close:hover {
-      background: #f1f5f9;
-      transform: scale(1.1);
-    }
-    .file-preview-name {
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #0f172a;
-      font-size: 1.1rem;
-    }
-    .file-preview-actions {
-      margin-top: 16px;
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
-    .file-preview-actions a {
-      padding: 8px 20px;
-      background: #2563eb;
-      color: white;
-      border-radius: 40px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: 0.2s;
-    }
-    .file-preview-actions a:hover {
-      background: #1e3a8a;
-    }
-    .file-preview-loading {
-      text-align: center;
-      padding: 40px;
-      color: #94a3b8;
-    }
-    .delete-mode-toggle {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding: 8px 12px;
-      background: #f1f5f9;
-      border-radius: 12px;
-    }
-    .delete-mode-toggle label {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #1e293b;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-    .delete-mode-toggle input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: #dc2626;
-    }
-    .delete-btn {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      display: none;
-      align-items: center;
-      gap: 4px;
-    }
-    .delete-btn:hover {
-      background: #b91c1c;
-      transform: scale(1.05);
-    }
-    .delete-btn.visible {
-      display: inline-flex;
-    }
-    .file-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 0;
-      border-bottom: 1px solid #e2e8f0;
-      transition: 0.2s;
-    }
-    .file-item:hover {
-      background: #f8fafc;
-      padding-left: 8px;
-      border-radius: 8px;
-    }
-    .file-item .file-info {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .file-item .delete-checkbox {
-      display: none;
-      margin-right: 8px;
-    }
-    .file-item .delete-checkbox.visible {
-      display: block;
-    }
-    .file-item .delete-checkbox input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      accent-color: #dc2626;
-    }
-    .file-item.deleting {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    .bulk-delete-bar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: #fef2f2;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      border: 1px solid #fecaca;
-    }
-    .bulk-delete-bar.visible {
-      display: flex;
-    }
-    .bulk-delete-bar .selected-count {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #991b1b;
-    }
-    .bulk-delete-btn {
-      background: #dc2626;
-      color: white;
-      border: none;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .bulk-delete-btn:hover {
-      background: #b91c1c;
-    }
-    .bulk-delete-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    /* Inventory Page Styles */
+    .page-header { background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%); color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 2rem 2rem; text-align: center; }
+    .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .page-header p { opacity: 0.9; max-width: 800px; margin: 0 auto; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 32px 0; }
+    .stat-card { background: white; padding: 24px; border-radius: 28px; text-align: center; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02); border: 1px solid #e2e8f0; transition: all 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 20px -12px rgba(0, 0, 0, 0.08); }
+    .stat-number { font-size: 2rem; font-weight: 800; color: #1e3a8a; }
+    .stat-loading { display: inline-block; width: 24px; height: 24px; border: 3px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .lgu-hyperlink { background: linear-gradient(135deg, #1e3a8a, #2563eb); border-radius: 28px; padding: 20px; margin-bottom: 30px; text-align: center; }
+    .lgu-hyperlink a { color: white; font-size: 1.2rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; padding: 12px 28px; background: rgba(255, 255, 255, 0.15); border-radius: 50px; transition: 0.3s; }
+    .lgu-hyperlink a:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(4px); justify-content: center; align-items: center; }
+    .modal-content { background: white; border-radius: 32px; max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto; position: relative; margin: 0 auto; }
+    .modal-header { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 20px 24px; border-radius: 32px 32px 0 0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .modal-header h3 { font-size: 1.3rem; margin: 0; }
+    .close-modal { color: white; font-size: 28px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .close-modal:hover { color: #94a3b8; }
+    .modal-body { padding: 24px; max-height: 70vh; overflow-y: auto; }
+    .selector-group { margin-bottom: 20px; }
+    .selector-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b; font-size: 0.85rem; }
+    .selector-group select, .selector-group input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 16px; font-family: "Inter", sans-serif; background: white; font-size: 0.9rem; }
+    .hidden { display: none; }
+    .selected-info { background: #eef2ff; padding: 12px; border-radius: 20px; margin-bottom: 20px; text-align: center; font-weight: 500; color: #1e40af; }
+    .drive-folder { background: #f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 20px; border: 1px solid #eef2ff; }
+    .drive-folder h4 { color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 700; }
+    .drive-doc-list { list-style: none; max-height: 300px; overflow-y: auto; }
+    .drive-doc-list li { padding: 12px 0; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px; }
+    .drive-doc-list li:last-child { border-bottom: none; }
+    .drive-doc-list a { text-decoration: none; color: #2563eb; font-weight: 500; flex: 1; cursor: pointer; }
+    .drive-doc-list a:hover { text-decoration: underline; color: #1e40af; }
+    .drive-doc-list .file-icon { font-size: 1.2rem; }
+    .drive-doc-list .file-size { font-size: 0.7rem; color: #94a3b8; }
+    .google-drive-link { background: #eef2ff; border-radius: 20px; padding: 16px; margin-top: 16px; text-align: center; }
+    .btn-drive { display: inline-block; background: #1e3a8a; color: white; padding: 10px 20px; border-radius: 40px; text-decoration: none; margin-top: 10px; font-size: 0.85rem; transition: 0.2s; }
+    .btn-drive:hover { background: #2563eb; }
+    .submit-doc-btn { background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 16px; transition: 0.2s; }
+    .submit-doc-btn:hover { background: #1e3a8a; transform: translateY(-1px); }
+    .note-text { font-size: 0.8rem; color: #64748b; margin-top: 16px; text-align: center; }
+    .upload-btn { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .upload-btn:hover { background: #1e3a8a; transform: translateY(-1px); }
+    .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .upload-status { font-size: 0.75rem; color: #166534; margin-left: 8px; }
+    .upload-progress { display: inline-block; width: 16px; height: 16px; border: 2px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .file-input-hidden { display: none; }
+    .doc-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .doc-header h4 { margin: 0; }
+    .upload-actions { display: flex; gap: 8px; align-items: center; }
+    .file-preview-modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+    .file-preview-modal.active { display: flex; }
+    .file-preview-content { background: white; border-radius: 20px; max-width: 90%; max-height: 90%; width: auto; padding: 20px; position: relative; overflow: auto; }
+    .file-preview-content img, .file-preview-content iframe { max-width: 100%; max-height: 80vh; border-radius: 12px; }
+    .file-preview-content iframe { width: 800px; height: 600px; border: none; }
+    .file-preview-close { position: absolute; top: 10px; right: 20px; font-size: 2rem; cursor: pointer; color: #1e293b; background: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: 0.2s; }
+    .file-preview-close:hover { background: #f1f5f9; transform: scale(1.1); }
+    .file-preview-name { font-weight: 600; margin-bottom: 12px; color: #0f172a; font-size: 1.1rem; }
+    .file-preview-actions { margin-top: 16px; display: flex; gap: 12px; justify-content: center; }
+    .file-preview-actions a { padding: 8px 20px; background: #2563eb; color: white; border-radius: 40px; text-decoration: none; font-size: 0.85rem; transition: 0.2s; }
+    .file-preview-actions a:hover { background: #1e3a8a; }
+    .file-preview-loading { text-align: center; padding: 40px; color: #94a3b8; }
+    .delete-mode-toggle { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 8px 12px; background: #f1f5f9; border-radius: 12px; }
+    .delete-mode-toggle label { font-size: 0.8rem; font-weight: 500; color: #1e293b; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .delete-mode-toggle input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #dc2626; }
+    .delete-btn { background: #dc2626; color: white; border: none; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: 0.2s; display: none; align-items: center; gap: 4px; }
+    .delete-btn:hover { background: #b91c1c; transform: scale(1.05); }
+    .delete-btn.visible { display: inline-flex; }
+    .file-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #e2e8f0; transition: 0.2s; }
+    .file-item:hover { background: #f8fafc; padding-left: 8px; border-radius: 8px; }
+    .file-item .file-info { flex: 1; display: flex; align-items: center; gap: 12px; }
+    .file-item .delete-checkbox { display: none; margin-right: 8px; }
+    .file-item .delete-checkbox.visible { display: block; }
+    .file-item .delete-checkbox input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #dc2626; }
+    .file-item.deleting { opacity: 0.5; pointer-events: none; }
+    .bulk-delete-bar { display: none; align-items: center; justify-content: space-between; padding: 10px 16px; background: #fef2f2; border-radius: 12px; margin-bottom: 12px; border: 1px solid #fecaca; }
+    .bulk-delete-bar.visible { display: flex; }
+    .bulk-delete-bar .selected-count { font-size: 0.85rem; font-weight: 500; color: #991b1b; }
+    .bulk-delete-btn { background: #dc2626; color: white; border: none; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+    .bulk-delete-btn:hover { background: #b91c1c; }
+    .bulk-delete-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    @media (max-width: 900px) {
+      .main-nav-links { gap: 0.35rem; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
     }
     @media (max-width: 768px) {
-      .modal-content {
-        max-width: 98% !important;
-        width: 98% !important;
-      }
-      .bulk-delete-bar {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-      }
+      .modal-content { max-width: 98% !important; width: 98% !important; }
+      .bulk-delete-bar { flex-direction: column; gap: 8px; text-align: center; }
       .top-bar { flex-direction: column; align-items: stretch; }
       .header-logo-img span { white-space: normal; font-size: 0.7rem; }
       .login-modal-brand img { width: 100px; }
+    }
+    @media (max-width: 700px) {
+      .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
+      .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
+      .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
+      .dropdown-submenu.open .submenu-content { display: block; }
     }
   </style>
 </head>
@@ -643,30 +250,10 @@
   <section style="padding: 20px 0 60px;">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number" id="totalClupCount">
-            <span class="stat-loading"></span>
-          </div>
-          <div>Total CLUP Documents</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="totalZoCount">
-            <span class="stat-loading"></span>
-          </div>
-          <div>Total ZO Documents</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="totalLguCount">
-            <span class="stat-loading"></span>
-          </div>
-          <div>LGUs Covered</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="digitizationRate">
-            <span class="stat-loading"></span>
-          </div>
-          <div>Digitization Rate</div>
-        </div>
+        <div class="stat-card"><div class="stat-number" id="totalClupCount"><span class="stat-loading"></span></div><div>Total CLUP Documents</div></div>
+        <div class="stat-card"><div class="stat-number" id="totalZoCount"><span class="stat-loading"></span></div><div>Total ZO Documents</div></div>
+        <div class="stat-card"><div class="stat-number" id="totalLguCount"><span class="stat-loading"></span></div><div>LGUs Covered</div></div>
+        <div class="stat-card"><div class="stat-number" id="digitizationRate"><span class="stat-loading"></span></div><div>Digitization Rate</div></div>
       </div>
       <div class="lgu-hyperlink"><a href="#" id="lguHyperlinkBtn">📁 Click here to access CLUP/ZO Documents <span style="font-size:1.2rem;">📂</span></a></div>
     </div>
@@ -692,61 +279,54 @@
         </div>
         <div class="selector-group" id="lguSelectorGroup" style="display:none;">
           <label>🏘️ Select Municipality/City:</label>
-          <select id="lguSelect">
-            <option value="">-- Select LGU --</option>
-          </select>
+          <select id="lguSelect"><option value="">-- Select LGU --</option></select>
         </div>
         <div id="selectedInfo" class="selected-info hidden">📍 Viewing documents for: <span id="selectedLocation">-</span></div>
         <div id="documentsContainer" style="display:none;">
           <div class="delete-mode-toggle">
-              <label>
-                  <input type="checkbox" id="deleteModeToggle" onchange="toggleDeleteMode()">
-                  🗑️ Enable Delete Mode
-              </label>
-              <span style="font-size:0.7rem; color:#64748b;">(Check files to delete)</span>
+            <label><input type="checkbox" id="deleteModeToggle" onchange="toggleDeleteMode()">🗑️ Enable Delete Mode</label>
+            <span style="font-size:0.7rem; color:#64748b;">(Check files to delete)</span>
           </div>
           <div class="bulk-delete-bar" id="bulkDeleteBar">
-              <span class="selected-count" id="selectedCount">0 files selected</span>
-              <button class="bulk-delete-btn" id="bulkDeleteBtn" onclick="confirmBulkDelete()" disabled>
-                  🗑️ Delete Selected
-              </button>
+            <span class="selected-count" id="selectedCount">0 files selected</span>
+            <button class="bulk-delete-btn" id="bulkDeleteBtn" onclick="confirmBulkDelete()" disabled>🗑️ Delete Selected</button>
           </div>
           <div class="drive-folder">
-              <div class="doc-header">
-                  <h4>📁 CLUP Documents</h4>
-                  <div class="upload-actions">
-                      <button class="upload-btn" id="uploadClupBtn" onclick="triggerUpload('clup')">📤 Upload</button>
-                      <span id="clupUploadStatus" class="upload-status"></span>
-                  </div>
+            <div class="doc-header">
+              <h4>📁 CLUP Documents</h4>
+              <div class="upload-actions">
+                <button class="upload-btn" id="uploadClupBtn" onclick="triggerUpload('clup')">📤 Upload</button>
+                <span id="clupUploadStatus" class="upload-status"></span>
               </div>
-              <input type="file" id="clupFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('clup', this)">
-              <ul class="drive-doc-list" id="clupDocList"><li>Select a province and LGU first</li></ul>
+            </div>
+            <input type="file" id="clupFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('clup', this)">
+            <ul class="drive-doc-list" id="clupDocList"><li>Select a province and LGU first</li></ul>
           </div>
           <div class="drive-folder">
-              <div class="doc-header">
-                  <h4>⚖️ ZO Documents</h4>
-                  <div class="upload-actions">
-                      <button class="upload-btn" id="uploadZoBtn" onclick="triggerUpload('zo')">📤 Upload</button>
-                      <span id="zoUploadStatus" class="upload-status"></span>
-                  </div>
+            <div class="doc-header">
+              <h4>⚖️ ZO Documents</h4>
+              <div class="upload-actions">
+                <button class="upload-btn" id="uploadZoBtn" onclick="triggerUpload('zo')">📤 Upload</button>
+                <span id="zoUploadStatus" class="upload-status"></span>
               </div>
-              <input type="file" id="zoFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('zo', this)">
-              <ul class="drive-doc-list" id="zoDocList"><li>Select a province and LGU first</li></ul>
+            </div>
+            <input type="file" id="zoFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple onchange="handleFileUpload('zo', this)">
+            <ul class="drive-doc-list" id="zoDocList"><li>Select a province and LGU first</li></ul>
           </div>
           <div class="drive-folder">
-              <div class="doc-header">
-                  <h4>📊 Supporting Documents</h4>
-                  <div class="upload-actions">
-                      <button class="upload-btn" id="uploadSupportingBtn" onclick="triggerUpload('supporting')">📤 Upload</button>
-                      <span id="supportingUploadStatus" class="upload-status"></span>
-                  </div>
+            <div class="doc-header">
+              <h4>📊 Supporting Documents</h4>
+              <div class="upload-actions">
+                <button class="upload-btn" id="uploadSupportingBtn" onclick="triggerUpload('supporting')">📤 Upload</button>
+                <span id="supportingUploadStatus" class="upload-status"></span>
               </div>
-              <input type="file" id="supportingFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx" multiple onchange="handleFileUpload('supporting', this)">
-              <ul class="drive-doc-list" id="supportingDocList"><li>Select a province and LGU first</li></ul>
+            </div>
+            <input type="file" id="supportingFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx" multiple onchange="handleFileUpload('supporting', this)">
+            <ul class="drive-doc-list" id="supportingDocList"><li>Select a province and LGU first</li></ul>
           </div>
           <div class="google-drive-link" id="googleDriveLink" style="display:none;">
-              <p>📁 <strong>Access Full Google Drive Folder:</strong></p>
-              <a href="https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing" target="_blank" class="btn-drive" id="driveFolderLink">🔗 Open CLUP/ZO Google Drive Folder</a>
+            <p>📁 <strong>Access Full Google Drive Folder:</strong></p>
+            <a href="https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing" target="_blank" class="btn-drive" id="driveFolderLink">🔗 Open CLUP/ZO Google Drive Folder</a>
           </div>
         </div>
         <div id="requestFormContainer" style="display:none;">
@@ -761,14 +341,11 @@
     </div>
   </div>
 
-  <!-- File Preview Modal -->
   <div id="filePreviewModal" class="file-preview-modal">
     <div class="file-preview-content">
       <span class="file-preview-close" onclick="closeFilePreview()">&times;</span>
       <div class="file-preview-name" id="previewFileName">Loading...</div>
-      <div id="previewContent">
-        <div class="file-preview-loading">⏳ Loading file preview...</div>
-      </div>
+      <div id="previewContent"><div class="file-preview-loading">⏳ Loading file preview...</div></div>
       <div class="file-preview-actions">
         <a href="#" target="_blank" id="previewDownloadLink">📥 Download</a>
         <a href="#" target="_blank" id="previewOpenLink">🔗 Open in Drive</a>
@@ -776,7 +353,6 @@
     </div>
   </div>
 
-  <!-- LOGIN MODAL -->
   <div id="loginModal" class="login-modal">
     <div class="login-modal-content">
       <div class="login-modal-brand">
@@ -787,15 +363,8 @@
       </div>
       <div class="login-modal-body">
         <form id="modalLoginForm" onsubmit="return handleModalLogin(event)">
-          <div class="input-group">
-            <label><i class="fas fa-envelope"></i> Email Address</label>
-            <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
-          </div>
-          <div class="input-group">
-            <label><i class="fas fa-lock"></i> Password</label>
-            <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-            <button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button>
-          </div>
+          <div class="input-group"><label><i class="fas fa-envelope"></i> Email Address</label><input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required /></div>
+          <div class="input-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="modalLoginPassword" placeholder="Enter your password" required /><button type="button" class="toggle-password" onclick="toggleModalPassword()">👁️</button></div>
           <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
         </form>
       </div>
@@ -806,89 +375,79 @@
   <footer class="footer-new">
     <div class="container">
       <div class="footer-grid">
-        <div>
-          <img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br />
-          <strong>DHSUD Region VI</strong><br />ELUPDD<br />
-        </div>
-        <div>
-          <strong>Our Social Networks</strong><br />Follow us for updates<br />
-          <div class="social-icons">
-            <a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-          </div>
-        </div>
+        <div><img src="img/DHSUD_LOGO.png" alt="logo" style="height:40px; filter:brightness(0) invert(1); margin-bottom:12px" /><br /><strong>DHSUD Region VI</strong><br />ELUPDD<br /></div>
+        <div><strong>Our Social Networks</strong><br />Follow us for updates<br /><div class="social-icons"><a href="https://web.facebook.com/DHSUDR6" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a></div></div>
       </div>
       <div style="text-align:center; margin-top:2rem; border-top:1px solid #2d4f6e; padding-top:1rem">© 2026 DHSUD VI — ELUPDD</div>
     </div>
   </footer>
 
   <script>
-    // ===== CONFIGURATION =====
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
     const DRIVE_FOLDER_ID = "1arGRhomtDIU7seiDZajAO77L8noAQigV";
     let currentUser = null;
-
-    // ===== STORAGE FOR UPLOADED FILES =====
-    const uploadedFiles = {
-      clup: [],
-      zo: [],
-      supporting: []
-    };
+    const uploadedFiles = { clup: [], zo: [], supporting: [] };
 
     function escapeHtml(s) { if(!s) return ""; return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
-    
-    function showToastMessage(msg, type) { 
-      let t = document.querySelector(".toast-msg"); 
-      if(t) t.remove(); 
-      let toast = document.createElement("div"); 
-      toast.className = "toast-msg " + (type || "info"); 
-      toast.style.background = type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "#1e293b"; 
-      toast.innerText = msg; 
-      document.body.appendChild(toast); 
-      setTimeout(() => toast.remove(), 4000); 
-    }
+    function showToastMessage(msg, type) { let t = document.querySelector(".toast-msg"); if(t) t.remove(); let toast = document.createElement("div"); toast.className = "toast-msg " + (type || "info"); toast.style.background = type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "#1e293b"; toast.innerText = msg; document.body.appendChild(toast); setTimeout(() => toast.remove(), 4000); }
 
-    function checkSession() { 
-      const raw = localStorage.getItem("dhsud_session"); 
-      if (raw) { 
-        try { 
-          const s = JSON.parse(raw); 
-          const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60); 
-          if (diff < 12 && s.email) { 
-            currentUser = s; 
-            return true; 
-          } else localStorage.removeItem("dhsud_session"); 
-        } catch(e) { localStorage.removeItem("dhsud_session"); } 
-      } 
-      currentUser = null; 
-      return false; 
-    }
-
+    function checkSession() { const raw = localStorage.getItem("dhsud_session"); if (raw) { try { const s = JSON.parse(raw); const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60); if (diff < 12 && s.email) { currentUser = s; return true; } else localStorage.removeItem("dhsud_session"); } catch(e) { localStorage.removeItem("dhsud_session"); } } currentUser = null; return false; }
     function getUserInitials(n) { if(!n) return "U"; let p = n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
     function getRoleLabel(r) { if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r) { if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
 
+    // ============================================
+    // NAVIGATION — WITH ACTIVE HIGHLIGHT
+    // ============================================
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
-      let navHtml = `<a href="index.html">Home</a>`;
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+
+      let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
       if (currentUser) {
-        navHtml +=
-          `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-            <a href="lc.html">Locational Clearance</a>
-            <a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-          </div></div>
-          <a href="Techsamp.html">Technical Assistance</a>
-          <a href="training.html">CLUP/ZO Trainings</a>
-          <a href="p_monitoring.html">Plan Monitoring</a>
-          <a href="lgu-info.html">LGU Information</a>
-          <a href="report.html">Reports</a>
-          <a href="calendar.html">Calendar of Activities</a>
-          <a href="issuance.html">Issuances</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>`;
+        const isCertActive = isActive('lc.html') || isActive('SZC.html');
+        const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+        const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+        navHtml += `
+          <div class="dropdown" id="certDropdown">
+            <button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button>
+            <div class="dropdown-content">
+              <a href="lc.html">Locational Clearance</a>
+              <a href="SZC.html">Site Zoning Certification</a>
+            </div>
+          </div>
+          <div class="dropdown" id="landUseDropdown">
+            <button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button>
+            <div class="dropdown-content">
+              <div class="dropdown-submenu" id="clupSubmenu">
+                <button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button>
+                <div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div>
+              </div>
+              <div class="dropdown-submenu" id="pdpfpSubmenu">
+                <button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button>
+                <div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div>
+              </div>
+            </div>
+          </div>
+          <div class="dropdown" id="techServicesDropdown">
+            <button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button>
+            <div class="dropdown-content">
+              <a href="Techsamp.html">Technical Assistance</a>
+              <a href="training.html">CLUP/ZO Trainings</a>
+              <a href="p_monitoring.html">Plan Monitoring</a>
+              <a href="meetings.html">Meetings Attended</a>
+            </div>
+          </div>
+          <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+          <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+          <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+          <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+          <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+          <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+        `;
       } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
       container.innerHTML = navHtml;
       setTimeout(() => {
@@ -908,61 +467,25 @@
     }
 
     function renderUserMenu() {
-      const container = document.getElementById("userMenuContainer"); 
-      if(!container) return;
-      
+      const container = document.getElementById("userMenuContainer"); if(!container) return;
       if (currentUser) {
         const initials = getUserInitials(currentUser.fullName);
         const firstName = currentUser.fullName?.split(" ")[0] || "User";
         const isAdmin = currentUser.role === "admin";
         const roleLabel = getRoleLabel(currentUser.role);
         const roleClass = getRoleClass(currentUser.role);
-        container.innerHTML = `<div class="user-menu" id="userMenuDropdown">
-          <div class="user-avatar">${initials}</div>
-          <span class="user-name">${escapeHtml(firstName)}</span>
-          <span class="role-badge-header ${roleClass}">${roleLabel}</span>
-          <span style="font-size:0.7rem;">▼</span>
-          <div class="user-dropdown-menu">
-            <div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div>
-            <div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>
-            ${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}
-            <div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div>
-          </div>
-        </div>`;
-        
+        container.innerHTML = `<div class="user-menu" id="userMenuDropdown"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office||"ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
         const userDiv = document.getElementById("userMenuDropdown");
-        if (userDiv) { 
-          userDiv.addEventListener("click", (e) => { 
-            e.stopPropagation(); 
-            const menu = userDiv.querySelector(".user-dropdown-menu"); 
-            if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; 
-          }); 
-          document.addEventListener("click", () => { 
-            const menu = userDiv.querySelector(".user-dropdown-menu"); 
-            if(menu) menu.style.display = "none"; 
-          }); 
-        }
-        
-        if (isAdmin) { 
-          const adminBtn = document.getElementById("adminConsoleLink"); 
-          if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); 
-        }
-        
+        if (userDiv) { userDiv.addEventListener("click", (e) => { e.stopPropagation(); const menu = userDiv.querySelector(".user-dropdown-menu"); if(menu) menu.style.display = menu.style.display === "block" ? "none" : "block"; }); document.addEventListener("click", () => { const menu = userDiv.querySelector(".user-dropdown-menu"); if(menu) menu.style.display = "none"; }); }
+        if (isAdmin) { const adminBtn = document.getElementById("adminConsoleLink"); if(adminBtn) adminBtn.addEventListener("click", () => window.location.href = "admin.html"); }
         const logoutBtn = document.getElementById("logoutDropdownBtn");
-        if(logoutBtn) logoutBtn.addEventListener("click", () => { 
-          localStorage.removeItem("dhsud_session"); 
-          showToastMessage("Logged out successfully.", "info"); 
-          setTimeout(() => window.location.reload(), 700); 
-        });
-      } else {
-        container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
-      }
+        if(logoutBtn) logoutBtn.addEventListener("click", () => { localStorage.removeItem("dhsud_session"); showToastMessage("Logged out successfully.", "info"); setTimeout(() => window.location.reload(), 700); });
+      } else { container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`; }
     }
 
     function openLoginModal() { document.getElementById("loginModal").classList.add("active"); }
     function closeLoginModal() { document.getElementById("loginModal").classList.remove("active"); }
     function toggleModalPassword() { let pwd = document.getElementById("modalLoginPassword"); pwd.type = pwd.type === "password" ? "text" : "password"; }
-    
     async function handleModalLogin(e) {
       e.preventDefault();
       const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
@@ -975,8 +498,7 @@
         const users = await resp.json();
         const user = users.find(u => u.email?.toLowerCase() === email);
         if (!user) { showToastMessage("Account not found.", "error"); btn.innerHTML = originalText; btn.disabled = false; return false; }
-        const encodedPassword = btoa(password);
-        if (user.password === encodedPassword) {
+        if (user.password === btoa(password)) {
           const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
           localStorage.setItem("dhsud_session", JSON.stringify(session));
           showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
@@ -988,142 +510,62 @@
       return false;
     }
 
-    // ===== FILE PREVIEW FUNCTIONS =====
     function openFilePreview(fileName, fileUrl) {
       const modal = document.getElementById('filePreviewModal');
       const nameEl = document.getElementById('previewFileName');
       const contentEl = document.getElementById('previewContent');
       const downloadLink = document.getElementById('previewDownloadLink');
       const openLink = document.getElementById('previewOpenLink');
-      
       nameEl.textContent = fileName;
       downloadLink.href = fileUrl;
       openLink.href = fileUrl;
-      
       contentEl.innerHTML = '<div class="file-preview-loading">⏳ Loading file preview...</div>';
       modal.classList.add('active');
-      
       const ext = fileName.split('.').pop().toLowerCase();
       const isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext);
       const isPDF = ext === 'pdf';
       const isDoc = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext);
-      
-      if (isImage) {
-        contentEl.innerHTML = `<img src="${fileUrl}" alt="${fileName}" onerror="this.style.display='none'; document.getElementById('previewError').style.display='block'">`;
-      } else if (isPDF) {
-        contentEl.innerHTML = `<iframe src="${fileUrl}" allowfullscreen></iframe>`;
-      } else if (isDoc) {
-        const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-        contentEl.innerHTML = `<iframe src="${viewerUrl}" allowfullscreen></iframe>`;
-      } else {
-        contentEl.innerHTML = `
-          <div style="text-align:center; padding: 40px;">
-            <div style="font-size: 4rem; margin-bottom: 20px;">📄</div>
-            <p style="color: #64748b;">This file type cannot be previewed directly.</p>
-            <p style="color: #64748b; margin-top: 8px;">Click "Open in Drive" to view or download.</p>
-          </div>
-        `;
-      }
+      if (isImage) { contentEl.innerHTML = `<img src="${fileUrl}" alt="${fileName}">`; }
+      else if (isPDF) { contentEl.innerHTML = `<iframe src="${fileUrl}" allowfullscreen></iframe>`; }
+      else if (isDoc) { const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`; contentEl.innerHTML = `<iframe src="${viewerUrl}" allowfullscreen></iframe>`; }
+      else { contentEl.innerHTML = `<div style="text-align:center; padding: 40px;"><div style="font-size: 4rem; margin-bottom: 20px;">📄</div><p style="color: #64748b;">This file type cannot be previewed directly.</p><p style="color: #64748b; margin-top: 8px;">Click "Open in Drive" to view or download.</p></div>`; }
     }
-
-    function closeFilePreview() {
-      document.getElementById('filePreviewModal').classList.remove('active');
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeFilePreview();
-      }
-    });
-
-    document.getElementById('filePreviewModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeFilePreview();
-      }
-    });
-
-    // ============================================================
-    // ===== FETCH STATISTICS FROM GOOGLE SHEETS =====
-    // ============================================================
+    function closeFilePreview() { document.getElementById('filePreviewModal').classList.remove('active'); }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeFilePreview(); });
+    document.getElementById('filePreviewModal').addEventListener('click', function(e) { if (e.target === this) closeFilePreview(); });
 
     async function fetchStatistics() {
       try {
-        let lguRecords = [];
-        let clupCount = 0;
-        let zoCount = 0;
-        let totalLgus = 0;
-        let digitizedCount = 0;
-
-        try {
-          const lguResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu&_=${Date.now()}`);
-          if (lguResponse.ok) {
-            lguRecords = await lguResponse.json();
-            if (!Array.isArray(lguRecords)) {
-              lguRecords = lguRecords.data || [];
-            }
-          }
-        } catch (e) {
-          console.warn('Could not fetch LGU records:', e);
-        }
-
+        let lguRecords = []; let clupCount = 0; let zoCount = 0; let totalLgus = 0; let digitizedCount = 0;
+        try { const lguResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu&_=${Date.now()}`); if (lguResponse.ok) { lguRecords = await lguResponse.json(); if (!Array.isArray(lguRecords)) lguRecords = lguRecords.data || []; } } catch (e) { console.warn('Could not fetch LGU records:', e); }
         totalLgus = lguRecords.length;
-
         lguRecords.forEach(record => {
           const clupStatus = record["CLUP Status"] || record["clupStatus"] || record["PDPFP/CLUP Status"] || "";
           const zoStatus = record["ZO Status"] || record["zoStatus"] || "";
-          
-          if (clupStatus && clupStatus.trim() !== "") {
-            clupCount++;
-          }
-          if (zoStatus && zoStatus.trim() !== "") {
-            zoCount++;
-          }
+          if (clupStatus && clupStatus.trim() !== "") clupCount++;
+          if (zoStatus && zoStatus.trim() !== "") zoCount++;
         });
-
         if (clupCount === 0 && zoCount === 0) {
           try {
             const statusResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=lgu_status&_=${Date.now()}`);
             if (statusResponse.ok) {
               const statusData = await statusResponse.json();
               const statusRecords = Array.isArray(statusData) ? statusData : (statusData.data || []);
-              
               statusRecords.forEach(record => {
-                const clupStatus = record["CLUP Status"] || "";
-                const zoStatus = record["ZO Status"] || "";
-                
-                if (clupStatus && clupStatus.trim() !== "") {
-                  clupCount++;
-                }
-                if (zoStatus && zoStatus.trim() !== "") {
-                  zoCount++;
-                }
+                const clupStatus = record["CLUP Status"] || ""; const zoStatus = record["ZO Status"] || "";
+                if (clupStatus && clupStatus.trim() !== "") clupCount++;
+                if (zoStatus && zoStatus.trim() !== "") zoCount++;
               });
-              
-              if (statusRecords.length > 0) {
-                totalLgus = statusRecords.length;
-              }
+              if (statusRecords.length > 0) totalLgus = statusRecords.length;
             }
-          } catch (e) {
-            console.warn('Could not fetch LGU status records:', e);
-          }
+          } catch (e) { console.warn('Could not fetch LGU status records:', e); }
         }
-
-        digitizedCount = lguRecords.filter(record => {
-          const status = record["CLUP Status"] || record["clupStatus"] || record["PDPFP/CLUP Status"] || "";
-          return status && (status.toLowerCase().includes("updated") || 
-                           status.toLowerCase().includes("digitized") ||
-                           status.toLowerCase().includes("digital") ||
-                           status.toLowerCase().includes("complete") ||
-                           status.toLowerCase().includes("approved"));
-        }).length;
-
+        digitizedCount = lguRecords.filter(record => { const status = record["CLUP Status"] || record["clupStatus"] || record["PDPFP/CLUP Status"] || ""; return status && (status.toLowerCase().includes("updated") || status.toLowerCase().includes("digitized") || status.toLowerCase().includes("digital") || status.toLowerCase().includes("complete") || status.toLowerCase().includes("approved")); }).length;
         const digitizationRate = totalLgus > 0 ? Math.round((digitizedCount / totalLgus) * 100) : 0;
-
         document.getElementById('totalClupCount').textContent = clupCount || 0;
         document.getElementById('totalZoCount').textContent = zoCount || 0;
         document.getElementById('totalLguCount').textContent = totalLgus || 0;
         document.getElementById('digitizationRate').textContent = digitizationRate + '%';
-
         if (clupCount === 0 && zoCount === 0 && totalLgus === 0) {
           const fallbackData = getFallbackStatistics();
           document.getElementById('totalClupCount').textContent = fallbackData.clupCount || 0;
@@ -1131,7 +573,6 @@
           document.getElementById('totalLguCount').textContent = fallbackData.totalLgus || 0;
           document.getElementById('digitizationRate').textContent = fallbackData.digitizationRate + '%';
         }
-
       } catch (error) {
         console.error('Error fetching statistics:', error);
         const fallbackData = getFallbackStatistics();
@@ -1144,60 +585,24 @@
     }
 
     function getFallbackStatistics() {
-      let totalLgus = 0;
-      const provinces = ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo'];
-      provinces.forEach(p => {
-        if (provinceData[p]) {
-          totalLgus += provinceData[p].lgus.length;
-        }
-      });
-
-      let clupCount = 0;
-      let zoCount = 0;
+      let totalLgus = 0; const provinces = ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo'];
+      provinces.forEach(p => { if (provinceData[p]) totalLgus += provinceData[p].lgus.length; });
+      let clupCount = 0; let zoCount = 0;
       const lguKeys = Object.keys(documentData);
-      lguKeys.forEach(key => {
-        const data = documentData[key];
-        if (data && data.clup) {
-          clupCount += data.clup.filter(d => d && d.name).length;
-        }
-        if (data && data.zo) {
-          zoCount += data.zo.filter(d => d && d.name).length;
-        }
-      });
-
+      lguKeys.forEach(key => { const data = documentData[key]; if (data && data.clup) clupCount += data.clup.filter(d => d && d.name).length; if (data && data.zo) zoCount += data.zo.filter(d => d && d.name).length; });
       if (clupCount === 0) clupCount = Math.round(totalLgus * 0.85);
       if (zoCount === 0) zoCount = Math.round(totalLgus * 0.75);
-
       const digitizationRate = totalLgus > 0 ? Math.round((clupCount / totalLgus) * 100) : 0;
-
       return { clupCount, zoCount, totalLgus, digitizationRate };
     }
-
-    // ============================================================
-    // ===== INVENTORY CODE =====
-    // ============================================================
 
     const modal = document.getElementById("documentModal");
     const hyperlinkBtn = document.getElementById("lguHyperlinkBtn");
     const closeBtn = document.querySelector(".close-modal");
-    
-    hyperlinkBtn.addEventListener("click", function(e) {
-      e.preventDefault();
-      modal.style.display = "block";
-      document.body.style.overflow = "hidden";
-      resetModalState();
-    });
-    closeBtn.addEventListener("click", function() {
-      modal.style.display = "none";
-      document.body.style.overflow = "auto";
-    });
-    window.addEventListener("click", function(e) {
-      if (e.target === modal) {
-        modal.style.display = "none";
-        document.body.style.overflow = "auto";
-      }
-    });
-    
+    hyperlinkBtn.addEventListener("click", function(e) { e.preventDefault(); modal.style.display = "block"; document.body.style.overflow = "hidden"; resetModalState(); });
+    closeBtn.addEventListener("click", function() { modal.style.display = "none"; document.body.style.overflow = "auto"; });
+    window.addEventListener("click", function(e) { if (e.target === modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } });
+
     const provinceData = {
       Aklan: { lgus: ["Altavas","Balete","Banga","Batan","Buruanga","Ibajay","Kalibo","Lezo","Libacao","Madalag","Makato","Malay","Malinao","Nabas","New Washington","Numancia","Tangalan"], driveFolder: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" },
       Antique: { lgus: ["Anini-y","Barbaza","Belison","Bugasong","Caluya","Culasi","Hamtic","Laua-an","Libertad","Pandan","Patnongon","San Jose","San Remigio","Sebaste","Sibalom","Tibiao","Tobias Fornier","Valderrama"], driveFolder: "https://drive.google.com/drive/folders/1AntiqueFolder?usp=sharing" },
@@ -1205,11 +610,11 @@
       Guimaras: { lgus: ["Buenavista","Jordan","Nueva Valencia","San Lorenzo","Sibunag"], driveFolder: "https://drive.google.com/drive/folders/1GuimarasFolder?usp=sharing" },
       Iloilo: { lgus: ["Ajuy","Alimodian","Anilao","Badiangan","Balasan","Banate","Barotac Nuevo","Barotac Viejo","Batad","Bingawan","Cabatuan","Calinog","Carles","Concepcion","Dingle","Dueñas","Dumangas","Estancia","Guimbal","Igbaras","Iloilo City","Janiuay","Lambunao","Leganes","Lemery","Leon","Maasin","Miagao","Mina","New Lucena","Oton","Pavia","Pototan","San Dionisio","San Enrique","San Joaquin","San Miguel","San Rafael","Santa Barbara","Sara","Tigbauan","Tubungan","Zarraga"], driveFolder: "https://drive.google.com/drive/folders/1IloiloFolder?usp=sharing" }
     };
-    
+
     const documentData = {
       Altavas: { clup: [{ name: "Altavas CLUP 2003-2012.pdf", link: "https://drive.google.com/file/d/1Xo445Gj6onPeMTkOLIpHVpoz3UaVYAFC/view?usp=drive_link" },{ name: "Altavas CLUP Updated 2015.jpeg", link: "https://drive.google.com/file/d/1uz_FQH4idjW4Ws5WfbQCWqQFiCaN_96V/view?usp=drive_link" }], zo: [{ name: "Zoning Ordinance Altavas.pdf", link: "https://drive.google.com/file/d/example/view?usp=drive_link" }], supporting: [{ name: "SP Resolution for Altavas.pdf", link: "https://drive.google.com/file/d/example2/view?usp=drive_link" }] }
     };
-    
+
     function resetModalState() {
       document.getElementById("provinceSelect").value = "";
       document.getElementById("lguSelectorGroup").style.display = "none";
@@ -1218,11 +623,9 @@
       document.getElementById("selectedInfo").classList.add("hidden");
       document.getElementById("lguSelect").innerHTML = '<option value="">-- Select LGU --</option>';
       document.querySelector(".modal-header h3").innerHTML = "📂 CLUP/ZO Documents Viewer";
-      uploadedFiles.clup = [];
-      uploadedFiles.zo = [];
-      uploadedFiles.supporting = [];
+      uploadedFiles.clup = []; uploadedFiles.zo = []; uploadedFiles.supporting = [];
     }
-    
+
     const provinceSelect = document.getElementById("provinceSelect");
     const lguSelect = document.getElementById("lguSelect");
     const lguSelectorGroup = document.getElementById("lguSelectorGroup");
@@ -1230,286 +633,99 @@
     const requestFormContainer = document.getElementById("requestFormContainer");
     const selectedInfo = document.getElementById("selectedInfo");
     const selectedLocationSpan = document.getElementById("selectedLocation");
-    
+
     provinceSelect.addEventListener("change", function() {
       const p = this.value;
-      if (p === "") {
-        lguSelectorGroup.style.display = "none";
-        documentsContainer.style.display = "none";
-        requestFormContainer.style.display = "none";
-        selectedInfo.classList.add("hidden");
-        return;
-      }
+      if (p === "") { lguSelectorGroup.style.display = "none"; documentsContainer.style.display = "none"; requestFormContainer.style.display = "none"; selectedInfo.classList.add("hidden"); return; }
       lguSelectorGroup.style.display = "block";
       lguSelect.innerHTML = '<option value="">-- Select LGU --</option>';
       const lgus = provinceData[p]?.lgus || [];
-      lgus.forEach(l => {
-        const opt = document.createElement("option");
-        opt.value = l;
-        opt.textContent = `🏘️ ${l}`;
-        lguSelect.appendChild(opt);
-      });
+      lgus.forEach(l => { const opt = document.createElement("option"); opt.value = l; opt.textContent = `🏘️ ${l}`; lguSelect.appendChild(opt); });
       document.querySelector(".modal-header h3").innerHTML = `📂 CLUP/ZO Documents - ${p} Province`;
     });
-    
+
     lguSelect.addEventListener("change", function() {
-      const p = provinceSelect.value;
-      const l = this.value;
-      if (l === "") {
-        documentsContainer.style.display = "none";
-        requestFormContainer.style.display = "none";
-        selectedInfo.classList.add("hidden");
-        return;
-      }
+      const p = provinceSelect.value; const l = this.value;
+      if (l === "") { documentsContainer.style.display = "none"; requestFormContainer.style.display = "none"; selectedInfo.classList.add("hidden"); return; }
       documentsContainer.style.display = "block";
       requestFormContainer.style.display = "block";
       selectedInfo.classList.remove("hidden");
       selectedLocationSpan.innerHTML = `${l}, ${p}`;
       const driveFolderLink = document.getElementById("driveFolderLink");
       const googleDriveLinkDiv = document.getElementById("googleDriveLink");
-      const folderUrl = provinceData[p]?.driveFolder || "#";
       driveFolderLink.href = "https://drive.google.com/drive/folders/1arGRhomtDIU7seiDZajAO77L8noAQigV?usp=sharing";
       googleDriveLinkDiv.style.display = "block";
-      
-      uploadedFiles.clup = [];
-      uploadedFiles.zo = [];
-      uploadedFiles.supporting = [];
-      
+      uploadedFiles.clup = []; uploadedFiles.zo = []; uploadedFiles.supporting = [];
       loadDocumentsForLGU(l);
-      
       document.getElementById("uploadClupBtn").disabled = false;
       document.getElementById("uploadZoBtn").disabled = false;
       document.getElementById("uploadSupportingBtn").disabled = false;
     });
-    
+
     async function loadDocumentsForLGU(lgu) {
       const province = provinceSelect.value;
       const folderName = `${province} - ${lgu}`;
-      
       let folderId = null;
-      try {
-        const folderResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=createFolder&folderName=${encodeURIComponent(folderName)}&parentFolderId=${DRIVE_FOLDER_ID}`);
-        const folderResult = await folderResponse.json();
-        if (folderResult.success) {
-          folderId = folderResult.folderId;
-        }
-      } catch (error) {
-        console.log('Could not get folder:', error);
-      }
-      
+      try { const folderResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=createFolder&folderName=${encodeURIComponent(folderName)}&parentFolderId=${DRIVE_FOLDER_ID}`); const folderResult = await folderResponse.json(); if (folderResult.success) folderId = folderResult.folderId; } catch (error) { console.log('Could not get folder:', error); }
       let driveFiles = [];
-      if (folderId) {
-        try {
-          const fileResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolderFiles&folderId=${encodeURIComponent(folderId)}`);
-          const fileResult = await fileResponse.json();
-          if (fileResult.success) {
-            driveFiles = fileResult.files || [];
-          }
-        } catch (error) {
-          console.log('Could not fetch files:', error);
-        }
-      }
-      
+      if (folderId) { try { const fileResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFolderFiles&folderId=${encodeURIComponent(folderId)}`); const fileResult = await fileResponse.json(); if (fileResult.success) driveFiles = fileResult.files || []; } catch (error) { console.log('Could not fetch files:', error); } }
       const clupDriveFiles = driveFiles.filter(f => f.name.includes('CLUP_'));
       const zoDriveFiles = driveFiles.filter(f => f.name.includes('ZO_'));
       const supportingDriveFiles = driveFiles.filter(f => !f.name.includes('CLUP_') && !f.name.includes('ZO_'));
-      
-      const clupList = document.getElementById("clupDocList");
-      let clupItems = [];
-      
-      clupDriveFiles.forEach(f => {
-        clupItems.push({
-          name: f.name,
-          link: f.url,
-          isUploaded: true,
-          isStatic: false,
-          fileId: f.id
-        });
-      });
-      
-      renderFileList(clupList, clupItems);
-      
-      const zoList = document.getElementById("zoDocList");
-      let zoItems = [];
-      
-      zoDriveFiles.forEach(f => {
-        zoItems.push({
-          name: f.name,
-          link: f.url,
-          isUploaded: true,
-          isStatic: false,
-          fileId: f.id
-        });
-      });
-      
-      renderFileList(zoList, zoItems);
-      
-      const supList = document.getElementById("supportingDocList");
-      let supItems = [];
-      
-      supportingDriveFiles.forEach(f => {
-        supItems.push({
-          name: f.name,
-          link: f.url,
-          isUploaded: true,
-          isStatic: false,
-          fileId: f.id
-        });
-      });
-      
-      renderFileList(supList, supItems);
+      renderFileList(document.getElementById("clupDocList"), clupDriveFiles.map(f => ({ name: f.name, link: f.url, isUploaded: true, isStatic: false, fileId: f.id })));
+      renderFileList(document.getElementById("zoDocList"), zoDriveFiles.map(f => ({ name: f.name, link: f.url, isUploaded: true, isStatic: false, fileId: f.id })));
+      renderFileList(document.getElementById("supportingDocList"), supportingDriveFiles.map(f => ({ name: f.name, link: f.url, isUploaded: true, isStatic: false, fileId: f.id })));
     }
-    
+
     function renderFileList(listElement, items) {
-      if (items.length === 0) {
-        listElement.innerHTML = '<li>No documents available</li>';
-        return;
-      }
-      
+      if (items.length === 0) { listElement.innerHTML = '<li>No documents available</li>'; return; }
       listElement.innerHTML = items.map(item => {
-        let badge = '';
-        let deleteCheckbox = '';
-        
-        if (item.isUploaded && item.fileId) {
-          badge = ' <span style="font-size:0.6rem; color:#166534; background:#dcfce7; padding:2px 8px; border-radius:12px; margin-left:6px;">⬆ Uploaded</span>';
-          deleteCheckbox = `
-              <span class="delete-checkbox">
-                  <input type="checkbox" onchange="toggleFileSelection('${item.fileId}', this)">
-              </span>
-          `;
-        } else if (item.isStatic) {
-          badge = ' <span style="font-size:0.6rem; color:#1e40af; background:#dbeafe; padding:2px 8px; border-radius:12px; margin-left:6px;">📎 Default</span>';
-        }
-        
-        return `<li class="file-item">
-            ${deleteCheckbox}
-            <span class="file-info">
-                <span class="file-icon">📄</span>
-                <a href="javascript:void(0)" onclick="openFilePreview('${escapeHtml(item.name)}', '${item.link}')">${escapeHtml(item.name)}</a>
-                ${badge}
-                ${item.isUploaded && item.fileId ? `<button class="delete-btn visible" onclick="deleteSingleFile('${item.fileId}', '${escapeHtml(item.name)}', this)">🗑️</button>` : ''}
-            </span>
-        </li>`;
+        let badge = ''; let deleteCheckbox = '';
+        if (item.isUploaded && item.fileId) { badge = ' <span style="font-size:0.6rem; color:#166534; background:#dcfce7; padding:2px 8px; border-radius:12px; margin-left:6px;">⬆ Uploaded</span>'; deleteCheckbox = `<span class="delete-checkbox"><input type="checkbox" onchange="toggleFileSelection('${item.fileId}', this)"></span>`; }
+        else if (item.isStatic) { badge = ' <span style="font-size:0.6rem; color:#1e40af; background:#dbeafe; padding:2px 8px; border-radius:12px; margin-left:6px;">📎 Default</span>'; }
+        return `<li class="file-item">${deleteCheckbox}<span class="file-info"><span class="file-icon">📄</span><a href="javascript:void(0)" onclick="openFilePreview('${escapeHtml(item.name)}', '${item.link}')">${escapeHtml(item.name)}</a>${badge}${item.isUploaded && item.fileId ? `<button class="delete-btn visible" onclick="deleteSingleFile('${item.fileId}', '${escapeHtml(item.name)}', this)">🗑️</button>` : ''}</span></li>`;
       }).join('');
-      
-      if (deleteModeEnabled) {
-        document.querySelectorAll('.delete-checkbox').forEach(el => {
-          el.classList.add('visible');
-        });
-        document.getElementById('bulkDeleteBar').classList.add('visible');
-      }
+      if (deleteModeEnabled) { document.querySelectorAll('.delete-checkbox').forEach(el => { el.classList.add('visible'); }); document.getElementById('bulkDeleteBar').classList.add('visible'); }
     }
-    
-    function getDefaultDocuments(lgu) {
-      return {
-        clup: [{ name: `${lgu} CLUP Document.pdf`, link: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" }],
-        zo: [{ name: `${lgu} Zoning Ordinance.pdf`, link: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" }],
-        supporting: [{ name: `${lgu} Supporting Documents.pdf`, link: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" }]
-      };
-    }
-    
-    // ===== UPLOAD FUNCTIONS =====
-    
-    function triggerUpload(type) {
-      const inputMap = {
-        'clup': 'clupFileInput',
-        'zo': 'zoFileInput',
-        'supporting': 'supportingFileInput'
-      };
-      document.getElementById(inputMap[type]).click();
-    }
-    
+
+    function getDefaultDocuments(lgu) { return { clup: [{ name: `${lgu} CLUP Document.pdf`, link: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" }], zo: [{ name: `${lgu} Zoning Ordinance.pdf`, link: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" }], supporting: [{ name: `${lgu} Supporting Documents.pdf`, link: "https://drive.google.com/drive/folders/1X3ko9XJe_aIF2v_0Qwf4kvpK4HSrePqo?usp=sharing" }] }; }
+
+    function triggerUpload(type) { const inputMap = { 'clup': 'clupFileInput', 'zo': 'zoFileInput', 'supporting': 'supportingFileInput' }; document.getElementById(inputMap[type]).click(); }
+
     async function handleFileUpload(type, input) {
       const files = input.files;
       if (!files || files.length === 0) return;
-      
-      const province = provinceSelect.value;
-      const lgu = lguSelect.value;
-      
-      if (!province || !lgu) {
-        showToastMessage("Please select a Province and LGU first.", "error");
-        input.value = '';
-        return;
-      }
-      
+      const province = provinceSelect.value; const lgu = lguSelect.value;
+      if (!province || !lgu) { showToastMessage("Please select a Province and LGU first.", "error"); input.value = ''; return; }
       const statusSpan = document.getElementById(`${type}UploadStatus`);
       const uploadBtn = document.getElementById(`upload${type.charAt(0).toUpperCase() + type.slice(1)}Btn`);
-      
       const folderName = `${province} - ${lgu}`;
       let folderId;
-      
       try {
         statusSpan.innerHTML = `<span class="upload-progress"></span> Creating folder...`;
-        
         const folderResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=createFolder&folderName=${encodeURIComponent(folderName)}&parentFolderId=${DRIVE_FOLDER_ID}`);
         const folderResult = await folderResponse.json();
-        
-        if (!folderResult.success) {
-          showToastMessage("Failed to create folder: " + folderResult.error, "error");
-          statusSpan.innerHTML = '❌ Failed';
-          input.value = '';
-          return;
-        }
+        if (!folderResult.success) { showToastMessage("Failed to create folder: " + folderResult.error, "error"); statusSpan.innerHTML = '❌ Failed'; input.value = ''; return; }
         folderId = folderResult.folderId;
-        console.log("Folder ready:", folderId);
-        
-      } catch (error) {
-        console.error("Error:", error);
-        showToastMessage("Error: " + error.message, "error");
-        statusSpan.innerHTML = '❌ Error';
-        input.value = '';
-        return;
-      }
-      
-      let uploadedCount = 0;
-      let failedCount = 0;
-      
+      } catch (error) { showToastMessage("Error: " + error.message, "error"); statusSpan.innerHTML = '❌ Error'; input.value = ''; return; }
+      let uploadedCount = 0; let failedCount = 0;
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         statusSpan.innerHTML = `<span class="upload-progress"></span> Uploading ${file.name} (${i+1}/${files.length})...`;
         uploadBtn.disabled = true;
-        
         try {
           const result = await uploadFileDirect(file, folderId, province, lgu, type);
-          
-          if (result.success) {
-            uploadedCount++;
-            const fileInfo = { name: result.fileName || file.name, link: result.fileLink };
-            if (type === 'clup') {
-              uploadedFiles.clup.push(fileInfo);
-            } else if (type === 'zo') {
-              uploadedFiles.zo.push(fileInfo);
-            } else if (type === 'supporting') {
-              uploadedFiles.supporting.push(fileInfo);
-            }
-            showToastMessage(`✅ ${result.fileName || file.name} uploaded!`, "success");
-          } else {
-            failedCount++;
-            showToastMessage(`❌ ${file.name}: ${result.error || 'Upload failed'}`, "error");
-          }
-        } catch (error) {
-          failedCount++;
-          showToastMessage(`❌ ${file.name}: ${error.message}`, "error");
-        }
+          if (result.success) { uploadedCount++; const fileInfo = { name: result.fileName || file.name, link: result.fileLink }; if (type === 'clup') uploadedFiles.clup.push(fileInfo); else if (type === 'zo') uploadedFiles.zo.push(fileInfo); else if (type === 'supporting') uploadedFiles.supporting.push(fileInfo); showToastMessage(`✅ ${result.fileName || file.name} uploaded!`, "success"); }
+          else { failedCount++; showToastMessage(`❌ ${file.name}: ${result.error || 'Upload failed'}`, "error"); }
+        } catch (error) { failedCount++; showToastMessage(`❌ ${file.name}: ${error.message}`, "error"); }
       }
-      
       loadDocumentsForLGU(lgu);
-      
-      if (uploadedCount > 0 && failedCount === 0) {
-        statusSpan.innerHTML = `✅ ${uploadedCount} uploaded`;
-        showToastMessage(`✅ All ${uploadedCount} file(s) uploaded successfully!`, "success");
-      } else if (uploadedCount > 0 && failedCount > 0) {
-        statusSpan.innerHTML = `⚠️ ${uploadedCount} uploaded, ${failedCount} failed`;
-        showToastMessage(`⚠️ ${uploadedCount} uploaded, ${failedCount} failed`, "error");
-      } else {
-        statusSpan.innerHTML = '❌ Upload failed';
-        showToastMessage(`❌ All ${files.length} file(s) failed to upload`, "error");
-      }
-      
-      uploadBtn.disabled = false;
-      input.value = '';
+      if (uploadedCount > 0 && failedCount === 0) { statusSpan.innerHTML = `✅ ${uploadedCount} uploaded`; showToastMessage(`✅ All ${uploadedCount} file(s) uploaded successfully!`, "success"); }
+      else if (uploadedCount > 0 && failedCount > 0) { statusSpan.innerHTML = `⚠️ ${uploadedCount} uploaded, ${failedCount} failed`; showToastMessage(`⚠️ ${uploadedCount} uploaded, ${failedCount} failed`, "error"); }
+      else { statusSpan.innerHTML = '❌ Upload failed'; showToastMessage(`❌ All ${files.length} file(s) failed to upload`, "error"); }
+      uploadBtn.disabled = false; input.value = '';
     }
-    
+
     async function uploadFileDirect(file, folderId, province, lgu, docType) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1518,207 +734,59 @@
             const base64Data = e.target.result.split(',')[1];
             const typeLabels = { 'clup': 'CLUP', 'zo': 'ZO', 'supporting': 'Supporting' };
             const fileName = `${typeLabels[docType]}_${file.name}`;
-            
             const formData = new FormData();
-            formData.append('action', 'upload');
-            formData.append('folderId', folderId);
-            formData.append('fileName', fileName);
-            formData.append('fileData', base64Data);
-            formData.append('mimeType', file.type || 'application/octet-stream');
-            formData.append('docType', docType);
-            formData.append('lgu', lgu);
-            formData.append('province', province);
-            
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-              method: 'POST',
-              body: formData
-            });
-            
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            let result;
-            try {
-              result = await response.json();
-            } catch (parseError) {
-              const text = await response.text();
-              console.log('Response text:', text);
-              throw new Error('Invalid JSON response: ' + text.substring(0, 200));
-            }
-            
-            console.log('Upload response:', result);
-            
-            if (result.success) {
-              resolve(result);
-            } else {
-              reject(new Error(result.error || 'Upload failed'));
-            }
-          } catch (error) {
-            console.error('Upload error:', error);
-            reject(error);
-          }
+            formData.append('action', 'upload'); formData.append('folderId', folderId); formData.append('fileName', fileName);
+            formData.append('fileData', base64Data); formData.append('mimeType', file.type || 'application/octet-stream');
+            formData.append('docType', docType); formData.append('lgu', lgu); formData.append('province', province);
+            const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            let result; try { result = await response.json(); } catch (parseError) { const text = await response.text(); throw new Error('Invalid JSON response: ' + text.substring(0, 200)); }
+            if (result.success) resolve(result); else reject(new Error(result.error || 'Upload failed'));
+          } catch (error) { reject(error); }
         };
-        reader.onerror = function(error) {
-          console.error('FileReader error:', error);
-          reject(error);
-        };
+        reader.onerror = function(error) { reject(error); };
         reader.readAsDataURL(file);
       });
     }
 
-    // ===== DELETE FUNCTIONS =====
-
-    let deleteModeEnabled = false;
-    let selectedFiles = new Set();
-
-    function toggleDeleteMode() {
-      const checkbox = document.getElementById('deleteModeToggle');
-      deleteModeEnabled = checkbox.checked;
-      
-      document.querySelectorAll('.delete-checkbox').forEach(el => {
-        el.classList.toggle('visible', deleteModeEnabled);
-      });
-      
-      document.getElementById('bulkDeleteBar').classList.toggle('visible', deleteModeEnabled);
-      
-      if (!deleteModeEnabled) {
-        selectedFiles.clear();
-        updateSelectedCount();
-      }
-    }
-
-    function toggleFileSelection(fileId, checkbox) {
-      if (checkbox.checked) {
-        selectedFiles.add(fileId);
-      } else {
-        selectedFiles.delete(fileId);
-      }
-      updateSelectedCount();
-    }
-
-    function updateSelectedCount() {
-      const count = selectedFiles.size;
-      document.getElementById('selectedCount').textContent = `${count} file${count !== 1 ? 's' : ''} selected`;
-      document.getElementById('bulkDeleteBtn').disabled = count === 0;
-    }
-
+    let deleteModeEnabled = false; let selectedFiles = new Set();
+    function toggleDeleteMode() { const checkbox = document.getElementById('deleteModeToggle'); deleteModeEnabled = checkbox.checked; document.querySelectorAll('.delete-checkbox').forEach(el => { el.classList.toggle('visible', deleteModeEnabled); }); document.getElementById('bulkDeleteBar').classList.toggle('visible', deleteModeEnabled); if (!deleteModeEnabled) { selectedFiles.clear(); updateSelectedCount(); } }
+    function toggleFileSelection(fileId, checkbox) { if (checkbox.checked) selectedFiles.add(fileId); else selectedFiles.delete(fileId); updateSelectedCount(); }
+    function updateSelectedCount() { const count = selectedFiles.size; document.getElementById('selectedCount').textContent = `${count} file${count !== 1 ? 's' : ''} selected`; document.getElementById('bulkDeleteBtn').disabled = count === 0; }
     async function confirmBulkDelete() {
-      if (selectedFiles.size === 0) {
-        showToastMessage('No files selected for deletion.', 'error');
-        return;
-      }
-      
+      if (selectedFiles.size === 0) { showToastMessage('No files selected for deletion.', 'error'); return; }
       const confirmDelete = confirm(`Are you sure you want to delete ${selectedFiles.size} file(s)? This action cannot be undone!`);
       if (!confirmDelete) return;
-      
-      const bulkBtn = document.getElementById('bulkDeleteBtn');
-      bulkBtn.disabled = true;
-      bulkBtn.textContent = '⏳ Deleting...';
-      
-      let deleted = 0;
-      let failed = 0;
-      
-      for (const fileId of selectedFiles) {
-        try {
-          const result = await deleteFileFromDrive(fileId);
-          if (result.success) {
-            deleted++;
-          } else {
-            failed++;
-            console.error('Delete failed:', result.error);
-          }
-        } catch (error) {
-          failed++;
-          console.error('Delete error:', error);
-        }
-      }
-      
-      selectedFiles.clear();
-      updateSelectedCount();
-      
-      const lgu = lguSelect.value;
-      if (lgu) {
-        await loadDocumentsForLGU(lgu);
-      }
-      
-      bulkBtn.textContent = '🗑️ Delete Selected';
-      bulkBtn.disabled = false;
-      
-      if (deleted > 0 && failed === 0) {
-        showToastMessage(`✅ ${deleted} file(s) deleted successfully!`, 'success');
-      } else if (deleted > 0 && failed > 0) {
-        showToastMessage(`⚠️ ${deleted} deleted, ${failed} failed`, 'error');
-      } else {
-        showToastMessage(`❌ Failed to delete ${failed} file(s)`, 'error');
-      }
+      const bulkBtn = document.getElementById('bulkDeleteBtn'); bulkBtn.disabled = true; bulkBtn.textContent = '⏳ Deleting...';
+      let deleted = 0; let failed = 0;
+      for (const fileId of selectedFiles) { try { const result = await deleteFileFromDrive(fileId); if (result.success) deleted++; else failed++; } catch (error) { failed++; } }
+      selectedFiles.clear(); updateSelectedCount();
+      const lgu = lguSelect.value; if (lgu) await loadDocumentsForLGU(lgu);
+      bulkBtn.textContent = '🗑️ Delete Selected'; bulkBtn.disabled = false;
+      if (deleted > 0 && failed === 0) showToastMessage(`✅ ${deleted} file(s) deleted successfully!`, 'success');
+      else if (deleted > 0 && failed > 0) showToastMessage(`⚠️ ${deleted} deleted, ${failed} failed`, 'error');
+      else showToastMessage(`❌ Failed to delete ${failed} file(s)`, 'error');
     }
-
-    async function deleteFileFromDrive(fileId) {
-      try {
-        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=deleteFile&fileId=${encodeURIComponent(fileId)}`);
-        const result = await response.json();
-        return result;
-      } catch (error) {
-        console.error('Delete error:', error);
-        return { success: false, error: error.message };
-      }
-    }
-
+    async function deleteFileFromDrive(fileId) { try { const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=deleteFile&fileId=${encodeURIComponent(fileId)}`); return await response.json(); } catch (error) { return { success: false, error: error.message }; } }
     async function deleteSingleFile(fileId, fileName, element) {
       const confirmDelete = confirm(`Are you sure you want to delete "${fileName}"?`);
       if (!confirmDelete) return;
-      
-      const parentLi = element.closest('li');
-      parentLi.classList.add('deleting');
-      
-      try {
-        const result = await deleteFileFromDrive(fileId);
-        if (result.success) {
-          showToastMessage(`✅ "${fileName}" deleted successfully!`, 'success');
-          const lgu = lguSelect.value;
-          if (lgu) {
-            await loadDocumentsForLGU(lgu);
-          }
-        } else {
-          showToastMessage(`❌ Failed to delete: ${result.error}`, 'error');
-          parentLi.classList.remove('deleting');
-        }
-      } catch (error) {
-        showToastMessage(`❌ Error: ${error.message}`, 'error');
-        parentLi.classList.remove('deleting');
-      }
+      const parentLi = element.closest('li'); parentLi.classList.add('deleting');
+      try { const result = await deleteFileFromDrive(fileId); if (result.success) { showToastMessage(`✅ "${fileName}" deleted successfully!`, 'success'); const lgu = lguSelect.value; if (lgu) await loadDocumentsForLGU(lgu); } else { showToastMessage(`❌ Failed to delete: ${result.error}`, 'error'); parentLi.classList.remove('deleting'); } }
+      catch (error) { showToastMessage(`❌ Error: ${error.message}`, 'error'); parentLi.classList.remove('deleting'); }
     }
-
     function submitDocumentRequest(e) {
       e.preventDefault();
       const docName = document.getElementById('requestDocName').value.trim();
       const email = document.getElementById('requestEmail').value.trim();
-      
-      if (!docName) {
-        showToastMessage('Please enter a document name.', 'error');
-        return false;
-      }
-      if (!email) {
-        showToastMessage('Please enter your email address.', 'error');
-        return false;
-      }
-      
+      if (!docName) { showToastMessage('Please enter a document name.', 'error'); return false; }
+      if (!email) { showToastMessage('Please enter your email address.', 'error'); return false; }
       showToastMessage(`📧 Request for "${docName}" sent to ${email}`, 'success');
-      document.getElementById('requestDocName').value = '';
-      document.getElementById('requestEmail').value = '';
+      document.getElementById('requestDocName').value = ''; document.getElementById('requestEmail').value = '';
       return false;
     }
 
-    // ===== INITIALIZE PAGE =====
-    checkSession();
-    renderMainNavigation();
-    renderUserMenu();
-    
-    // Fetch statistics when page loads
-    fetchStatistics();
-    
-    console.log('Page initialized!');
+    checkSession(); renderMainNavigation(); renderUserMenu(); fetchStatistics();
   </script>
 </body>
 </html>

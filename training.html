@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <base target="_top">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>DHSUD VI | CLUP/ZO TRAINING</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* ===== GLOBAL ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            font-family: "Inter", sans-serif;
             background: #f4f9fe;
             color: #0a2540;
             line-height: 1.5;
+            scroll-behavior: smooth;
             min-height: 100vh;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
@@ -80,48 +80,100 @@
             color: white;
             transform: translateY(-2px);
         }
+
+        /* ===== NAVIGATION BAR (centered) ===== */
         .nav-bottom {
             background: white;
             border-top: 1px solid #eef2ff;
             padding: 0.5rem 0;
         }
+        .nav-bottom .container {
+            display: flex;
+            justify-content: center;
+        }
         .main-nav-links {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            justify-content: center;
+            gap: 0.5rem;
             flex-wrap: wrap;
+            padding: 0.2rem 0;
         }
-        .main-nav-links a,
-        .dropbtn {
+
+        /* ===== NAV ITEM BOXES ===== */
+        .main-nav-links > a,
+        .main-nav-links > .dropdown > .dropbtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            font-weight: normal;
-            font-size: 0.85rem;
+            font-weight: 600;
+            font-size: 0.82rem;
             color: #1f3a5f;
-            padding: 0.5rem 0;
-            transition: 0.2s;
+            padding: 0.55rem 1rem;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            transition: all 0.25s ease;
             letter-spacing: -0.2px;
-            background: none;
-            border: none;
-            font-family: inherit;
             cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            font-family: inherit;
+            line-height: 1.2;
         }
-        .main-nav-links a:hover,
-        .dropbtn:hover {
+
+        /* Hover effect – box style */
+        .main-nav-links > a:hover,
+        .main-nav-links > .dropdown > .dropbtn:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
             color: #2563eb;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
         }
+
+        /* Active / Highlighted state */
+        .main-nav-links > a.active,
+        .main-nav-links > .dropdown > .dropbtn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30);
+            transform: translateY(-2px);
+        }
+        .main-nav-links > a.active:hover,
+        .main-nav-links > .dropdown > .dropbtn.active:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* Dropdown arrow for active state */
+        .main-nav-links > .dropdown > .dropbtn.active::after {
+            opacity: 1;
+        }
+
+        .dropbtn::after {
+            content: " ▾";
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-left: 4px;
+            transition: opacity 0.2s;
+        }
+        .dropdown:hover .dropbtn::after {
+            opacity: 1;
+        }
+
+        /* ===== DROPDOWN MENUS ===== */
         .dropdown {
             position: relative;
             display: inline-block;
         }
-        .dropbtn::after {
-            content: " ▾";
-            font-size: 0.7rem;
-            opacity: 0.6;
-        }
-        .dropdown:hover .dropbtn::after {
-            content: " ▾";
-            opacity: 1;
+        .dropbtn {
+            background: none;
+            border: none;
+            font-family: inherit;
         }
         .dropdown-content {
             display: none;
@@ -131,13 +183,33 @@
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
             border-radius: 16px;
             z-index: 1000;
-            top: 30px;
-            left: 0;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
             border: 1px solid #eef2ff;
             padding: 0.3rem 0;
+            animation: dropFade 0.2s ease;
+            margin-top: 0;
+        }
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: transparent;
+        }
+        @keyframes dropFade {
+            from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         .dropdown:hover .dropdown-content {
             display: block;
+        }
+        .dropdown {
+            padding-bottom: 6px;
+            margin-bottom: -6px;
         }
         .dropdown-content a {
             display: block;
@@ -145,10 +217,14 @@
             color: #1e293b;
             font-size: 0.8rem;
             text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
         }
         .dropdown-content a:hover {
             background: #eff6ff;
+            color: #2563eb;
         }
+
+        /* Submenus */
         .dropdown-submenu {
             position: relative;
         }
@@ -166,13 +242,19 @@
             justify-content: space-between;
             align-items: center;
             font-family: inherit;
+            transition: background 0.15s ease, color 0.15s ease;
         }
         .submenu-trigger:hover {
             background: #eff6ff;
+            color: #2563eb;
         }
         .arrow-right {
             font-size: 0.7rem;
             margin-left: 1rem;
+            transition: transform 0.2s ease;
+        }
+        .dropdown-submenu.open .arrow-right {
+            transform: rotate(90deg);
         }
         .submenu-content {
             display: none;
@@ -187,8 +269,25 @@
             z-index: 1001;
             padding: 0.3rem 0;
         }
-        .dropdown-submenu:hover .submenu-content {
+        .submenu-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -10px;
+            bottom: 0;
+            width: 10px;
+            background: transparent;
+        }
+        .dropdown-submenu:hover .submenu-content,
+        .dropdown-submenu.open .submenu-content {
             display: block;
+        }
+        .submenu-trigger {
+            padding-right: 2rem;
+        }
+        .dropdown-submenu {
+            padding-right: 6px;
+            margin-right: -6px;
         }
         .submenu-content a {
             padding: 0.7rem 1.2rem;
@@ -244,7 +343,7 @@
             background: #f8fafc;
         }
 
-        /* ===== CARD (from index) ===== */
+        /* ===== CARD ===== */
         .card {
             max-width: 880px;
             width: 100%;
@@ -1334,6 +1433,17 @@
             margin-bottom: 12px;
         }
 
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .main-nav-links {
+                gap: 0.35rem;
+            }
+            .main-nav-links > a,
+            .main-nav-links > .dropdown > .dropbtn {
+                font-size: 0.75rem;
+                padding: 0.45rem 0.75rem;
+            }
+        }
         @media (max-width: 800px) {
             .card { padding: 1.5rem; }
             .form-grid { grid-template-columns: 1fr; gap: 0.8rem; }
@@ -1365,6 +1475,49 @@
             .chart-summary { grid-template-columns: repeat(3, 1fr); }
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+
+            /* Mobile nav: allow wrapping and scroll */
+            .nav-bottom .container {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .main-nav-links {
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                gap: 0.25rem;
+                padding: 0.1rem 0;
+            }
+            .main-nav-links > a,
+            .main-nav-links > .dropdown > .dropbtn {
+                font-size: 0.68rem;
+                padding: 0.4rem 0.6rem;
+                white-space: nowrap;
+            }
+            .dropdown-content {
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                top: auto;
+                bottom: 20px;
+                min-width: 260px;
+                max-width: 90vw;
+                z-index: 2000;
+            }
+            .submenu-content {
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                top: auto;
+                bottom: 20px;
+                min-width: 200px;
+                max-width: 85vw;
+                z-index: 2001;
+            }
+            .dropdown-submenu.open .submenu-content {
+                display: block;
+            }
         }
         @media (max-width: 400px) {
             .card { padding: 1rem; }
@@ -1446,12 +1599,10 @@
                                 <option value="">Select City/Municipality...</option>
                             </select>
                         </div>
-                        <!-- TRAINING TITLE - Changed to Input Text -->
                         <div class="field-group full-width">
                             <label><i class="fas fa-chalkboard-teacher"></i> Training Title <span class="required">*</span></label>
                             <input type="text" id="training_title" placeholder="Enter Training Title..." required>
                         </div>
-                        <!-- TRAINING TOPICS - Changed to Input Text -->
                         <div class="field-group full-width">
                             <label><i class="fas fa-list-ul"></i> Training Topics <span class="required">*</span></label>
                             <input type="text" id="training_topics" placeholder="Enter Training Topics..." required>
@@ -1483,12 +1634,10 @@
                             <label><i class="fas fa-users"></i> No. of Participants <span class="required">*</span></label>
                             <input type="number" id="training_participants" min="0" placeholder="e.g. 25" required>
                         </div>
-                        <!-- BUDGET - Changed to Input Text -->
                         <div class="field-group">
                             <label><i class="fas fa-coins"></i> Budget/Funding Source <span class="required">*</span></label>
                             <input type="text" id="training_budget" placeholder="Enter Budget/Funding Source..." required>
                         </div>
-                        <!-- PARTNER AGENCY - Changed to Input Text -->
                         <div class="field-group">
                             <label><i class="fas fa-handshake"></i> Partner Agency <span class="required">*</span></label>
                             <input type="text" id="training_partner" placeholder="Enter Partner Agency..." required>
@@ -1590,7 +1739,7 @@
     <div class="login-modal-content">
         <div class="login-modal-brand">
             <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
-            <img src="DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
             <h3>DHSUD Region VI</h3>
             <p>ELUPDD · CLUP & ZO Platform</p>
         </div>
@@ -1648,7 +1797,6 @@
                     <option value="December">December</option>
                 </select>
             </div>
-            <!-- NEW: Training Category Filter -->
             <div class="filter-group">
                 <label for="filterCategory">Training Category:</label>
                 <select id="filterCategory">
@@ -1826,12 +1974,12 @@
         setTimeout(() => toast.remove(), duration);
     }
 
-// ============================================
-// CONFIG
-// ============================================
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzlwKZg92vFXB6sx3wBNS68UNOxZNSh7-J5uUCqOLqmKwyOjkBGogNzo4m6enPeZZXo_g/exec';
-const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/16fN6OsGQtUno_KPCc2W1A1VktolQTN1oYnSFG4MybbQ/edit?usp=sharing';
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
+    // ============================================
+    // CONFIG
+    // ============================================
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzlwKZg92vFXB6sx3wBNS68UNOxZNSh7-J5uUCqOLqmKwyOjkBGogNzo4m6enPeZZXo_g/exec';
+    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/16fN6OsGQtUno_KPCc2W1A1VktolQTN1oYnSFG4MybbQ/edit?usp=sharing';
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
 
     // ============================================
     // PERSONNEL IN-CHARGE DATA
@@ -2086,7 +2234,6 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvo
     let editingRowNumber = null;
     const modalBodyContent = document.getElementById('modalBodyContent');
 
-    // ===== NEW: Training Category Filter =====
     const filterCategory = document.getElementById('filterCategory');
 
     function setStatus(message, type = 'info') {
@@ -2139,7 +2286,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvo
     }
 
     // ============================================
-    // GET FORM DATA - Updated with input fields
+    // GET FORM DATA
     // ============================================
     function getFormData() {
         const getVal = (id) => document.getElementById('training_'+id).value.trim();
@@ -2351,7 +2498,6 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvo
                         cats.forEach(c => html += `<option value="${c}" ${c === value ? 'selected' : ''}>${c}</option>`);
                         html += `</select></td>`;
                     } else {
-                        // For text fields (Training Title, Topics, Budget, Partner)
                         html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9;">
                             <input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; max-width:120px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">
                         </td>`;
@@ -2606,7 +2752,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvo
     });
 
     // ============================================
-    // NAVIGATION (from Techsamp.html)
+    // NAVIGATION & USER MENU (from m_attended.html)
     // ============================================
     let currentUser = null;
 
@@ -2643,32 +2789,82 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvo
         return "viewer";
     }
 
-   function renderMainNavigation() {
+    // ============================================
+    // NAVIGATION RENDERING — WITH ACTIVE HIGHLIGHT
+    // ============================================
+    function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
-        let navHtml = `<a href="index.html">Home</a>`;
-        if (currentUser) {
-            navHtml +=
-                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-                    <a href="lc.html">Locational Clearance</a>
-                    <a href="SZC.html">Site Zoning Certification</a></div></div>
-                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-                </div></div>
-                <a href="Techsamp.html">Technical Assistance</a>
-                <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
-                <a href="lgu-info.html">LGU Information</a>
-                <a href="report.html">Reports</a>
-                <a href="calendar.html">Calendar of Activities</a>
-                <a href="issuance.html">Issuances</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>`;
-        } else {
-            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+
+        // Determine current page
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+        // Helper to check active state
+        function isActive(page) {
+            return currentPage === page || (currentPage === '' && page === 'index.html');
         }
+
+        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+
+        if (currentUser) {
+            // Determine active states for each main item
+            const isCertActive = isActive('lc.html') || isActive('SZC.html');
+            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+            const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+            navHtml += `
+                <div class="dropdown" id="certDropdown">
+                    <button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button>
+                    <div class="dropdown-content">
+                        <a href="lc.html" class="${isActive('lc.html') ? 'active-sub' : ''}">Locational Clearance</a>
+                        <a href="SZC.html" class="${isActive('SZC.html') ? 'active-sub' : ''}">Site Zoning Certification</a>
+                    </div>
+                </div>
+                <div class="dropdown" id="landUseDropdown">
+                    <button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button>
+                    <div class="dropdown-content">
+                        <div class="dropdown-submenu" id="clupSubmenu">
+                            <button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button>
+                            <div class="submenu-content">
+                                <a href="status.html" class="${isActive('status.html') ? 'active-sub' : ''}">Status</a>
+                                <a href="inventory.html" class="${isActive('inventory.html') ? 'active-sub' : ''}">Inventory</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-submenu" id="pdpfpSubmenu">
+                            <button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button>
+                            <div class="submenu-content">
+                                <a href="status_pdpfp.html" class="${isActive('status_pdpfp.html') ? 'active-sub' : ''}">Status</a>
+                                <a href="inventory_pdpfp.html" class="${isActive('inventory_pdpfp.html') ? 'active-sub' : ''}">Inventory</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown" id="techServicesDropdown">
+                    <button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button>
+                    <div class="dropdown-content">
+                        <a href="Techsamp.html" class="${isActive('Techsamp.html') ? 'active-sub' : ''}">Technical Assistance</a>
+                        <a href="training.html" class="${isActive('training.html') ? 'active-sub' : ''}">CLUP/ZO Trainings</a>
+                        <a href="p_monitoring.html" class="${isActive('p_monitoring.html') ? 'active-sub' : ''}">Plan Monitoring</a>
+                        <a href="meetings.html" class="${isActive('meetings.html') ? 'active-sub' : ''}">Meetings Attended</a>
+                    </div>
+                </div>
+                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+            `;
+        } else {
+            navHtml += `
+                <a href="#about" class="">About</a>
+                <a href="#contact" class="">Contact</a>
+            `;
+        }
+
         container.innerHTML = navHtml;
+
+        // Submenu toggle logic
         setTimeout(() => {
             document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
                 trigger.addEventListener("click", (e) => {
@@ -2715,7 +2911,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvo
             if (logoutBtn) logoutBtn.addEventListener("click", () => {
                 localStorage.removeItem("dhsud_session");
                 showToast("Logged out successfully.", "success");
-                setTimeout(() => { window.location.href = "index.html"; }, 700);
+                setTimeout(() => { window.location.href = "training.html"; }, 700);
             });
         } else {
             container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;

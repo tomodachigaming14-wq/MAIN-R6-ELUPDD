@@ -41,41 +41,62 @@ header {
 }
 
 .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem 0;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-.logo-area-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-.header-logo-img {
-    height: 42px;
-    background: #f1f5f9;
-    padding: 4px 16px;
-    border-radius: 40px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #1e3a8a;
-    white-space: nowrap;
-}
-.header-logo-img img {
-    height: 32px;
-    width: auto;
-}
-
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo-area-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+         .header-logo-img {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0f6fe;
+            padding: 6px 20px;
+            border-radius: 60px;
+            transition: all 0.2s;
+        }
+         .header-logo-img img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.2s;
+        }
+.header-logo-img span {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1e3a8a;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+        }
 .nav-right {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
+.nav-right .login-prompt,
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            padding: 0.2rem 0.6rem 0.2rem 0.8rem;
+            border-radius: 60px;
+            cursor: pointer;
+            position: relative;
+        }
+		
+		.login-prompt:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+        }
+
 .user-menu {
     display: flex;
     align-items: center;
@@ -145,32 +166,118 @@ header {
 }
 
 .nav-bottom {
-    background: #ffffff;
-    border-top: 1px solid #eef2ff;
-    padding: 0.5rem 0;
-}
-.main-nav-links {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-}
-.main-nav-links a,
-.main-nav-links .dropdown {
-    text-decoration: none;
-    color: #334155;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: 0.2s;
-}
-.main-nav-links a:hover,
-.main-nav-links .dropbtn:hover {
-    color: #2563eb;
-}
+            background: white;
+            border-top: 1px solid #eef2ff;
+            padding: 0.5rem 0;
+        }
+		
+		 .nav-bottom .container {
+            display: flex;
+            justify-content: center;
+        }
+		
+        .main-nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 0.2rem 0;
+        }
+
+ .main-nav-links > a,
+        .main-nav-links > .dropdown > .dropbtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.82rem;
+            color: #1f3a5f;
+            padding: 0.55rem 1rem;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            transition: all 0.25s ease;
+            letter-spacing: -0.2px;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            font-family: inherit;
+            line-height: 1.2;
+        }
+ .main-nav-links > a:hover,
+        .main-nav-links > .dropdown > .dropbtn:hover {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+        }
+		
+		.main-nav-links > a.active,
+        .main-nav-links > .dropdown > .dropbtn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30);
+            transform: translateY(-2px);
+        }
+        .main-nav-links > a.active:hover,
+        .main-nav-links > .dropdown > .dropbtn.active:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            color: #ffffff;
+        }
+        .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
+        .dropbtn::after {
+            content: " ▾";
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-left: 4px;
+            transition: opacity 0.2s;
+        }
+        .dropdown:hover .dropbtn::after { opacity: 1; }
+
+
 .dropdown {
-    position: relative;
-    display: inline-block;
-}
+            position: relative;
+            display: inline-block;
+            padding-bottom: 6px;
+            margin-bottom: -6px;
+        }
+		
+		.dropbtn { background: none; border: none; font-family: inherit; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            z-index: 1000;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 1px solid #eef2ff;
+            padding: 0.3rem 0;
+            animation: dropFade 0.2s ease;
+        }
+		
+		.dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+            background: transparent;
+        }
+		@keyframes dropFade {
+            from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+		
 .dropbtn {
     background: none;
     border: none;
@@ -1814,6 +1921,82 @@ th:hover .sort-icon {
     content: " ▾";
     opacity: 1;
 }
+
+ .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content a {
+            display: block;
+            padding: 0.7rem 1.2rem;
+            color: #1e293b;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+ .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
+
+        /* Submenus */
+        .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
+        .submenu-trigger {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 0.7rem 2rem 0.7rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: inherit;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
+        .arrow-right {
+            font-size: 0.7rem;
+            margin-left: 1rem;
+            transition: transform 0.2s ease;
+        }
+        .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
+        .submenu-content {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            min-width: 180px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            border: 1px solid #eef2ff;
+            z-index: 1001;
+            padding: 0.3rem 0;
+        }
+        .submenu-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -10px;
+            bottom: 0;
+            width: 10px;
+            background: transparent;
+        }
+        .dropdown-submenu:hover .submenu-content,
+        .dropdown-submenu.open .submenu-content { display: block; }
+        .submenu-content a { padding: 0.7rem 1.2rem; }
+
+        @media (max-width: 900px) {
+            .main-nav-links { gap: 0.35rem; }
+            .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
+        }
+        @media (max-width: 700px) {
+            .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+            .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
+            .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
+            .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
+            .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
+            .dropdown-submenu.open .submenu-content { display: block; }
+        }
 
 /* ========== ACCORDION MENU STYLES ========== */
 .accordion-section {
@@ -6353,45 +6536,37 @@ label[for="lguSelect"] {
         }
 
         function renderMainNavigation() {
-        const container = document.getElementById("mainNavContainer");
-        if (!container) return;
-        let navHtml = `<a href="index.html">Home</a>`;
-        if (currentUser) {
-            navHtml +=
-                `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-                    <a href="lc.html">Locational Clearance</a>
-                    <a href="SZC.html">Site Zoning Certification</a></div></div>
-                <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-                    <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-                    <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-                </div></div>
-                <a href="Techsamp.html">Technical Assistance</a>
-                <a href="training.html">CLUP/ZO Trainings</a>
-				<a href="p_monitoring.html">Plan Monitoring</a>
-                <a href="lgu-info.html">LGU Information</a>
-                <a href="report.html">Reports</a>
-                <a href="calendar.html">Calendar of Activities</a>
-                <a href="issuance.html">Issuances</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>`;
-            } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
-            container.innerHTML = navHtml;
-            setTimeout(() => {
-                document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-                    trigger.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        const submenu = trigger.closest(".dropdown-submenu");
-                        if (submenu) submenu.classList.toggle("open");
-                    });
-                });
-                document.addEventListener("click", function(e) {
-                    if (!e.target.closest(".dropdown-submenu")) {
-                        document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove(
-                        "open"));
-                    }
-                });
-            }, 10);
-        }
+    const container = document.getElementById("mainNavContainer");
+    if (!container) return;
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+
+    let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+    if (currentUser) {
+        const isCertActive = isActive('lc.html') || isActive('SZC.html');
+        const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+        const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+        navHtml += `
+            <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+            <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+            <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+            <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+            <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+            <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+            <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+            <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+            <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+        `;
+    } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+    container.innerHTML = navHtml;
+    setTimeout(() => {
+        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+            trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
+        });
+        document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
+    }, 10);
+}
 
         function renderUserMenu() {
             const container = document.getElementById("userMenuContainer");

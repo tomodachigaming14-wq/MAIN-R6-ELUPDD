@@ -3,52 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>DHSUD VI · REPORT · text wrap</title>
+  <title>DHSUD VI · REPORT</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: "Inter", -apple-system, system-ui, sans-serif;
-      background: #f4f9fe;
-      color: #0a2540;
-      line-height: 1.5;
-      font-size: 15px;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family: "Inter", -apple-system, system-ui, sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; font-size: 15px; -webkit-font-smoothing: antialiased; }
     .container { max-width: 1400px; margin:0 auto; padding:0 20px; }
 
-    /* ============== HEADER ============== */
-    header { background:#fff; border-bottom:1px solid #e2edf7; position:sticky; top:0; z-index:100; backdrop-filter:blur(2px); background:rgba(255,255,255,0.97); }
-    .top-bar { display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; flex-wrap:wrap; gap:1rem; }
-    .logo-area { display:flex; align-items:center; gap:16px; }
-    .header-logo-img { display:flex; align-items:center; gap:12px; background:#f0f6fe; padding:6px 20px; border-radius:60px; transition:all 0.2s; }
-    .header-logo-img img { height:40px; width:auto; transition:transform 0.2s; }
-    .header-logo-img span { font-weight:700; font-size:0.9rem; color:#1e3a8a; letter-spacing:-0.2px; white-space:nowrap; }
-    .nav-right .login-prompt, .user-menu { display:flex; align-items:center; gap:0.5rem; background:#f1f5f9; padding:0.2rem 0.6rem 0.2rem 0.8rem; border-radius:60px; cursor:pointer; position:relative; }
-    .login-prompt:hover { background:#2563eb; color:white; transform:translateY(-2px); }
-    .nav-bottom { background:white; border-top:1px solid #eef2ff; padding:0.5rem 0; }
-    .main-nav-links { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
-    .main-nav-links a, .dropbtn { text-decoration:none; font-weight:500; font-size:0.85rem; color:#1f3a5f; padding:0.5rem 0; transition:0.2s; letter-spacing:-0.2px; }
-    .main-nav-links a:hover, .dropbtn:hover { color:#2563eb; transform:translateY(-1px); }
-    .dropdown { position:relative; display:inline-block; }
-    .dropbtn { background:none; border:none; font-family:inherit; cursor:pointer; }
-    .dropbtn::after { content:" ▾"; font-size:0.7rem; opacity:0.6; }
-    .dropdown:hover .dropbtn::after { content:" ▾"; opacity:1; }
-    .dropdown-content { display:none; position:absolute; background:white; min-width:220px; box-shadow:0 12px 28px rgba(0,0,0,0.1); border-radius:16px; z-index:1000; top:30px; left:0; border:1px solid #eef2ff; padding:0.3rem 0; }
-    .dropdown:hover .dropdown-content { display:block; }
-    .dropdown-content a { display:block; padding:0.7rem 1.2rem; color:#1e293b; font-size:0.8rem; text-decoration:none; }
-    .dropdown-content a:hover { background:#eff6ff; }
-    .dropdown-submenu { position:relative; }
-    .submenu-trigger { background:none; border:none; width:100%; text-align:left; padding:0.7rem 1.2rem; font-size:0.8rem; font-weight:500; color:#1e293b; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-family:inherit; }
-    .submenu-trigger:hover { background:#eff6ff; }
-    .arrow-right { font-size:0.7rem; margin-left:1rem; }
-    .submenu-content { display:none; position:absolute; left:100%; top:0; background:white; min-width:180px; box-shadow:0 12px 28px rgba(0,0,0,0.1); border-radius:16px; border:1px solid #eef2ff; z-index:1001; padding:0.3rem 0; }
-    .dropdown-submenu:hover .submenu-content { display:block; }
-    .submenu-content a { padding:0.7rem 1.2rem; }
+    /* ===== HEADER / NAV ===== */
+    header { background: #ffffff; border-bottom: 1px solid #e2edf7; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(2px); background: rgba(255, 255, 255, 0.98); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; flex-wrap: wrap; gap: 1rem; }
+    .logo-area { display: flex; align-items: center; gap: 16px; }
+    .header-logo-img { display: flex; align-items: center; gap: 12px; background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s; }
+    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
+    .header-logo-img span { font-weight: 700; font-size: 0.9rem; color: #1e3a8a; letter-spacing: -0.2px; white-space: nowrap; }
+    .nav-right .login-prompt, .user-menu { display: flex; align-items: center; gap: 0.5rem; background: #f1f5f9; padding: 0.2rem 0.6rem 0.2rem 0.8rem; border-radius: 60px; cursor: pointer; position: relative; }
+    .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
 
-    /* User menu */
+    /* ===== NAVIGATION BAR (centered) ===== */
+    .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
+    .nav-bottom .container { display: flex; justify-content: center; }
+    .main-nav-links { display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.2rem 0; }
+    .main-nav-links > a,
+    .main-nav-links > .dropdown > .dropbtn {
+      display: inline-flex; align-items: center; justify-content: center;
+      text-decoration: none; font-weight: 600; font-size: 0.82rem;
+      color: #1f3a5f; padding: 0.55rem 1rem; border-radius: 12px;
+      border: 1.5px solid transparent; background: transparent;
+      transition: all 0.25s ease; letter-spacing: -0.2px;
+      cursor: pointer; white-space: nowrap; position: relative;
+      font-family: inherit; line-height: 1.2;
+    }
+    .main-nav-links > a:hover,
+    .main-nav-links > .dropdown > .dropbtn:hover {
+      background: #eff6ff; border-color: #bfdbfe; color: #2563eb;
+      transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+    .main-nav-links > a.active,
+    .main-nav-links > .dropdown > .dropbtn.active {
+      background: #2563eb; border-color: #2563eb; color: #ffffff;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30); transform: translateY(-2px);
+    }
+    .main-nav-links > a.active:hover,
+    .main-nav-links > .dropdown > .dropbtn.active:hover {
+      background: #1d4ed8; border-color: #1d4ed8; color: #ffffff;
+    }
+    .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
+    .dropbtn::after { content: " ▾"; font-size: 0.65rem; opacity: 0.6; margin-left: 4px; transition: opacity 0.2s; }
+    .dropdown:hover .dropbtn::after { opacity: 1; }
+
+    /* ===== DROPDOWN MENUS ===== */
+    .dropdown { position: relative; display: inline-block; padding-bottom: 6px; margin-bottom: -6px; }
+    .dropbtn { background: none; border: none; font-family: inherit; }
+    .dropdown-content {
+      display: none; position: absolute; background: white;
+      min-width: 220px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      border-radius: 16px; z-index: 1000; top: 100%; left: 50%;
+      transform: translateX(-50%); border: 1px solid #eef2ff;
+      padding: 0.3rem 0; animation: dropFade 0.2s ease;
+    }
+    .dropdown-content::before { content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 12px; background: transparent; }
+    @keyframes dropFade { from { opacity: 0; transform: translateX(-50%) translateY(-6px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    .dropdown:hover .dropdown-content { display: block; }
+    .dropdown-content a { display: block; padding: 0.7rem 1.2rem; color: #1e293b; font-size: 0.8rem; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; }
+    .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
+    .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
+    .submenu-trigger { background: none; border: none; width: 100%; text-align: left; padding: 0.7rem 2rem 0.7rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; transition: background 0.15s ease, color 0.15s ease; }
+    .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
+    .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
+    .submenu-content { display: none; position: absolute; left: 100%; top: 0; background: white; min-width: 180px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1); border-radius: 16px; border: 1px solid #eef2ff; z-index: 1001; padding: 0.3rem 0; }
+    .submenu-content::before { content: ""; position: absolute; top: 0; left: -10px; bottom: 0; width: 10px; background: transparent; }
+    .dropdown-submenu:hover .submenu-content, .dropdown-submenu.open .submenu-content { display: block; }
+    .submenu-content a { padding: 0.7rem 1.2rem; }
+
+    /* ===== USER DROPDOWN ===== */
     .user-avatar { width:28px; height:28px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:0.75rem; }
     .user-name { font-size:0.7rem; font-weight:500; }
     .role-badge-header { background:#e2e8f0; padding:0.15rem 0.5rem; border-radius:20px; font-size:0.6rem; font-weight:600; margin-left:0.3rem; }
@@ -78,11 +109,7 @@
     .login-submit-btn:disabled { background:#94a3b8; cursor:not-allowed; transform:none; }
     .login-modal-footer { text-align:center; font-size:0.65rem; color:#94a3b8; padding:0.4rem 0 1.2rem; border-top:1px solid #eef2ff; margin:0 1.8rem; }
 
-    /* Animations */
     @keyframes fadeUp { 0% { opacity:0; transform:translateY(25px); } 100% { opacity:1; transform:translateY(0); } }
-    @keyframes slideInLeft { 0% { opacity:0; transform:translateX(-40px); } 100% { opacity:1; transform:translateX(0); } }
-    @keyframes slideInRight { 0% { opacity:0; transform:translateX(40px); } 100% { opacity:1; transform:translateX(0); } }
-    @keyframes float { 0% { transform:translateY(0px); } 50% { transform:translateY(-8px); } 100% { transform:translateY(0px); } }
 
     /* ============== CARD & REPORT ============== */
     .card { background:#fff; border-radius:28px; box-shadow:0 16px 30px -12px rgba(0,0,0,0.06); border:1px solid #eef2ff; margin:1.8rem 0; overflow:hidden; }
@@ -99,8 +126,6 @@
     .btn-success:hover { background:#0d9488; transform:translateY(-1px); }
     .btn-print { background:#7c3aed; color:#fff; }
     .btn-print:hover { background:#5b21b6; transform:translateY(-1px); }
-    .btn-print-lgu { background:#0d9488; color:#fff; }
-    .btn-print-lgu:hover { background:#0f766e; transform:translateY(-1px); }
     .clear-filter-btn { background:#e2e8f0; border:1px solid #cbd5e1; padding:0.4rem 1rem; border-radius:60px; font-size:0.7rem; cursor:pointer; font-weight:500; font-family:inherit; }
     .clear-filter-btn:hover { background:#cbd5e1; }
 
@@ -113,7 +138,6 @@
     .stat-number { font-size:1.6rem; font-weight:700; color:#1e3a8a; line-height:1.2; letter-spacing:-0.02em; }
     .stat-label { font-size:0.65rem; color:#475569; font-weight:500; }
 
-    /* Table */
     .report-table-wrapper { overflow-x:auto; overflow-y:auto; border-radius:20px; max-width:100%; max-height:560px; border:1px solid #eef2ff; background:#fff; }
     .report-table-wrapper::-webkit-scrollbar { width:7px; height:7px; }
     .report-table-wrapper::-webkit-scrollbar-track { background:#f1f5f9; border-radius:8px; }
@@ -121,37 +145,11 @@
 
     .data-table { width:100%; border-collapse:collapse; font-size:0.78rem; min-width:1100px; font-family:"Inter", -apple-system, system-ui, sans-serif; table-layout:auto; }
     .data-table th { text-align:left; padding:0.55rem 0.6rem; background:#f1f5f9; color:#0b1e33; font-weight:600; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.03em; border-bottom:2px solid #e2e8f0; white-space:nowrap; position:sticky; top:0; z-index:10; }
-    
-    .data-table td {
-      padding:0.45rem 0.6rem;
-      border-bottom:1px solid #eef2ff;
-      vertical-align:middle;
-      word-break:break-word;
-      white-space:normal;
-      max-width:280px;
-      color:#122b44;
-      font-weight:450;
-      font-size:0.78rem;
-      line-height:1.4;
-      overflow-wrap:break-word;
-      word-wrap:break-word;
-      hyphens:auto;
-    }
-    
-    .data-table td:nth-child(1), 
-    .data-table td:nth-child(2) { 
-      white-space: nowrap !important; 
-      word-break: keep-all !important; 
-      overflow-wrap: normal !important; 
-      word-wrap: normal !important; 
-      hyphens: none !important; 
-      max-width: none !important; 
-    }
-
+    .data-table td { padding:0.45rem 0.6rem; border-bottom:1px solid #eef2ff; vertical-align:middle; word-break:break-word; white-space:normal; max-width:280px; color:#122b44; font-weight:450; font-size:0.78rem; line-height:1.4; overflow-wrap:break-word; word-wrap:break-word; hyphens:auto; }
+    .data-table td:nth-child(1), .data-table td:nth-child(2) { white-space: nowrap !important; word-break: keep-all !important; overflow-wrap: normal !important; word-wrap: normal !important; hyphens: none !important; max-width: none !important; }
     .data-table tr:hover td { background:#fafcff; }
     .data-table .empty-row td { text-align:center; padding:2.5rem !important; color:#64748b; font-style:italic; font-size:0.85rem; white-space:normal; }
 
-    /* Badges */
     .status-badge { display:inline-block; padding:0.1rem 0.7rem; border-radius:40px; font-size:0.6rem; font-weight:600; letter-spacing:0.01em; background:#e2e8f0; color:#1e293b; white-space:nowrap; }
     .status-updated { background:#dcfce7; color:#166534; }
     .status-for-updating { background:#fef3c7; color:#92400e; }
@@ -163,7 +161,6 @@
     .phase-badge.pre { background:#e0e7ff; color:#3730a3; border-color:#c7d2fe; }
     .phase-badge.none { background:#f1f5f9; color:#64748b; border-color:#e2e8f0; }
 
-    /* Utilities */
     .hidden-filter { display:none !important; }
     .toast-msg { position:fixed; bottom:20px; right:20px; background:#1e293b; color:#fff; padding:8px 18px; border-radius:60px; z-index:9999; font-size:0.75rem; box-shadow:0 4px 12px rgba(0,0,0,0.12); font-family:inherit; }
     .toast-msg.success { background:#166534; }
@@ -174,6 +171,10 @@
     .social-icons i { font-size:1.6rem; margin-right:1rem; color:white; transition:0.2s; cursor:pointer; }
     .social-icons i:hover { transform:translateY(-4px); color:#3b82f6; }
 
+    @media (max-width:900px) {
+      .main-nav-links { gap: 0.35rem; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
+    }
     @media (max-width:720px) {
       .container { padding:0 12px; }
       .card-header { flex-direction:column; align-items:stretch; }
@@ -181,12 +182,17 @@
       .data-table td, .data-table th { padding:0.3rem 0.4rem; }
       .header-logo-img span { white-space:normal; font-size:0.7rem; }
       .top-bar { flex-direction:column; align-items:stretch; }
+      .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+      .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
+      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
+      .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
+      .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
+      .dropdown-submenu.open .submenu-content { display: block; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ============== HEADER ============== -->
   <header>
     <div class="container">
       <div class="top-bar">
@@ -206,7 +212,6 @@
     </div>
   </header>
 
-  <!-- ============== MAIN ============== -->
   <main class="container">
     <div class="card">
       <div class="card-header">
@@ -219,14 +224,12 @@
             <option value="lgu_directory">🏛️ LGU Directory</option>
             <option value="clup_formulation">📋 Status of CLUP/ZO Formulation</option>
           </select>
-          <!-- cert filters -->
           <div id="certFilters" class="filter-group">
             <select id="monthFilter" class="month-filter" onchange="filterReportTable()"><option value="all">📅 All Months</option></select>
             <button class="clear-filter-btn" onclick="clearMonthFilter()">✖ Clear Month Filter</button>
             <button class="btn btn-success" onclick="exportCurrentReportToExcel()">📥 Download Excel</button>
             <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
           </div>
-          <!-- clup filters -->
           <div id="clupFilters" class="filter-group hidden-filter">
             <select id="clupStatusFilter" class="month-filter" onchange="filterReportTable()"><option value="all">📋 All CLUP Status</option><option value="Updated">✅ Summary of CLUP's Updated</option><option value="For Updating">🔄 Summary of CLUP's For Updating</option><option value="Under Review">📝 Summary of CLUP's Under Review</option></select>
             <select id="clupProvinceFilter" class="month-filter" onchange="filterReportTable()"><option value="all">🌍 All Provinces</option></select>
@@ -238,7 +241,6 @@
               <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
             </div>
           </div>
-          <!-- LGU dir filters -->
           <div id="lguDirFilters" class="filter-group hidden-filter">
             <select id="lguDirProvinceFilter" class="month-filter" onchange="filterLguDirectory()"><option value="all">🌍 All Provinces</option></select>
             <button class="clear-filter-btn" onclick="clearLguDirFilters()">✖ Clear Filters</button>
@@ -246,7 +248,6 @@
             <button class="btn btn-success" onclick="exportLguDirectoryExcel()">📥 Download Excel</button>
             <button class="btn btn-primary" onclick="fetchLiveData()">🔄 Sync from Sheets</button>
           </div>
-          <!-- CLUP Form filters -->
           <div id="clupFormFilters" class="filter-group hidden-filter">
             <select id="clupFormProvinceFilter" class="month-filter" onchange="filterClupFormulation()"><option value="all">🌍 All Provinces</option></select>
             <span id="clupFormLguFilterContainer"><select id="clupFormLguFilter" class="month-filter" onchange="filterClupFormulation()"><option value="all">🏛️ All LGUs</option></select></span>
@@ -258,20 +259,17 @@
         </div>
       </div>
       <div class="card-body">
-        <!-- search bars -->
         <div id="certSearchBar" class="search-bar"><input type="text" id="reportSearchInput" placeholder="🔍 Search by Control No., Applicant, Location..." onkeyup="filterReportTable()"><span>⬇️ Released records only</span></div>
         <div id="clupSearchBar" class="search-bar hidden-filter"><input type="text" id="clupSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterReportTable()"><span>📋 CLUP Status records</span></div>
         <div id="lguDirSearchBar" class="search-bar hidden-filter"><input type="text" id="lguDirSearchInput" placeholder="🔍 Search by Municipality, Province, Mayor..." onkeyup="filterLguDirectory()"><span>🏛️ LGU Directory</span></div>
         <div id="clupFormSearchBar" class="search-bar hidden-filter"><input type="text" id="clupFormSearchInput" placeholder="🔍 Search by City/Municipality, Province..." onkeyup="filterClupFormulation()"><span>📋 CLUP/ZO Formulation</span></div>
 
-        <!-- stats -->
         <div class="stats-row" id="statsPanel">
           <div class="stat-card"><div class="stat-number" id="totalCount">-</div><div class="stat-label">Total Records</div></div>
           <div class="stat-card"><div class="stat-number" id="monthCount">-</div><div class="stat-label">Filtered Records</div></div>
           <div class="stat-card" id="avgDaysCard"><div class="stat-number" id="avgDays">-</div><div class="stat-label">Avg. Processing Days</div></div>
         </div>
 
-        <!-- table -->
         <div class="report-table-wrapper">
           <table class="data-table" id="reportTable">
             <thead id="tableHeader"><tr><th colspan="12">Loading...</th></tr></thead>
@@ -279,7 +277,6 @@
           </table>
         </div>
 
-        <!-- footers -->
         <div id="certFooter" style="margin-top:1.5rem;font-size:0.75rem;background:#eef2ff;padding:0.7rem 1rem;border-radius:16px;color:#1e3a8a;">✅ Report includes ONLY records with status = <strong>"Released"</strong> from live Google Sheets endpoints.</div>
         <div id="clupFooter" class="hidden-filter" style="margin-top:1.5rem;font-size:0.75rem;background:#eef2ff;padding:0.7rem 1rem;border-radius:16px;color:#1e3a8a;">📋 CLUP Status data from LGUstatus sheet.</div>
         <div id="lguDirFooter" class="hidden-filter" style="margin-top:1.5rem;font-size:0.75rem;background:#eef2ff;padding:0.7rem 1rem;border-radius:16px;color:#1e3a8a;">🏛️ LGU Directory from LGURecords sheet.</div>
@@ -288,10 +285,8 @@
     </div>
   </main>
 
-  <!-- Sync Status -->
   <div class="sync-status" id="syncStatus"><span id="statusDot">🟡</span> <span id="statusText">Connecting...</span><button onclick="fetchLiveData()" style="margin-left:8px;background:#e2e8f0;border:none;border-radius:30px;padding:2px 10px;cursor:pointer;">↻</button></div>
 
-  <!-- LOGIN MODAL -->
   <div id="loginModal" class="login-modal">
     <div class="login-modal-content">
       <div class="login-modal-brand">
@@ -317,7 +312,6 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <footer class="footer-new">
     <div class="container">
       <div class="footer-grid">
@@ -356,9 +350,6 @@
     let lguDirFiltered = [];
     let clupFormFiltered = [];
 
-    // ============================================================
-    //  UTILITIES
-    // ============================================================
     function encodePassword(p) { return btoa(p); }
     function escapeHtml(s) { if (s==null) return ""; return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
     function showToastMessage(msg, type="info") { let t = document.querySelector(".toast-msg"); if(t) t.remove(); let toast = document.createElement("div"); toast.className="toast-msg"; toast.style.background = type==="error" ? "#b91c1c" : "#166534"; toast.innerText=msg; document.body.appendChild(toast); setTimeout(()=>toast.remove(),3000); }
@@ -370,8 +361,41 @@
     function toTitleCase(str) { if (!str) return ""; let lower = str.toLowerCase(); return lower.replace(/\b\w/g, c => c.toUpperCase()); }
 
     // ============================================================
-    //  AUTHENTICATION
+    //  NAVIGATION — WITH ACTIVE HIGHLIGHT
     // ============================================================
+    function renderMainNavigation() {
+      const container = document.getElementById("mainNavContainer");
+      if (!container) return;
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+
+      let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+      if (currentUser) {
+        const isCertActive = isActive('lc.html') || isActive('SZC.html');
+        const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+        const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+        navHtml += `
+          <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+          <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+          <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+          <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+          <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+          <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+          <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+          <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+          <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+        `;
+      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
+      container.innerHTML = navHtml;
+      setTimeout(() => {
+        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
+        });
+        document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
+      }, 10);
+    }
+
     function checkSession() {
       const raw = localStorage.getItem("dhsud_session");
       if (raw) {
@@ -388,47 +412,6 @@
     function getUserInitials(n){ if(!n) return "U"; let p=n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
     function getRoleLabel(r){ if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r){ if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
-
-    function renderMainNavigation() {
-      const container = document.getElementById("mainNavContainer");
-      if (!container) return;
-      let navHtml = `<a href="index.html">Home</a>`;
-      if (currentUser) {
-        navHtml += `<div class="dropdown" id="certDropdown"><button class="dropbtn">Certification</button><div class="dropdown-content">
-            <a href="lc.html">Locational Clearance</a>
-            <a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn">Land Use Plans</button><div class="dropdown-content">
-            <div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div>
-            <div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div>
-          </div></div>
-          <a href="Techsamp.html">Technical Assistance</a>
-          <a href="training.html">CLUP/ZO Trainings</a>
-          <a href="p_monitoring.html">Plan Monitoring</a>
-          <a href="lgu-info.html">LGU Information</a>
-          <a href="report.html">Reports</a>
-          <a href="calendar.html">Calendar of Activities</a>
-          <a href="issuance.html">Issuances</a>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>`;
-      } else {
-        navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
-      }
-      container.innerHTML = navHtml;
-      setTimeout(() => {
-        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const submenu = trigger.closest(".dropdown-submenu");
-            if (submenu) submenu.classList.toggle("open");
-          });
-        });
-        document.addEventListener("click", function (e) {
-          if (!e.target.closest(".dropdown-submenu")) {
-            document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open"));
-          }
-        });
-      }, 10);
-    }
 
     function renderUserMenu() {
       const container = document.getElementById("userMenuContainer"); if(!container) return;
@@ -478,9 +461,6 @@
       return false;
     }
 
-    // ============================================================
-    //  DATA FETCHING
-    // ============================================================
     async function fetchLocationalReleased() {
       try {
         const url = `${GOOGLE_SCRIPT_URL}?action=get&data_type=locational&_=${Date.now()}`;
@@ -591,26 +571,15 @@
       }
       container.classList.add("visible");
       const lgus = clupStatusData
-        .filter(rec => {
-          const p = rec["Province"] || rec["province"] || "";
-          return toTitleCase(p) === provinceFilter;
-        })
+        .filter(rec => { const p = rec["Province"] || rec["province"] || ""; return toTitleCase(p) === provinceFilter; })
         .map(rec => rec["City/Municipality"] || rec["city"] || rec["City"] || "")
         .filter(Boolean);
       const uniqueLgus = Array.from(new Set(lgus)).sort();
       const currentValue = lguSel.value;
       lguSel.innerHTML = '<option value="all">🏛️ All LGUs</option>';
-      uniqueLgus.forEach(l => {
-        const opt = document.createElement("option");
-        opt.value = l;
-        opt.textContent = l;
-        lguSel.appendChild(opt);
-      });
-      if (currentValue !== "all" && uniqueLgus.includes(currentValue)) {
-        lguSel.value = currentValue;
-      } else {
-        lguSel.value = "all";
-      }
+      uniqueLgus.forEach(l => { const opt = document.createElement("option"); opt.value = l; opt.textContent = l; lguSel.appendChild(opt); });
+      if (currentValue !== "all" && uniqueLgus.includes(currentValue)) lguSel.value = currentValue;
+      else lguSel.value = "all";
       renderClupFormulation();
     }
 
@@ -645,9 +614,6 @@
       }
     }
 
-    // ============================================================
-    //  REPORT TABLE RENDERING
-    // ============================================================
     const LOCATIONAL_COLS = ["Application No.","Decision No.","Requesting Party","Date Issued","Report Month","Owner/Proponents","Location","Total Area","No. of Days","On Time / Delayed","Amount Paid","O.R. No."];
     const ZONING_COLS = ["Certification No.","Type","Requesting Party","Date Issued","Report Month","Owner/Proponents","Location","No. of Parcels","Total Area (ha)","No. of Days","On Time / Delayed","Amount Paid","O.R. No."];
     const CLUP_COLS = ["No.","City/Municipality","Province","Latest Plan Approval","Resolution No.","Date Approved","Start Year","End Year","Specific Status"];
@@ -888,9 +854,6 @@
       tbody.innerHTML = rows;
     }
 
-    // ============================================================
-    //  CLUP FORMULATION RENDER
-    // ============================================================
     function renderClupFormulation() {
       const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
       const lguFilter = document.getElementById("clupFormLguFilter")?.value || "all";
@@ -961,9 +924,6 @@
 
     function filterClupFormulation() { updateClupFormLguFilter(); renderClupFormulation(); }
 
-    // ============================================================
-    //  LGU DIRECTORY RENDER
-    // ============================================================
     function renderLguDirectory() {
       const provinceFilter = document.getElementById("lguDirProvinceFilter")?.value || "all";
       const search = document.getElementById("lguDirSearchInput")?.value.toLowerCase() || "";
@@ -1007,9 +967,6 @@
 
     function filterLguDirectory() { renderLguDirectory(); }
 
-    // ============================================================
-    //  SWITCH REPORT TYPE
-    // ============================================================
     function switchReportType() {
       const sel = document.getElementById("reportTypeSelect");
       currentReportType = sel.value;
@@ -1065,407 +1022,7 @@
     }
 
     // ============================================================
-    //  CLUP FORMULATION EXPORT & PRINT
-    // ============================================================
-    function exportClupFormulationExcel() {
-      if (clupFormFiltered.length === 0) { alert("No records to export."); return; }
-      const data = clupFormFiltered.map((rec) => {
-        const province = rec["Province"] || rec["province"] || "";
-        const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
-        const lguMatch = lguRecordsData.find(l => {
-          const lProvince = l["Province"] || l["province"] || "";
-          const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
-          return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
-        });
-        return {
-          "Province": toTitleCase(province),
-          "City/Municipality": city,
-          "Mayor": lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "",
-          "Vice Mayor": lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "",
-          "LGU Email": lguMatch ? (lguMatch["Official Email Address of LGU"] || "") : "",
-          "Landline": lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "",
-          "MPDC": lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "",
-          "MPDC Email": lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "",
-          "MPDC Mobile": lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : ""
-        };
-      });
-      const ws = XLSX.utils.json_to_sheet(data);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "CLUP_Formulation");
-      XLSX.writeFile(wb, `CLUP_Formulation_${new Date().toISOString().slice(0,10)}.xlsx`);
-      showToastMessage(`Exported ${data.length} CLUP formulation records`, "success");
-    }
-
-    function printClupFormulation() {
-      if (clupFormFiltered.length === 0) { alert("No records to print."); return; }
-      const lguFilter = document.getElementById("clupFormLguFilter")?.value || "all";
-      
-      if (lguFilter !== "all") {
-        // Multi-strategy search to find the LGU record
-        const target = lguFilter.trim().toLowerCase();
-        let lguData = null;
-        
-        // Strategy 1: exact match on City/Municipality (case-insensitive, trimmed)
-        lguData = clupStatusData.find(rec => {
-          const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim().toLowerCase();
-          return c === target;
-        });
-        
-        // Strategy 2: startsWith / includes match (handles hidden characters, hyphens, etc.)
-        if (!lguData) {
-          lguData = clupStatusData.find(rec => {
-            const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim().toLowerCase();
-            return c.includes(target) || target.includes(c);
-          });
-        }
-        
-        // Strategy 3: normalize hyphens/spaces (e.g. "Anini-y" vs "Anini y" vs "Aniniy")
-        if (!lguData) {
-          const normalize = s => s.replace(/[\s\-_]+/g, "").toLowerCase();
-          const normTarget = normalize(target);
-          lguData = clupStatusData.find(rec => {
-            const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim();
-            return normalize(c) === normTarget;
-          });
-        }
-        
-        // Strategy 4: fallback — use clupFormFiltered (the currently displayed filtered row)
-        if (!lguData && clupFormFiltered.length > 0) {
-          lguData = clupFormFiltered[0];
-        }
-        
-        if (!lguData) {
-          showToastMessage(`No data found for "${lguFilter}". Try syncing from Sheets.`, "error");
-          return;
-        }
-        
-        printClupFormulationDetail(lguData);
-      } else {
-        printClupFormulationSummary();
-      }
-    }
-
-    function printClupFormulationSummary() {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
-      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
-      const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
-      let provinceLabel = provinceFilter !== "all" ? ` - ${provinceFilter}` : "";
-      let tableRows = clupFormFiltered.map((rec) => {
-        const province = rec["Province"] || rec["province"] || "";
-        const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
-        const lguMatch = lguRecordsData.find(l => {
-          const lProvince = l["Province"] || l["province"] || "";
-          const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || "";
-          return toTitleCase(lProvince) === toTitleCase(province) && lCity === city;
-        });
-        return `<tr>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(toTitleCase(province))}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(city)}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Official Email Address of LGU"] || "") : "")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "")}</td>
-        </tr>`;
-      }).join("");
-      const printHtml = `
-        <html>
-        <head>
-          <style>
-            * { color: #000000 !important; }
-            body { font-family: "Inter", sans-serif; padding: 15px; color: #000000 !important; background: #ffffff !important; margin: 0; }
-            .print-header { text-align: center; margin-bottom: 15px; }
-            .print-header h1 { color: #000000 !important; font-size: 16pt; font-weight: 700; margin: 0; }
-            .print-header .subtitle { font-size: 10pt; color: #000000 !important; margin: 2px 0; }
-            .print-header .date-time { font-size: 9pt; color: #000000 !important; }
-            table { width: 100%; border-collapse: collapse; font-size: 7.5pt; color: #000000 !important; }
-            th { background: #1e3a8a !important; color: #ffffff !important; padding: 5px 4px; text-align: left; font-weight: 700; white-space: nowrap; border: 1px solid #1e3a8a; }
-            td { padding: 4px 4px; border: 1px solid #d1d5db; color: #000000 !important; vertical-align: top; }
-            .footer { margin-top: 15px; font-size: 8pt; color: #000000 !important; text-align: center; border-top: 1px solid #d1d5db; padding-top: 8px; }
-            @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } body { color: #000000 !important; background: #ffffff !important; } td { color: #000000 !important; } th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
-            @page { size: landscape; margin: 10mm 8mm; }
-          </style>
-        </head>
-        <body>
-          <div class="print-header">
-            <h1>STATUS OF CLUP/ZO FORMULATION${provinceLabel}</h1>
-            <div class="subtitle">DHSUD Region VI - ELUPDD Integrated Database</div>
-            <div class="date-time">Generated: ${dateStr} at ${timeStr}</div>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th style="color:#ffffff !important;width:10%;">Province</th>
-                <th style="color:#ffffff !important;width:12%;">City/Municipality</th>
-                <th style="color:#ffffff !important;width:12%;">Mayor</th>
-                <th style="color:#ffffff !important;width:12%;">Vice Mayor</th>
-                <th style="color:#ffffff !important;width:14%;">LGU Email</th>
-                <th style="color:#ffffff !important;width:10%;">Landline</th>
-                <th style="color:#ffffff !important;width:10%;">MPDC</th>
-                <th style="color:#ffffff !important;width:12%;">MPDC Email</th>
-                <th style="color:#ffffff !important;width:8%;">MPDC Mobile</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${tableRows}
-            </tbody>
-          </table>
-          <div class="footer">Total LGUs: ${clupFormFiltered.length}</div>
-        </body>
-        </html>
-      `;
-      const win = window.open("", "_blank", "width=1200,height=800");
-      if (win) {
-        win.document.write(printHtml);
-        win.document.close();
-        win.focus();
-        setTimeout(function() { win.print(); }, 500);
-      } else {
-        showToastMessage("Please allow popups to print.", "error");
-      }
-    }
-
-    function printClupFormulationDetail(lguData) {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
-      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
-      
-      // Helper to safely read fields with multiple possible names
-      const getField = (obj, ...keys) => {
-        for (const k of keys) {
-          if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k];
-        }
-        return "";
-      };
-      
-      const city = getField(lguData, "City/Municipality", "city", "City", "Municipality", "municipality");
-      const province = getField(lguData, "Province", "province");
-      const incomeClass = getField(lguData, "Income Class", "incomeClass", "Income Classification");
-      
-      // Find LGU match using normalized comparison
-      const normalize = s => String(s || "").replace(/[\s\-_]+/g, "").toLowerCase();
-      const normProvince = normalize(province);
-      const normCity = normalize(city);
-      const lguMatch = lguRecordsData.find(l => {
-        const lProvince = getField(l, "Province", "province");
-        const lCity = getField(l, "Municipality", "municipality", "City/Municipality");
-        return normalize(lProvince) === normProvince && normalize(lCity) === normCity;
-      });
-      
-      const clupStatus = getField(lguData, "CLUP Status", "CLUPStatus", "status");
-      let statusDisplay = "OTHER";
-      if (clupStatus) {
-        const sl = String(clupStatus).toLowerCase().trim();
-        if (sl.includes("updated") || sl === "updated") statusDisplay = "UPDATED";
-        else if (sl.includes("for updating") || sl === "for updating") statusDisplay = "FOR UPDATING";
-        else if (sl.includes("under review") || sl === "under review") statusDisplay = "UNDER REVIEW";
-        else statusDisplay = clupStatus.toUpperCase();
-      }
-      
-      const clupUpdates = getField(lguData, "CLUPStatus/Updates", "updates", "Specific Status");
-      const phaseInfo = getPhaseDisplay(clupUpdates);
-      let specificStatusText = "None Indicated";
-      if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") {
-        specificStatusText = phaseInfo.display;
-      } else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") {
-        specificStatusText = clupUpdates;
-      }
-      
-      const shelterPlan = getField(lguData, "LGU with Local Shelter Plan", "With Local Shelter Plan");
-      const housingSubsector = getField(lguData, "LGU with Integrated Housing Subsector", "With Integrated Housing Subsector");
-      const commPlan = getField(lguData, "LGU with Integrated Communications Plan", "With Communication Plan", "With Communications Plan");
-      
-      // NEW FIELDS — with exact column names from LGU_STATUS_COLUMNS
-      const riskInformed = getField(lguData, "Risk-Informed", "Risk Informed", "RiskInformed") || "Not Specified";
-      
-      // Urban Development Target — grab "Urban Development"
-      const urbanDevTarget = getField(lguData, "Urban Development", "Urban Development Target", "Urban Dev't Target", "UrbanDevTarget");
-      
-      // Target Year (Urban Dev't) — grab "Target Year_Urban Devt"
-      const targetYearUrbanDevt = getField(lguData, "Target Year_Urban Devt", "Target Year (Urban Dev't)", "Target Year Urban Devt", "TargetYearUrbanDevt", "Target Year_Urban_Devt");
-      
-      // PLANADO Target
-      const planadoTarget = getField(lguData, "PLANADO Target", "Planado Target", "PLANADOTarget") || "Not Specified";
-      
-      // Target Year (for PLANADO)
-      const targetYear = getField(lguData, "Target Year", "TargetYear", "PLANADO Target Year");
-      
-      const startYear = getField(lguData, "Start Year", "startYear");
-      const endYear = getField(lguData, "End Year", "endYear");
-      const resolutionNo = getField(lguData, "Resolution Number of the Latest Plan", "resolutionNo");
-      const approvalDate = getField(lguData, "Approval date of the Latest plan (MM/DD/YYYY)", "dateApproved", "Approval Date");
-      const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
-      
-      let mpdcName = lguMatch ? getField(lguMatch, "Name of C/M/PPDC") : "";
-      let mpdcEmail = lguMatch ? getField(lguMatch, "C/M/PPDO Email Address") : "";
-      let mpdcMobile = lguMatch ? getField(lguMatch, "C/M/PPDO Contact Number") : "";
-      let mayor = lguMatch ? getField(lguMatch, "Name of Local Chief Executive") : "";
-      mayor = mayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-      let mayorMobile = lguMatch ? getField(lguMatch, "Official Phone/Landline Number of LGU") : "";
-      mayorMobile = mayorMobile.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-      let viceMayor = lguMatch ? getField(lguMatch, "Name of Vice Governor/Mayor") : "";
-      viceMayor = viceMayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-      
-      const statusClass = statusDisplay === "UPDATED" ? "status-Updated" : 
-                         statusDisplay === "FOR UPDATING" ? "status-For-Updating" : 
-                         statusDisplay === "UNDER REVIEW" ? "status-Under-Review" : "status-Other";
-      
-      let region = getField(lguData, "Region", "region") || "WESTERN VISAYAS";
-      if (region.toUpperCase().includes("REGION_06") || region.toUpperCase().includes("REGION 06") || region.toUpperCase().includes("REGION6")) {
-        region = "WESTERN VISAYAS";
-      }
-      if (region.trim() === "06" || region.trim() === "6") {
-        region = "WESTERN VISAYAS";
-      }
-      
-      function formatMultiLine(text) {
-        if (!text || String(text).trim() === '') return '<span style="color: #1e293b; font-weight: 500;">—</span>';
-        const lines = String(text).split('\n').filter(line => line.trim() !== '');
-        if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
-        let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
-        for (let i = 1; i < lines.length; i++) {
-          html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
-        }
-        return html;
-      }
-
-      // Build the status fields in the EXACT order requested:
-      // 1. Risk-Informed
-      // 2. Specific Status
-      // 3. Urban Development Target
-      // 4. With Local Shelter Plan
-      // 5. Target Year (Urban Dev't)
-      // 6. With Integrated Housing Subsector
-      // 7. PLANADO Target
-      // 8. With Communication Plan
-      // 9. Target Year
-      let extraStatusFieldsHtml = '';
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Risk-Informed :</span><span class="value">${escapeHtml(riskInformed)}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText)}</span></div>`;
-      
-      if (urbanDevTarget) {
-        extraStatusFieldsHtml += `<div class="info-item"><span class="label">Urban Development Target :</span><span class="value">${escapeHtml(urbanDevTarget)}</span></div>`;
-      } else {
-        extraStatusFieldsHtml += `<div class="info-item"><span class="label">Urban Development Target :</span><span class="value">—</span></div>`;
-      }
-      
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || '—')}</span></div>`;
-      
-      if (targetYearUrbanDevt) {
-        extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year (Urban Dev't) :</span><span class="value">${escapeHtml(targetYearUrbanDevt)}</span></div>`;
-      } else {
-        extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year (Urban Dev't) :</span><span class="value">—</span></div>`;
-      }
-      
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">PLANADO Target :</span><span class="value">${escapeHtml(planadoTarget)}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>`;
-      
-      if (targetYear) {
-        extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year :</span><span class="value">${escapeHtml(targetYear)}</span></div>`;
-      } else {
-        extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year :</span><span class="value">—</span></div>`;
-      }
-
-      const printHtml = `
-        <html>
-        <head>
-          <style>
-            * { color: #000000 !important; }
-            body { font-family: "Inter", sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; color: #000000 !important; background: #ffffff !important; line-height: 1.5; }
-            .print-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; }
-            .print-header h1 { color: #000000 !important; font-size: 14pt; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
-            .print-header .date-time { font-size: 9pt; color: #000000 !important; text-align: right; line-height: 1.4; }
-            .lgu-header { display: flex; justify-content: space-between; align-items: stretch; border-bottom: 1px solid #1e3a8a; padding-bottom: 6px; margin-bottom: 12px; }
-            .lgu-left { display: flex; flex-direction: column; align-items: flex-start; gap: 0px; }
-            .lgu-left .lgu-province { font-size: 14pt; font-weight: 600; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.5px; }
-            .lgu-left .lgu-name { font-size: 14pt; font-weight: 600; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.5px; }
-            .lgu-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0px; text-align: right; }
-            .lgu-right .lgu-region { font-size: 12pt; font-weight: 500; color: #1e3a8a !important; text-transform: uppercase; }
-            .lgu-right .lgu-income { font-size: 10pt; font-weight: 400; color: #475569 !important; }
-            .status-row { display: flex; align-items: center; gap: 12px; margin: 4px 0 12px 0; padding: 4px 0; border-bottom: 1px dashed #d1d5db; }
-            .status-label { font-weight: 700; color: #1e3a8a; font-size: 10pt; text-transform: uppercase; min-width: 70px; }
-            .status-badge { display: inline-block; font-weight: 700; padding: 2px 16px; border-radius: 20px; font-size: 10pt; }
-            .status-Updated { background: #dcfce7; color: #166534 !important; }
-            .status-For-Updating { background: #fef3c7; color: #92400e !important; }
-            .status-Under-Review { background: #dbeafe; color: #1e40af !important; }
-            .status-Other { background: #e2e8f0; color: #475569 !important; }
-            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 30px; margin: 4px 0; }
-            .info-item { display: flex; padding: 3px 0; font-size: 9.5pt; align-items: baseline; }
-            .info-item .label { font-weight: 600; color: #475569; min-width: 180px; flex-shrink: 0; }
-            .info-item .value { color: #1e293b; font-weight: 500; white-space: normal; word-break: break-word; }
-            .section-title { font-size: 10pt; font-weight: 700; color: #1e3a8a; text-transform: uppercase; border-bottom: 1px solid #d1d5db; padding-bottom: 3px; margin-top: 14px; margin-bottom: 8px; letter-spacing: 0.5px; }
-            .two-col-section { display: grid; grid-template-columns: 1fr 1fr; gap: 0px 40px; margin-top: 2px; margin-bottom: 2px; }
-            .two-col-section .field { margin-bottom: 6px; }
-            .two-col-section .field-label { font-weight: 700; color: #000000; font-size: 9.5pt; display: block; margin-bottom: 1px; text-align: left; }
-            .two-col-section .field-value { color: #000000; font-weight: 600; font-size: 9.5pt; display: block; padding-left: 0px; line-height: 1.5; text-align: left; }
-            .two-col-section .field-value .line { display: block; color: #1e293b; font-weight: 600; text-align: left; }
-            .two-col-section .full-width { grid-column: 1 / -1; }
-            .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #d1d5db; font-size: 8pt; color: #94a3b8; text-align: center; }
-            @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } body { color: #000000 !important; background: #ffffff !important; padding: 15px; } .lgu-left .lgu-province { color: #1e3a8a !important; } .lgu-left .lgu-name { color: #1e3a8a !important; } .lgu-right .lgu-region { color: #1e3a8a !important; } .status-badge { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } .status-Updated { background: #dcfce7 !important; color: #166534 !important; } .status-For-Updating { background: #fef3c7 !important; color: #92400e !important; } .status-Under-Review { background: #dbeafe !important; color: #1e40af !important; } .status-Other { background: #e2e8f0 !important; color: #475569 !important; } .two-col-section .field-label { color: #1e293b !important; } .two-col-section .field-value { color: #1e293b !important; } }
-            @page { margin: 12mm 15mm; }
-          </style>
-        </head>
-        <body>
-          <div class="print-header">
-            <h1>STATUS OF CLUP/ZO FORMULATION</h1>
-            <div class="date-time">${dateStr}<br>${timeStr}</div>
-          </div>
-          <div class="lgu-header">
-            <div class="lgu-left">
-              <span class="lgu-province">${escapeHtml(toTitleCase(province).toUpperCase())}</span>
-              <span class="lgu-name">${escapeHtml(city.toUpperCase())}</span>
-            </div>
-            <div class="lgu-right">
-              <span class="lgu-region">${escapeHtml(region.toUpperCase())}</span>
-              ${incomeClass ? `<span class="lgu-income">Income Classification: ${escapeHtml(incomeClass)}</span>` : '<span class="lgu-income">Income Classification: ___</span>'}
-            </div>
-          </div>
-          <div class="status-row">
-            <span class="status-label">Status</span>
-            <span class="status-badge ${statusClass}">${escapeHtml(statusDisplay)}</span>
-          </div>
-          <div class="info-grid">
-            ${extraStatusFieldsHtml}
-          </div>
-          <div class="section-title">Latest CLUP</div>
-          <div class="info-grid">
-            <div class="info-item"><span class="label">Planning Period :</span><span class="value">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span></div>
-            <div class="info-item"><span class="label">Date Approved :</span><span class="value">${escapeHtml(approvalDisplay || '—')}</span></div>
-            <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || '—')}</span></div>
-          </div>
-          <div class="section-title">City/Municipal Planning and Development Coordinator (C/MPDC)</div>
-          <div class="two-col-section">
-            <div class="field"><span class="field-label">Name</span><span class="field-value">${formatMultiLine(mpdcName)}</span></div>
-            <div class="field"><span class="field-label">Email</span><span class="field-value">${formatMultiLine(mpdcEmail)}</span></div>
-            <div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${formatMultiLine(mpdcMobile)}</span></div>
-          </div>
-          <div class="section-title">Local Chief Executive</div>
-          <div class="two-col-section">
-            <div class="field"><span class="field-label">Mayor</span><span class="field-value">${escapeHtml(mayor || '—')}</span></div>
-            <div class="field"><span class="field-label">Vice Mayor</span><span class="field-value">${escapeHtml(viceMayor || '—')}</span></div>
-            ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ''}
-          </div>
-          <div class="footer">Generated on ${dateStr} at ${timeStr}</div>
-        </body>
-        </html>
-      `;
-      const win = window.open("", "_blank", "width=900,height=800");
-      if (win) {
-        win.document.write(printHtml);
-        win.document.close();
-        win.focus();
-        setTimeout(function() { win.print(); }, 500);
-      } else {
-        showToastMessage("Please allow popups to print.", "error");
-      }
-    }
-
-    // ============================================================
-    //  CLUP SUMMARY PRINT
+    //  PRINT FUNCTIONS
     // ============================================================
     function printClupSummary() {
       const filterValue = document.getElementById("clupStatusFilter")?.value || "all";
@@ -1531,29 +1088,241 @@
       else { showToastMessage("Please allow popups to print.", "error"); }
     }
 
-   function printLguStatus() {
-  const lguFilter = document.getElementById("clupLguFilter")?.value || "all";
-  if (lguFilter === "all") { showToastMessage("Please select a specific LGU to print.", "error"); return; }
-  const target = lguFilter.trim().toLowerCase();
-  let lguData = clupStatusData.find(rec => {
-    const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim().toLowerCase();
-    return c === target;
-  });
-  if (!lguData) {
-    const normalize = s => s.replace(/[\s\-_]+/g, "").toLowerCase();
-    const normTarget = normalize(target);
-    lguData = clupStatusData.find(rec => {
-      const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim();
-      return normalize(c) === normTarget;
-    });
-  }
-  if (!lguData) { showToastMessage(`No data found for "${lguFilter}".`, "error"); return; }
-  printClupFormulationDetail(lguData);
-}
+    function printClupFormulation() {
+      if (clupFormFiltered.length === 0) { alert("No records to print."); return; }
+      const lguFilter = document.getElementById("clupFormLguFilter")?.value || "all";
+      
+      if (lguFilter !== "all") {
+        const target = lguFilter.trim().toLowerCase();
+        let lguData = null;
+        lguData = clupStatusData.find(rec => { const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim().toLowerCase(); return c === target; });
+        if (!lguData) { lguData = clupStatusData.find(rec => { const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim().toLowerCase(); return c.includes(target) || target.includes(c); }); }
+        if (!lguData) { const normalize = s => s.replace(/[\s\-_]+/g, "").toLowerCase(); const normTarget = normalize(target); lguData = clupStatusData.find(rec => { const c = (rec["City/Municipality"] || rec["city"] || rec["City"] || "").trim(); return normalize(c) === normTarget; }); }
+        if (!lguData && clupFormFiltered.length > 0) { lguData = clupFormFiltered[0]; }
+        if (!lguData) { showToastMessage(`No data found for "${lguFilter}".`, "error"); return; }
+        printClupFormulationDetail(lguData);
+      } else {
+        printClupFormulationSummary();
+      }
+    }
 
-    // ============================================================
-    //  EXPORT CURRENT REPORT
-    // ============================================================
+    function printClupFormulationSummary() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
+      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
+      const provinceFilter = document.getElementById("clupFormProvinceFilter")?.value || "all";
+      let provinceLabel = provinceFilter !== "all" ? ` - ${provinceFilter}` : "";
+      let tableRows = clupFormFiltered.map((rec) => {
+        const province = rec["Province"] || rec["province"] || "";
+        const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
+        const lguMatch = lguRecordsData.find(l => { const lProvince = l["Province"] || l["province"] || ""; const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || ""; return toTitleCase(lProvince) === toTitleCase(province) && lCity === city; });
+        return `<tr><td>${escapeHtml(toTitleCase(province))}</td><td>${escapeHtml(city)}</td><td>${escapeHtml(lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "")}</td><td>${escapeHtml(lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "")}</td><td>${escapeHtml(lguMatch ? (lguMatch["Official Email Address of LGU"] || "") : "")}</td><td>${escapeHtml(lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "")}</td><td>${escapeHtml(lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "")}</td><td>${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "")}</td><td>${escapeHtml(lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : "")}</td></tr>`;
+      }).join("");
+      const printHtml = `
+        <html><head><style>
+          * { color: #000000 !important; }
+          body { font-family: "Inter", sans-serif; padding: 15px; color: #000000 !important; background: #ffffff !important; margin: 0; }
+          .print-header { text-align: center; margin-bottom: 15px; }
+          .print-header h1 { color: #000000 !important; font-size: 16pt; font-weight: 700; margin: 0; }
+          .print-header .subtitle { font-size: 10pt; color: #000000 !important; margin: 2px 0; }
+          .print-header .date-time { font-size: 9pt; color: #000000 !important; }
+          table { width: 100%; border-collapse: collapse; font-size: 7.5pt; color: #000000 !important; }
+          th { background: #1e3a8a !important; color: #ffffff !important; padding: 5px 4px; text-align: left; font-weight: 700; white-space: nowrap; border: 1px solid #1e3a8a; }
+          td { padding: 4px 4px; border: 1px solid #d1d5db; color: #000000 !important; vertical-align: top; }
+          .footer { margin-top: 15px; font-size: 8pt; color: #000000 !important; text-align: center; border-top: 1px solid #d1d5db; padding-top: 8px; }
+          @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
+          @page { size: landscape; margin: 10mm 8mm; }
+        </style></head>
+        <body>
+          <div class="print-header"><h1>STATUS OF CLUP/ZO FORMULATION${provinceLabel}</h1><div class="subtitle">DHSUD Region VI - ELUPDD Integrated Database</div><div class="date-time">Generated: ${dateStr} at ${timeStr}</div></div>
+          <table><thead><tr><th style="color:#ffffff !important;width:10%;">Province</th><th style="color:#ffffff !important;width:12%;">City/Municipality</th><th style="color:#ffffff !important;width:12%;">Mayor</th><th style="color:#ffffff !important;width:12%;">Vice Mayor</th><th style="color:#ffffff !important;width:14%;">LGU Email</th><th style="color:#ffffff !important;width:10%;">Landline</th><th style="color:#ffffff !important;width:10%;">MPDC</th><th style="color:#ffffff !important;width:12%;">MPDC Email</th><th style="color:#ffffff !important;width:8%;">MPDC Mobile</th></tr></thead><tbody>${tableRows}</tbody></table>
+          <div class="footer">Total LGUs: ${clupFormFiltered.length}</div>
+        </body></html>
+      `;
+      const win = window.open("", "_blank", "width=1200,height=800");
+      if (win) { win.document.write(printHtml); win.document.close(); win.focus(); setTimeout(() => win.print(), 500); }
+      else { showToastMessage("Please allow popups to print.", "error"); }
+    }
+
+    function printClupFormulationDetail(lguData) {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
+      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
+      
+      const getField = (obj, ...keys) => { for (const k of keys) { if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k]; } return ""; };
+      const city = getField(lguData, "City/Municipality", "city", "City", "Municipality", "municipality");
+      const province = getField(lguData, "Province", "province");
+      const incomeClass = getField(lguData, "Income Class", "incomeClass", "Income Classification");
+      
+      const normalize = s => String(s || "").replace(/[\s\-_]+/g, "").toLowerCase();
+      const normProvince = normalize(province);
+      const normCity = normalize(city);
+      const lguMatch = lguRecordsData.find(l => { const lProvince = getField(l, "Province", "province"); const lCity = getField(l, "Municipality", "municipality", "City/Municipality"); return normalize(lProvince) === normProvince && normalize(lCity) === normCity; });
+      
+      const clupStatus = getField(lguData, "CLUP Status", "CLUPStatus", "status");
+      let statusDisplay = "OTHER";
+      if (clupStatus) {
+        const sl = String(clupStatus).toLowerCase().trim();
+        if (sl.includes("updated") || sl === "updated") statusDisplay = "UPDATED";
+        else if (sl.includes("for updating") || sl === "for updating") statusDisplay = "FOR UPDATING";
+        else if (sl.includes("under review") || sl === "under review") statusDisplay = "UNDER REVIEW";
+        else statusDisplay = clupStatus.toUpperCase();
+      }
+      
+      const clupUpdates = getField(lguData, "CLUPStatus/Updates", "updates", "Specific Status");
+      const phaseInfo = getPhaseDisplay(clupUpdates);
+      let specificStatusText = "None Indicated";
+      if (phaseInfo && phaseInfo.display && phaseInfo.display !== "None Indicated") specificStatusText = phaseInfo.display;
+      else if (clupUpdates && clupUpdates !== "" && clupUpdates !== "None Indicated") specificStatusText = clupUpdates;
+      
+      const shelterPlan = getField(lguData, "LGU with Local Shelter Plan", "With Local Shelter Plan");
+      const housingSubsector = getField(lguData, "LGU with Integrated Housing Subsector", "With Integrated Housing Subsector");
+      const commPlan = getField(lguData, "LGU with Integrated Communications Plan", "With Communication Plan", "With Communications Plan");
+      const riskInformed = getField(lguData, "Risk-Informed", "Risk Informed", "RiskInformed") || "Not Specified";
+      const urbanDevTarget = getField(lguData, "Urban Development", "Urban Development Target", "Urban Dev't Target", "UrbanDevTarget");
+      const targetYearUrbanDevt = getField(lguData, "Target Year_Urban Devt", "Target Year (Urban Dev't)", "Target Year Urban Devt", "TargetYearUrbanDevt", "Target Year_Urban_Devt");
+      const planadoTarget = getField(lguData, "PLANADO Target", "Planado Target", "PLANADOTarget") || "Not Specified";
+      const targetYear = getField(lguData, "Target Year", "TargetYear", "PLANADO Target Year");
+      
+      const startYear = getField(lguData, "Start Year", "startYear");
+      const endYear = getField(lguData, "End Year", "endYear");
+      const resolutionNo = getField(lguData, "Resolution Number of the Latest Plan", "resolutionNo");
+      const approvalDate = getField(lguData, "Approval date of the Latest plan (MM/DD/YYYY)", "dateApproved", "Approval Date");
+      const approvalDisplay = approvalDate ? formatDateShort(approvalDate) : "";
+      
+      let mpdcName = lguMatch ? getField(lguMatch, "Name of C/M/PPDC") : "";
+      let mpdcEmail = lguMatch ? getField(lguMatch, "C/M/PPDO Email Address") : "";
+      let mpdcMobile = lguMatch ? getField(lguMatch, "C/M/PPDO Contact Number") : "";
+      let mayor = lguMatch ? getField(lguMatch, "Name of Local Chief Executive") : "";
+      mayor = mayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      let mayorMobile = lguMatch ? getField(lguMatch, "Official Phone/Landline Number of LGU") : "";
+      mayorMobile = mayorMobile.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      let viceMayor = lguMatch ? getField(lguMatch, "Name of Vice Governor/Mayor") : "";
+      viceMayor = viceMayor.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      
+      const statusClass = statusDisplay === "UPDATED" ? "status-Updated" : statusDisplay === "FOR UPDATING" ? "status-For-Updating" : statusDisplay === "UNDER REVIEW" ? "status-Under-Review" : "status-Other";
+      
+      let region = getField(lguData, "Region", "region") || "WESTERN VISAYAS";
+      if (region.toUpperCase().includes("REGION_06") || region.toUpperCase().includes("REGION 06") || region.toUpperCase().includes("REGION6")) region = "WESTERN VISAYAS";
+      if (region.trim() === "06" || region.trim() === "6") region = "WESTERN VISAYAS";
+      
+      function formatMultiLine(text) {
+        if (!text || String(text).trim() === '') return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+        const lines = String(text).split('\n').filter(line => line.trim() !== '');
+        if (lines.length === 0) return '<span style="color: #1e293b; font-weight: 500;">—</span>';
+        let html = `<span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[0].trim())}</span>`;
+        for (let i = 1; i < lines.length; i++) html += `<br><span style="color: #1e293b; font-weight: 500;">${escapeHtml(lines[i].trim())}</span>`;
+        return html;
+      }
+
+      let extraStatusFieldsHtml = '';
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Risk-Informed :</span><span class="value">${escapeHtml(riskInformed)}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText)}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Urban Development Target :</span><span class="value">${escapeHtml(urbanDevTarget || '—')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || '—')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year (Urban Dev't) :</span><span class="value">${escapeHtml(targetYearUrbanDevt || '—')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">PLANADO Target :</span><span class="value">${escapeHtml(planadoTarget)}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year :</span><span class="value">${escapeHtml(targetYear || '—')}</span></div>`;
+
+      const printHtml = `
+        <html><head><style>
+          * { color: #000000 !important; }
+          body { font-family: "Inter", sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; color: #000000 !important; background: #ffffff !important; line-height: 1.5; }
+          .print-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; }
+          .print-header h1 { color: #000000 !important; font-size: 14pt; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+          .print-header .date-time { font-size: 9pt; color: #000000 !important; text-align: right; line-height: 1.4; }
+          .lgu-header { display: flex; justify-content: space-between; align-items: stretch; border-bottom: 1px solid #1e3a8a; padding-bottom: 6px; margin-bottom: 12px; }
+          .lgu-left { display: flex; flex-direction: column; align-items: flex-start; gap: 0px; }
+          .lgu-left .lgu-province { font-size: 14pt; font-weight: 600; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.5px; }
+          .lgu-left .lgu-name { font-size: 14pt; font-weight: 600; color: #1e3a8a !important; text-transform: uppercase; letter-spacing: 0.5px; }
+          .lgu-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0px; text-align: right; }
+          .lgu-right .lgu-region { font-size: 12pt; font-weight: 500; color: #1e3a8a !important; text-transform: uppercase; }
+          .lgu-right .lgu-income { font-size: 10pt; font-weight: 400; color: #475569 !important; }
+          .status-row { display: flex; align-items: center; gap: 12px; margin: 4px 0 12px 0; padding: 4px 0; border-bottom: 1px dashed #d1d5db; }
+          .status-label { font-weight: 700; color: #1e3a8a; font-size: 10pt; text-transform: uppercase; min-width: 70px; }
+          .status-badge { display: inline-block; font-weight: 700; padding: 2px 16px; border-radius: 20px; font-size: 10pt; }
+          .status-Updated { background: #dcfce7; color: #166534 !important; }
+          .status-For-Updating { background: #fef3c7; color: #92400e !important; }
+          .status-Under-Review { background: #dbeafe; color: #1e40af !important; }
+          .status-Other { background: #e2e8f0; color: #475569 !important; }
+          .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 30px; margin: 4px 0; }
+          .info-item { display: flex; padding: 3px 0; font-size: 9.5pt; align-items: baseline; }
+          .info-item .label { font-weight: 600; color: #475569; min-width: 180px; flex-shrink: 0; }
+          .info-item .value { color: #1e293b; font-weight: 500; white-space: normal; word-break: break-word; }
+          .section-title { font-size: 10pt; font-weight: 700; color: #1e3a8a; text-transform: uppercase; border-bottom: 1px solid #d1d5db; padding-bottom: 3px; margin-top: 14px; margin-bottom: 8px; letter-spacing: 0.5px; }
+          .two-col-section { display: grid; grid-template-columns: 1fr 1fr; gap: 0px 40px; margin-top: 2px; margin-bottom: 2px; }
+          .two-col-section .field { margin-bottom: 6px; }
+          .two-col-section .field-label { font-weight: 700; color: #000000; font-size: 9.5pt; display: block; margin-bottom: 1px; text-align: left; }
+          .two-col-section .field-value { color: #000000; font-weight: 600; font-size: 9.5pt; display: block; padding-left: 0px; line-height: 1.5; text-align: left; }
+          .two-col-section .full-width { grid-column: 1 / -1; }
+          .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #d1d5db; font-size: 8pt; color: #94a3b8; text-align: center; }
+          @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } .status-Updated { background: #dcfce7 !important; color: #166534 !important; } .status-For-Updating { background: #fef3c7 !important; color: #92400e !important; } .status-Under-Review { background: #dbeafe !important; color: #1e40af !important; } .status-Other { background: #e2e8f0 !important; color: #475569 !important; } }
+          @page { margin: 12mm 15mm; }
+        </style></head>
+        <body>
+          <div class="print-header"><h1>STATUS OF CLUP/ZO FORMULATION</h1><div class="date-time">${dateStr}<br>${timeStr}</div></div>
+          <div class="lgu-header">
+            <div class="lgu-left"><span class="lgu-province">${escapeHtml(toTitleCase(province).toUpperCase())}</span><span class="lgu-name">${escapeHtml(city.toUpperCase())}</span></div>
+            <div class="lgu-right"><span class="lgu-region">${escapeHtml(region.toUpperCase())}</span>${incomeClass ? `<span class="lgu-income">Income Classification: ${escapeHtml(incomeClass)}</span>` : '<span class="lgu-income">Income Classification: ___</span>'}</div>
+          </div>
+          <div class="status-row"><span class="status-label">Status</span><span class="status-badge ${statusClass}">${escapeHtml(statusDisplay)}</span></div>
+          <div class="info-grid">${extraStatusFieldsHtml}</div>
+          <div class="section-title">Latest CLUP</div>
+          <div class="info-grid">
+            <div class="info-item"><span class="label">Planning Period :</span><span class="value">${startYear && endYear ? `${startYear}-${endYear}` : (startYear || endYear || '—')}</span></div>
+            <div class="info-item"><span class="label">Date Approved :</span><span class="value">${escapeHtml(approvalDisplay || '—')}</span></div>
+            <div class="info-item"><span class="label">SP/DHSUD DC :</span><span class="value">${escapeHtml(resolutionNo || '—')}</span></div>
+          </div>
+          <div class="section-title">City/Municipal Planning and Development Coordinator (C/MPDC)</div>
+          <div class="two-col-section">
+            <div class="field"><span class="field-label">Name</span><span class="field-value">${formatMultiLine(mpdcName)}</span></div>
+            <div class="field"><span class="field-label">Email</span><span class="field-value">${formatMultiLine(mpdcEmail)}</span></div>
+            <div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${formatMultiLine(mpdcMobile)}</span></div>
+          </div>
+          <div class="section-title">Local Chief Executive</div>
+          <div class="two-col-section">
+            <div class="field"><span class="field-label">Mayor</span><span class="field-value">${escapeHtml(mayor || '—')}</span></div>
+            <div class="field"><span class="field-label">Vice Mayor</span><span class="field-value">${escapeHtml(viceMayor || '—')}</span></div>
+            ${mayorMobile ? `<div class="field full-width"><span class="field-label">Mobile</span><span class="field-value">${escapeHtml(mayorMobile)}</span></div>` : ''}
+          </div>
+          <div class="footer">Generated on ${dateStr} at ${timeStr}</div>
+        </body></html>
+      `;
+      const win = window.open("", "_blank", "width=900,height=800");
+      if (win) { win.document.write(printHtml); win.document.close(); win.focus(); setTimeout(() => win.print(), 500); }
+      else { showToastMessage("Please allow popups to print.", "error"); }
+    }
+
+    function printLguDirectory() {
+      if (lguDirFiltered.length === 0) { alert("No records to print."); return; }
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
+      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
+      let tableRows = lguDirFiltered.map(rec => `<tr><td>${escapeHtml(toTitleCase(rec["Province"]||rec["province"]||""))}</td><td>${escapeHtml(rec["Municipality"]||rec["municipality"]||rec["City/Municipality"]||"")}</td><td>${escapeHtml(rec["Name of Local Chief Executive"]||"")}</td><td>${escapeHtml(rec["Name of Vice Governor/Mayor"]||"")}</td><td>${escapeHtml(rec["Official Email Address of LGU"]||"")}</td><td>${escapeHtml(rec["Official Phone/Landline Number of LGU"]||"")}</td><td>${escapeHtml(rec["Name of C/M/PPDC"]||"")}</td><td>${escapeHtml(rec["C/M/PPDO Email Address"]||"")}</td><td>${escapeHtml(rec["C/M/PPDO Contact Number"]||"")}</td></tr>`).join("");
+      const printHtml = `
+        <html><head><style>
+          * { color: #000000 !important; }
+          body { font-family: "Inter", sans-serif; padding: 15px; color: #000000 !important; background: #ffffff !important; margin: 0; }
+          .print-header { text-align: center; margin-bottom: 15px; }
+          .print-header h1 { color: #000000 !important; font-size: 16pt; font-weight: 700; margin: 0; }
+          table { width: 100%; border-collapse: collapse; font-size: 7.5pt; color: #000000 !important; }
+          th { background: #1e3a8a !important; color: #ffffff !important; padding: 5px 4px; text-align: left; font-weight: 700; white-space: nowrap; border: 1px solid #1e3a8a; }
+          td { padding: 4px 4px; border: 1px solid #d1d5db; color: #000000 !important; vertical-align: top; }
+          @media print { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          @page { size: landscape; margin: 10mm 8mm; }
+        </style></head>
+        <body>
+          <div class="print-header"><h1>LGU Directory</h1><div style="font-size:10pt;">DHSUD Region VI - ELUPDD Integrated Database</div><div style="font-size:9pt;">Generated: ${dateStr} at ${timeStr}</div></div>
+          <table><thead><tr><th style="color:#ffffff !important;">Province</th><th style="color:#ffffff !important;">City/Municipality</th><th style="color:#ffffff !important;">Mayor</th><th style="color:#ffffff !important;">Vice Mayor</th><th style="color:#ffffff !important;">LGU Email</th><th style="color:#ffffff !important;">Landline</th><th style="color:#ffffff !important;">MPDC</th><th style="color:#ffffff !important;">MPDC Email</th><th style="color:#ffffff !important;">MPDC Mobile</th></tr></thead><tbody>${tableRows}</tbody></table>
+        </body></html>
+      `;
+      const win = window.open("", "_blank", "width=1200,height=800");
+      if (win) { win.document.write(printHtml); win.document.close(); win.focus(); setTimeout(() => win.print(), 500); }
+      else { showToastMessage("Please allow popups to print.", "error"); }
+    }
+
     function exportCurrentReportToExcel() {
       if (currentReportType === "lgu_directory") { exportLguDirectoryExcel(); return; }
       if (currentReportType === "clup_formulation") { exportClupFormulationExcel(); return; }
@@ -1568,7 +1337,7 @@
         sheetData = records.map(rec => { const row = mapZoningToRow(rec); const out={}; cols.forEach(c => out[c]=row[c]!==undefined?row[c]:""); return out; });
       } else {
         cols = CLUP_COLS; sheetName = "CLUP_Status";
-        sheetData = records.map((rec, idx) => { const row = mapClupToRow(rec, idx); const out={}; cols.forEach(c => { if(c==="Specific Status") out[c]=row[c]!==undefined?row[c]:""; else out[c]=row[c]!==undefined?row[c]:""; }); return out; });
+        sheetData = records.map((rec, idx) => { const row = mapClupToRow(rec, idx); const out={}; cols.forEach(c => { out[c]=row[c]!==undefined?row[c]:""; }); return out; });
       }
       const ws = XLSX.utils.json_to_sheet(sheetData);
       const wb = XLSX.utils.book_new();
@@ -1577,9 +1346,6 @@
       showToastMessage(`Exported ${records.length} records to Excel`, "success");
     }
 
-    // ============================================================
-    //  LGU DIRECTORY EXPORT & PRINT
-    // ============================================================
     function exportLguDirectoryExcel() {
       if (lguDirFiltered.length === 0) { alert("No records to export."); return; }
       const data = lguDirFiltered.map(rec => ({
@@ -1600,85 +1366,31 @@
       showToastMessage(`Exported ${data.length} LGU records`, "success");
     }
 
-    function printLguDirectory() {
-      if (lguDirFiltered.length === 0) { alert("No records to print."); return; }
-      const now = new Date();
-      const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
-      const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
-      let tableRows = lguDirFiltered.map(rec => `
-        <tr>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(toTitleCase(rec["Province"]||rec["province"]||""))}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["Municipality"]||rec["municipality"]||rec["City/Municipality"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["Name of Local Chief Executive"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["Name of Vice Governor/Mayor"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["Official Email Address of LGU"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["Official Phone/Landline Number of LGU"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["Name of C/M/PPDC"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["C/M/PPDO Email Address"]||"")}</td>
-          <td style="color:#000000 !important;padding:4px 6px;">${escapeHtml(rec["C/M/PPDO Contact Number"]||"")}</td>
-        </tr>
-      `).join("");
-      const printHtml = `
-        <html>
-        <head>
-          <style>
-            * { color: #000000 !important; }
-            body { font-family: "Inter", sans-serif; padding: 15px; color: #000000 !important; background: #ffffff !important; margin: 0; }
-            .print-header { text-align: center; margin-bottom: 15px; }
-            .print-header h1 { color: #000000 !important; font-size: 16pt; font-weight: 700; margin: 0; }
-            .print-header .subtitle { font-size: 10pt; color: #000000 !important; margin: 2px 0; }
-            .print-header .date-time { font-size: 9pt; color: #000000 !important; }
-            table { width: 100%; border-collapse: collapse; font-size: 7.5pt; color: #000000 !important; }
-            th { background: #1e3a8a !important; color: #ffffff !important; padding: 5px 4px; text-align: left; font-weight: 700; white-space: nowrap; border: 1px solid #1e3a8a; }
-            td { padding: 4px 4px; border: 1px solid #d1d5db; color: #000000 !important; vertical-align: top; }
-            .footer { margin-top: 15px; font-size: 8pt; color: #000000 !important; text-align: center; border-top: 1px solid #d1d5db; padding-top: 8px; }
-            @media print { * { color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } body { color: #000000 !important; background: #ffffff !important; } td { color: #000000 !important; } th { background: #1e3a8a !important; color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
-            @page { size: landscape; margin: 10mm 8mm; }
-          </style>
-        </head>
-        <body>
-          <div class="print-header">
-            <h1>LGU Directory</h1>
-            <div class="subtitle">DHSUD Region VI - ELUPDD Integrated Database</div>
-            <div class="date-time">Generated: ${dateStr} at ${timeStr}</div>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th style="color:#ffffff !important;width:10%;">Province</th>
-                <th style="color:#ffffff !important;width:12%;">City/Municipality</th>
-                <th style="color:#ffffff !important;width:12%;">Mayor</th>
-                <th style="color:#ffffff !important;width:12%;">Vice Mayor</th>
-                <th style="color:#ffffff !important;width:14%;">LGU Email</th>
-                <th style="color:#ffffff !important;width:10%;">Landline</th>
-                <th style="color:#ffffff !important;width:10%;">MPDC</th>
-                <th style="color:#ffffff !important;width:12%;">MPDC Email</th>
-                <th style="color:#ffffff !important;width:8%;">MPDC Mobile</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${tableRows}
-            </tbody>
-          </table>
-          <div class="footer">Total LGUs: ${lguDirFiltered.length}</div>
-        </body>
-        </html>
-      `;
-      const win = window.open("", "_blank", "width=1200,height=800");
-      if (win) { 
-        win.document.write(printHtml); 
-        win.document.close(); 
-        win.focus(); 
-        setTimeout(function() {
-          win.print();
-        }, 500);
-      }
-      else { showToastMessage("Please allow popups to print.", "error"); }
+    function exportClupFormulationExcel() {
+      if (clupFormFiltered.length === 0) { alert("No records to export."); return; }
+      const data = clupFormFiltered.map((rec) => {
+        const province = rec["Province"] || rec["province"] || "";
+        const city = rec["City/Municipality"] || rec["city"] || rec["City"] || "";
+        const lguMatch = lguRecordsData.find(l => { const lProvince = l["Province"] || l["province"] || ""; const lCity = l["Municipality"] || l["municipality"] || l["City/Municipality"] || ""; return toTitleCase(lProvince) === toTitleCase(province) && lCity === city; });
+        return {
+          "Province": toTitleCase(province),
+          "City/Municipality": city,
+          "Mayor": lguMatch ? (lguMatch["Name of Local Chief Executive"] || "") : "",
+          "Vice Mayor": lguMatch ? (lguMatch["Name of Vice Governor/Mayor"] || "") : "",
+          "LGU Email": lguMatch ? (lguMatch["Official Email Address of LGU"] || "") : "",
+          "Landline": lguMatch ? (lguMatch["Official Phone/Landline Number of LGU"] || "") : "",
+          "MPDC": lguMatch ? (lguMatch["Name of C/M/PPDC"] || "") : "",
+          "MPDC Email": lguMatch ? (lguMatch["C/M/PPDO Email Address"] || "") : "",
+          "MPDC Mobile": lguMatch ? (lguMatch["C/M/PPDO Contact Number"] || "") : ""
+        };
+      });
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "CLUP_Formulation");
+      XLSX.writeFile(wb, `CLUP_Formulation_${new Date().toISOString().slice(0,10)}.xlsx`);
+      showToastMessage(`Exported ${data.length} CLUP formulation records`, "success");
     }
 
-    // ============================================================
-    //  INIT
-    // ============================================================
     async function init() {
       checkSession();
       renderMainNavigation();
@@ -1698,11 +1410,10 @@
       document.getElementById("clupFooter").classList.add("hidden-filter");
       document.getElementById("lguDirFooter").classList.add("hidden-filter");
       document.getElementById("clupFormFooter").classList.add("hidden-filter");
-       await fetchLiveData();
+      await fetchLiveData();
     }
     init();
 
-    // Global exposures
     window.switchReportType = switchReportType;
     window.filterReportTable = filterReportTable;
     window.clearMonthFilter = clearMonthFilter;
@@ -1716,7 +1427,6 @@
     window.toggleModalPassword = toggleModalPassword;
     window.handleModalLogin = handleModalLogin;
     window.printClupSummary = printClupSummary;
-    window.printLguStatus = printLguStatus;
     window.filterLguDirectory = filterLguDirectory;
     window.printLguDirectory = printLguDirectory;
     window.exportLguDirectoryExcel = exportLguDirectoryExcel;
@@ -1726,6 +1436,7 @@
     window.exportClupFormulationExcel = exportClupFormulationExcel;
     window.printClupFormulationDetail = printClupFormulationDetail;
     window.updateClupFormLguFilter = updateClupFormLguFilter;
+    window.onclick = function(e) { const modal = document.getElementById("loginModal"); if (e.target === modal) closeLoginModal(); };
   </script>
 </body>
 </html>
