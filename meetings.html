@@ -1458,6 +1458,79 @@
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1asn7RHb2UTGhj1WZLH_fVulU9mxK4cu6C1kNy71PAsM/edit?usp=sharing';
 
     // ============================================
+    // DATE FORMATTING (FIXED — uses LOCAL date methods)
+    // ============================================
+    // The Google Sheet stores dates in Philippine time (UTC+8).
+    // When Apps Script returns an ISO string like "2026-09-24T16:00:00.000Z",
+    // using getUTCDate() gives 23 (wrong), while getDate() gives 24 (correct local).
+    // So we use LOCAL date methods (getMonth, getDate, getFullYear) for ISO strings
+    // and Date objects. For YYYY-MM-DD strings, we split manually.
+    function formatDate(dateValue) {
+        if (dateValue === null || dateValue === undefined || dateValue === '' || dateValue === '-') return '-';
+
+        // Already MM/DD/YYYY
+        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) return dateValue;
+
+        // ISO string with time (e.g. 2026-09-24T16:00:00.000Z) → use LOCAL date to match sheet
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(dateValue)) {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day   = String(d.getDate()).padStart(2, '0');
+                const year  = d.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+        }
+
+        // YYYY-MM-DD (no time) → split manually to avoid timezone shift
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            const parts = dateValue.split('-');
+            return parts[1] + '/' + parts[2] + '/' + parts[0];
+        }
+
+        // Date object (from Apps Script) → use LOCAL date methods
+        if (dateValue instanceof Date) {
+            const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+            const day   = String(dateValue.getDate()).padStart(2, '0');
+            const year  = dateValue.getFullYear();
+            return month + '/' + day + '/' + year;
+        }
+
+        // Fallback
+        try {
+            const d = new Date(dateValue);
+            if (!isNaN(d.getTime())) {
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day   = String(d.getDate()).padStart(2, '0');
+                const year  = d.getFullYear();
+                return month + '/' + day + '/' + year;
+            }
+        } catch (e) {}
+
+        return dateValue;
+    }
+
+    function formatDateRange(start, end) {
+        const startFormatted = formatDate(start);
+        const endFormatted = formatDate(end);
+        if (startFormatted && endFormatted && startFormatted !== '-' && endFormatted !== '-') {
+            return startFormatted + ' - ' + endFormatted;
+        } else if (startFormatted && startFormatted !== '-') {
+            return startFormatted;
+        } else if (endFormatted && endFormatted !== '-') {
+            return endFormatted;
+        }
+        return '-';
+    }
+
+    function escapeHtml(text) {
+        if (text === null || text === undefined) return '';
+        const div = document.createElement('div');
+        div.textContent = String(text);
+        return div.innerHTML;
+    }
+
+    // ============================================
     // PERSONNEL IN-CHARGE DATA
     // ============================================
     let picNames = [];
@@ -1669,69 +1742,6 @@
     }
 
     // ============================================
-    // FORMAT DATE (always MM/DD/YYYY)
-    // ============================================
-    function formatDate(dateValue) {
-        if (dateValue === null || dateValue === undefined || dateValue === '' || dateValue === '-') return '-';
-
-        if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) return dateValue;
-
-        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(dateValue)) {
-            const d = new Date(dateValue);
-            if (!isNaN(d.getTime())) {
-                const month = String(d.getUTCMonth() + 1).padStart(2, '0');
-                const day   = String(d.getUTCDate()).padStart(2, '0');
-                const year  = d.getUTCFullYear();
-                return month + '/' + day + '/' + year;
-            }
-        }
-
-        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-            const parts = dateValue.split('-');
-            return parts[1] + '/' + parts[2] + '/' + parts[0];
-        }
-
-        if (dateValue instanceof Date) {
-            const month = String(dateValue.getMonth() + 1).padStart(2, '0');
-            const day = String(dateValue.getDate()).padStart(2, '0');
-            const year = dateValue.getFullYear();
-            return month + '/' + day + '/' + year;
-        }
-
-        try {
-            const d = new Date(dateValue);
-            if (!isNaN(d.getTime())) {
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                const year = d.getFullYear();
-                return month + '/' + day + '/' + year;
-            }
-        } catch (e) {}
-
-        return dateValue;
-    }
-
-    function formatDateRange(start, end) {
-        const startFormatted = formatDate(start);
-        const endFormatted = formatDate(end);
-        if (startFormatted && endFormatted && startFormatted !== '-' && endFormatted !== '-') {
-            return startFormatted + ' - ' + endFormatted;
-        } else if (startFormatted && startFormatted !== '-') {
-            return startFormatted;
-        } else if (endFormatted && endFormatted !== '-') {
-            return endFormatted;
-        }
-        return '-';
-    }
-
-    function escapeHtml(text) {
-        if (text === null || text === undefined) return '';
-        const div = document.createElement('div');
-        div.textContent = String(text);
-        return div.innerHTML;
-    }
-
-    // ============================================
     // GET FORM DATA
     // ============================================
     function getFormData() {
@@ -1784,7 +1794,7 @@
     }
 
     // ============================================
-    // TOAST NOTIFICATION (simple version)
+    // TOAST NOTIFICATION
     // ============================================
     function showToast(title, message, type = 'info', duration = 4000) {
         const existing = document.querySelector('.toast-msg');
@@ -1864,7 +1874,7 @@
         }
     }
 
-    // ===== RENDER TABLE =====
+    // ===== RENDER TABLE (FIXED DATE COLUMN) =====
     function renderTable(records) {
         if (picNames.length === 0) picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
 
@@ -1901,6 +1911,7 @@
             columns.forEach(col => {
                 let value = record[col.key] || '-';
 
+                // === FIX: Apply LOCAL-safe date formatting ===
                 if (col.key === 'Date of Meeting') value = formatDate(value);
 
                 if (isEditing) {
@@ -1960,6 +1971,7 @@
         const meeting = record['Meeting'] || 'Untitled Meeting';
         const reportingMonth = record['Reporting Month'] || '';
         const linkMov = record['Link to MOV'] || '';
+        const dateOfMeeting = formatDate(record['Date of Meeting']); // Apply LOCAL-safe formatting
 
         let linkHtml = '<span class="empty">Not provided</span>';
         if (linkMov && linkMov !== '-' && linkMov !== 'N/A') linkHtml = `<a href="${escapeHtml(linkMov)}" target="_blank"><i class="fas fa-external-link-alt"></i> Open MOV Link</a>`;
@@ -1976,7 +1988,7 @@
                 </div>
                 <div class="detail-item full-width">
                     <div class="detail-label"><i class="fas fa-calendar-alt"></i> Date of Meeting</div>
-                    <div class="detail-value ${!record['Date of Meeting'] ? 'empty' : ''}">${escapeHtml(record['Date of Meeting']) || 'Not provided'}</div>
+                    <div class="detail-value ${!record['Date of Meeting'] ? 'empty' : ''}">${escapeHtml(dateOfMeeting) || 'Not provided'}</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label"><i class="fas fa-users"></i> Proponents</div>
@@ -2398,17 +2410,12 @@
         return "viewer";
     }
 
-    // ============================================
-    // NAVIGATION RENDERING — WITH ACTIVE HIGHLIGHT
-    // ============================================
     function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
 
-        // Determine current page
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-        // Helper to check active state
         function isActive(page) {
             return currentPage === page || (currentPage === '' && page === 'index.html');
         }
@@ -2416,7 +2423,6 @@
         let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
 
         if (currentUser) {
-            // Determine active states for each main item
             const isCertActive = isActive('lc.html') || isActive('SZC.html');
             const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
             const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
@@ -2473,7 +2479,6 @@
 
         container.innerHTML = navHtml;
 
-        // Submenu toggle logic
         setTimeout(() => {
             document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
                 trigger.addEventListener("click", (e) => {
