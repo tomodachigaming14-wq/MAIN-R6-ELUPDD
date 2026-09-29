@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; min-height: 100vh; }
+        body { font-family: "Inter", sans-serif; background: #e6f0fa; color: #0a2540; line-height: 1.5; min-height: 100vh; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
         /* ===== HEADER / NAV ===== */
@@ -198,7 +198,8 @@
         .modal-search .search-info { font-size: 0.75rem; color: #64748b; white-space: nowrap; }
         .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
 
-        .modal-body { padding: 0 1.5rem; overflow: visible; flex: 1; display: flex; flex-direction: column; }
+        /* *** FIX #1: modal-body scrollbar *** */
+        .modal-body { padding: 0 1.5rem; flex: 1; display: flex; flex-direction: column; overflow-y: auto; max-height: 55vh; }
         .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 1200px; }
         .modal-body table th { background: #f1f5f9; color: #1e3a8a; font-weight: 700; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3px; padding: 0.4rem 0.3rem; text-align: left; border-bottom: 2px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
         .modal-body table td { padding: 0.3rem 0.3rem; border-bottom: 1px solid #f1f5f9; color: #334155; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -316,73 +317,19 @@
         .log-badge.updated { background: #dbeafe; color: #2563eb; }
         .log-badge.deleted { background: #fee2e2; color: #dc2626; }
 
-        /* ===== RECENT ACTIVITY LOG (display style from old) ===== */
-        .recent-activity-box {
-            margin-top: 1.2rem;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 0.8rem 1.2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .recent-activity-box .activity-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: #1e3a8a;
-            font-size: 0.85rem;
-            padding-bottom: 4px;
-            border-bottom: 1px dashed #e2e8f0;
-        }
-        .recent-activity-box .activity-header i {
-            color: #2563eb;
-        }
-        .recent-activity-box .activity-log {
-            max-height: 180px;
-            overflow-y: auto;
-            font-size: 0.8rem;
-            color: #334155;
-            padding-right: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
+        /* ===== RECENT ACTIVITY LOG ===== */
+        .recent-activity-box { margin-top: 1.2rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 0.8rem 1.2rem; display: flex; flex-direction: column; gap: 6px; }
+        .recent-activity-box .activity-header { display: flex; align-items: center; gap: 8px; font-weight: 600; color: #1e3a8a; font-size: 0.85rem; padding-bottom: 4px; border-bottom: 1px dashed #e2e8f0; }
+        .recent-activity-box .activity-header i { color: #2563eb; }
+        .recent-activity-box .activity-log { max-height: 180px; overflow-y: auto; font-size: 0.8rem; color: #334155; padding-right: 4px; display: flex; flex-direction: column; gap: 2px; }
         .recent-activity-box .activity-log::-webkit-scrollbar { width: 4px; }
         .recent-activity-box .activity-log::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         .recent-activity-box .activity-log::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .recent-activity-box .activity-log .log-entry {
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            padding: 3px 0;
-            border-bottom: 1px solid #f1f5f9;
-            flex-wrap: wrap;
-        }
+        .recent-activity-box .activity-log .log-entry { display: flex; align-items: baseline; gap: 8px; padding: 3px 0; border-bottom: 1px solid #f1f5f9; flex-wrap: wrap; }
         .recent-activity-box .activity-log .log-entry:last-child { border-bottom: none; }
-        .recent-activity-box .activity-log .log-time {
-            color: #94a3b8;
-            font-size: 0.65rem;
-            font-weight: 500;
-            min-width: 70px;
-            white-space: nowrap;
-        }
-        .recent-activity-box .activity-log .log-badge {
-            font-size: 0.6rem;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            min-width: 50px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-        .recent-activity-box .activity-log .log-detail {
-            color: #1e293b;
-            font-size: 0.75rem;
-        }
+        .recent-activity-box .activity-log .log-time { color: #94a3b8; font-size: 0.65rem; font-weight: 500; min-width: 70px; white-space: nowrap; }
+        .recent-activity-box .activity-log .log-badge { font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 20px; text-transform: uppercase; min-width: 50px; text-align: center; flex-shrink: 0; }
+        .recent-activity-box .activity-log .log-detail { color: #1e293b; font-size: 0.75rem; }
 
         /* ===== FOOTER ===== */
         .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
@@ -413,7 +360,7 @@
             .modal-filters select, .modal-filters input { min-width: 100%; max-width: 100%; }
             .modal-search { padding: 0.6rem 1rem; flex-direction: column; }
             .modal-search input { width: 100%; min-width: unset; }
-            .modal-body { padding: 0 0.8rem; }
+            .modal-body { padding: 0 0.8rem; max-height: 45vh; }
             .modal-body table { font-size: 0.55rem; min-width: 900px; }
             .modal-body table th, .modal-body table td { padding: 0.15rem 0.15rem; }
             .modal-body .action-cell .btn-action { font-size: 0.5rem; padding: 0.1rem 0.3rem; }
@@ -508,7 +455,7 @@
                 <button type="button" class="btn-test btn-sheet" id="sheetBtn"><i class="fas fa-external-link-alt"></i> View Google Sheet</button>
             </div>
 
-            <!-- ===== RECENT ACTIVITY (copied from p_monitoring_old) ===== -->
+            <!-- ===== RECENT ACTIVITY ===== -->
             <div class="recent-activity-box" id="recentActivityBox">
                 <div class="activity-header">
                     <i class="fas fa-clock"></i>
@@ -519,7 +466,7 @@
                 </div>
             </div>
 
-            <!-- ===== MONTHLY ACTIVITY SECTION (retained) ===== -->
+            <!-- ===== MONTHLY ACTIVITY SECTION ===== -->
             <div class="monthly-activity-section">
                 <div class="section-header">
                     <h3><i class="fas fa-calendar-alt"></i> Monthly Activity Record</h3>
@@ -919,7 +866,7 @@
     }
 
     // ============================================
-    // RENDER RECENT ACTIVITY (matching old display)
+    // RENDER RECENT ACTIVITY
     // ============================================
     function renderActivityLog() {
         const log = document.getElementById('activityLog');
@@ -937,7 +884,7 @@
             if (e.city) displayText += (displayText ? ' · ' : '') + e.city;
             
             if (action === 'Added') {
-                // Just province and city (no extra details in the log line)
+                // Just province and city
             } else if (action === 'Deleted') {
                 displayText += ' - Record removed';
             } else if (action === 'Updated' && e.details) {
@@ -1050,7 +997,7 @@
     async function loadRecords() {
         modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p style="margin-top: 1rem;">Loading records...</p></div>`;
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring', { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring&_=' + Date.now(), { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') {
                 allRecords = result.records || []; filteredRecords = [...allRecords];
@@ -1198,6 +1145,7 @@
         finally { if (saveBtn) saveBtn.disabled = false; }
     };
 
+    // *** FIX #2: deleteRecord now re‑fetches from server after deletion ***
     window.deleteRecord = async function(rowNumber) {
         if (!confirm('Delete this record permanently?')) return;
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
@@ -1214,6 +1162,7 @@
             showToast('🗑️ Deleted', 'Record deleted.', 'success');
             await addActivityLog('Deleted', province, city, 'Record removed');
             editingRowNumber = null;
+            // Force re‑fetch from the server to ensure the deleted row no longer appears
             await loadRecords();
         } catch (e) { showToast('❌ Error', 'Delete failed: ' + e.message, 'error'); }
         finally { if (deleteBtn) deleteBtn.disabled = false; }
@@ -1277,7 +1226,7 @@
         container.innerHTML = `<div class="chart-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading chart data...</p></div>`;
         document.getElementById('chartSummary').style.display = 'none';
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring', { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring&_=' + Date.now(), { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') renderChart(result.records || []);
             else container.innerHTML = `<div style="text-align:center; padding:2rem; color:#dc2626;">Error: ${result.message}</div>`;
