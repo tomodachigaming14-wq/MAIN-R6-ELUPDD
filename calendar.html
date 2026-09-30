@@ -9,8 +9,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
+    body { font-family: "Inter", sans-serif; background: #e6f0fa; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .wide-container { max-width: 1600px; margin: 0 auto; padding: 0 24px; }
     @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
     .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
     .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
@@ -196,11 +197,11 @@
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Calendar Styles - Preserved */
+    /* Calendar Styles */
     .hero-banner { background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%); padding: 1.8rem 0; margin-bottom: 2rem; text-align: center; color: white; border-radius: 0 0 2rem 2rem; }
     .split-layout { display: flex; gap: 1.8rem; flex-wrap: wrap; }
     .calendar-panel { flex: 1.2; min-width: 280px; background: white; border-radius: 28px; border: 1px solid #eef2ff; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); }
-    .list-panel { flex: 0.9; min-width: 320px; background: white; border-radius: 28px; border: 1px solid #eef2ff; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); }
+    .list-panel { flex: 1.4; min-width: 400px; background: white; border-radius: 28px; border: 1px solid #eef2ff; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); }
     .panel-header { padding: 1rem 1.5rem; border-bottom: 1px solid #eef2ff; background: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
     .panel-header h2 { font-size: 1.3rem; font-weight: 600; margin: 0; }
     .calendar-container { padding: 1rem; overflow-x: auto; }
@@ -232,26 +233,94 @@
     .stats-row { display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
     .stat-card { background: #f1f5f9; padding: 0.3rem 0.8rem; border-radius: 40px; font-size: 0.7rem; }
     .stat-number { font-size: 1rem; font-weight: 700; color: #1e3a8a; }
-    .list-responsive { overflow-x: auto; max-height: 55vh; overflow-y: auto; }
-    .data-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 600px; }
-    .data-table th, .data-table td { padding: 0.5rem 0.5rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
-    .data-table th { background: #f1f5f9; font-weight: 600; position: sticky; top: 0; }
-    .status-badge { padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; font-weight: 600; }
+    
+    .list-responsive { 
+      overflow-x: hidden; 
+      overflow-y: auto; 
+      max-height: 55vh;
+      width: 100%;
+    }
+    .data-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 0.7rem; 
+      table-layout: fixed;
+    }
+    .data-table th, .data-table td { 
+      padding: 0.5rem 0.5rem; 
+      text-align: left; 
+      border-bottom: 1px solid #e2e8f0;
+      word-wrap: break-word;
+      overflow: hidden;
+    }
+    .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 28%; }
+    .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 11%; }
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 20%; }
+    .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 15%; }
+    .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 8%; }
+    .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 18%; }
+    .data-table th { background: #f1f5f9; font-weight: 600; position: sticky; top: 0; z-index: 1; }
+    .data-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+    .data-table th.sortable:hover { background: #e2e8f0; }
+    .data-table th .sort-icon { display: inline-block; margin-left: 4px; font-size: 0.6rem; opacity: 0.5; }
+    .data-table th .sort-icon.active { opacity: 1; color: #2563eb; }
+    .status-badge { padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; font-weight: 600; display: inline-block; }
     .status-upcoming { background: #fef9c3; color: #854d0e; }
     .status-ongoing { background: #dcfce7; color: #166534; }
     .status-completed { background: #e2e8f0; color: #334155; }
     .type-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; color: white; font-weight: 500; }
-    .action-btn { padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.65rem; border: none; cursor: pointer; background: #f1f5f9; margin: 0 2px; }
+    .action-btn { padding: 0.2rem 0.4rem; border-radius: 20px; font-size: 0.6rem; border: none; cursor: pointer; background: #f1f5f9; margin: 0 1px; }
     .action-btn.view { background: #dbeafe; color: #1e40af; }
     .action-btn.edit { background: #fef9c3; color: #854d0e; }
     .action-btn.delete { background: #fee2e2; color: #b91c1c; }
     .btn-small { padding: 0.3rem 0.8rem; font-size: 0.7rem; border-radius: 30px; cursor: pointer; border: none; }
     .btn-success { background: #10b981; color: white; }
     .btn-primary { background: #2563eb; color: white; }
-    .join-link-btn { background: #10b981; color: white; padding: 0.15rem 0.4rem; border-radius: 20px; text-decoration: none; font-size: 0.6rem; }
+    .join-link-btn { background: #10b981; color: white; padding: 0.15rem 0.4rem; border-radius: 20px; text-decoration: none; font-size: 0.6rem; display: inline-block; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
     .modal.active { display: flex; }
     .modal-content { background: white; border-radius: 28px; max-width: 750px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 1.5rem; }
+    
+    /* ===== COMPACT ACTIVITY DETAILS MODAL ===== */
+    .modal-content.compact-modal {
+      max-width: 640px;
+      width: 92%;
+      max-height: 85vh;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-radius: 28px;
+    }
+    .compact-modal .modal-header {
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #2563eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      margin-bottom: 0.5rem;
+    }
+    .compact-modal .modal-header h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin: 0;
+    }
+    .compact-modal .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+    .compact-modal .modal-footer {
+      padding-top: 1rem;
+      border-top: 1px solid #eef2ff;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+
     .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .form-group.full-width { grid-column: span 2; }
     .form-control { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px; }
@@ -259,11 +328,16 @@
     .attendee-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
     .attendee-row .form-control { flex: 1; }
     .attendee-row .remove-attendee { background: #fee2e2; color: #b91c1c; border: none; border-radius: 20px; padding: 4px 8px; cursor: pointer; }
-    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; transition: color 0.2s; }
+    .close-btn:hover { color: #1e293b; }
 
+    @media (max-width: 1400px) {
+      .wide-container { padding: 0 20px; }
+    }
     @media (max-width: 900px) {
       .split-layout { flex-direction: column; }
       .container { padding: 0 1rem; }
+      .wide-container { padding: 0 1rem; }
       .top-bar { flex-direction: column; align-items: stretch; }
       .header-logo-img span { white-space: normal; font-size: 0.7rem; }
       .login-modal-brand img { width: 100px; }
@@ -277,6 +351,14 @@
       .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
       .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
       .dropdown-submenu.open .submenu-content { display: block; }
+      .modal-content.compact-modal { width: 94%; padding: 1rem; }
+      .compact-modal .modal-header h3 { font-size: 1rem; }
+      .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 30%; }
+      .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 10%; }
+      .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 18%; }
+      .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 14%; }
+      .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 8%; }
+      .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 20%; }
     }
   </style>
 </head>
@@ -300,24 +382,17 @@
     </div>
   </header>
 
-  <div class="hero-banner"><div class="container"></div></div>
+  <div class="hero-banner"><div class="wide-container"></div></div>
 
-  <main class="container">
+  <main class="wide-container">
     <div class="split-layout">
       <div class="calendar-panel">
         <div class="panel-header"><h2>📅 Calendar View</h2><button class="btn btn-success btn-small" onclick="openAddModal()">➕ Add Activity</button></div>
         <div class="calendar-container">
           <div class="calendar-header"><div class="month-nav"><button onclick="prevMonth()">◀</button><button onclick="nextMonth()">▶</button></div><div class="current-month" id="currentMonth">May 2026</div><button class="today-btn" onclick="goToToday()">Today</button></div>
           <div id="calendarGrid" class="calendar-grid"></div>
-          <div class="legend">
-            <span class="legend-item"><span class="legend-color" style="background:#3b82f6;"></span> Meeting</span>
-            <span class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span> Workshop</span>
-            <span class="legend-item"><span class="legend-color" style="background:#10b981;"></span> Training</span>
-            <span class="legend-item"><span class="legend-color" style="background:#8b5cf6;"></span> Seminar</span>
-            <span class="legend-item"><span class="legend-color" style="background:#ef4444;"></span> Hearing</span>
-            <span class="legend-item"><span class="legend-color" style="background:#ec489a;"></span> Deadline</span>
-            <span class="legend-item"><span class="legend-color" style="background:#6b7280;"></span> Other</span>
-            <span class="legend-item"><span class="legend-color" style="background:#2dd4bf;"></span> Has Link</span>
+          <div class="legend" id="legendContainer">
+            <!-- Legend items will be generated by JS -->
           </div>
         </div>
       </div>
@@ -326,12 +401,29 @@
         <div class="list-content">
           <div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterList()"><select id="typeFilter" onchange="filterList()"><option value="all">All Types</option><option>Meeting</option><option>Workshop</option><option>Training</option><option>Seminar</option><option>Hearing</option><option>Deadline</option></select><select id="statusFilterList" onchange="filterList()"><option value="all">All Status</option><option value="upcoming">Upcoming</option><option value="ongoing">Ongoing</option><option value="completed">Completed</option></select><button class="btn-secondary btn-small" onclick="clearListFilters()">✖ Clear</button></div>
           <div class="stats-row" id="statsPanel"><div class="stat-card"><span class="stat-number" id="totalCount">0</span> Total</div><div class="stat-card"><span class="stat-number" id="upcomingCount">0</span> Upcoming</div><div class="stat-card"><span class="stat-number" id="ongoingCount">0</span> Ongoing</div><div class="stat-card"><span class="stat-number" id="completedCount">0</span> Completed</div></div>
-          <div class="list-responsive"><table class="data-table" id="activitiesTable"><thead><tr><th>Activity</th><th>Type</th><th>Start</th><th>Status</th><th>Link</th><th>Actions</th></tr></thead><tbody id="listTableBody"></tbody></table></div>
+          <div class="list-responsive">
+            <table class="data-table" id="activitiesTable">
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Type</th>
+                  <th class="sortable" id="sortStartHeader" onclick="toggleSortStart()">
+                    Start <span class="sort-icon active" id="sortStartIcon">▼</span>
+                  </th>
+                  <th>Status</th>
+                  <th>Link</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="listTableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
+  <!-- Add Activity Modal -->
   <div id="activityModal" class="modal">
     <div class="modal-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
@@ -363,7 +455,7 @@
             <td style="width:30%; padding:10px 8px; font-weight:600; vertical-align:top; border-bottom:1px solid #eef2ff;"><label>📅 Date & Time <span style="color:red;">*</span></label></td>
             <td style="width:70%; padding:10px 8px; border-bottom:1px solid #eef2ff;">
               <div style="display:flex; gap:1rem;">
-                <div style="flex:1;"><label style="display:block; font-size:0.7rem; color:#64748b; margin-bottom:4px;">Start</label><input type="datetime-local" id="startDateTime" class="form-control" style="width:100%;" required></div>
+                <div style="flex:1;"><label style="display:block; font-size:0.7rem; color:#64748b; margin-bottom:4px;">Start</label><input type="datetime-local" id="startDateTime" class="form-control" style="width:100%;" required onchange="setMinEndDate()"></div>
                 <div style="flex:1;"><label style="display:block; font-size:0.7rem; color:#64748b; margin-bottom:4px;">End</label><input type="datetime-local" id="endDateTime" class="form-control" style="width:100%;" required></div>
               </div>
             </td>
@@ -395,19 +487,23 @@
     </div>
   </div>
 
+  <!-- ===== COMPACT ACTIVITY DETAILS MODAL ===== -->
   <div id="viewModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:2px solid #2563eb; padding-bottom:0.75rem;">
-        <h3 style="color:#1e3a8a;">📋 Activity Details</h3>
+    <div class="modal-content compact-modal">
+      <div class="modal-header">
+        <h3>📋 Activity Details</h3>
         <button class="close-btn" onclick="closeViewModal()">&times;</button>
       </div>
-      <div id="viewModalBody" style="padding:0.5rem 0;"></div>
-      <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem; padding-top:1rem; border-top:1px solid #eef2ff;">
+      <div class="modal-body" id="viewModalBody">
+        <!-- Content will be dynamically injected here -->
+      </div>
+      <div class="modal-footer">
         <button class="btn-primary btn-small" onclick="closeViewModal()" style="padding:0.5rem 1.5rem;">Close</button>
       </div>
     </div>
   </div>
 
+  <!-- Login Modal -->
   <div id="loginModal" class="login-modal">
     <div class="login-modal-content">
       <div class="login-modal-brand">
@@ -441,11 +537,56 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
     let activities = [], currentEditId = null, currentDisplayDate = new Date();
     let currentUser = null;
+    let sortStartAsc = false; // DEFAULT: Latest first (descending)
 
     function escapeHtml(s) { return s ? String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
     function formatDateTime(dt) { if(!dt) return ""; const d = new Date(dt); return isNaN(d.getTime()) ? dt : d.toLocaleString(); }
     function showToastMessage(msg, type) { let t = document.querySelector(".toast-msg"); if(t) t.remove(); let toast = document.createElement("div"); toast.className = "toast-msg"; toast.style.background = type === "error" ? "#b91c1c" : "#166534"; toast.innerText = msg; document.body.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
     function encodePassword(p) { return btoa(p); }
+
+    function renderLegend() {
+      const legendContainer = document.getElementById("legendContainer");
+      if (!legendContainer) return;
+      const types = [
+        { name: "Meeting", color: "#3b82f6" },
+        { name: "Workshop", color: "#f59e0b" },
+        { name: "Training", color: "#10b981" },
+        { name: "Seminar", color: "#8b5cf6" },
+        { name: "Hearing", color: "#ef4444" },
+        { name: "Deadline", color: "#ec489a" },
+        { name: "Other", color: "#6b7280" }
+      ];
+      legendContainer.innerHTML = types.map(t => 
+        `<span class="legend-item"><span class="legend-color" style="background:${t.color};"></span> ${t.name}</span>`
+      ).join("");
+    }
+
+    function setMinEndDate() {
+      const startInput = document.getElementById("startDateTime");
+      const endInput = document.getElementById("endDateTime");
+      if (startInput.value) {
+        const startDate = startInput.value;
+        endInput.min = startDate;
+        if (endInput.value && endInput.value < startDate) {
+          endInput.value = startDate;
+        }
+      } else {
+        endInput.removeAttribute("min");
+      }
+    }
+
+    function toggleSortStart() {
+      sortStartAsc = !sortStartAsc;
+      updateSortIcon();
+      renderList();
+    }
+    function updateSortIcon() {
+      const icon = document.getElementById("sortStartIcon");
+      if (icon) {
+        icon.textContent = sortStartAsc ? "▲" : "▼";
+        icon.classList.add("active");
+      }
+    }
 
     async function saveActivityToGoogleSheets(activity) {
       try {
@@ -599,9 +740,6 @@
     function getRoleLabel(r) { if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
     function getRoleClass(r) { if(r==="admin") return "admin"; if(r==="encoder"||r==="staff") return "staff"; return "viewer"; }
 
-    // ============================================
-    // NAVIGATION — WITH ACTIVE HIGHLIGHT
-    // ============================================
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
@@ -696,7 +834,6 @@
       }
     }
 
-    // Calendar rendering functions
     function getTypeColor(t) { return { Meeting:"#3b82f6", Workshop:"#f59e0b", Training:"#10b981", Seminar:"#8b5cf6", Hearing:"#ef4444", Deadline:"#ec489a", Other:"#6b7280" }[t]||"#6b7280"; }
     function getTypeClass(t) { return "event-"+t.toLowerCase(); }
     
@@ -739,10 +876,16 @@
       const typeFilter=document.getElementById("typeFilter")?.value||"all"; 
       const statusFilter=document.getElementById("statusFilterList")?.value||"all"; 
       let filtered=activities.filter(a=>(search===""||a.name.toLowerCase().includes(search)||a.purpose.toLowerCase().includes(search)) && (typeFilter==="all"||a.type===typeFilter) && (statusFilter==="all"||a.status===statusFilter)); 
-      filtered.sort((a,b)=>new Date(a.startDateTime)-new Date(b.startDateTime)); 
+      
+      // Sort by start date - default: latest first (descending)
+      filtered.sort((a,b) => {
+        const diff = new Date(a.startDateTime) - new Date(b.startDateTime);
+        return sortStartAsc ? diff : -diff;
+      });
+      
       const tbody=document.getElementById("listTableBody"); 
-      if(!filtered.length) { tbody.innerHTML='<tr><td colspan="6">No activities found. Add one. </td></tr>'; return; } 
-      tbody.innerHTML=filtered.map(a=>`<tr><td><strong>${escapeHtml(a.name)}</strong><br><span style="font-size:0.6rem;">${escapeHtml(a.purpose.substring(0,40))}</span></td><td><span class="type-badge" style="background:${getTypeColor(a.type)};">${a.type}</span></td><td>${formatDateTime(a.startDateTime)}</td><td><span class="status-badge status-${a.status}">${a.status==="upcoming"?"Upcoming":a.status==="ongoing"?"Ongoing":"Completed"}</span></td><td>${a.meetingLink?`<a href="${escapeHtml(a.meetingLink)}" target="_blank" class="join-link-btn">Join</a>`:"—"}</td><td><button class="action-btn view" onclick="viewActivity(${a.id})">👁️</button><button class="action-btn edit" onclick="editActivity(${a.id})">✏️</button><button class="action-btn delete" onclick="deleteActivity(${a.id})">🗑️</button></td></tr>`).join(""); 
+      if(!filtered.length) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center; padding:2rem; color:#94a3b8;">No activities found. Add one.</td></tr>'; return; } 
+      tbody.innerHTML=filtered.map(a=>`<tr><td><strong>${escapeHtml(a.name)}</strong><br><span style="font-size:0.6rem; color:#64748b;">${escapeHtml(a.purpose.substring(0,40))}</span></td><td><span class="type-badge" style="background:${getTypeColor(a.type)};">${a.type}</span></td><td>${formatDateTime(a.startDateTime)}</td><td><span class="status-badge status-${a.status}">${a.status==="upcoming"?"Upcoming":a.status==="ongoing"?"Ongoing":"Completed"}</span></td><td>${a.meetingLink?`<a href="${escapeHtml(a.meetingLink)}" target="_blank" class="join-link-btn">Join</a>`:"—"}</td><td><button class="action-btn view" onclick="viewActivity(${a.id})">👁️</button><button class="action-btn edit" onclick="editActivity(${a.id})">✏️</button><button class="action-btn delete" onclick="deleteActivity(${a.id})">🗑️</button></td></tr>`).join(""); 
       updateStats(); 
     }
     
@@ -758,8 +901,8 @@
     function prevMonth() { currentDisplayDate.setMonth(currentDisplayDate.getMonth()-1); renderCalendar(); }
     function nextMonth() { currentDisplayDate.setMonth(currentDisplayDate.getMonth()+1); renderCalendar(); }
     function goToToday() { currentDisplayDate=new Date(); renderCalendar(); }
-    function openAddModal() { currentEditId=null; document.getElementById("modalTitle").innerText="Add New Activity"; document.getElementById("activityForm").reset(); document.getElementById("activityId").value=""; document.getElementById("attendeesContainer").innerHTML=""; addAttendeeField(); document.getElementById("activityModal").classList.add("active"); }
-    function openAddModalForDate(dateStr) { openAddModal(); document.getElementById("startDateTime").value=`${dateStr}T09:00`; document.getElementById("endDateTime").value=`${dateStr}T17:00`; }
+    function openAddModal() { currentEditId=null; document.getElementById("modalTitle").innerText="Add New Activity"; document.getElementById("activityForm").reset(); document.getElementById("activityId").value=""; document.getElementById("attendeesContainer").innerHTML=""; addAttendeeField(); document.getElementById("activityModal").classList.add("active"); setMinEndDate(); }
+    function openAddModalForDate(dateStr) { openAddModal(); document.getElementById("startDateTime").value=`${dateStr}T09:00`; document.getElementById("endDateTime").value=`${dateStr}T17:00`; setMinEndDate(); }
     
     function editActivity(id) { 
       const a=activities.find(x=>x.id===id); if(!a) return; 
@@ -777,6 +920,7 @@
       document.getElementById("attendeesContainer").innerHTML=""; 
       if(a.attendees?.length) a.attendees.forEach(att=>addAttendeeField(att)); else addAttendeeField(); 
       document.getElementById("activityModal").classList.add("active"); 
+      setMinEndDate();
     }
     
     function addAttendeeField(v="") { 
@@ -795,20 +939,20 @@
       const statusColors = { upcoming: { bg: "#fef9c3", color: "#854d0e", text: "🟡 Upcoming" }, ongoing: { bg: "#dcfce7", color: "#166534", text: "🟢 Ongoing" }, completed: { bg: "#e2e8f0", color: "#334155", text: "🔵 Completed" } };
       const statusStyle = statusColors[a.status] || statusColors.upcoming;
       const typeColors = { Meeting: "#3b82f6", Workshop: "#f59e0b", Training: "#10b981", Seminar: "#8b5cf6", Hearing: "#ef4444", Deadline: "#ec489a", Other: "#6b7280" };
-      const linkHtml = a.meetingLink ? `<tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600; width:35%; vertical-align:top;">🔗 Meeting Link</td><td style="padding:12px 8px;"><a href="${escapeHtml(a.meetingLink)}" target="_blank" style="color:#2563eb; text-decoration:none;">${escapeHtml(a.meetingLink)}</a><button onclick="copyToClipboard('${escapeHtml(a.meetingLink)}')" style="margin-left:8px; padding:2px 8px; border-radius:20px; border:1px solid #cbd5e1; background:white; cursor:pointer;">📋 Copy</button></td></tr>` : "";
-      const locationHtml = a.location ? `<tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600; width:35%; vertical-align:top;">📍 Location</td><td style="padding:12px 8px;">${escapeHtml(a.location)}</td></tr>` : "";
-      const attendeesHtml = a.attendees && a.attendees.length ? `<tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600; width:35%; vertical-align:top;">👥 Attendees</td><td style="padding:12px 8px;">${a.attendees.map(att => `<span style="display:inline-block; background:#f1f5f9; padding:4px 10px; border-radius:20px; margin:2px 4px 2px 0; font-size:0.75rem;">${escapeHtml(att)}</span>`).join('')}</td></tr>` : "";
+      const linkHtml = a.meetingLink ? `<tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; width:35%; vertical-align:top;">🔗 Meeting Link</td><td style="padding:10px 8px;"><a href="${escapeHtml(a.meetingLink)}" target="_blank" style="color:#2563eb; text-decoration:none; word-break:break-all;">${escapeHtml(a.meetingLink)}</a><button onclick="copyToClipboard('${escapeHtml(a.meetingLink)}')" style="margin-left:8px; padding:2px 8px; border-radius:20px; border:1px solid #cbd5e1; background:white; cursor:pointer; font-size:0.65rem;">📋 Copy</button></td></tr>` : "";
+      const locationHtml = a.location ? `<tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; width:35%; vertical-align:top;">📍 Location</td><td style="padding:10px 8px;">${escapeHtml(a.location)}</td></tr>` : "";
+      const attendeesHtml = a.attendees && a.attendees.length ? `<tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; width:35%; vertical-align:top;">👥 Attendees</td><td style="padding:10px 8px;">${a.attendees.map(att => `<span style="display:inline-block; background:#f1f5f9; padding:3px 10px; border-radius:20px; margin:2px 4px 2px 0; font-size:0.7rem;">${escapeHtml(att)}</span>`).join('')}</td></tr>` : "";
       document.getElementById("viewModalBody").innerHTML = `
         <table style="width:100%; border-collapse:collapse;">
-          <tr style="border-bottom:2px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600; width:35%; background:#f8fafc;">📋 Activity Name</td><td style="padding:12px 8px; font-weight:600; font-size:1rem;">${escapeHtml(a.name)}</td></tr>
-          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600;">🏷️ Type</td><td style="padding:12px 8px;"><span style="display:inline-block; background:${typeColors[a.type]}; color:white; padding:4px 12px; border-radius:20px; font-size:0.75rem;">${a.type}</span></td></tr>
-          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600;">📅 Start Date & Time</td><td style="padding:12px 8px;">${formatDateTime(a.startDateTime)}</td></tr>
-          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600;">⏰ End Date & Time</td><td style="padding:12px 8px;">${formatDateTime(a.endDateTime)}</td></tr>
+          <tr style="border-bottom:2px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; width:35%; background:#f8fafc; font-size:0.8rem;">📋 Activity Name</td><td style="padding:10px 8px; font-weight:600; font-size:0.9rem;">${escapeHtml(a.name)}</td></tr>
+          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; font-size:0.8rem;">🏷️ Type</td><td style="padding:10px 8px;"><span style="display:inline-block; background:${typeColors[a.type]}; color:white; padding:3px 10px; border-radius:20px; font-size:0.7rem;">${a.type}</span></td></tr>
+          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; font-size:0.8rem;">📅 Start Date & Time</td><td style="padding:10px 8px; font-size:0.8rem;">${formatDateTime(a.startDateTime)}</td></tr>
+          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; font-size:0.8rem;">⏰ End Date & Time</td><td style="padding:10px 8px; font-size:0.8rem;">${formatDateTime(a.endDateTime)}</td></tr>
           ${locationHtml}
-          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:12px 8px; font-weight:600;">📝 Purpose</td><td style="padding:12px 8px; line-height:1.5;">${escapeHtml(a.purpose)}</td></tr>
+          <tr style="border-bottom:1px solid #eef2ff;"><td style="padding:10px 8px; font-weight:600; font-size:0.8rem;">📝 Purpose</td><td style="padding:10px 8px; line-height:1.5; font-size:0.8rem;">${escapeHtml(a.purpose)}</td></tr>
           ${linkHtml}
           ${attendeesHtml}
-          <tr><td style="padding:12px 8px; font-weight:600;">📊 Status</td><td style="padding:12px 8px;"><span style="display:inline-block; background:${statusStyle.bg}; color:${statusStyle.color}; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:600;">${statusStyle.text}</span></td></tr>
+          <tr><td style="padding:10px 8px; font-weight:600; font-size:0.8rem;">📊 Status</td><td style="padding:10px 8px;"><span style="display:inline-block; background:${statusStyle.bg}; color:${statusStyle.color}; padding:3px 10px; border-radius:20px; font-size:0.7rem; font-weight:600;">${statusStyle.text}</span></td></tr>
         </table>
       `; 
       document.getElementById("viewModal").classList.add("active"); 
@@ -838,11 +982,13 @@
       checkSession();
       renderMainNavigation();
       renderUserMenu();
+      renderLegend();
+      updateSortIcon();
       await loadActivitiesFromBackend();
       setInterval(()=>{ 
         let changed=false; 
         activities.forEach(a=>{ const ns=updateActivityStatus(a); if(a.status!==ns){ a.status=ns; changed=true; } }); 
-        if(changed){ saveToLocalStorage(); renderCalendar(); renderList(); updateStats(); }
+        if(changed){ saveToLocalStorage(); renderCalendar(); renderList(); updateStats(); } 
       }, 60000);
     }
     
