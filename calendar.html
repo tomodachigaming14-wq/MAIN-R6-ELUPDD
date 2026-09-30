@@ -11,10 +11,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: "Inter", sans-serif; background: #e6f0fa; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-    .wide-container { max-width: 1600px; margin: 0 auto; padding: 0 24px; }
+    .wide-container { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 24px; }
     @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-    .scroll-reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
 
     /* ===== HEADER / NAV ===== */
     header {
@@ -39,7 +37,7 @@
       display: flex; align-items: center; gap: 12px;
       background: #f0f6fe; padding: 6px 20px; border-radius: 60px; transition: all 0.2s;
     }
-    .header-logo-img img { height: 40px; width: auto; transition: transform 0.2s; }
+    .header-logo-img img { height: 40px; width: auto; }
     .header-logo-img span {
       font-weight: 700; font-size: 0.9rem; color: #1e3a8a;
       letter-spacing: -0.2px; white-space: nowrap;
@@ -52,15 +50,13 @@
     }
     .login-prompt:hover { background: #2563eb; color: white; transform: translateY(-2px); }
 
-    /* ===== NAVIGATION BAR (centered) ===== */
+    /* ===== NAVIGATION BAR ===== */
     .nav-bottom { background: white; border-top: 1px solid #eef2ff; padding: 0.5rem 0; }
     .nav-bottom .container { display: flex; justify-content: center; }
     .main-nav-links {
       display: flex; align-items: center; justify-content: center;
       gap: 0.5rem; flex-wrap: wrap; padding: 0.2rem 0;
     }
-
-    /* ===== NAV ITEM BOXES ===== */
     .main-nav-links > a,
     .main-nav-links > .dropdown > .dropbtn {
       display: inline-flex; align-items: center; justify-content: center;
@@ -81,10 +77,6 @@
       background: #2563eb; border-color: #2563eb; color: #ffffff;
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.30); transform: translateY(-2px);
     }
-    .main-nav-links > a.active:hover,
-    .main-nav-links > .dropdown > .dropbtn.active:hover {
-      background: #1d4ed8; border-color: #1d4ed8; color: #ffffff;
-    }
     .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
     .dropbtn::after {
       content: " ▾"; font-size: 0.65rem; opacity: 0.6;
@@ -92,7 +84,7 @@
     }
     .dropdown:hover .dropbtn::after { opacity: 1; }
 
-    /* ===== DROPDOWN MENUS ===== */
+    /* ===== DROPDOWN ===== */
     .dropdown { position: relative; display: inline-block; padding-bottom: 6px; margin-bottom: -6px; }
     .dropbtn { background: none; border: none; font-family: inherit; }
     .dropdown-content {
@@ -117,29 +109,22 @@
       transition: background 0.15s ease, color 0.15s ease;
     }
     .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
-
-    /* Submenus */
-    .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
+    .dropdown-submenu { position: relative; }
     .submenu-trigger {
       background: none; border: none; width: 100%; text-align: left;
       padding: 0.7rem 2rem 0.7rem 1.2rem; font-size: 0.8rem;
       font-weight: 500; color: #1e293b; cursor: pointer;
       display: flex; justify-content: space-between; align-items: center;
-      font-family: inherit; transition: background 0.15s ease, color 0.15s ease;
+      font-family: inherit;
     }
     .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
-    .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
-    .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
+    .arrow-right { font-size: 0.7rem; margin-left: 1rem; }
     .submenu-content {
       display: none; position: absolute; left: 100%; top: 0;
       background: white; min-width: 180px;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
       border-radius: 16px; border: 1px solid #eef2ff;
       z-index: 1001; padding: 0.3rem 0;
-    }
-    .submenu-content::before {
-      content: ""; position: absolute; top: 0; left: -10px; bottom: 0;
-      width: 10px; background: transparent;
     }
     .dropdown-submenu:hover .submenu-content,
     .dropdown-submenu.open .submenu-content { display: block; }
@@ -176,19 +161,19 @@
     .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
     .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
     .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; }
-    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; }
+    .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.2rem; }
     .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
     .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
     .login-modal-body .input-group { margin-bottom: 1.3rem; }
-    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
-    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+    .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; }
+    .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
     .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
-    .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-    .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+    .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
+    .login-submit-btn:hover { background: #1d4ed8; }
+    .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
     .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.4rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
-    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
-    .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
+    .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; }
+    .login-modal-close:hover { opacity: 1; }
     .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .toast-msg.success { background: #166534; }
     .toast-msg.error { background: #b91c1c; }
@@ -197,26 +182,61 @@
     .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
     .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
 
-    /* Calendar Styles */
+    /* ===== CALENDAR ===== */
     .hero-banner { background: linear-gradient(135deg, #0f2b3a 0%, #1e4a6e 100%); padding: 1.8rem 0; margin-bottom: 2rem; text-align: center; color: white; border-radius: 0 0 2rem 2rem; }
-    .split-layout { display: flex; gap: 1.8rem; flex-wrap: wrap; }
-    .calendar-panel { flex: 1.2; min-width: 280px; background: white; border-radius: 28px; border: 1px solid #eef2ff; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); }
-    .list-panel { flex: 1.4; min-width: 400px; background: white; border-radius: 28px; border: 1px solid #eef2ff; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); }
+    
+    /* Panels use flexible widths and wrap on small screens */
+    .split-layout { 
+      display: flex; 
+      gap: 1.5rem; 
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .calendar-panel { 
+      flex: 1 1 480px; 
+      min-width: 0;
+      background: white; 
+      border-radius: 28px; 
+      border: 1px solid #eef2ff; 
+      overflow: hidden; 
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); 
+    }
+    .list-panel { 
+      flex: 1 1 500px; 
+      min-width: 0;
+      background: white; 
+      border-radius: 28px; 
+      border: 1px solid #eef2ff; 
+      overflow: hidden; 
+      display: flex; 
+      flex-direction: column; 
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03); 
+    }
     .panel-header { padding: 1rem 1.5rem; border-bottom: 1px solid #eef2ff; background: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
     .panel-header h2 { font-size: 1.3rem; font-weight: 600; margin: 0; }
     .calendar-container { padding: 1rem; overflow-x: auto; }
     .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
     .month-nav button, .today-btn { background: #f1f5f9; border: 1px solid #eef2ff; border-radius: 40px; padding: 0.4rem 0.8rem; cursor: pointer; font-size: 0.75rem; }
     .current-month { font-size: 1.1rem; font-weight: 600; color: #1e3a8a; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: #eef2ff; border-radius: 20px; overflow: hidden; min-width: 560px; border: 1px solid #eef2ff; }
-    .calendar-weekday { background: #1e3a8a; color: white; padding: 0.7rem 0.2rem; text-align: center; font-weight: 600; font-size: 0.75rem; border-bottom: 2px solid #3b82f6; }
-    .calendar-day { background: white; min-height: 100px; padding: 0.5rem 0.3rem; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; border-right: 1px solid #eef2ff; border-bottom: 1px solid #eef2ff; vertical-align: top; overflow-y: auto; }
+    
+    /* Calendar grid fills width, min-width smaller for better scaling */
+    .calendar-grid { 
+      display: grid; 
+      grid-template-columns: repeat(7, minmax(0, 1fr)); 
+      background: #eef2ff; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      width: 100%;
+      border: 1px solid #eef2ff; 
+    }
+    .calendar-weekday { background: #1e3a8a; color: white; padding: 0.6rem 0.2rem; text-align: center; font-weight: 600; font-size: 0.7rem; border-bottom: 2px solid #3b82f6; }
+    .calendar-day { background: white; min-height: 90px; padding: 0.4rem 0.3rem; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; border-right: 1px solid #eef2ff; border-bottom: 1px solid #eef2ff; overflow-y: auto; }
     .calendar-day:hover { background: #dbeafe; }
     .calendar-day.empty { background: #f9fafb; cursor: default; color: #94a3b8; }
-    .day-number { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.3rem; display: inline-block; width: 28px; text-align: center; line-height: 1.4; }
-    .day-number.today { background: #d4a017; color: white; border-radius: 30px; width: 28px; display: inline-block; }
+    .day-number { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.3rem; display: inline-block; width: 26px; text-align: center; line-height: 1.4; }
+    .day-number.today { background: #d4a017; color: white; border-radius: 30px; width: 26px; }
     .day-events { display: flex; flex-direction: column; gap: 0.2rem; margin-top: 0.2rem; }
-    .event-item { font-size: 0.65rem; padding: 0.2rem 0.3rem; border-radius: 6px; white-space: normal; word-break: break-word; cursor: pointer; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; }
+    .event-item { font-size: 0.6rem; padding: 0.2rem 0.3rem; border-radius: 6px; word-break: break-word; cursor: pointer; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; }
     .event-meeting { background: #3b82f6; color: white; }
     .event-workshop { background: #f59e0b; color: white; }
     .event-training { background: #10b981; color: white; }
@@ -224,21 +244,26 @@
     .event-hearing { background: #ef4444; color: white; }
     .event-deadline { background: #ec489a; color: white; }
     .event-other { background: #6b7280; color: white; }
-    .legend { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; padding: 0.6rem; background: #f8fafc; border-radius: 16px; font-size: 0.7rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; padding: 0.6rem; background: #f8fafc; border-radius: 16px; font-size: 0.65rem; }
     .legend-item { display: flex; align-items: center; gap: 0.4rem; }
-    .legend-color { width: 16px; height: 16px; border-radius: 4px; }
-    .list-content { padding: 1rem; overflow-y: auto; flex: 1; }
+    .legend-color { width: 14px; height: 14px; border-radius: 4px; }
+
+    /* ===== LIST VIEW ===== */
+    .list-content { padding: 1rem; flex: 1; display: flex; flex-direction: column; min-height: 0; }
     .search-bar { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
-    .search-bar input, .search-bar select { padding: 0.4rem 0.8rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.75rem; flex: 1; }
+    .search-bar input, .search-bar select { padding: 0.4rem 0.8rem; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 0.75rem; flex: 1 1 100px; min-width: 0; }
     .stats-row { display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
     .stat-card { background: #f1f5f9; padding: 0.3rem 0.8rem; border-radius: 40px; font-size: 0.7rem; }
     .stat-number { font-size: 1rem; font-weight: 700; color: #1e3a8a; }
-    
+
+    /* Table area: scrolls vertically only, no horizontal scrollbar */
     .list-responsive { 
       overflow-x: hidden; 
       overflow-y: auto; 
       max-height: 55vh;
       width: 100%;
+      border-radius: 12px;
+      border: 1px solid #eef2ff;
     }
     .data-table { 
       width: 100%; 
@@ -252,36 +277,38 @@
       border-bottom: 1px solid #e2e8f0;
       word-wrap: break-word;
       overflow: hidden;
+      vertical-align: top;
     }
-    .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 28%; }
+    /* Column widths: percentages so they always fit */
+    .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 30%; }
     .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 11%; }
-    .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 20%; }
-    .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 15%; }
-    .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 8%; }
-    .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 18%; }
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 19%; }
+    .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 14%; }
+    .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 7%; }
+    .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 19%; }
     .data-table th { background: #f1f5f9; font-weight: 600; position: sticky; top: 0; z-index: 1; }
     .data-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
     .data-table th.sortable:hover { background: #e2e8f0; }
     .data-table th .sort-icon { display: inline-block; margin-left: 4px; font-size: 0.6rem; opacity: 0.5; }
     .data-table th .sort-icon.active { opacity: 1; color: #2563eb; }
-    .status-badge { padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; font-weight: 600; display: inline-block; }
+    .status-badge { padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; display: inline-block; white-space: nowrap; }
     .status-upcoming { background: #fef9c3; color: #854d0e; }
     .status-ongoing { background: #dcfce7; color: #166534; }
     .status-completed { background: #e2e8f0; color: #334155; }
-    .type-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; color: white; font-weight: 500; }
-    .action-btn { padding: 0.2rem 0.4rem; border-radius: 20px; font-size: 0.6rem; border: none; cursor: pointer; background: #f1f5f9; margin: 0 1px; }
+    .type-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; color: white; font-weight: 500; white-space: nowrap; }
+    .action-btn { padding: 0.2rem 0.35rem; border-radius: 20px; font-size: 0.55rem; border: none; cursor: pointer; background: #f1f5f9; margin: 0 1px; }
     .action-btn.view { background: #dbeafe; color: #1e40af; }
     .action-btn.edit { background: #fef9c3; color: #854d0e; }
     .action-btn.delete { background: #fee2e2; color: #b91c1c; }
     .btn-small { padding: 0.3rem 0.8rem; font-size: 0.7rem; border-radius: 30px; cursor: pointer; border: none; }
     .btn-success { background: #10b981; color: white; }
     .btn-primary { background: #2563eb; color: white; }
-    .join-link-btn { background: #10b981; color: white; padding: 0.15rem 0.4rem; border-radius: 20px; text-decoration: none; font-size: 0.6rem; display: inline-block; }
+    .join-link-btn { background: #10b981; color: white; padding: 0.15rem 0.4rem; border-radius: 20px; text-decoration: none; font-size: 0.6rem; display: inline-block; white-space: nowrap; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
     .modal.active { display: flex; }
     .modal-content { background: white; border-radius: 28px; max-width: 750px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 1.5rem; }
-    
-    /* ===== COMPACT ACTIVITY DETAILS MODAL ===== */
+
+    /* Compact activity details modal */
     .modal-content.compact-modal {
       max-width: 640px;
       width: 92%;
@@ -301,64 +328,43 @@
       flex-shrink: 0;
       margin-bottom: 0.5rem;
     }
-    .compact-modal .modal-header h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #1e3a8a;
-      margin: 0;
-    }
-    .compact-modal .modal-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.5rem 0;
-    }
-    .compact-modal .modal-footer {
-      padding-top: 1rem;
-      border-top: 1px solid #eef2ff;
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
-      flex-shrink: 0;
-    }
+    .compact-modal .modal-header h3 { font-size: 1.2rem; font-weight: 700; color: #1e3a8a; margin: 0; }
+    .compact-modal .modal-body { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
+    .compact-modal .modal-footer { padding-top: 1rem; border-top: 1px solid #eef2ff; display: flex; justify-content: flex-end; gap: 1rem; flex-shrink: 0; }
 
-    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .form-group.full-width { grid-column: span 2; }
     .form-control { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px; }
     .form-control:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
     .attendee-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
     .attendee-row .form-control { flex: 1; }
     .attendee-row .remove-attendee { background: #fee2e2; color: #b91c1c; border: none; border-radius: 20px; padding: 4px 8px; cursor: pointer; }
-    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; transition: color 0.2s; }
+    .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; }
     .close-btn:hover { color: #1e293b; }
 
-    @media (max-width: 1400px) {
-      .wide-container { padding: 0 20px; }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .wide-container { padding: 0 16px; }
     }
     @media (max-width: 900px) {
       .split-layout { flex-direction: column; }
-      .container { padding: 0 1rem; }
-      .wide-container { padding: 0 1rem; }
+      .calendar-panel, .list-panel { flex: 1 1 auto; width: 100%; }
+      .container, .wide-container { padding: 0 1rem; }
       .top-bar { flex-direction: column; align-items: stretch; }
       .header-logo-img span { white-space: normal; font-size: 0.7rem; }
-      .login-modal-brand img { width: 100px; }
-      .main-nav-links { gap: 0.35rem; }
-      .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
     }
     @media (max-width: 700px) {
       .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
-      .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
+      .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; }
       .main-nav-links > a, .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
       .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
       .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
       .dropdown-submenu.open .submenu-content { display: block; }
       .modal-content.compact-modal { width: 94%; padding: 1rem; }
-      .compact-modal .modal-header h3 { font-size: 1rem; }
-      .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 30%; }
-      .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 10%; }
+      .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 32%; }
+      .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 12%; }
       .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 18%; }
       .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 14%; }
-      .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 8%; }
-      .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 20%; }
+      .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 6%; }
+      .data-table th:nth-child(6), .data-table td:nth-child(6) { width: 18%; }
     }
   </style>
 </head>
@@ -391,9 +397,7 @@
         <div class="calendar-container">
           <div class="calendar-header"><div class="month-nav"><button onclick="prevMonth()">◀</button><button onclick="nextMonth()">▶</button></div><div class="current-month" id="currentMonth">May 2026</div><button class="today-btn" onclick="goToToday()">Today</button></div>
           <div id="calendarGrid" class="calendar-grid"></div>
-          <div class="legend" id="legendContainer">
-            <!-- Legend items will be generated by JS -->
-          </div>
+          <div class="legend" id="legendContainer"></div>
         </div>
       </div>
       <div class="list-panel">
@@ -487,16 +491,14 @@
     </div>
   </div>
 
-  <!-- ===== COMPACT ACTIVITY DETAILS MODAL ===== -->
+  <!-- Compact Activity Details Modal -->
   <div id="viewModal" class="modal">
     <div class="modal-content compact-modal">
       <div class="modal-header">
         <h3>📋 Activity Details</h3>
         <button class="close-btn" onclick="closeViewModal()">&times;</button>
       </div>
-      <div class="modal-body" id="viewModalBody">
-        <!-- Content will be dynamically injected here -->
-      </div>
+      <div class="modal-body" id="viewModalBody"></div>
       <div class="modal-footer">
         <button class="btn-primary btn-small" onclick="closeViewModal()" style="padding:0.5rem 1.5rem;">Close</button>
       </div>
@@ -537,7 +539,7 @@
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwo4bJ6qkDy7HkB4IMRu4y1E0JKHgSF9IZFilJbjeNNUdYkIfg-iv7AuZB3p6vd9Q/exec";
     let activities = [], currentEditId = null, currentDisplayDate = new Date();
     let currentUser = null;
-    let sortStartAsc = false; // DEFAULT: Latest first (descending)
+    let sortStartAsc = false;
 
     function escapeHtml(s) { return s ? String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
     function formatDateTime(dt) { if(!dt) return ""; const d = new Date(dt); return isNaN(d.getTime()) ? dt : d.toLocaleString(); }
@@ -743,24 +745,17 @@
     function renderMainNavigation() {
       const container = document.getElementById("mainNavContainer");
       if (!container) return;
-
       const currentPage = window.location.pathname.split('/').pop() || 'index.html';
       function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
-
       let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
-
       if (currentUser) {
         const isCertActive = isActive('lc.html') || isActive('SZC.html');
         const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
         const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
-
         navHtml += `
           <div class="dropdown" id="certDropdown">
             <button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button>
-            <div class="dropdown-content">
-              <a href="lc.html">Locational Clearance</a>
-              <a href="SZC.html">Site Zoning Certification</a>
-            </div>
+            <div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div>
           </div>
           <div class="dropdown" id="landUseDropdown">
             <button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button>
@@ -777,12 +772,7 @@
           </div>
           <div class="dropdown" id="techServicesDropdown">
             <button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button>
-            <div class="dropdown-content">
-              <a href="Techsamp.html">Technical Assistance</a>
-              <a href="training.html">CLUP/ZO Trainings</a>
-              <a href="p_monitoring.html">Plan Monitoring</a>
-              <a href="meetings.html">Meetings Attended</a>
-            </div>
+            <div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div>
           </div>
           <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
           <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
@@ -876,13 +866,10 @@
       const typeFilter=document.getElementById("typeFilter")?.value||"all"; 
       const statusFilter=document.getElementById("statusFilterList")?.value||"all"; 
       let filtered=activities.filter(a=>(search===""||a.name.toLowerCase().includes(search)||a.purpose.toLowerCase().includes(search)) && (typeFilter==="all"||a.type===typeFilter) && (statusFilter==="all"||a.status===statusFilter)); 
-      
-      // Sort by start date - default: latest first (descending)
       filtered.sort((a,b) => {
         const diff = new Date(a.startDateTime) - new Date(b.startDateTime);
         return sortStartAsc ? diff : -diff;
       });
-      
       const tbody=document.getElementById("listTableBody"); 
       if(!filtered.length) { tbody.innerHTML='<tr><td colspan="6" style="text-align:center; padding:2rem; color:#94a3b8;">No activities found. Add one.</td></tr>'; return; } 
       tbody.innerHTML=filtered.map(a=>`<tr><td><strong>${escapeHtml(a.name)}</strong><br><span style="font-size:0.6rem; color:#64748b;">${escapeHtml(a.purpose.substring(0,40))}</span></td><td><span class="type-badge" style="background:${getTypeColor(a.type)};">${a.type}</span></td><td>${formatDateTime(a.startDateTime)}</td><td><span class="status-badge status-${a.status}">${a.status==="upcoming"?"Upcoming":a.status==="ongoing"?"Ongoing":"Completed"}</span></td><td>${a.meetingLink?`<a href="${escapeHtml(a.meetingLink)}" target="_blank" class="join-link-btn">Join</a>`:"—"}</td><td><button class="action-btn view" onclick="viewActivity(${a.id})">👁️</button><button class="action-btn edit" onclick="editActivity(${a.id})">✏️</button><button class="action-btn delete" onclick="deleteActivity(${a.id})">🗑️</button></td></tr>`).join(""); 
