@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Inter", sans-serif; background: #f4f9fe; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
+    body { font-family: "Inter", sans-serif; background: #e6f0fa; color: #0a2540; line-height: 1.5; scroll-behavior: smooth; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
     /* ===== HEADER / NAV ===== */
@@ -402,36 +402,38 @@
 
     // ===== NAVIGATION =====
     function renderMainNavigation() {
-      const container = document.getElementById("mainNavContainer");
-      if (!container) return;
-      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-      function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+        const container = document.getElementById("mainNavContainer");
+        if (!container) return;
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
 
-      let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
-      if (currentUser) {
-        const isCertActive = isActive('lc.html') || isActive('SZC.html');
-        const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
-        const isTechServicesActive = isActive('Techsamp.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+        if (currentUser) {
+            const isCertActive = isActive('lc.html') || isActive('SZC.html');
+            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+            const isTechServicesActive = isActive('Techsamp.html') || isActive('house_sub.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
 
-        navHtml += `
-          <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
-          <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
-          <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
-          <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
-          <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
-          <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
-          <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
-          <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
-          <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
-        `;
-      } else { navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`; }
-      container.innerHTML = navHtml;
-      setTimeout(() => {
-        document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-          trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
-        });
-        document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
-      }, 10);
+            navHtml += `
+                <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+                <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+                <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="house_sub.html">T.A Housing Sub.</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+            `;
+        } else {
+            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+        }
+        container.innerHTML = navHtml;
+        setTimeout(() => {
+            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+                trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
+            });
+            document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
+        }, 10);
     }
 
     function renderUserMenu() {

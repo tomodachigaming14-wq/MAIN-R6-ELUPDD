@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>DHSUD VI | TECHNICAL ASSISTANCE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T.A Housing Sub. | Technical Assistance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* ===== GLOBAL ===== */
@@ -89,6 +90,27 @@
         .user-dropdown-item { padding: 0.8rem 1.2rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.8rem; }
         .user-dropdown-item:hover { background: #f8fafc; }
 
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 999999; display: flex; flex-direction: column; gap: 10px; max-width: 400px; width: 100%; pointer-events: none; }
+        .toast { pointer-events: auto; background: white; border-radius: 16px; padding: 1rem 1.5rem; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); display: flex; align-items: center; gap: 14px; transform: translateX(120%); animation: slideIn 0.5s ease forwards; border-left: 5px solid #2563eb; min-height: 60px; }
+        .toast.hiding { animation: slideOut 0.4s ease forwards; }
+        .toast-success { border-left-color: #10b981; }
+        .toast-error { border-left-color: #ef4444; }
+        .toast-info { border-left-color: #2563eb; }
+        .toast-warning { border-left-color: #f59e0b; }
+        .toast-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .toast-success .toast-icon { background: #d1fae5; color: #059669; }
+        .toast-error .toast-icon { background: #fee2e2; color: #dc2626; }
+        .toast-info .toast-icon { background: #dbeafe; color: #2563eb; }
+        .toast-warning .toast-icon { background: #fef3c7; color: #d97706; }
+        .toast-content { flex: 1; }
+        .toast-title { font-weight: 700; font-size: 0.9rem; color: #0f172a; }
+        .toast-message { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+        .toast-close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.2rem; padding: 4px; transition: color 0.3s ease; flex-shrink: 0; }
+        .toast-close:hover { color: #475569; }
+        @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+
         /* ===== TECH ASSISTANCE CARD ===== */
         .ta-card { max-width: 880px; width: 100%; background: white; border-radius: 28px; padding: 2.5rem 3rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); margin: 2rem auto; position: relative; z-index: 1; }
         .ta-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.5rem; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; gap: 1rem; }
@@ -98,13 +120,6 @@
         .ta-header h1 { font-size: 1.6rem; font-weight: 700; color: #1e3a8a; letter-spacing: -0.5px; }
         .ta-header h1 small { display: block; font-size: 0.7rem; font-weight: 400; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
         .ta-header-badge { background: rgba(0, 200, 150, 0.15); border: 1px solid rgba(0, 200, 150, 0.2); padding: 0.4rem 1rem; border-radius: 40px; color: #00c896; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
-        .ta-toggle-container { display: flex; gap: 0; margin-bottom: 2rem; border-radius: 16px; overflow: hidden; border: 2px solid #e2e8f0; background: #f8fafc; }
-        .ta-toggle-btn { flex: 1; padding: 0.8rem 1.5rem; border: none; background: transparent; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; color: #64748b; position: relative; font-family: "Inter", sans-serif; }
-        .ta-toggle-btn i { margin-right: 8px; }
-        .ta-toggle-btn.active { background: #1e3a8a; color: white; box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3); }
-        .ta-toggle-btn:not(.active):hover { background: #e2e8f0; color: #1e3a8a; }
-        .ta-toggle-btn:first-child { border-radius: 14px 0 0 14px; }
-        .ta-toggle-btn:last-child { border-radius: 0 14px 14px 0; }
         .ta-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 1.8rem; }
         .ta-full-width { grid-column: 1 / -1; }
         .ta-field-group { display: flex; flex-direction: column; gap: 0.4rem; }
@@ -117,12 +132,6 @@
         .ta-field-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; cursor: pointer; color: #0f172a; min-height: 50px; }
         .ta-field-group select option { background: #ffffff; color: #0f172a; white-space: normal !important; word-wrap: break-word !important; padding: 6px 12px !important; line-height: 1.4 !important; min-height: 30px !important; height: auto !important; }
         .ta-field-group textarea { resize: vertical; min-height: 60px; }
-        .ta-others-text-container { display: none; margin-top: 0.5rem; }
-        .ta-others-text-container.active { display: block; }
-        .ta-others-text-container input { background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 0.75rem 1.1rem; font-size: 0.9rem; transition: all 0.25s ease; outline: none; width: 100%; color: #0f172a; font-weight: 400; font-family: "Inter", "Segoe UI", Roboto, sans-serif; }
-        .ta-others-text-container input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
-        .ta-form-type { display: none; }
-        .ta-form-type.active { display: block; }
         .ta-pic-container { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .ta-pic-container select { flex: 1; min-width: 200px; }
         .ta-pic-btn { padding: 0.5rem 1rem; border: none; border-radius: 12px; font-weight: 600; font-size: 0.75rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 6px; font-family: "Inter", "Segoe UI", Roboto, sans-serif; white-space: nowrap; }
@@ -170,20 +179,6 @@
         .modal-header h2 i { color: #2563eb; }
         .modal-header .close-btn { background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; color: #475569; }
         .modal-header .close-btn:hover { background: #fee2e2; color: #dc2626; }
-        .modal-filters { padding: 1rem 2rem; border-bottom: 1px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; background: #f8fafc; }
-        .modal-filters .filter-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
-        .modal-filters label { font-weight: 600; font-size: 0.7rem; color: #334155; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
-        .modal-filters select, .modal-filters input { padding: 0.4rem 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.8rem; outline: none; background: white; transition: all 0.3s ease; min-width: 100px; }
-        .modal-filters select:focus, .modal-filters input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
-        .modal-filters .filter-btn { background: #2563eb; border: none; padding: 0.4rem 1.2rem; border-radius: 30px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.75rem; }
-        .modal-filters .filter-btn:hover { background: #1d4ed8; }
-        .modal-filters .filter-btn.reset-btn { background: #64748b; }
-        .modal-filters .filter-btn.reset-btn:hover { background: #475569; }
-        .modal-search { padding: 1rem 2rem; border-bottom: 1px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; background: #f8fafc; }
-        .modal-search input { flex: 1; min-width: 200px; padding: 0.6rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 0.9rem; outline: none; transition: all 0.3s ease; }
-        .modal-search input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
-        .modal-search .search-info { font-size: 0.8rem; color: #64748b; white-space: nowrap; }
-        .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
         .modal-body { padding: 1.5rem 2rem; overflow-y: auto; flex: 1; }
         .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         .modal-body table th { background: #f1f5f9; color: #1e3a8a; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.8rem 0.8rem; text-align: left; border-bottom: 2px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
@@ -194,6 +189,7 @@
         .modal-body .action-cell .btn-action { padding: 0.3rem 0.7rem; border: none; border-radius: 8px; font-size: 0.65rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; font-family: "Inter", "Segoe UI", Roboto, sans-serif; display: inline-flex !important; align-items: center; gap: 4px; }
         .modal-body .action-cell .btn-action:hover { transform: translateY(-2px) scale(1.05); }
         .modal-body .action-cell .btn-action:active { transform: scale(0.9); }
+        .modal-body .action-cell .btn-view { background: #8b5cf6; color: white; }
         .modal-body .action-cell .btn-edit { background: #f59e0b; color: white; }
         .modal-body .action-cell .btn-delete { background: #ef4444; color: white; }
         .modal-body .action-cell .btn-save-edit { background: #10b981; color: white; }
@@ -203,7 +199,7 @@
         .modal-body .action-cell .btn-action.loading i { display: none; }
         .modal-body .action-cell .btn-action.loading { opacity: 0.7; pointer-events: none; }
         .modal-body .editing-row td { background: #fef3c7 !important; }
-        .modal-body .editing-row .action-cell .btn-edit, .modal-body .editing-row .action-cell .btn-delete { display: none !important; }
+        .modal-body .editing-row .action-cell .btn-edit, .modal-body .editing-row .action-cell .btn-delete, .modal-body .editing-row .action-cell .btn-view { display: none !important; }
         .modal-body .editing-row .action-cell .btn-save-edit, .modal-body .editing-row .action-cell .btn-cancel-edit { display: inline-flex !important; }
         .modal-body .editing-row input, .modal-body .editing-row select, .modal-body .editing-row textarea { background: white; border: 1.5px solid #f59e0b; border-radius: 6px; padding: 0.2rem 0.4rem; font-size: 0.75rem; width: 100%; outline: none; font-family: "Inter", "Segoe UI", Roboto, sans-serif; }
         .modal-body .editing-row input:focus, .modal-body .editing-row select:focus, .modal-body .editing-row textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15); }
@@ -248,30 +244,9 @@
         .add-person-modal .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 0.3rem; display: none; }
         .add-person-modal .error-msg.show { display: block; }
 
-        /* ===== LOGIN MODAL ===== */
-        .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
-        .login-modal.active { display: flex; }
-        .login-modal-content { background: white; border-radius: 2.5rem; max-width: 460px; width: 92%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
-        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
-        .login-modal-brand { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding: 2rem 1.5rem 1.8rem; text-align: center; color: white; position: relative; }
-        .login-modal-brand img { width: 130px; height: auto; background: white; border-radius: 20px; padding: 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: inline-block; margin-bottom: 0.8rem; transition: transform 0.2s; }
-        .login-modal-brand img:hover { transform: scale(1.02); }
-        .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
-        .login-modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: 0.2s; z-index: 10; }
-        .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
-        .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
-        .login-modal-body .input-group { margin-bottom: 1.3rem; }
-        .login-modal-body .input-group label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #54708f; margin-bottom: 0.4rem; letter-spacing: 0.3px; }
-        .login-modal-body .input-group input { width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; }
-        .login-modal-body .input-group input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-        .login-submit-btn { width: 100%; padding: 0.9rem; background: #2563eb; color: white; border: none; border-radius: 1.2rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem; font-family: 'Inter', sans-serif; }
-        .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-        .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
-        .login-modal-footer { text-align: center; font-size: 0.65rem; color: #94a3b8; padding: 0.4rem 0 1.2rem; border-top: 1px solid #eef2ff; margin: 0 1.8rem; }
-        .toast-msg { position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 10px 20px; border-radius: 40px; z-index: 9999; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .toast-msg.success { background: #166534; }
-        .toast-msg.error { background: #b91c1c; }
+        /* ===== VIEW RECORD MODAL ===== */
+        .view-record-modal .modal-box { max-width: 600px; }
+        .view-record-modal .modal-body { padding: 1.5rem; }
 
         /* ===== FOOTER ===== */
         .footer-new { background: #0a2540; color: #b9d0e7; padding: 2rem 0; margin-top: 3rem; border-top: 1px solid #2d4f6e; }
@@ -293,16 +268,11 @@
             .ta-header-icon img { height: 42px; }
             .ta-header-badge { display: none; }
             .ta-btn-group { flex-direction: column; }
-            .ta-toggle-btn { font-size: 0.75rem; padding: 0.6rem 1rem; }
             .ta-pic-container { flex-direction: column; }
             .ta-pic-container select { width: 100%; }
             .ta-pic-btn { width: 100%; justify-content: center; }
             .modal-box { max-height: 95vh; }
             .modal-header { padding: 1rem; }
-            .modal-filters { padding: 0.8rem 1rem; flex-direction: column; align-items: stretch; }
-            .modal-filters select, .modal-filters input { min-width: 100%; }
-            .modal-search { padding: 0.8rem 1rem; flex-direction: column; }
-            .modal-search input { width: 100%; min-width: unset; }
             .modal-body { padding: 1rem; }
             .modal-body table { font-size: 0.65rem; }
             .modal-body table th, .modal-body table td { padding: 0.3rem 0.3rem; }
@@ -316,6 +286,7 @@
             .chart-summary { grid-template-columns: repeat(3, 1fr); }
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+            .toast-container { top: 10px; right: 10px; left: 10px; max-width: 100%; }
         }
         @media (max-width: 700px) {
             .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
@@ -325,9 +296,16 @@
             .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
             .dropdown-submenu.open .submenu-content { display: block; }
         }
+        @media (max-width: 400px) {
+            .ta-card { padding: 1rem; }
+            .ta-field-group input, .ta-field-group select, .ta-field-group textarea { padding: 0.6rem 0.9rem; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
 
 <!-- ===== HEADER ===== -->
 <header>
@@ -360,7 +338,7 @@
                     </div>
                     <div>
                         <h1>
-                            Technical Assistance
+                            T.A Housing Sub.
                             <small>Technical Assistance Management Information System</small>
                         </h1>
                     </div>
@@ -371,254 +349,107 @@
                 </div>
             </div>
 
-            <!-- Toggle Buttons -->
-            <div class="ta-toggle-container">
-                <button class="ta-toggle-btn active" data-type="CLUP" id="toggleCLUP">
-                    <i class="fas fa-file-alt"></i> CLUP
-                </button>
-                <button class="ta-toggle-btn" data-type="PDPFP" id="togglePDPFP">
-                    <i class="fas fa-file-pdf"></i> PDPFP
-                </button>
-            </div>
-
-            <!-- ===== CLUP FORM ===== -->
-            <div class="ta-form-type active" id="formCLUP">
-                <form id="clupForm">
-                    <div class="ta-form-grid">
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-hashtag"></i> PSGC <span class="required">*</span></label>
-                            <input type="text" id="clup_psgc" placeholder="Auto-fills when city selected" readonly required>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
-                            <select id="clup_region" required>
-                                <option value="Region 6">Region 6 - Western Visayas</option>
+            <!-- ===== HOUSING SUB FORM ===== -->
+            <form id="housingSubForm">
+                <div class="ta-form-grid">
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-hashtag"></i> PSGC <span class="required">*</span></label>
+                        <input type="text" id="hs_psgc" placeholder="Auto-fills when city selected" readonly required>
+                    </div>
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
+                        <select id="hs_region" required>
+                            <option value="Region_06">Region_06</option>
+                        </select>
+                    </div>
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
+                        <select id="hs_province" required>
+                            <option value="">Select Province...</option>
+                            <option value="Aklan">Aklan</option>
+                            <option value="Antique">Antique</option>
+                            <option value="Capiz">Capiz</option>
+                            <option value="Guimaras">Guimaras</option>
+                            <option value="Iloilo">Iloilo</option>
+                        </select>
+                    </div>
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-city"></i> City/Municipality <span class="required">*</span></label>
+                        <select id="hs_cityMun" required>
+                            <option value="">Select City/Municipality...</option>
+                        </select>
+                    </div>
+                    <div class="ta-field-group ta-full-width">
+                        <label><i class="fas fa-quote-right"></i> Query / TA Details <span class="required">*</span></label>
+                        <textarea id="hs_queryDetails" placeholder="Describe the request or technical assistance..." rows="2" required></textarea>
+                    </div>
+                    <div class="ta-field-group ta-full-width">
+                        <label><i class="fas fa-headset"></i> Type of Assistance Provided <span class="required">*</span></label>
+                        <select id="hs_assistanceType" required>
+                            <option value="">Select Type of Assistance...</option>
+                            <option value="Assistance through online platform, telephone, and letter queries">Assistance through online platform, telephone, and letter queries</option>
+                            <option value="Assistance through on-field mentoring and coaching">Assistance through on-field mentoring and coaching</option>
+                            <option value="Assistance through the provision of orientations/briefings">Assistance through the provision of orientations/briefings</option>
+                        </select>
+                    </div>
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-clock"></i> Planned / Requested <span class="required">*</span></label>
+                        <select id="hs_plannedRequested" required>
+                            <option value="">Select...</option>
+                            <option value="Planned">Planned</option>
+                            <option value="Requested">Requested</option>
+                        </select>
+                    </div>
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-calendar-alt"></i> Date Conducted (MM/DD/YYYY) <span class="required">*</span></label>
+                        <input type="date" id="hs_dateConducted" required>
+                    </div>
+                    <div class="ta-field-group">
+                        <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
+                        <select id="hs_reportingMonth" required>
+                            <option value="">Select Month...</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+                    <div class="ta-field-group ta-full-width">
+                        <label><i class="fas fa-pencil-alt"></i> Remarks</label>
+                        <input type="text" id="hs_remarks" placeholder="N/A or additional notes">
+                    </div>
+                    <div class="ta-field-group ta-full-width">
+                        <label><i class="fas fa-link"></i> Link to MOV</label>
+                        <input type="url" id="hs_linkMov" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="ta-field-group ta-full-width">
+                        <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
+                        <div class="ta-pic-container">
+                            <select id="hs_pic" required>
+                                <option value="">Select Person...</option>
                             </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
-                            <select id="clup_province" required>
-                                <option value="">Select Province...</option>
-                                <option value="Aklan">Aklan</option>
-                                <option value="Antique">Antique</option>
-                                <option value="Capiz">Capiz</option>
-                                <option value="Guimaras">Guimaras</option>
-                                <option value="Iloilo">Iloilo</option>                               
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-city"></i> City/Municipality <span class="required">*</span></label>
-                            <select id="clup_cityMun" required>
-                                <option value="">Select City/Municipality...</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-quote-right"></i> Query / TA Details <span class="required">*</span></label>
-                            <textarea id="clup_queryDetails" placeholder="Describe the request or technical assistance..." rows="2" required></textarea>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-headset"></i> Type of Assistance Provided <span class="required">*</span></label>
-                            <select id="clup_assistanceType" required>
-                                <option value="">Select Type of Assistance...</option>
-                                <option value="Assistance through on-field mentoring and coaching">Assistance through on-field mentoring and coaching</option>
-                                <option value="Assistance to walk-in/by-appointment consultations">Assistance to walk-in/by-appointment consultations</option>
-                                <option value="Assistance through online platform, telephone, and letter queries">Assistance through online platform, telephone, and letter queries</option>
-                                <option value="Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)">Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)</option>
-                                <option value="Assistance through the provision of orientations/briefings">Assistance through the provision of orientations/briefings</option>
-                                <option value="Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.">Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.</option>
-                                <option value="Others (to specify in the remarks)">Others (to specify in the remarks)</option>
-                            </select>
-                            <div class="ta-others-text-container" id="clup_othersContainer">
-                                <input type="text" id="clup_othersText" placeholder="Please specify other type of assistance...">
-                            </div>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-tag"></i> TA Category <span class="required">*</span></label>
-                            <select id="clup_taCategory" required>
-                                <option value="">Select...</option>
-                                <option value="CDRA">CDRA</option>
-                                <option value="Formulation or Updating">Formulation or Updating</option>
-                                <option value="GIS">GIS</option>
-                                <option value="Implementation and Monitoring">Implementation and Monitoring</option>
-                                <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
-                                <option value="PlanSmart for SHS">PlanSmart for SHS</option>
-                                <option value="Review and Approval">Review and Approval</option>
-                                <option value="Urban Development">Urban Development</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-clock"></i> Planned / Requested <span class="required">*</span></label>
-                            <select id="clup_plannedRequested" required>
-                                <option value="">Select...</option>
-                                <option value="Planned">Planned</option>
-                                <option value="Requested">Requested</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-alt"></i> Date Conducted <span class="required">*</span></label>
-                            <input type="date" id="clup_dateConducted" required>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
-                            <select id="clup_reportingMonth" required>
-                                <option value="">Select Month...</option>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-pencil-alt"></i> Remarks</label>
-                            <input type="text" id="clup_remarks" placeholder="N/A or additional notes">
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-link"></i> Link to MOV</label>
-                            <input type="url" id="clup_linkMov" placeholder="https://drive.google.com/...">
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
-                            <div class="ta-pic-container">
-                                <select id="clup_pic" required>
-                                    <option value="">Select Person...</option>
-                                </select>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-add" id="clup_addPic">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-delete" id="clup_deletePic">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
+                            <button type="button" class="ta-pic-btn ta-pic-btn-add" id="hs_addPic">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                            <button type="button" class="ta-pic-btn ta-pic-btn-delete" id="hs_deletePic">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     </div>
-                    <button type="submit" class="ta-btn-submit" id="clup_submitBtn">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Google Sheet (CLUP)</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- ===== PDPFP FORM ===== -->
-            <div class="ta-form-type" id="formPDPFP">
-                <form id="pdpfpForm">
-                    <div class="ta-form-grid">
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-map-pin"></i> Region <span class="required">*</span></label>
-                            <select id="pdpfp_region" required>
-                                <option value="Region 6">Region 6 - Western Visayas</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-landmark"></i> Province <span class="required">*</span></label>
-                            <select id="pdpfp_province" required>
-                                <option value="">Select Province...</option>
-                                <option value="Aklan">Aklan</option>
-                                <option value="Antique">Antique</option>
-                                <option value="Capiz">Capiz</option>
-                                <option value="Guimaras">Guimaras</option>
-                                <option value="Iloilo">Iloilo</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-quote-right"></i> Query / TA Details <span class="required">*</span></label>
-                            <textarea id="pdpfp_queryDetails" placeholder="Describe the request or technical assistance..." rows="2" required></textarea>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-headset"></i> Type of Assistance Provided <span class="required">*</span></label>
-                            <select id="pdpfp_assistanceType" required>
-                                <option value="">Select Type of Assistance...</option>
-                                <option value="Assistance through on-field mentoring and coaching">Assistance through on-field mentoring and coaching</option>
-                                <option value="Assistance to walk-in/by-appointment consultations">Assistance to walk-in/by-appointment consultations</option>
-                                <option value="Assistance through online platform, telephone, and letter queries">Assistance through online platform, telephone, and letter queries</option>
-                                <option value="Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)">Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)</option>
-                                <option value="Assistance through the provision of orientations/briefings">Assistance through the provision of orientations/briefings</option>
-                                <option value="Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.">Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.</option>
-                                <option value="Others (to specify in the remarks)">Others (to specify in the remarks)</option>
-                            </select>
-                            <div class="ta-others-text-container" id="pdpfp_othersContainer">
-                                <input type="text" id="pdpfp_othersText" placeholder="Please specify other type of assistance...">
-                            </div>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-tag"></i> TA Category <span class="required">*</span></label>
-                            <select id="pdpfp_taCategory" required>
-                                <option value="">Select...</option>
-                                <option value="CDRA & PCRD">CDRA & PCRD</option>
-                                <option value="Formulation or Updating">Formulation or Updating</option>
-                                <option value="GIS">GIS</option>
-                                <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
-                                <option value="PlanSmart for SHS">PlanSmart for SHS</option>
-                                <option value="Review and Approval">Review and Approval</option>
-                                <option value="Urban Development">Urban Development</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-clock"></i> Planned / Requested <span class="required">*</span></label>
-                            <select id="pdpfp_plannedRequested" required>
-                                <option value="">Select...</option>
-                                <option value="Planned">Planned</option>
-                                <option value="Requested">Requested</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-alt"></i> Date Conducted <span class="required">*</span></label>
-                            <input type="date" id="pdpfp_dateConducted" required>
-                        </div>
-                        <div class="ta-field-group">
-                            <label><i class="fas fa-calendar-check"></i> Reporting Month <span class="required">*</span></label>
-                            <select id="pdpfp_reportingMonth" required>
-                                <option value="">Select Month...</option>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-pencil-alt"></i> Remarks</label>
-                            <input type="text" id="pdpfp_remarks" placeholder="N/A or additional notes">
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-link"></i> Link to MOV</label>
-                            <input type="url" id="pdpfp_linkMov" placeholder="https://drive.google.com/...">
-                        </div>
-                        <div class="ta-field-group ta-full-width">
-                            <label><i class="fas fa-user"></i> Personnel In-Charge <span class="required">*</span></label>
-                            <div class="ta-pic-container">
-                                <select id="pdpfp_pic" required>
-                                    <option value="">Select Person...</option>
-                                </select>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-add" id="pdpfp_addPic">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                                <button type="button" class="ta-pic-btn ta-pic-btn-delete" id="pdpfp_deletePic">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="ta-btn-submit" id="pdpfp_submitBtn">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Google Sheet (PDPFP)</span>
-                    </button>
-                </form>
-            </div>
+                </div>
+                <button type="submit" class="ta-btn-submit" id="hs_submitBtn">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Save to Google Sheet (T.A Housing Sub.)</span>
+                </button>
+            </form>
 
             <!-- Buttons -->
             <div class="ta-btn-group">
@@ -664,85 +495,12 @@
     </div>
 </footer>
 
-<!-- ===== LOGIN MODAL ===== -->
-<div id="loginModal" class="login-modal">
-    <div class="login-modal-content">
-        <div class="login-modal-brand">
-            <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
-            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
-            <h3>DHSUD Region VI</h3>
-            <p>ELUPDD · CLUP & ZO Platform</p>
-        </div>
-        <div class="login-modal-body">
-            <form id="modalLoginForm">
-                <div class="input-group">
-                    <label><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
-                </div>
-                <div class="input-group">
-                    <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-                </div>
-                <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
-            </form>
-        </div>
-        <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
-    </div>
-</div>
-
 <!-- ===== RECORDS MODAL ===== -->
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">Technical Assistance</span></h2>
+            <h2><i class="fas fa-table"></i> <span id="recordsModalTitle">T.A Housing Sub. Records</span></h2>
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-filters">
-            <div class="filter-group">
-                <label for="filterPSGC">PSGC:</label>
-                <input type="text" id="filterPSGC" placeholder="Search PSGC..." style="min-width: 120px;">
-            </div>
-            <div class="filter-group">
-                <label for="filterProvince">Province:</label>
-                <select id="filterProvince">
-                    <option value="all">All Provinces</option>
-                    <option value="Aklan">Aklan</option>
-                    <option value="Antique">Antique</option>
-                    <option value="Capiz">Capiz</option>
-                    <option value="Guimaras">Guimaras</option>
-                    <option value="Iloilo">Iloilo</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filterReportingMonth">Reporting Month:</label>
-                <select id="filterReportingMonth">
-                    <option value="all">All Months</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filterPIC">PIC:</label>
-                <select id="filterPIC">
-                    <option value="all">All Personnel</option>
-                </select>
-            </div>
-            <button class="filter-btn" id="applyRecordFilter"><i class="fas fa-filter"></i> Apply</button>
-            <button class="filter-btn reset-btn" id="resetRecordFilter"><i class="fas fa-undo"></i> Reset</button>
-        </div>
-        <div class="modal-search">
-            <input type="text" id="searchInput" placeholder=" ">
-            <span class="search-info">Showing <span id="displayCount">0</span> of <span id="totalCount">0</span> records</span>
         </div>
         <div class="modal-body" id="modalBody">
             <div style="text-align:center; padding: 2rem; color: #94a3b8;">
@@ -757,20 +515,37 @@
     </div>
 </div>
 
+<!-- ===== VIEW RECORD MODAL ===== -->
+<div class="modal-overlay view-record-modal" id="viewRecordModal">
+    <div class="modal-box" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2><i class="fas fa-eye"></i> Record Details</h2>
+            <button class="close-btn" id="closeViewBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" style="padding: 1.5rem;">
+            <div id="viewRecordContent"></div>
+        </div>
+        <div class="modal-footer">
+            <span class="record-count">📋 View Mode</span>
+            <button class="btn-close-modal" id="closeViewBtn2">Close</button>
+        </div>
+    </div>
+</div>
+
 <!-- ===== CHART MODAL ===== -->
 <div class="modal-overlay" id="chartModal">
-    <div class="modal-box" style="max-width: 1100px;">
+    <div class="modal-box" style="max-width: 1280px;">
         <div class="modal-header">
-            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">CLUP and ZO TA Analytics Dashboard</span></h2>
+            <h2><i class="fas fa-chart-bar"></i> <span id="chartModalTitle">T.A Housing Sub. Analytics Dashboard</span></h2>
             <button class="close-btn" id="closeChartBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="chartModalBody">
             <div class="chart-filters" style="border-bottom: none; margin-bottom: 0.5rem; background: transparent; padding: 0 0 0.5rem 0;">
                 <div class="chart-type-selector">
                     <label>Chart Type:</label>
-                    <button class="active" data-chart="category">TA Category</button>
+                    <button class="active" data-chart="assistance">Type of Assistance</button>
                     <button data-chart="planned">Planned/Requested</button>
-                    <button data-chart="province">By City/Municipality</button>
+                    <button data-chart="city">By City/Municipality</button>
                 </div>
             </div>
             <div class="chart-filters">
@@ -795,12 +570,6 @@
                 <div class="filter-group">
                     <label for="chartYearFilter">Year:</label>
                     <input type="number" id="chartYearFilter" placeholder="e.g. 2026" style="width: 100px; min-width: 80px;">
-                </div>
-                <div class="filter-group">
-                    <label for="chartCategoryFilter">TA Category:</label>
-                    <select id="chartCategoryFilter">
-                        <option value="all">All Categories</option>
-                    </select>
                 </div>
                 <div class="filter-divider"></div>
                 <div class="filter-group">
@@ -877,12 +646,72 @@
     </div>
 </div>
 
+<!-- ===== LOGIN MODAL ===== -->
+<div id="loginModal" class="login-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:10000;">
+    <div class="login-modal-content" style="background:white; border-radius:2.5rem; max-width:460px; width:92%; overflow:hidden; box-shadow:0 30px 60px -20px rgba(0,0,0,0.4);">
+        <div class="login-modal-brand" style="background:linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); padding:2rem 1.5rem 1.8rem; text-align:center; color:white; position:relative;">
+            <button class="login-modal-close" onclick="closeLoginModal()" style="position:absolute; top:16px; right:20px; background:none; border:none; font-size:2rem; color:white; cursor:pointer; opacity:0.7;">&times;</button>
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" style="width:130px; height:auto; background:white; border-radius:20px; padding:14px; box-shadow:0 8px 20px rgba(0,0,0,0.2); display:inline-block; margin-bottom:0.8rem;" />
+            <h3 style="font-size:1.6rem; font-weight:800; letter-spacing:-0.5px; margin-bottom:0.2rem;">DHSUD Region VI</h3>
+            <p style="font-size:0.75rem; opacity:0.85; margin:0;">ELUPDD · CLUP & ZO Platform</p>
+        </div>
+        <div class="login-modal-body" style="padding:2rem 1.8rem 1.8rem;">
+            <form id="modalLoginForm">
+                <div class="input-group" style="margin-bottom:1.3rem;">
+                    <label style="display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase; color:#54708f; margin-bottom:0.4rem; letter-spacing:0.3px;"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required style="width:100%; padding:0.85rem 1rem; border:1.5px solid #e2e8f0; border-radius:1rem; font-size:0.9rem; font-family:'Inter',sans-serif;" />
+                </div>
+                <div class="input-group" style="margin-bottom:1.3rem;">
+                    <label style="display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase; color:#54708f; margin-bottom:0.4rem; letter-spacing:0.3px;"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required style="width:100%; padding:0.85rem 1rem; border:1.5px solid #e2e8f0; border-radius:1rem; font-size:0.9rem; font-family:'Inter',sans-serif;" />
+                </div>
+                <button type="submit" class="login-submit-btn" id="loginModalBtn" style="width:100%; padding:0.9rem; background:#2563eb; color:white; border:none; border-radius:1.2rem; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.2s; margin-top:0.3rem; font-family:'Inter',sans-serif;">→ Sign In</button>
+            </form>
+        </div>
+        <div class="login-modal-footer" style="text-align:center; font-size:0.65rem; color:#94a3b8; padding:0.4rem 0 1.2rem; border-top:1px solid #eef2ff; margin:0 1.8rem;">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+</div>
+
 <script>
+    // ============================================
+    // TOAST NOTIFICATION SYSTEM
+    // ============================================
+    function showToast(title, message, type = 'info', duration = 4000) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-times-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <div class="toast-icon"><i class="fas ${icons[type] || icons.info}"></i></div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        `;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.add('hiding');
+            setTimeout(() => toast.remove(), 400);
+        }, duration);
+        
+        return toast;
+    }
+
     // ============================================
     // CONFIGURATION
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwkJeP7BFW0-hBKwu35_bKPgp8StOpnAyZom417vmlHQ6mkTQRk0JEIglUaOi2SW-7s4A/exec';
-    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1ikMuQVy3MBiuK6KuAEGBJ2sod-jlzLwCqsTtenORczg/edit?usp=sharing';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbznwIA6-nZa_2uSyENfZq5dMqcggvElBLVE5z7BPKzT1Zu6NZRUQYh0OQMCJ_j0j4dr1A/exec';
+    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1x3XKYjQ5eGz-sNQaBxrshM5F_uAS9j5zwcSXBmeUCK4/edit?usp=sharing';
 
     // ============================================
     // PERSONNEL IN-CHARGE DATA
@@ -895,19 +724,19 @@
             const result = await response.json();
             if (result.result === 'success' && result.names) {
                 picNames = result.names;
-                populatePicDropdowns();
+                populatePicDropdown();
                 updatePICFilters();
                 return picNames;
             } else {
                 picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
-                populatePicDropdowns();
+                populatePicDropdown();
                 updatePICFilters();
                 return picNames;
             }
         } catch (error) {
             console.error('Error loading PIC names:', error);
             picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
-            populatePicDropdowns();
+            populatePicDropdown();
             updatePICFilters();
             return picNames;
         }
@@ -925,42 +754,39 @@
         }
     }
 
-    function populatePicDropdowns() {
-        const selects = ['clup_pic', 'pdpfp_pic'];
-        selects.forEach(id => {
-            const select = document.getElementById(id);
-            if (!select) return;
-            const currentValue = select.value;
-            select.innerHTML = '<option value="">Select Person...</option>';
-            picNames.forEach(name => {
-                const opt = document.createElement('option');
-                opt.value = name;
-                opt.textContent = name;
-                select.appendChild(opt);
-            });
-            if (currentValue && picNames.includes(currentValue)) {
-                select.value = currentValue;
-            }
+    function populatePicDropdown() {
+        const select = document.getElementById('hs_pic');
+        if (!select) return;
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Select Person...</option>';
+        picNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            select.appendChild(opt);
         });
+        if (currentValue && picNames.includes(currentValue)) {
+            select.value = currentValue;
+        }
     }
 
     function updatePICFilters() {
-        const filterIds = ['filterPIC', 'chartPICFilter'];
-        filterIds.forEach(id => {
-            const select = document.getElementById(id);
-            if (!select) return;
-            const currentValue = select.value;
-            select.innerHTML = '<option value="all">All Personnel</option>';
+        const chartPIC = document.getElementById('chartPICFilter');
+        if (chartPIC) {
+            const currentValue = chartPIC.value;
+            chartPIC.innerHTML = '<option value="all">All Personnel</option>';
             picNames.forEach(name => {
                 const opt = document.createElement('option');
                 opt.value = name;
                 opt.textContent = name;
-                select.appendChild(opt);
+                chartPIC.appendChild(opt);
             });
             if (currentValue && picNames.includes(currentValue)) {
-                select.value = currentValue;
+                chartPIC.value = currentValue;
+            } else {
+                chartPIC.value = 'all';
             }
-        });
+        }
     }
 
     // ============================================
@@ -969,10 +795,8 @@
     const addPersonModal = document.getElementById('addPersonModal');
     const newPersonName = document.getElementById('newPersonName');
     const personError = document.getElementById('personError');
-    let currentAddTarget = 'clup';
 
-    function openAddPersonModal(target) {
-        currentAddTarget = target;
+    function openAddPersonModal() {
         newPersonName.value = '';
         personError.classList.remove('show');
         addPersonModal.classList.add('active');
@@ -999,12 +823,11 @@
             return;
         }
         picNames.push(name);
-        populatePicDropdowns();
+        populatePicDropdown();
         updatePICFilters();
         await savePICNamesToSheet(picNames);
-        const targetSelect = document.getElementById(currentAddTarget + '_pic');
-        if (targetSelect) { targetSelect.value = name; }
-        setStatus('✅ "' + name + '" added to Personnel In-Charge list.', 'success');
+        document.getElementById('hs_pic').value = name;
+        showToast('✅ Success', `"${name}" added to Personnel In-Charge list.`, 'success');
         closeAddPersonModal();
     });
 
@@ -1018,21 +841,21 @@
     // ============================================
     // DELETE PERSON
     // ============================================
-    async function deleteSelectedPerson(type) {
-        const select = document.getElementById(type + '_pic');
+    async function deleteSelectedPerson() {
+        const select = document.getElementById('hs_pic');
         const selectedName = select.value;
         if (!selectedName) {
-            setStatus('⚠️ Please select a person to delete.', 'error');
+            showToast('⚠️ Warning', 'Please select a person to delete.', 'warning');
             return;
         }
         if (!confirm('Are you sure you want to remove "' + selectedName + '" from the list?')) { return; }
         const index = picNames.indexOf(selectedName);
         if (index > -1) {
             picNames.splice(index, 1);
-            populatePicDropdowns();
+            populatePicDropdown();
             updatePICFilters();
             await savePICNamesToSheet(picNames);
-            setStatus('🗑️ "' + selectedName + '" removed from Personnel In-Charge list.', 'info');
+            showToast('🗑️ Removed', `"${selectedName}" removed from Personnel In-Charge list.`, 'info');
         }
     }
 
@@ -1156,257 +979,103 @@
     // ============================================
     // STATE
     // ============================================
-    let currentFormType = 'CLUP';
     let allRecords = [];
     let filteredRecords = [];
-    let chartInstance = null;
-    let currentChartType = 'category';
     let editingRowNumber = null;
 
     // ============================================
-    // TOGGLE FUNCTION
+    // FORM LOGIC
     // ============================================
-    function switchForm(type) {
-        currentFormType = type;
-        document.querySelectorAll('.ta-toggle-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.type === type);
-        });
-        document.getElementById('formCLUP').classList.toggle('active', type === 'CLUP');
-        document.getElementById('formPDPFP').classList.toggle('active', type === 'PDPFP');
-        setStatus('📋 ' + type + ' form selected · fill in all required fields', 'info');
-    }
+    const hsProvince = document.getElementById('hs_province');
+    const hsCity = document.getElementById('hs_cityMun');
+    const hsPsgc = document.getElementById('hs_psgc');
 
-    document.getElementById('toggleCLUP').addEventListener('click', function() { switchForm('CLUP'); });
-    document.getElementById('togglePDPFP').addEventListener('click', function() { switchForm('PDPFP'); });
-
-    // ============================================
-    // DOM REFS
-    // ============================================
-    const clupForm = document.getElementById('clupForm');
-    const pdpfpForm = document.getElementById('pdpfpForm');
-    const statusDiv = document.getElementById('statusMessage');
-    const statusText = document.getElementById('statusText');
-
-    // ============================================
-    // SET STATUS
-    // ============================================
-    function setStatus(message, type = 'info') {
-        statusText.textContent = message;
-        statusDiv.className = 'ta-status-message';
-        const icon = statusDiv.querySelector('i');
-        if (type === 'success') {
-            statusDiv.classList.add('success');
-            icon.className = 'fas fa-check-circle';
-        } else if (type === 'error') {
-            statusDiv.classList.add('error');
-            icon.className = 'fas fa-exclamation-circle';
-        } else {
-            icon.className = 'fas fa-info-circle';
-        }
-    }
-
-    // ============================================
-    // CLUP CITY DEPENDENCY
-    // ============================================
-    const clupProvince = document.getElementById('clup_province');
-    const clupCity = document.getElementById('clup_cityMun');
-    const clupPsgc = document.getElementById('clup_psgc');
-
-    clupProvince.addEventListener('change', function() {
+    hsProvince.addEventListener('change', function() {
         const province = this.value;
-        clupCity.innerHTML = '<option value="">Select City/Municipality...</option>';
-        if (!province) { clupPsgc.value = ''; return; }
+        hsCity.innerHTML = '<option value="">Select City/Municipality...</option>';
+        if (!province) { hsPsgc.value = ''; return; }
         const cities = getCitiesByProvince(province);
         cities.forEach(({ psgc, city }) => {
             const opt = document.createElement('option');
             opt.value = psgc;
             opt.textContent = city;
-            clupCity.appendChild(opt);
+            hsCity.appendChild(opt);
         });
-        clupPsgc.value = '';
+        hsPsgc.value = '';
     });
 
-    clupCity.addEventListener('change', function() {
+    hsCity.addEventListener('change', function() {
         const selected = this.options[this.selectedIndex];
-        clupPsgc.value = selected && selected.value ? selected.value : '';
-        clupPsgc.style.borderColor = selected && selected.value ? '#10b981' : '#cbd5e1';
+        hsPsgc.value = selected && selected.value ? selected.value : '';
+        hsPsgc.style.borderColor = selected && selected.value ? '#10b981' : '#cbd5e1';
     });
 
     // ============================================
-    // CLUP OTHERS TOGGLE
+    // FORMAT DATE
     // ============================================
-    document.getElementById('clup_assistanceType').addEventListener('change', function() {
-        const container = document.getElementById('clup_othersContainer');
-        const input = document.getElementById('clup_othersText');
-        if (this.value === 'Others (to specify in the remarks)') {
-            container.classList.add('active');
-            input.setAttribute('required', 'required');
-        } else {
-            container.classList.remove('active');
-            input.removeAttribute('required');
-            input.value = '';
-        }
-    });
-
-    document.getElementById('pdpfp_assistanceType').addEventListener('change', function() {
-        const container = document.getElementById('pdpfp_othersContainer');
-        const input = document.getElementById('pdpfp_othersText');
-        if (this.value === 'Others (to specify in the remarks)') {
-            container.classList.add('active');
-            input.setAttribute('required', 'required');
-        } else {
-            container.classList.remove('active');
-            input.removeAttribute('required');
-            input.value = '';
-        }
-    });
-
-    // ============================================
-    // FORMAT DATE HELPER
-    // ============================================
-    function formatDateDisplay(dateValue) {
+    function formatDate(dateValue) {
         if (!dateValue) return '-';
+        if (typeof dateValue === 'number') {
+            const d = new Date((dateValue - 25569) * 86400 * 1000);
+            return String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0') + '/' + d.getFullYear();
+        }
         if (typeof dateValue === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) return dateValue;
         if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-            const parts = dateValue.split('-');
-            return parts[1] + '/' + parts[2] + '/' + parts[0];
-        }
-        if (typeof dateValue === 'string' && dateValue.includes('T')) {
-            const d = new Date(dateValue);
-            if (!isNaN(d.getTime())) {
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                const year = d.getFullYear();
-                return month + '/' + day + '/' + year;
-            }
+            const p = dateValue.split('-');
+            return p[1] + '/' + p[2] + '/' + p[0];
         }
         if (dateValue instanceof Date) {
-            const month = String(dateValue.getMonth() + 1).padStart(2, '0');
-            const day = String(dateValue.getDate()).padStart(2, '0');
-            const year = dateValue.getFullYear();
-            return month + '/' + day + '/' + year;
+            return String(dateValue.getMonth() + 1).padStart(2, '0') + '/' + String(dateValue.getDate()).padStart(2, '0') + '/' + dateValue.getFullYear();
         }
         try {
             const d = new Date(dateValue);
             if (!isNaN(d.getTime())) {
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                const year = d.getFullYear();
-                return month + '/' + day + '/' + year;
+                return String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0') + '/' + d.getFullYear();
             }
         } catch (e) {}
         return dateValue || '-';
     }
 
     // ============================================
-    // GET FORM DATA
+    // FORM SUBMIT
     // ============================================
-    function getFormData(type) {
-        const prefix = type.toLowerCase();
-        const getVal = (id) => document.getElementById(prefix + '_' + id).value.trim();
-        const getText = (id) => document.getElementById(prefix + '_' + id).options[document.getElementById(prefix + '_' + id).selectedIndex]?.text || '';
+    document.getElementById('housingSubForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-        let assistance = getVal('assistanceType');
-        if (assistance === 'Others (to specify in the remarks)') {
-            const others = document.getElementById(prefix + '_othersText').value.trim();
-            assistance = others ? 'Others: ' + others : '';
-        }
-
-        let regionValue = getVal('region');
-        if (regionValue === 'Region 6') {
-            regionValue = 'Region_06';
-        }
-
-        let payload = {
-            formType: type,
-            region: regionValue,
-            province: getVal('province'),
-            queryDetails: getVal('queryDetails'),
-            assistanceType: assistance,
-            taCategory: getVal('taCategory'),
-            plannedRequested: getVal('plannedRequested'),
-            dateConducted: getVal('dateConducted'),
-            reportingMonth: getVal('reportingMonth'),
-            remarks: getVal('remarks') || 'N/A',
-            linkMov: getVal('linkMov') || '',
-            personnelInCharge: getVal('pic')
+        const getVal = (id) => document.getElementById(id).value.trim();
+        const getText = (id) => {
+            const sel = document.getElementById(id);
+            return sel.options[sel.selectedIndex]?.text || '';
         };
 
-        if (type === 'CLUP') {
-            payload.psgc = getVal('psgc');
-            payload.cityMun = getText('cityMun');
-        } else {
-            payload.psgc = '';
-            payload.cityMun = '';
-        }
-        return payload;
-    }
+        const payload = {
+            formType: 'HOUSING_SUB',
+            psgc: getVal('hs_psgc'),
+            region: getVal('hs_region'),
+            province: getVal('hs_province'),
+            cityMun: getText('hs_cityMun'),
+            queryDetails: getVal('hs_queryDetails'),
+            assistanceType: getVal('hs_assistanceType'),
+            plannedRequested: getVal('hs_plannedRequested'),
+            dateConducted: getVal('hs_dateConducted'),
+            reportingMonth: getVal('hs_reportingMonth'),
+            remarks: getVal('hs_remarks') || 'N/A',
+            linkMov: getVal('hs_linkMov') || '',
+            personnelInCharge: getVal('hs_pic')
+        };
 
-    // ============================================
-    // VALIDATE FORM
-    // ============================================
-    function validateForm(payload, type) {
-        let required = ['region', 'province', 'queryDetails', 'assistanceType', 'taCategory', 'plannedRequested', 'dateConducted', 'reportingMonth', 'personnelInCharge'];
-        if (type === 'CLUP') {
-            required.push('psgc');
-            required.push('cityMun');
-        }
+        const required = ['psgc', 'province', 'cityMun', 'queryDetails', 'assistanceType', 'plannedRequested', 'dateConducted', 'reportingMonth', 'personnelInCharge'];
         for (const field of required) {
             if (!payload[field]) {
-                setStatus('❌ Please fill in all required fields', 'error');
-                return false;
+                showToast('❌ Validation Error', 'Please fill in all required fields.', 'error');
+                return;
             }
         }
-        if (!payload.assistanceType || payload.assistanceType === '') {
-            setStatus('❌ Please specify the other type of assistance.', 'error');
-            return false;
-        }
-        return true;
-    }
 
-    // ============================================
-    // RESET FORM
-    // ============================================
-    function resetForm(type) {
-        const prefix = type.toLowerCase();
-        const form = document.getElementById(prefix + 'Form');
-        form.reset();
-        document.getElementById(prefix + '_dateConducted').value = new Date().toISOString().split('T')[0];
-        document.getElementById(prefix + '_region').value = 'Region 6';
-        document.getElementById(prefix + '_province').value = '';
-        if (type === 'CLUP') {
-            document.getElementById(prefix + '_cityMun').innerHTML = '<option value="">Select City/Municipality...</option>';
-            document.getElementById(prefix + '_psgc').value = '';
-        }
-        document.getElementById(prefix + '_othersContainer').classList.remove('active');
-        document.getElementById(prefix + '_othersText').value = '';
-        document.getElementById(prefix + '_taCategory').value = '';
-        document.getElementById(prefix + '_plannedRequested').value = '';
-        document.getElementById(prefix + '_reportingMonth').value = '';
-        const picSelect = document.getElementById(prefix + '_pic');
-        if (picSelect) picSelect.value = '';
-    }
+        const btn = document.getElementById('hs_submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="ta-spinner"></span> Saving...';
 
-    // ============================================
-    // SUBMIT HANDLERS
-    // ============================================
-    clupForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const payload = getFormData('CLUP');
-        if (!validateForm(payload, 'CLUP')) return;
-        await submitRecord(payload, 'CLUP');
-    });
-
-    pdpfpForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const payload = getFormData('PDPFP');
-        if (!validateForm(payload, 'PDPFP')) return;
-        await submitRecord(payload, 'PDPFP');
-    });
-
-    async function submitRecord(payload, type) {
-        setLoading(true);
-        setStatus('⏳ Saving to Google Sheet (' + type + ')...', 'info');
         try {
             await fetch(WEB_APP_URL, {
                 method: 'POST',
@@ -1414,42 +1083,35 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            setStatus('✅ Record SAVED to Google Sheet (' + type + ')!', 'success');
-            resetForm(type);
+            showToast('✅ Success', 'Record saved to Google Sheet (T.A Housing Sub.)!', 'success');
+            this.reset();
+            document.getElementById('hs_dateConducted').value = new Date().toISOString().split('T')[0];
+            document.getElementById('hs_region').value = 'Region_06';
+            document.getElementById('hs_province').value = '';
+            document.getElementById('hs_cityMun').innerHTML = '<option value="">Select City/Municipality...</option>';
+            document.getElementById('hs_psgc').value = '';
+            document.getElementById('hs_pic').value = '';
         } catch (error) {
-            setStatus('❌ Error saving record: ' + error.message, 'error');
+            showToast('❌ Error', 'Failed to save record: ' + error.message, 'error');
         } finally {
-            setLoading(false);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet (T.A Housing Sub.)</span>';
         }
-    }
-
-    function setLoading(loading) {
-        const btns = ['clup_submitBtn', 'pdpfp_submitBtn'];
-        btns.forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) {
-                btn.disabled = loading;
-                btn.innerHTML = loading ? '<span class="ta-spinner"></span> Saving...' :
-                    (id.includes('clup') ? '<i class="fas fa-cloud-upload-alt"></i> Save to Google Sheet (CLUP)' :
-                        '<i class="fas fa-cloud-upload-alt"></i> Save to Google Sheet (PDPFP)');
-            }
-        });
-    }
+    });
 
     // ============================================
     // RECORDS MODAL
     // ============================================
     const recordsModal = document.getElementById('recordsModal');
     const modalBody = document.getElementById('modalBody');
-    const searchInput = document.getElementById('searchInput');
-    const displayCount = document.getElementById('displayCount');
-    const totalCount = document.getElementById('totalCount');
     const footerTotalCount = document.getElementById('footerTotalCount');
 
-    const filterPSGC = document.getElementById('filterPSGC');
-    const filterProvince = document.getElementById('filterProvince');
-    const filterReportingMonth = document.getElementById('filterReportingMonth');
-    const filterPIC = document.getElementById('filterPIC');
+    function openRecordsModal() {
+        recordsModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('recordsModalTitle').textContent = 'T.A Housing Sub. Records';
+        loadRecords();
+    }
 
     function closeRecordsModal() {
         recordsModal.classList.remove('active');
@@ -1457,87 +1119,35 @@
         editingRowNumber = null;
     }
 
-    function openRecordsModal() {
-        recordsModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        document.getElementById('recordsModalTitle').textContent = currentFormType + ' Technical Assistance';
-        updatePICFilters();
-        loadRecords();
-    }
-
     document.getElementById('closeModalBtn').addEventListener('click', closeRecordsModal);
     document.getElementById('closeModalBtn2').addEventListener('click', closeRecordsModal);
     recordsModal.addEventListener('click', function(e) {
         if (e.target === recordsModal) closeRecordsModal();
     });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeRecordsModal();
-    });
-
-    function applyRecordFilters() {
-        const psgcFilter = filterPSGC.value.trim().toLowerCase();
-        const provinceFilter = filterProvince.value;
-        const monthFilter = filterReportingMonth.value;
-        const picFilter = filterPIC.value;
-
-        filteredRecords = allRecords.filter(record => {
-            if (psgcFilter) {
-                const psgc = (record.PSGC || '').toLowerCase();
-                if (!psgc.includes(psgcFilter)) return false;
-            }
-            if (provinceFilter !== 'all') {
-                if ((record.Province || '') !== provinceFilter) return false;
-            }
-            if (monthFilter !== 'all') {
-                if ((record['Reporting Month'] || '') !== monthFilter) return false;
-            }
-            if (picFilter !== 'all') {
-                if ((record['Personnel In-Charge'] || '') !== picFilter) return false;
-            }
-            return true;
-        });
-
-        renderTable(filteredRecords);
-        displayCount.textContent = filteredRecords.length;
-        footerTotalCount.textContent = filteredRecords.length;
-        editingRowNumber = null;
-    }
-
-    document.getElementById('applyRecordFilter').addEventListener('click', applyRecordFilters);
-    document.getElementById('resetRecordFilter').addEventListener('click', function() {
-        filterPSGC.value = '';
-        filterProvince.value = 'all';
-        filterReportingMonth.value = 'all';
-        filterPIC.value = 'all';
-        searchInput.value = '';
-        applyRecordFilters();
-    });
 
     async function loadRecords() {
         modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p style="margin-top: 1rem;">Loading records...</p></div>`;
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=' + currentFormType, { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=records&type=HOUSING_SUB', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') {
                 allRecords = result.records || [];
                 filteredRecords = [...allRecords];
-                totalCount.textContent = allRecords.length;
-                footerTotalCount.textContent = allRecords.length;
                 renderTable(allRecords);
-                displayCount.textContent = allRecords.length;
+                footerTotalCount.textContent = allRecords.length;
                 editingRowNumber = null;
             } else {
-                modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error loading records: ${result.message}</div>`;
+                modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error: ${result.message}</div>`;
             }
         } catch (error) {
-            modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load records: ${error.message}</div>`;
+            modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load: ${error.message}</div>`;
         }
     }
 
+    // ===== RENDER TABLE WITH VIEW/EDIT/DELETE =====
     function renderTable(records) {
         if (!records || records.length === 0) {
-            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>PSGC</th><th>Region</th><th>Province</th><th>City/Municipality</th><th>Query Details</th><th>Assistance Type</th><th>TA Category</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel In-Charge</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="13">📭 No records found for ${currentFormType}.</td></tr></tbody></table>`;
-            displayCount.textContent = '0';
+            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>PSGC</th><th>Region</th><th>Province</th><th>City/Municipality</th><th>Query/TA Details</th><th>Type of Assistance</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="12">📭 No records found for T.A Housing Sub.</td></tr></tbody></table>`;
             return;
         }
 
@@ -1546,13 +1156,12 @@
             { key: 'Region', label: 'Region' },
             { key: 'Province', label: 'Province' },
             { key: 'City/Municipality', label: 'City/Municipality' },
-            { key: 'Query / TA Details', label: 'Query Details' },
-            { key: 'Type of Assistance Provided', label: 'Assistance Type' },
-            { key: 'TA Category', label: 'TA Category' },
+            { key: 'Query/TA Details', label: 'Query/TA Details' },
+            { key: 'Type of Assistance Provided', label: 'Type of Assistance' },
             { key: 'Planned / Requested', label: 'Planned/Requested' },
             { key: 'Date Conducted', label: 'Date Conducted' },
             { key: 'Reporting Month', label: 'Reporting Month' },
-            { key: 'Personnel In-Charge', label: 'Personnel In-Charge' }
+            { key: 'Personnel In-Charge', label: 'Personnel' }
         ];
 
         let html = `<table><thead><tr><th>#</th>`;
@@ -1561,21 +1170,22 @@
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
-            const actualRow = record.rowNumber || (index + 2);
+            const actualRow = index + 2;
             const isEditing = editingRowNumber === actualRow;
 
             html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}">`;
-            html += `<td>${rowNum}</td>`;
+            html += `<td style="text-align:center;">${rowNum}</td>`;
 
             columns.forEach(col => {
                 let value = record[col.key] || '-';
                 if (col.key === 'Date Conducted') {
-                    value = formatDateDisplay(value);
+                    value = formatDate(value);
                 }
 
                 if (isEditing) {
                     const fieldName = col.key.replace(/ /g, '_').replace(/\//g, '_');
-                    if (col.key === 'Query / TA Details' || col.key === 'Remarks' || col.key === 'Link to MOV') {
+                    
+                    if (col.key === 'Query/TA Details' || col.key === 'Remarks') {
                         html += `<td><textarea name="${fieldName}" data-key="${col.key}" rows="1">${value}</textarea></td>`;
                     } else if (col.key === 'Personnel In-Charge') {
                         html += `<td><select name="${fieldName}" data-key="${col.key}">`;
@@ -1598,33 +1208,19 @@
                         html += `</select></td>`;
                     } else if (col.key === 'Date Conducted') {
                         let dateValue = value;
-                        if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-                            const parts = value.split('/');
+                        if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateValue)) {
+                            const parts = dateValue.split('/');
                             dateValue = parts[2] + '-' + parts[0] + '-' + parts[1];
                         }
                         html += `<td><input type="date" name="${fieldName}" data-key="${col.key}" value="${dateValue}"></td>`;
-                    } else if (col.key === 'TA Category') {
-                        const categories = currentFormType === 'CLUP' ?
-                            ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
-                        html += `<td><select name="${fieldName}" data-key="${col.key}">`;
-                        html += `<option value="">Select...</option>`;
-                        categories.forEach(cat => {
-                            html += `<option value="${cat}" ${cat === value ? 'selected' : ''}>${cat}</option>`;
-                        });
-                        html += `</select></td>`;
                     } else if (col.key === 'Type of Assistance Provided') {
                         const assistanceTypes = [
-                            'Assistance through on-field mentoring and coaching',
-                            'Assistance to walk-in/by-appointment consultations',
                             'Assistance through online platform, telephone, and letter queries',
-                            'Assistance by serving as a resource speaker (i.e., tapped as or requested as an RP) to other capability development activities conducted by other bodies (i.e., other DHSUD offices, external bodies such as NGAs, NGOs, Academe, etc.)',
-                            'Assistance through the provision of orientations/briefings',
-                            'Assistance through provision of inputs and recommendations for draft policies, guidelines, plans, framework, and other policy documents of DHSUD and other concerned agencies/institutions.',
-                            'Others (to specify in the remarks)'
+                            'Assistance through on-field mentoring and coaching',
+                            'Assistance through the provision of orientations/briefings'
                         ];
-                        html += `<td><select name="${fieldName}" data-key="${col.key}" style="min-width: 120px;">`;
-                        html += `<option value="">Select Type of Assistance...</option>`;
+                        html += `<td><select name="${fieldName}" data-key="${col.key}">`;
+                        html += `<option value="">Select Type...</option>`;
                         assistanceTypes.forEach(type => {
                             html += `<option value="${type}" ${type === value ? 'selected' : ''}>${type}</option>`;
                         });
@@ -1633,8 +1229,8 @@
                         html += `<td><input type="text" name="${fieldName}" data-key="${col.key}" value="${value}"></td>`;
                     }
                 } else {
-                    if (value.length > 20) {
-                        value = value.substring(0, 20) + '...';
+                    if (value.length > 25) {
+                        value = value.substring(0, 25) + '…';
                     }
                     html += `<td>${value}</td>`;
                 }
@@ -1642,21 +1238,12 @@
 
             html += `<td class="action-cell">`;
             if (isEditing) {
-                html += `<button class="btn-action btn-save-edit" onclick="saveEditRow(${actualRow})" id="saveBtn_${actualRow}">
-                    <i class="fas fa-save"></i>
-                    <span class="btn-spinner"></span>
-                </button>`;
-                html += `<button class="btn-action btn-cancel-edit" onclick="cancelEditRow()">
-                    <i class="fas fa-times"></i>
-                </button>`;
+                html += `<button class="btn-action btn-save-edit" onclick="saveEditRow(${actualRow})" id="saveBtn_${actualRow}"><i class="fas fa-save"></i><span class="btn-spinner"></span></button>`;
+                html += `<button class="btn-action btn-cancel-edit" onclick="cancelEditRow()"><i class="fas fa-times"></i></button>`;
             } else {
-                html += `<button class="btn-action btn-edit" onclick="startEditRow(${actualRow})">
-                    <i class="fas fa-pen"></i>
-                </button>`;
-                html += `<button class="btn-action btn-delete" onclick="deleteRecord(${actualRow})" id="deleteBtn_${actualRow}">
-                    <i class="fas fa-trash"></i>
-                    <span class="btn-spinner"></span>
-                </button>`;
+                html += `<button class="btn-action btn-view" onclick="viewRecord(${actualRow})" title="View"><i class="fas fa-eye"></i></button>`;
+                html += `<button class="btn-action btn-edit" onclick="startEditRow(${actualRow})" title="Edit"><i class="fas fa-pen"></i></button>`;
+                html += `<button class="btn-action btn-delete" onclick="deleteRecord(${actualRow})" id="deleteBtn_${actualRow}" title="Delete"><i class="fas fa-trash"></i><span class="btn-spinner"></span></button>`;
             }
             html += `</td>`;
             html += `</tr>`;
@@ -1664,23 +1251,108 @@
 
         html += `</tbody></table>`;
         modalBody.innerHTML = html;
-        displayCount.textContent = records.length;
     }
 
+    // ============================================
+    // VIEW RECORD MODAL
+    // ============================================
+    const viewRecordModal = document.getElementById('viewRecordModal');
+    const viewRecordContent = document.getElementById('viewRecordContent');
+
+    window.viewRecord = function(rowNumber) {
+        const recordIndex = rowNumber - 2;
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) {
+            showToast('❌ Error', 'Record not found.', 'error');
+            return;
+        }
+        const record = filteredRecords[recordIndex];
+
+        let html = '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">';
+        const fields = [
+            { key: 'PSGC', label: 'PSGC', icon: 'fa-hashtag' },
+            { key: 'Region', label: 'Region', icon: 'fa-map-pin' },
+            { key: 'Province', label: 'Province', icon: 'fa-landmark' },
+            { key: 'City/Municipality', label: 'City/Municipality', icon: 'fa-city' },
+            { key: 'Planned / Requested', label: 'Planned/Requested', icon: 'fa-clock' },
+            { key: 'Date Conducted', label: 'Date Conducted', icon: 'fa-calendar-alt' },
+            { key: 'Reporting Month', label: 'Reporting Month', icon: 'fa-calendar-check' },
+            { key: 'Personnel In-Charge', label: 'Personnel', icon: 'fa-user' }
+        ];
+
+        fields.forEach(field => {
+            let value = record[field.key] || '-';
+            if (field.key === 'Date Conducted') {
+                value = formatDate(value);
+            }
+            if (value.length > 40) value = value.substring(0, 40) + '…';
+            html += `<div style="background: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 0.6rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px;">
+                    <i class="fas ${field.icon}" style="color: #2563eb; font-size: 0.55rem;"></i> ${field.label}
+                </div>
+                <div style="font-size: 0.85rem; color: #0f172a; margin-top: 2px; word-break: break-word;">${value}</div>
+            </div>`;
+        });
+
+        const fullFields = [
+            { key: 'Query/TA Details', label: 'Query / TA Details', icon: 'fa-quote-right' },
+            { key: 'Type of Assistance Provided', label: 'Type of Assistance Provided', icon: 'fa-headset' },
+            { key: 'Remarks', label: 'Remarks', icon: 'fa-pencil-alt' },
+            { key: 'Link to MOV', label: 'Link to MOV', icon: 'fa-link' }
+        ];
+
+        fullFields.forEach(field => {
+            let value = record[field.key] || '-';
+            if (value.length > 200) value = value.substring(0, 200) + '…';
+            html += `</div><div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem; margin-top: 0.5rem;">`;
+            html += `<div style="background: #f8fafc; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 0.6rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px;">
+                    <i class="fas ${field.icon}" style="color: #2563eb; font-size: 0.55rem;"></i> ${field.label}
+                </div>
+                <div style="font-size: 0.85rem; color: #0f172a; margin-top: 2px; word-break: break-word; white-space: pre-wrap;">${value}</div>
+            </div>`;
+        });
+
+        html += '</div>';
+        viewRecordContent.innerHTML = html;
+        viewRecordModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    function closeViewModal() {
+        viewRecordModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.getElementById('closeViewBtn').addEventListener('click', closeViewModal);
+    document.getElementById('closeViewBtn2').addEventListener('click', closeViewModal);
+    viewRecordModal.addEventListener('click', function(e) {
+        if (e.target === viewRecordModal) closeViewModal();
+    });
+
+    // ============================================
+    // EDIT / DELETE ACTIONS
+    // ============================================
     window.startEditRow = function(rowNumber) {
         editingRowNumber = rowNumber;
-        applyRecordFilters();
+        renderTable(filteredRecords);
     };
 
     window.cancelEditRow = function() {
         editingRowNumber = null;
-        applyRecordFilters();
+        renderTable(filteredRecords);
     };
 
     window.saveEditRow = async function(rowNumber) {
+        const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
+        if (saveBtn) {
+            saveBtn.classList.add('loading');
+            saveBtn.disabled = true;
+        }
+
         const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
         if (!row) {
-            setStatus('❌ Error: Row not found', 'error');
+            showToast('❌ Error', 'Row not found.', 'error');
+            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
             return;
         }
 
@@ -1693,9 +1365,10 @@
             }
         });
 
-        const recordIndex = filteredRecords.findIndex(r => r.rowNumber === rowNumber);
-        if (recordIndex === -1) {
-            setStatus('❌ Error: Record not found in local data', 'error');
+        const recordIndex = rowNumber - 2;
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) {
+            showToast('❌ Error', 'Record not found.', 'error');
+            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
             return;
         }
         const originalRecord = filteredRecords[recordIndex];
@@ -1703,15 +1376,14 @@
         const payload = {
             action: 'updateRecord',
             rowNumber: rowNumber,
-            formType: currentFormType,
+            formType: 'HOUSING_SUB',
             data: {
                 psgc: updatedData['PSGC'] || originalRecord['PSGC'] || '',
                 region: updatedData['Region'] || originalRecord['Region'] || '',
                 province: updatedData['Province'] || originalRecord['Province'] || '',
                 cityMun: updatedData['City/Municipality'] || originalRecord['City/Municipality'] || '',
-                queryDetails: updatedData['Query / TA Details'] || originalRecord['Query / TA Details'] || '',
+                queryDetails: updatedData['Query/TA Details'] || originalRecord['Query/TA Details'] || '',
                 assistanceType: updatedData['Type of Assistance Provided'] || originalRecord['Type of Assistance Provided'] || '',
-                taCategory: updatedData['TA Category'] || originalRecord['TA Category'] || '',
                 plannedRequested: updatedData['Planned / Requested'] || originalRecord['Planned / Requested'] || '',
                 dateConducted: updatedData['Date Conducted'] || originalRecord['Date Conducted'] || '',
                 reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
@@ -1722,18 +1394,22 @@
         };
 
         try {
-            setStatus('⏳ Updating record...', 'info');
             await fetch(WEB_APP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            setStatus('✅ Record updated! Please refresh to see changes.', 'success');
+            showToast('✅ Success', 'Record updated successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
         } catch (error) {
-            setStatus('❌ Error updating record: ' + error.message, 'error');
+            showToast('❌ Error', 'Failed to update record: ' + error.message, 'error');
+        } finally {
+            if (saveBtn) {
+                saveBtn.classList.remove('loading');
+                saveBtn.disabled = false;
+            }
         }
     };
 
@@ -1741,8 +1417,14 @@
         if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
             return;
         }
+
+        const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
+        if (deleteBtn) {
+            deleteBtn.classList.add('loading');
+            deleteBtn.disabled = true;
+        }
+
         try {
-            setStatus('⏳ Deleting record...', 'info');
             await fetch(WEB_APP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -1750,51 +1432,36 @@
                 body: JSON.stringify({
                     action: 'deleteRecord',
                     rowNumber: rowNumber,
-                    formType: currentFormType
+                    formType: 'HOUSING_SUB'
                 })
             });
-            setStatus('🗑️ Record deleted! Please refresh to see changes.', 'success');
+            showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
         } catch (error) {
-            setStatus('❌ Error deleting record: ' + error.message, 'error');
+            showToast('❌ Error', 'Failed to delete record: ' + error.message, 'error');
+        } finally {
+            if (deleteBtn) {
+                deleteBtn.classList.remove('loading');
+                deleteBtn.disabled = false;
+            }
         }
     };
-
-    searchInput.addEventListener('input', function() {
-        const term = this.value.trim().toLowerCase();
-        if (!term) {
-            applyRecordFilters();
-            return;
-        }
-        const searchFiltered = allRecords.filter(r => {
-            const psgc = String(r.PSGC || '').toLowerCase();
-            const province = String(r.Province || '').toLowerCase();
-            const city = String(r['City/Municipality'] || '').toLowerCase();
-            const pic = String(r['Personnel In-Charge'] || '').toLowerCase();
-            const region = String(r.Region || '').toLowerCase();
-            const query = String(r['Query / TA Details'] || '').toLowerCase();
-            const assistance = String(r['Type of Assistance Provided'] || '').toLowerCase();
-            const category = String(r['TA Category'] || '').toLowerCase();
-            const planned = String(r['Planned / Requested'] || '').toLowerCase();
-            const remarks = String(r.Remarks || '').toLowerCase();
-            const month = String(r['Reporting Month'] || '').toLowerCase();
-            return (
-                province.includes(term) || city.includes(term) || psgc.includes(term) || pic.includes(term) ||
-                region.includes(term) || query.includes(term) || assistance.includes(term) || category.includes(term) ||
-                planned.includes(term) || remarks.includes(term) || month.includes(term)
-            );
-        });
-        renderTable(searchFiltered);
-        displayCount.textContent = searchFiltered.length;
-        footerTotalCount.textContent = searchFiltered.length;
-        editingRowNumber = null;
-    });
 
     // ============================================
     // CHART MODAL
     // ============================================
     const chartModal = document.getElementById('chartModal');
+    let chartInstance = null;
+    let currentChartType = 'assistance';
+
+    function openChartModal() {
+        chartModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('chartModalTitle').textContent = 'T.A Housing Sub. Analytics Dashboard';
+        updatePICFilters();
+        loadChartData();
+    }
 
     function closeChartModal() {
         chartModal.classList.remove('active');
@@ -1802,22 +1469,10 @@
         if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
     }
 
-    function openChartModal() {
-        chartModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        document.getElementById('chartModalTitle').textContent = 'CLUP and ZO TA Analytics Dashboard';
-        updateCategoryFilter();
-        updatePICFilters();
-        loadChartData();
-    }
-
     document.getElementById('closeChartBtn').addEventListener('click', closeChartModal);
     document.getElementById('closeChartBtn2').addEventListener('click', closeChartModal);
     chartModal.addEventListener('click', function(e) {
         if (e.target === chartModal) closeChartModal();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeChartModal();
     });
 
     document.querySelectorAll('.chart-type-selector button').forEach(btn => {
@@ -1829,27 +1484,13 @@
         });
     });
 
-    function updateCategoryFilter() {
-        const select = document.getElementById('chartCategoryFilter');
-        select.innerHTML = '<option value="all">All Categories</option>';
-        const categories = currentFormType === 'CLUP' ?
-            ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
-        categories.forEach(cat => {
-            const opt = document.createElement('option');
-            opt.value = cat;
-            opt.textContent = cat;
-            select.appendChild(opt);
-        });
-    }
-
     async function loadChartData() {
         const container = document.getElementById('chartContainer');
         container.innerHTML = `<div class="chart-loading"><i class="fas fa-spinner fa-spin"></i><p>Loading chart data...</p></div>`;
         document.getElementById('chartSummary').style.display = 'none';
 
         try {
-            const response = await fetch(WEB_APP_URL + '?action=records&type=' + currentFormType, { method: 'GET' });
+            const response = await fetch(WEB_APP_URL + '?action=records&type=HOUSING_SUB', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') {
                 const records = result.records || [];
@@ -1862,13 +1503,18 @@
         }
     }
 
+    function shortLabel(label, maxLen = 30) {
+        if (!label) return '-';
+        if (label.length <= maxLen) return label;
+        return label.substring(0, maxLen) + '…';
+    }
+
     function renderChart(records) {
         const container = document.getElementById('chartContainer');
         const summary = document.getElementById('chartSummary');
 
         const monthFilter = document.getElementById('chartMonthFilter').value;
         const yearFilter = document.getElementById('chartYearFilter').value;
-        const categoryFilter = document.getElementById('chartCategoryFilter').value;
         const plannedFilter = document.getElementById('chartPlannedFilter').value;
         const provinceFilter = document.getElementById('chartProvinceFilter').value;
         const picFilter = document.getElementById('chartPICFilter')?.value || 'all';
@@ -1876,7 +1522,6 @@
         let filtered = records;
         if (monthFilter !== 'all') filtered = filtered.filter(r => (r['Reporting Month'] || '') === monthFilter);
         if (yearFilter) filtered = filtered.filter(r => (r['Date Conducted'] || '').includes(yearFilter));
-        if (categoryFilter !== 'all') filtered = filtered.filter(r => (r['TA Category'] || '') === categoryFilter);
         if (plannedFilter !== 'all') filtered = filtered.filter(r => (r['Planned / Requested'] || '') === plannedFilter);
         if (provinceFilter !== 'all') filtered = filtered.filter(r => (r['Province'] || '') === provinceFilter);
         if (picFilter !== 'all') filtered = filtered.filter(r => (r['Personnel In-Charge'] || '') === picFilter);
@@ -1898,26 +1543,28 @@
 
         let labels, data, chartTitle, datasetLabel;
 
-        if (currentChartType === 'category') {
-            const categoryCounts = {};
-            const categories = currentFormType === 'CLUP' ?
-                ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
-            categories.forEach(cat => categoryCounts[cat] = 0);
+        if (currentChartType === 'assistance') {
+            const assistanceCounts = {};
+            const assistanceTypes = [
+                'Assistance through online platform, telephone, and letter queries',
+                'Assistance through on-field mentoring and coaching',
+                'Assistance through the provision of orientations/briefings'
+            ];
+            assistanceTypes.forEach(t => assistanceCounts[t] = 0);
             filtered.forEach(r => {
-                const cat = r['TA Category'] || 'Other';
-                if (categoryCounts.hasOwnProperty(cat)) categoryCounts[cat]++;
-                else categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+                const type = r['Type of Assistance Provided'] || 'Other';
+                if (assistanceCounts.hasOwnProperty(type)) assistanceCounts[type]++;
+                else assistanceCounts[type] = (assistanceCounts[type] || 0) + 1;
             });
-            labels = Object.keys(categoryCounts).filter(k => categoryCounts[k] > 0);
-            data = labels.map(k => categoryCounts[k]);
-            chartTitle = currentFormType + ' - TA Category Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '') + (yearFilter ? ' - ' + yearFilter : '');
+            labels = Object.keys(assistanceCounts).filter(k => assistanceCounts[k] > 0);
+            data = labels.map(k => assistanceCounts[k]);
+            chartTitle = 'T.A Housing Sub. - Type of Assistance Distribution' + (monthFilter !== 'all' ? ' - ' + monthFilter : '') + (yearFilter ? ' - ' + yearFilter : '');
             datasetLabel = 'Number of Requests';
             document.getElementById('statCategories').textContent = labels.length;
             let topCat = '-', topCount = 0;
             labels.forEach((cat, i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
-            document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
-            renderBarChart(container, labels, data, chartTitle, datasetLabel);
+            document.getElementById('statTopCategory').textContent = shortLabel(topCat, 25);
+            renderHorizontalBarChart(container, labels, data, chartTitle, datasetLabel);
             summary.style.display = 'grid';
             return;
         } else if (currentChartType === 'planned') {
@@ -1931,13 +1578,13 @@
                 else if (status === 'Requested') requestedData[month] = (requestedData[month] || 0) + 1;
             });
             labels = monthOrder.filter(m => plannedData[m] > 0 || requestedData[m] > 0);
-            chartTitle = currentFormType + ' - Planned vs Requested by Month' + (yearFilter ? ' - ' + yearFilter : '');
+            chartTitle = 'T.A Housing Sub. - Planned vs Requested by Month' + (yearFilter ? ' - ' + yearFilter : '');
             document.getElementById('statCategories').textContent = '2 (Planned/Requested)';
             document.getElementById('statTopCategory').textContent = plannedCount > requestedCount ? 'Planned (' + plannedCount + ')' : 'Requested (' + requestedCount + ')';
             renderGroupedChart(container, labels, plannedData, requestedData, chartTitle);
             summary.style.display = 'grid';
             return;
-        } else if (currentChartType === 'province') {
+        } else if (currentChartType === 'city') {
             const cityData = {};
             filtered.forEach(r => {
                 const city = r['City/Municipality'] || 'Unknown';
@@ -1945,51 +1592,102 @@
             });
             labels = Object.keys(cityData).sort((a, b) => cityData[b] - cityData[a]);
             data = labels.map(k => cityData[k]);
-            chartTitle = currentFormType + ' - Requests by City/Municipality' + (monthFilter !== 'all' ? ' - ' + monthFilter : '') + (yearFilter ? ' - ' + yearFilter : '');
+            chartTitle = 'T.A Housing Sub. - Requests by City/Municipality' + (monthFilter !== 'all' ? ' - ' + monthFilter : '') + (yearFilter ? ' - ' + yearFilter : '');
             datasetLabel = 'Number of Requests';
             document.getElementById('statCategories').textContent = labels.length;
             let topCat = '-', topCount = 0;
             labels.forEach((cat, i) => { if (data[i] > topCount) { topCount = data[i]; topCat = cat; } });
             document.getElementById('statTopCategory').textContent = topCat + ' (' + topCount + ')';
-            renderBarChart(container, labels, data, chartTitle, datasetLabel);
+            renderHorizontalBarChart(container, labels, data, chartTitle, datasetLabel);
             summary.style.display = 'grid';
             return;
         }
     }
 
-    function renderBarChart(container, labels, data, chartTitle, datasetLabel) {
+    function renderHorizontalBarChart(container, labels, data, chartTitle, datasetLabel) {
         const colors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#14b8a6', '#6366f1'];
         const backgroundColors = labels.map((_, i) => colors[i % colors.length]);
 
-        container.innerHTML = `<div class="chart-container"><canvas id="chartCanvas"></canvas></div>`;
+        const dynamicHeight = Math.max(400, labels.length * 55 + 120);
+
+        container.innerHTML = `<div class="chart-container" style="height:${dynamicHeight}px;"><canvas id="chartCanvas"></canvas></div>`;
         const ctx = document.getElementById('chartCanvas').getContext('2d');
 
         if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
 
+        const axisLabels = labels.map(l => shortLabel(l, 45));
+        const fullLabels = labels;
+
         chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: labels,
+                labels: axisLabels,
                 datasets: [{
                     label: datasetLabel,
                     data: data,
                     backgroundColor: backgroundColors,
                     borderColor: backgroundColors.map(c => c + '99'),
                     borderWidth: 2,
-                    borderRadius: 6,
+                    borderRadius: 8,
+                    barThickness: 32,
+                    maxBarThickness: 42
                 }]
             },
             options: {
+                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: {
+                    padding: { left: 10, right: 30, top: 10, bottom: 10 }
+                },
                 plugins: {
-                    title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' },
+                    title: {
+                        display: true,
+                        text: chartTitle,
+                        font: { size: 16, weight: 'bold' },
+                        color: '#1e3a8a',
+                        padding: { top: 5, bottom: 15 }
+                    },
                     legend: { display: false },
-                    tooltip: { callbacks: { label: function(context) { return context.parsed.y + ' request(s)'; } } }
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return fullLabels[context[0].dataIndex];
+                            },
+                            label: function(context) {
+                                return context.parsed.x + ' request(s)';
+                            }
+                        },
+                        titleFont: { size: 12, weight: 'bold' },
+                        bodyFont: { size: 12 },
+                        padding: 12,
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)'
+                    }
                 },
                 scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Requests', font: { weight: 'bold' } } },
-                    x: { title: { display: true, text: currentChartType === 'category' ? 'TA Category' : 'City/Municipality', font: { weight: 'bold' } } }
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
+                        title: {
+                            display: true,
+                            text: 'Number of Requests',
+                            font: { weight: 'bold', size: 12 },
+                            color: '#1e3a8a'
+                        },
+                        grid: { color: '#f1f5f9' }
+                    },
+                    y: {
+                        ticks: {
+                            font: { size: 11 },
+                            autoSkip: false,
+                            color: '#334155'
+                        },
+                        grid: { display: false }
+                    }
+                },
+                animation: {
+                    duration: 700,
+                    easing: 'easeOutQuart'
                 }
             }
         });
@@ -2006,21 +1704,79 @@
             data: {
                 labels: labels,
                 datasets: [
-                    { label: 'Planned', data: labels.map(m => plannedData[m] || 0), backgroundColor: '#2563eb', borderColor: '#2563eb99', borderWidth: 2, borderRadius: 4 },
-                    { label: 'Requested', data: labels.map(m => requestedData[m] || 0), backgroundColor: '#f59e0b', borderColor: '#f59e0b99', borderWidth: 2, borderRadius: 4 }
+                    {
+                        label: 'Planned',
+                        data: labels.map(m => plannedData[m] || 0),
+                        backgroundColor: '#2563eb',
+                        borderColor: '#2563eb99',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.6
+                    },
+                    {
+                        label: 'Requested',
+                        data: labels.map(m => requestedData[m] || 0),
+                        backgroundColor: '#f59e0b',
+                        borderColor: '#f59e0b99',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        barPercentage: 0.7,
+                        categoryPercentage: 0.6
+                    }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    title: { display: true, text: chartTitle, font: { size: 16, weight: 'bold' }, color: '#1e3a8a' },
-                    legend: { position: 'top', labels: { font: { weight: 'bold' } } },
-                    tooltip: { callbacks: { label: function(context) { return context.dataset.label + ': ' + context.parsed.y + ' request(s)'; } } }
+                    title: {
+                        display: true,
+                        text: chartTitle,
+                        font: { size: 16, weight: 'bold' },
+                        color: '#1e3a8a',
+                        padding: { top: 5, bottom: 15 }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: { font: { weight: 'bold', size: 12 }, usePointStyle: true, padding: 15 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + ' request(s)';
+                            }
+                        },
+                        padding: 12,
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)'
+                    }
                 },
                 scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, title: { display: true, text: 'Number of Requests', font: { weight: 'bold' } } },
-                    x: { title: { display: true, text: 'Month', font: { weight: 'bold' } } }
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0, font: { size: 11 } },
+                        title: {
+                            display: true,
+                            text: 'Number of Requests',
+                            font: { weight: 'bold', size: 12 },
+                            color: '#1e3a8a'
+                        },
+                        grid: { color: '#f1f5f9' }
+                    },
+                    x: {
+                        ticks: { font: { size: 11 } },
+                        title: {
+                            display: true,
+                            text: 'Month',
+                            font: { weight: 'bold', size: 12 },
+                            color: '#1e3a8a'
+                        },
+                        grid: { display: false }
+                    }
+                },
+                animation: {
+                    duration: 700,
+                    easing: 'easeOutQuart'
                 }
             }
         });
@@ -2030,7 +1786,6 @@
     document.getElementById('resetChartFilter').addEventListener('click', function() {
         document.getElementById('chartMonthFilter').value = 'all';
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
-        document.getElementById('chartCategoryFilter').value = 'all';
         document.getElementById('chartPlannedFilter').value = 'all';
         document.getElementById('chartProvinceFilter').value = 'all';
         document.getElementById('chartPICFilter').value = 'all';
@@ -2038,22 +1793,20 @@
     });
 
     // ============================================
-    // VIEW BUTTONS
+    // BUTTON EVENTS
     // ============================================
     document.getElementById('viewAllBtn').addEventListener('click', openRecordsModal);
     document.getElementById('chartBtn').addEventListener('click', openChartModal);
     document.getElementById('sheetBtn').addEventListener('click', function() {
         window.open(GOOGLE_SHEET_URL, '_blank');
-        setStatus('📊 Opening Google Sheet in new tab...', 'info');
+        showToast('📊 Info', 'Opening Google Sheet in new tab...', 'info');
     });
 
     // ============================================
-    // PERSONNEL IN-CHARGE BUTTON EVENTS
+    // PERSONNEL BUTTONS
     // ============================================
-    document.getElementById('clup_addPic').addEventListener('click', function() { openAddPersonModal('clup'); });
-    document.getElementById('pdpfp_addPic').addEventListener('click', function() { openAddPersonModal('pdpfp'); });
-    document.getElementById('clup_deletePic').addEventListener('click', function() { deleteSelectedPerson('clup'); });
-    document.getElementById('pdpfp_deletePic').addEventListener('click', function() { deleteSelectedPerson('pdpfp'); });
+    document.getElementById('hs_addPic').addEventListener('click', openAddPersonModal);
+    document.getElementById('hs_deletePic').addEventListener('click', deleteSelectedPerson);
 
     // ============================================
     // NAVIGATION (with active highlight)
@@ -2176,16 +1929,21 @@
         if (t) t.remove();
         let toast = document.createElement("div");
         toast.className = "toast-msg" + (type === "error" ? " error" : type === "success" ? " success" : "");
+        toast.style.cssText = "position:fixed; bottom:20px; right:20px; background:#1e293b; color:white; padding:10px 20px; border-radius:40px; z-index:9999; font-size:0.8rem; box-shadow:0 4px 12px rgba(0,0,0,0.15);";
+        if (type === "success") toast.style.background = "#166534";
+        if (type === "error") toast.style.background = "#b91c1c";
         toast.innerText = msg;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
 
     function openLoginModal() {
+        document.getElementById("loginModal").style.display = "flex";
         document.getElementById("loginModal").classList.add("active");
     }
 
     function closeLoginModal() {
+        document.getElementById("loginModal").style.display = "none";
         document.getElementById("loginModal").classList.remove("active");
     }
 
@@ -2230,16 +1988,12 @@
     // ============================================
     document.addEventListener('DOMContentLoaded', function() {
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('clup_dateConducted').value = today;
-        document.getElementById('pdpfp_dateConducted').value = today;
+        document.getElementById('hs_dateConducted').value = today;
 
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const currentMonth = monthNames[new Date().getMonth()];
-        document.getElementById('clup_reportingMonth').value = currentMonth;
-        document.getElementById('pdpfp_reportingMonth').value = currentMonth;
+        document.getElementById('hs_reportingMonth').value = monthNames[new Date().getMonth()];
 
-        document.getElementById('clup_region').value = 'Region 6';
-        document.getElementById('pdpfp_region').value = 'Region 6';
+        document.getElementById('hs_region').value = 'Region_06';
         document.getElementById('chartYearFilter').value = new Date().getFullYear();
 
         checkSession();
@@ -2250,7 +2004,6 @@
         if (form) form.addEventListener("submit", handleModalLogin);
 
         loadPICNamesFromSheet();
-        setStatus('📋 All set · select CLUP or PDPFP', 'info');
     });
 
     window.openLoginModal = openLoginModal;
