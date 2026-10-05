@@ -1620,6 +1620,7 @@
                                 <option value="PlanSmart for SHS">PlanSmart for SHS</option>
                                 <option value="Review and Approval">Review and Approval</option>
                                 <option value="RUDD">RUDD</option>
+                                <option value="Other Urban Development Related">Other Urban Development Related</option>
                             </select>
                         </div>
                         <div class="field-group">
@@ -1810,6 +1811,7 @@
                     <option value="PlanSmart for SHS">PlanSmart for SHS</option>
                     <option value="Review and Approval">Review and Approval</option>
                     <option value="RUDD">RUDD</option>
+                    <option value="Other Urban Development Related">Other Urban Development Related</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -1894,6 +1896,7 @@
                         <option value="PlanSmart for SHS">PlanSmart for SHS</option>
                         <option value="Review and Approval">Review and Approval</option>
                         <option value="RUDD">RUDD</option>
+                        <option value="Other Urban Development Related">Other Urban Development Related</option>
                     </select>
                 </div>
                 <div class="filter-divider"></div>
@@ -2491,7 +2494,7 @@
                         months.forEach(m => html += `<option value="${m}" ${m === value ? 'selected' : ''}>${m}</option>`);
                         html += `</select></td>`;
                     } else if (col.key === 'Training Category') {
-                        const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD'];
+                        const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD','Other Urban Development Related'];
                         html += `<td style="padding:0.15rem 0.15rem; border-bottom:1px solid #f1f5f9; position:relative; overflow:visible; z-index:50;">
                             <select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; max-width:110px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white; font-family:'Inter',sans-serif; cursor:pointer; appearance:auto; -webkit-appearance:auto; z-index:1000; position:relative;">
                                 <option value="">Select...</option>`;
@@ -2665,7 +2668,7 @@
 
         if (currentChartType === 'category') {
             const catCounts = {};
-            const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD'];
+            const cats = ['CDRA','Formulation or Updating','GIS','Housing Subsector','Implementation and Monitoring','OSD','PlanSmart for SHS','Review and Approval','RUDD','Other Urban Development Related'];
             cats.forEach(c => catCounts[c] = 0);
             filtered.forEach(r => { const cat = r['Training Category'] || 'Other'; if (catCounts.hasOwnProperty(cat)) catCounts[cat]++; else catCounts[cat] = 1; });
             labels = Object.keys(catCounts).filter(k => catCounts[k] > 0);
