@@ -1170,10 +1170,9 @@
         .chart-type-selector button:active { transform: scale(0.95); }
 
         /* ===== MAIN SCROLLABLE CHART MODAL BODY ===== */
-        /* This is the key change: the entire body scrolls, not just the chart */
         #chartModalBody {
             padding: 0.5rem 1.5rem 1rem 1.5rem;
-            overflow-y: auto;          /* <-- vertical scroll for whole body */
+            overflow-y: auto;
             overflow-x: hidden;
             flex: 1;
             display: flex;
@@ -1197,9 +1196,7 @@
             background: #64748b;
         }
 
-        /* Remove the old chart-scroll-wrapper restriction — we no longer need it */
         .chart-scroll-wrapper {
-            /* This wrapper now simply holds content; no own scrollbar */
             overflow: visible;
             padding: 0;
             background: transparent;
@@ -1886,7 +1883,7 @@
     </div>
 </div>
 
-<!-- ===== CHART MODAL (now with full body scroll) ===== -->
+<!-- ===== CHART MODAL ===== -->
 <div class="modal-overlay" id="chartModal">
     <div class="modal-box" style="max-width: 1100px;">
         <div class="modal-header">
@@ -1894,7 +1891,6 @@
             <button class="close-btn" id="closeChartBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="chartModalBody">
-            <!-- chart type selector & filters remain at top; body will scroll -->
             <div class="chart-filters" style="border-bottom: none; margin-bottom: 0.5rem; background: transparent; padding: 0 0 0.5rem 0;">
                 <div class="chart-type-selector">
                     <label>Chart Type:</label>
@@ -1967,8 +1963,6 @@
                     <button class="filter-btn reset-btn" id="resetChartFilter"><i class="fas fa-undo"></i> Reset</button>
                 </div>
             </div>
-
-            <!-- chart and summary are inside a normal wrapper; the whole body scrolls -->
             <div class="chart-scroll-wrapper" id="chartScrollWrapper">
                 <div id="chartContainer">
                     <div class="chart-loading">
@@ -2511,7 +2505,10 @@
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
-            const actualRow = index + 2;
+            // *** FIX: Use the actual row number from the sheet (stored in the record) ***
+            // If the record has a `_rowNumber` property (set by the backend), use it;
+            // otherwise fall back to index + 2 for backward compatibility.
+            const actualRow = record._rowNumber || (index + 2);
             const isEditing = editingRowNumber === actualRow;
 
             html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" style="${isEditing ? 'background:#fef3c7 !important;' : ''}">`;
@@ -2577,6 +2574,7 @@
     window.startEditRow = function(rowNumber) { editingRowNumber = rowNumber; applyRecordFilters(); };
     window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
 
+    // *** FIX: saveEditRow now uses the actual row number from the record, not the filtered index ***
     window.saveEditRow = async function(rowNumber) {
         const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
         if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
@@ -2585,9 +2583,18 @@
         const inputs = row.querySelectorAll('input, select, textarea');
         const updatedData = {};
         inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
-        const recordIndex = rowNumber - 2;
-        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
-        const originalRecord = filteredRecords[recordIndex];
+
+        // Find the original record by matching the row number
+        const originalRecord = allRecords.find((rec, idx) => {
+            const recRow = rec._rowNumber || (idx + 2);
+            return recRow === rowNumber;
+        });
+        if (!originalRecord) {
+            showToast('❌ Error', 'Record not found.', 'error');
+            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+            return;
+        }
+
         const payload = {
             action: 'updateRecord',
             rowNumber: rowNumber,
@@ -2619,6 +2626,7 @@
         finally { if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } }
     };
 
+    // *** FIX: deleteRecord uses the actual row number from the record ***
     window.deleteRecord = async function(rowNumber) {
         if (!confirm('Delete this record? This cannot be undone.')) return;
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
@@ -2802,7 +2810,7 @@
     });
 
     // ============================================
-    // NAVIGATION & USER MENU (from m_attended.html)
+    // NAVIGATION & USER MENU
     // ============================================
     let currentUser = null;
 
@@ -2839,9 +2847,6 @@
         return "viewer";
     }
 
-    // ============================================
-    // NAVIGATION RENDERING — WITH ACTIVE HIGHLIGHT
-    // ============================================
     function renderMainNavigation() {
         const container = document.getElementById("mainNavContainer");
         if (!container) return;
