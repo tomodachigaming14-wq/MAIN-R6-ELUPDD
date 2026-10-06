@@ -198,7 +198,6 @@
         .modal-search .search-info { font-size: 0.75rem; color: #64748b; white-space: nowrap; }
         .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
 
-        /* *** FIX #1: modal-body scrollbar *** */
         .modal-body { padding: 0 1.5rem; flex: 1; display: flex; flex-direction: column; overflow-y: auto; max-height: 55vh; }
         .modal-body table { width: 100%; border-collapse: collapse; font-size: 0.7rem; min-width: 1200px; }
         .modal-body table th { background: #f1f5f9; color: #1e3a8a; font-weight: 700; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3px; padding: 0.4rem 0.3rem; text-align: left; border-bottom: 2px solid #e2e8f0; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
@@ -1028,14 +1027,15 @@
         if (picNames.length === 0) await loadPICNamesFromSheet();
         if (picNames.length === 0) picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
         if (!records || records.length === 0) {
-            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>Province</th><th>City/Municipality</th><th>Type</th><th>Initial</th><th>Updated</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="10">📭 No records found.</td></tr></tbody></table>`;
+            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>Province</th><th>City/Municipality</th><th>Type</th><th>Initial</th><th>Updated</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel</th><th>Link to MOV</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="11">📭 No records found.</td></tr></tbody></table>`;
             document.getElementById('displayCount').textContent = '0'; return;
         }
         const columns = [
             { key: 'Province', label: 'Province' }, { key: 'City/Municipality', label: 'City/Municipality' },
             { key: 'Type of Monitoring', label: 'Type' }, { key: 'Initial Status', label: 'Initial' },
             { key: 'Updated Status', label: 'Updated' }, { key: 'Date of Monitoring Conducted (MM/DD/YYYY)', label: 'Date Conducted' },
-            { key: 'Reporting Month', label: 'Reporting Month' }, { key: 'Personnel In-Charge', label: 'Personnel' }
+            { key: 'Reporting Month', label: 'Reporting Month' }, { key: 'Personnel In-Charge', label: 'Personnel' },
+            { key: 'Link to MOV', label: 'Link to MOV' }
         ];
         let html = `<table><thead><tr><th style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; min-width:30px;">#</th>`;
         columns.forEach(col => html += `<th style="position:sticky; top:0; z-index:20; background:#f1f5f9; padding:0.4rem 0.3rem; font-size:0.6rem; text-align:left; border-bottom:2px solid #e2e8f0; color:#1e3a8a; white-space:nowrap;">${col.label}</th>`);
@@ -1045,12 +1045,27 @@
             const rowNum = index + 1;
             const actualRow = index + 2;
             const isEditing = editingRowNumber === actualRow;
-            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" data-record-index="${index}">`;
+            // *** FIX: Store region in data attribute so it can be reused on save ***
+            const recordRegion = record['Region'] || 'Region_06';
+            html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" data-record-index="${index}" data-region="${recordRegion}">`;
             html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; text-align:center;">${rowNum}</td>`;
             columns.forEach(col => {
                 let value = record[col.key] || '-';
                 if (col.key === 'Date of Monitoring Conducted (MM/DD/YYYY)') value = formatDate(value);
-                if (isEditing) {
+                if (col.key === 'Link to MOV') {
+                    if (isEditing) {
+                        const fieldName = col.key.replace(/ /g, '_').replace(/\//g, '_').replace(/\(/g, '').replace(/\)/g, '');
+                        const rawValue = record[col.key] || '';
+                        html += `<td><input type="url" name="${fieldName}" data-key="${col.key}" value="${rawValue}" style="width:100%; min-width:70px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;"></td>`;
+                    } else {
+                        if (value && value !== '-') {
+                            const displayVal = value.length > 20 ? value.substring(0, 20) + '…' : value;
+                            html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><a href="${value}" target="_blank" rel="noopener noreferrer" style="color:#2563eb; text-decoration:underline;">${displayVal}</a></td>`;
+                        } else {
+                            html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">-</td>`;
+                        }
+                    }
+                } else if (isEditing) {
                     const fieldName = col.key.replace(/ /g, '_').replace(/\//g, '_').replace(/\(/g, '').replace(/\)/g, '');
                     if (col.key === 'Province') {
                         const provinces = ['Aklan','Antique','Capiz','Guimaras','Iloilo'];
@@ -1059,9 +1074,17 @@
                         html += `</select></td>`;
                     } else if (col.key === 'Type of Monitoring') {
                         html += `<td><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:70px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;"><option value="Table" ${value === 'Table' ? 'selected' : ''}>Table</option><option value="Field" ${value === 'Field' ? 'selected' : ''}>Field</option></select></td>`;
+                    } else if (col.key === 'City/Municipality') {
+                        const provinceOfRow = record['Province'] || '';
+                        const cityOptions = getCitiesByProvince(provinceOfRow);
+                        html += `<td><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:90px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">`;
+                        html += `<option value="" ${(!value || value === '-') ? 'selected' : ''}>(Leave Blank)</option>`;
+                        cityOptions.forEach(c => { html += `<option value="${c.city}" ${c.city === value ? 'selected' : ''}>${c.city}</option>`; });
+                        html += `</select></td>`;
                     } else if (col.key === 'Initial Status' || col.key === 'Updated Status') {
                         const statuses = ['Pre-Phase','Phase 1','Phase 2','Phase 3','Phase 4','Phase 5','RA1','RA2','RA3','RA4','RA5','RA6','RA7','None Indicated'];
                         html += `<td><select name="${fieldName}" data-key="${col.key}" style="width:100%; min-width:80px; padding:0.15rem 0.3rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;">`;
+                        html += `<option value="" ${(!value || value === '-') ? 'selected' : ''}>(Leave Blank)</option>`;
                         statuses.forEach(s => { html += `<option value="${s}" ${s === value ? 'selected' : ''}>${s}</option>`; });
                         html += `</select></td>`;
                     } else if (col.key === 'Reporting Month') {
@@ -1081,7 +1104,8 @@
                         html += `<td><input type="text" name="${fieldName}" data-key="${col.key}" value="${value}" style="width:100%; min-width:50px; padding:0.1rem 0.2rem; border:2px solid #f59e0b; border-radius:4px; font-size:0.6rem; background:white;"></td>`;
                     }
                 } else {
-                    if (value.length > 18) value = value.substring(0, 18) + '…';
+                    if (value === '' || value === '-') value = '-';
+                    else if (value.length > 18) value = value.substring(0, 18) + '…';
                     html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${value}</td>`;
                 }
             });
@@ -1115,25 +1139,31 @@
         if (isNaN(recordIndex) || recordIndex < 0 || recordIndex >= filteredRecords.length) { if (saveBtn) saveBtn.disabled = false; return; }
         const original = filteredRecords[recordIndex];
         const sheetRowNumber = recordIndex + 2;
-        const newInitialStatus = updatedData['Initial Status'] || original['Initial Status'] || '';
-        const newUpdatedStatus = updatedData['Updated Status'] || original['Updated Status'] || '';
+        // *** FIX: Preserve the original Region when editing ***
+        const originalRegion = row.dataset.region || original['Region'] || 'Region_06';
+        const newInitialStatus = updatedData['Initial Status'] !== undefined ? updatedData['Initial Status'] : (original['Initial Status'] || '');
+        const newUpdatedStatus = updatedData['Updated Status'] !== undefined ? updatedData['Updated Status'] : (original['Updated Status'] || '');
         const detailParts = [];
         const oldInitial = original['Initial Status'] || '';
         if (oldInitial && newInitialStatus && oldInitial !== newInitialStatus) detailParts.push(`Initial Status: ${oldInitial} → ${newInitialStatus}`);
+        else if (oldInitial && !newInitialStatus) detailParts.push(`Initial Status: ${oldInitial} → (Blank)`);
         const oldUpdated = original['Updated Status'] || '';
         if (oldUpdated && newUpdatedStatus && oldUpdated !== newUpdatedStatus) detailParts.push(`Updated Status: ${oldUpdated} → ${newUpdatedStatus}`);
+        else if (oldUpdated && !newUpdatedStatus) detailParts.push(`Updated Status: ${oldUpdated} → (Blank)`);
         const detail = detailParts.length ? detailParts.join(', ') : 'Updated record';
         const payload = {
             action: 'updateRecord', rowNumber: sheetRowNumber, formType: 'Plan_Monitoring',
             data: {
+                // *** FIX: Include region so it is not wiped out on update ***
+                region: originalRegion,
                 province: updatedData['Province'] || original['Province'] || '',
-                cityMun: updatedData['City/Municipality'] || original['City/Municipality'] || '',
+                cityMun: updatedData['City/Municipality'] !== undefined ? updatedData['City/Municipality'] : (original['City/Municipality'] || ''),
                 typeMonitoring: updatedData['Type of Monitoring'] || original['Type of Monitoring'] || '',
                 initialStatus: newInitialStatus, updatedStatus: newUpdatedStatus,
                 dateConducted: updatedData['Date of Monitoring Conducted (MM/DD/YYYY)'] || original['Date of Monitoring Conducted (MM/DD/YYYY)'] || '',
                 reportingMonth: updatedData['Reporting Month'] || original['Reporting Month'] || '',
                 remarks: updatedData['Remarks'] || original['Remarks'] || 'N/A',
-                linkMov: updatedData['Link to MOV'] || original['Link to MOV'] || '',
+                linkMov: updatedData['Link to MOV'] !== undefined ? updatedData['Link to MOV'] : (original['Link to MOV'] || ''),
                 personnelInCharge: updatedData['Personnel In-Charge'] || original['Personnel In-Charge'] || ''
             }
         };
@@ -1141,7 +1171,7 @@
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             showToast('✅ Success', 'Record updated!', 'success');
             const province = updatedData['Province'] || original['Province'] || '';
-            const city = updatedData['City/Municipality'] || original['City/Municipality'] || '';
+            const city = updatedData['City/Municipality'] !== undefined ? updatedData['City/Municipality'] : (original['City/Municipality'] || '');
             await addActivityLog('Updated', province, city, detail);
             editingRowNumber = null;
             await loadRecords();
@@ -1149,7 +1179,6 @@
         finally { if (saveBtn) saveBtn.disabled = false; }
     };
 
-    // *** FIX #2: deleteRecord now re‑fetches from server after deletion ***
     window.deleteRecord = async function(rowNumber) {
         if (!confirm('Delete this record permanently?')) return;
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
@@ -1166,7 +1195,6 @@
             showToast('🗑️ Deleted', 'Record deleted.', 'success');
             await addActivityLog('Deleted', province, city, 'Record removed');
             editingRowNumber = null;
-            // Force re‑fetch from the server to ensure the deleted row no longer appears
             await loadRecords();
         } catch (e) { showToast('❌ Error', 'Delete failed: ' + e.message, 'error'); }
         finally { if (deleteBtn) deleteBtn.disabled = false; }
