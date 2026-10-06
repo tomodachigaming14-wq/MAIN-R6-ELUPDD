@@ -210,6 +210,77 @@
         .modal-footer .btn-close-modal { background: #2563eb; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; }
         .modal-footer .btn-close-modal:hover { background: #1d4ed8; }
 
+        /* ===== RECORDS FILTER BAR (based on image) ===== */
+        .records-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+            padding: 1rem 1.2rem;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        .records-filter-bar .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .records-filter-bar label {
+            font-weight: 700;
+            font-size: 0.65rem;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .records-filter-bar select,
+        .records-filter-bar input {
+            padding: 0.45rem 0.8rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            outline: none;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 130px;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+            color: #0f172a;
+        }
+        .records-filter-bar select:focus,
+        .records-filter-bar input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .records-filter-bar .filter-btn {
+            background: #2563eb;
+            border: none;
+            padding: 0.45rem 1.2rem;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        }
+        .records-filter-bar .filter-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .records-filter-bar .filter-btn.reset-btn {
+            background: #64748b;
+        }
+        .records-filter-bar .filter-btn.reset-btn:hover {
+            background: #475569;
+        }
+
         /* ===== CHART STYLES ===== */
         .chart-filters { display: flex; flex-wrap: wrap; gap: 0.8rem 1.2rem; padding: 0.8rem 1rem; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; align-items: center; margin-bottom: 1rem; }
         .chart-filters .filter-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
@@ -287,6 +358,10 @@
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
             .toast-container { top: 10px; right: 10px; left: 10px; max-width: 100%; }
+            .records-filter-bar { flex-direction: column; align-items: stretch; }
+            .records-filter-bar .filter-group { flex-wrap: wrap; }
+            .records-filter-bar select, .records-filter-bar input { min-width: 100%; }
+            .records-filter-bar .filter-btn { width: 100%; justify-content: center; }
         }
         @media (max-width: 700px) {
             .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
@@ -503,9 +578,58 @@
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="modalBody">
-            <div style="text-align:center; padding: 2rem; color: #94a3b8;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
-                <p style="margin-top: 1rem;">Loading records...</p>
+            <!-- Filter Bar (based on the uploaded image) -->
+            <div class="records-filter-bar" id="recordsFilterBar">
+                <div class="filter-group">
+                    <label for="filterPsgc">PSGC:</label>
+                    <input type="text" id="filterPsgc" placeholder="Search PSGC..." />
+                </div>
+                <div class="filter-group">
+                    <label for="filterProvince">Province:</label>
+                    <select id="filterProvince">
+                        <option value="all">All Provinces</option>
+                        <option value="Aklan">Aklan</option>
+                        <option value="Antique">Antique</option>
+                        <option value="Capiz">Capiz</option>
+                        <option value="Guimaras">Guimaras</option>
+                        <option value="Iloilo">Iloilo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterReportingMonth">Reporting Month:</label>
+                    <select id="filterReportingMonth">
+                        <option value="all">All Months</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterPic">PIC:</label>
+                    <select id="filterPic">
+                        <option value="all">All Personnel</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="margin-left: auto;">
+                    <button class="filter-btn" id="applyFilterBtn"><i class="fas fa-filter"></i> Apply</button>
+                    <button class="filter-btn reset-btn" id="resetFilterBtn"><i class="fas fa-undo"></i> Reset</button>
+                </div>
+            </div>
+            <!-- Records table will be injected here -->
+            <div id="recordsTableContainer">
+                <div style="text-align:center; padding: 2rem; color: #94a3b8;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                    <p style="margin-top: 1rem;">Loading records...</p>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -726,11 +850,13 @@
                 picNames = result.names;
                 populatePicDropdown();
                 updatePICFilters();
+                populateRecordsFilterPIC(); // new
                 return picNames;
             } else {
                 picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
                 populatePicDropdown();
                 updatePICFilters();
+                populateRecordsFilterPIC(); // new
                 return picNames;
             }
         } catch (error) {
@@ -738,6 +864,7 @@
             picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
             populatePicDropdown();
             updatePICFilters();
+            populateRecordsFilterPIC(); // new
             return picNames;
         }
     }
@@ -789,6 +916,23 @@
         }
     }
 
+    // New: populate the records filter PIC dropdown
+    function populateRecordsFilterPIC() {
+        const filterPic = document.getElementById('filterPic');
+        if (!filterPic) return;
+        const currentValue = filterPic.value;
+        filterPic.innerHTML = '<option value="all">All Personnel</option>';
+        picNames.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            filterPic.appendChild(opt);
+        });
+        if (currentValue && picNames.includes(currentValue)) {
+            filterPic.value = currentValue;
+        }
+    }
+
     // ============================================
     // ADD PERSON MODAL
     // ============================================
@@ -825,6 +969,7 @@
         picNames.push(name);
         populatePicDropdown();
         updatePICFilters();
+        populateRecordsFilterPIC(); // new
         await savePICNamesToSheet(picNames);
         document.getElementById('hs_pic').value = name;
         showToast('✅ Success', `"${name}" added to Personnel In-Charge list.`, 'success');
@@ -854,6 +999,7 @@
             picNames.splice(index, 1);
             populatePicDropdown();
             updatePICFilters();
+            populateRecordsFilterPIC(); // new
             await savePICNamesToSheet(picNames);
             showToast('🗑️ Removed', `"${selectedName}" removed from Personnel In-Charge list.`, 'info');
         }
@@ -1110,6 +1256,11 @@
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         document.getElementById('recordsModalTitle').textContent = 'T.A Housing Sub. Records';
+        // Reset filter UI to defaults before loading
+        document.getElementById('filterPsgc').value = '';
+        document.getElementById('filterProvince').value = 'all';
+        document.getElementById('filterReportingMonth').value = 'all';
+        document.getElementById('filterPic').value = 'all';
         loadRecords();
     }
 
@@ -1126,28 +1277,78 @@
     });
 
     async function loadRecords() {
-        modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p style="margin-top: 1rem;">Loading records...</p></div>`;
+        document.getElementById('recordsTableContainer').innerHTML = `<div style="text-align:center; padding: 2rem; color: #94a3b8;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><p style="margin-top: 1rem;">Loading records...</p></div>`;
         try {
             const response = await fetch(WEB_APP_URL + '?action=records&type=HOUSING_SUB', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') {
                 allRecords = result.records || [];
                 filteredRecords = [...allRecords];
-                renderTable(allRecords);
-                footerTotalCount.textContent = allRecords.length;
+                renderTable(filteredRecords);
+                footerTotalCount.textContent = filteredRecords.length;
                 editingRowNumber = null;
             } else {
-                modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error: ${result.message}</div>`;
+                document.getElementById('recordsTableContainer').innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Error: ${result.message}</div>`;
             }
         } catch (error) {
-            modalBody.innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load: ${error.message}</div>`;
+            document.getElementById('recordsTableContainer').innerHTML = `<div style="text-align:center; padding: 2rem; color: #dc2626;">Failed to load: ${error.message}</div>`;
         }
+    }
+
+    // ===== APPLY FILTERS (new) =====
+    function applyRecordFilters() {
+        const psgcFilter = document.getElementById('filterPsgc').value.trim().toLowerCase();
+        const provinceFilter = document.getElementById('filterProvince').value;
+        const monthFilter = document.getElementById('filterReportingMonth').value;
+        const picFilter = document.getElementById('filterPic').value;
+
+        let filtered = [...allRecords];
+
+        // PSGC search (case-insensitive partial match)
+        if (psgcFilter) {
+            filtered = filtered.filter(r => 
+                (r['PSGC'] || '').toLowerCase().includes(psgcFilter)
+            );
+        }
+
+        // Province filter
+        if (provinceFilter !== 'all') {
+            filtered = filtered.filter(r => (r['Province'] || '') === provinceFilter);
+        }
+
+        // Reporting Month filter
+        if (monthFilter !== 'all') {
+            filtered = filtered.filter(r => (r['Reporting Month'] || '') === monthFilter);
+        }
+
+        // PIC filter
+        if (picFilter !== 'all') {
+            filtered = filtered.filter(r => (r['Personnel In-Charge'] || '') === picFilter);
+        }
+
+        filteredRecords = filtered;
+        renderTable(filteredRecords);
+        footerTotalCount.textContent = filteredRecords.length;
+        editingRowNumber = null;
+    }
+
+    // ===== RESET FILTERS (new) =====
+    function resetRecordFilters() {
+        document.getElementById('filterPsgc').value = '';
+        document.getElementById('filterProvince').value = 'all';
+        document.getElementById('filterReportingMonth').value = 'all';
+        document.getElementById('filterPic').value = 'all';
+        filteredRecords = [...allRecords];
+        renderTable(filteredRecords);
+        footerTotalCount.textContent = filteredRecords.length;
+        editingRowNumber = null;
     }
 
     // ===== RENDER TABLE WITH VIEW/EDIT/DELETE =====
     function renderTable(records) {
+        const container = document.getElementById('recordsTableContainer');
         if (!records || records.length === 0) {
-            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>PSGC</th><th>Region</th><th>Province</th><th>City/Municipality</th><th>Query/TA Details</th><th>Type of Assistance</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="12">📭 No records found for T.A Housing Sub.</td></tr></tbody></table>`;
+            container.innerHTML = `<table><thead><tr><th>#</th><th>PSGC</th><th>Region</th><th>Province</th><th>City/Municipality</th><th>Query/TA Details</th><th>Type of Assistance</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="12">📭 No records found for T.A Housing Sub.</td></tr></tbody></table>`;
             return;
         }
 
@@ -1250,7 +1451,7 @@
         });
 
         html += `</tbody></table>`;
-        modalBody.innerHTML = html;
+        container.innerHTML = html;
     }
 
     // ============================================
@@ -1403,6 +1604,14 @@
             showToast('✅ Success', 'Record updated successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
+            // reapply filters if any are active after reload
+            const hasActiveFilter = document.getElementById('filterPsgc').value.trim() !== '' ||
+                                    document.getElementById('filterProvince').value !== 'all' ||
+                                    document.getElementById('filterReportingMonth').value !== 'all' ||
+                                    document.getElementById('filterPic').value !== 'all';
+            if (hasActiveFilter) {
+                applyRecordFilters();
+            }
         } catch (error) {
             showToast('❌ Error', 'Failed to update record: ' + error.message, 'error');
         } finally {
@@ -1438,6 +1647,14 @@
             showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
+            // reapply filters if any are active after reload
+            const hasActiveFilter = document.getElementById('filterPsgc').value.trim() !== '' ||
+                                    document.getElementById('filterProvince').value !== 'all' ||
+                                    document.getElementById('filterReportingMonth').value !== 'all' ||
+                                    document.getElementById('filterPic').value !== 'all';
+            if (hasActiveFilter) {
+                applyRecordFilters();
+            }
         } catch (error) {
             showToast('❌ Error', 'Failed to delete record: ' + error.message, 'error');
         } finally {
@@ -1447,6 +1664,20 @@
             }
         }
     };
+
+    // ============================================
+    // FILTER EVENT LISTENERS (Records Modal)
+    // ============================================
+    document.getElementById('applyFilterBtn').addEventListener('click', applyRecordFilters);
+    document.getElementById('resetFilterBtn').addEventListener('click', resetRecordFilters);
+
+    // Allow pressing Enter in PSGC input to apply filter
+    document.getElementById('filterPsgc').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            applyRecordFilters();
+        }
+    });
 
     // ============================================
     // CHART MODAL
