@@ -551,7 +551,7 @@
                             <label><i class="fas fa-tag"></i> TA Category <span class="required">*</span></label>
                             <select id="pdpfp_taCategory" required>
                                 <option value="">Select...</option>
-                                <option value="CDRA & PCRD">CDRA & PCRD</option>
+                                <option value="CDRA or PCRD">CDRA or PCRD</option>
                                 <option value="Formulation or Updating">Formulation or Updating</option>
                                 <option value="GIS">GIS</option>
                                 <option value="Other CLUP and ZO Related Technical Assistance">Other CLUP and ZO Related Technical Assistance</option>
@@ -1606,7 +1606,7 @@
                     } else if (col.key === 'TA Category') {
                         const categories = currentFormType === 'CLUP' ?
                             ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
+                            ['CDRA or PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
                         html += `<td><select name="${fieldName}" data-key="${col.key}">`;
                         html += `<option value="">Select...</option>`;
                         categories.forEach(cat => {
@@ -1834,7 +1834,7 @@
         select.innerHTML = '<option value="all">All Categories</option>';
         const categories = currentFormType === 'CLUP' ?
             ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-            ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
+            ['CDRA or PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
         categories.forEach(cat => {
             const opt = document.createElement('option');
             opt.value = cat;
@@ -1902,7 +1902,7 @@
             const categoryCounts = {};
             const categories = currentFormType === 'CLUP' ?
                 ['CDRA', 'Formulation or Updating', 'GIS', 'Implementation and Monitoring', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'] :
-                ['CDRA & PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
+                ['CDRA or PCRD', 'Formulation or Updating', 'GIS', 'Other CLUP and ZO Related Technical Assistance', 'PlanSmart for SHS', 'Review and Approval', 'Urban Development'];
             categories.forEach(cat => categoryCounts[cat] = 0);
             filtered.forEach(r => {
                 const cat = r['TA Category'] || 'Other';
