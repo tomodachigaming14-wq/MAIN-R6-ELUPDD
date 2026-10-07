@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>DHSUD VI | TECHNICAL ASSISTANCE</title>
+    <title>DHSUD VI | TECHNICAL ASSISTANCE · Duplicate Check</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -157,6 +157,8 @@
         .ta-status-message.success i { color: #10b981; }
         .ta-status-message.error { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
         .ta-status-message.error i { color: #dc2626; }
+        .ta-status-message.warning { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .ta-status-message.warning i { color: #f59e0b; }
         .ta-footer-note { margin-top: 1.5rem; font-size: 0.65rem; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1.2rem; letter-spacing: 0.5px; }
 
         /* ===== MODALS ===== */
@@ -248,6 +250,30 @@
         .add-person-modal .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 0.3rem; display: none; }
         .add-person-modal .error-msg.show { display: block; }
 
+        /* ===== DUPLICATE MODAL ===== */
+        .duplicate-modal .modal-box { max-width: 720px; border-radius: 24px; }
+        .duplicate-modal .modal-header { background: #fef3c7; border-bottom: 2px solid #fcd34d; border-radius: 24px 24px 0 0; }
+        .duplicate-modal .modal-header h2 { color: #92400e; }
+        .duplicate-modal .modal-header h2 i { color: #f59e0b; }
+        .duplicate-modal .modal-body { padding: 1.5rem 2rem; }
+        .duplicate-modal .modal-footer { background: #fef3c7; border-top: 1px solid #fcd34d; border-radius: 0 0 24px 24px; }
+        .duplicate-modal .duplicate-warning { display: flex; align-items: flex-start; gap: 16px; background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+        .duplicate-modal .duplicate-warning .warning-icon { font-size: 2.5rem; color: #f59e0b; flex-shrink: 0; }
+        .duplicate-modal .duplicate-warning .warning-text h3 { font-size: 1.1rem; font-weight: 700; color: #92400e; margin-bottom: 0.3rem; }
+        .duplicate-modal .duplicate-warning .warning-text p { font-size: 0.85rem; color: #78350f; }
+        .duplicate-modal .duplicate-record-detail { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+        .duplicate-modal .duplicate-record-detail h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 0.8rem; font-weight: 700; }
+        .duplicate-modal .duplicate-record-detail .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+        .duplicate-modal .duplicate-record-detail .detail-item { display: flex; flex-direction: column; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-label { font-size: 0.6rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.3px; font-weight: 600; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-value { font-size: 0.85rem; color: #0f172a; font-weight: 500; }
+        .duplicate-modal .duplicate-record-detail .detail-item.full-width { grid-column: 1 / -1; }
+        .duplicate-modal .duplicate-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+        .duplicate-modal .btn-dup-secondary { background: #e2e8f0; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; color: #334155; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-family: "Inter", sans-serif; }
+        .duplicate-modal .btn-dup-secondary:hover { background: #cbd5e1; }
+        .duplicate-modal .btn-dup-danger { background: #dc2626; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-family: "Inter", sans-serif; }
+        .duplicate-modal .btn-dup-danger:hover { background: #b91c1c; }
+
         /* ===== LOGIN MODAL ===== */
         .login-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; z-index: 10000; }
         .login-modal.active { display: flex; }
@@ -316,6 +342,7 @@
             .chart-summary { grid-template-columns: repeat(3, 1fr); }
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+            .duplicate-modal .detail-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 700px) {
             .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
@@ -687,6 +714,36 @@
             </form>
         </div>
         <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+</div>
+
+<!-- ===== DUPLICATE DETECTION MODAL ===== -->
+<div class="modal-overlay duplicate-modal" id="duplicateModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Possible Duplicate Record</h2>
+            <button class="close-btn" id="closeDuplicateBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="duplicate-warning">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text">
+                    <h3>A matching record has been found in the database.</h3>
+                    <p>Please review the existing record below to avoid duplicate entries.</p>
+                </div>
+            </div>
+            <div class="duplicate-record-detail" id="duplicateRecordDetail">
+                <!-- filled dynamically -->
+            </div>
+            <div class="duplicate-actions">
+                <button class="btn-dup-secondary" id="cancelDuplicateBtn">Cancel &amp; Review</button>
+                <button class="btn-dup-danger" id="proceedDuplicateBtn">Yes, Save Anyway</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="record-count">⚠️ Duplicate check triggered</span>
+            <button class="btn-close-modal" id="closeDuplicateFooterBtn">Close</button>
+        </div>
     </div>
 </div>
 
@@ -1163,6 +1220,10 @@
     let currentChartType = 'category';
     let editingRowNumber = null;
 
+    // Duplicate detection state
+    let pendingDuplicatePayload = null;
+    let pendingDuplicateType = null;
+
     // ============================================
     // TOGGLE FUNCTION
     // ============================================
@@ -1200,6 +1261,9 @@
         } else if (type === 'error') {
             statusDiv.classList.add('error');
             icon.className = 'fas fa-exclamation-circle';
+        } else if (type === 'warning') {
+            statusDiv.classList.add('warning');
+            icon.className = 'fas fa-exclamation-triangle';
         } else {
             icon.className = 'fas fa-info-circle';
         }
@@ -1388,23 +1452,148 @@
     }
 
     // ============================================
-    // SUBMIT HANDLERS
+    // DUPLICATE DETECTION (7-FIELD CHECK)
+    // ============================================
+    async function checkDuplicate(payload, type) {
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=records&type=' + type, { method: 'GET' });
+            const result = await response.json();
+            if (result.result !== 'success' || !result.records) return null;
+
+            const records = result.records;
+
+            // Fields to compare (case‑insensitive, trimmed)
+            const province = (payload.province || '').trim().toLowerCase();
+            const cityMun = (payload.cityMun || '').trim().toLowerCase();
+            const assistance = (payload.assistanceType || '').trim().toLowerCase();
+            const category = (payload.taCategory || '').trim().toLowerCase();
+            const planned = (payload.plannedRequested || '').trim().toLowerCase();
+            const dateConducted = (payload.dateConducted || '').trim().toLowerCase();
+            const reportingMonth = (payload.reportingMonth || '').trim().toLowerCase();
+
+            const match = records.find(r => {
+                const rProvince = (r.Province || '').trim().toLowerCase();
+                const rCity = (r['City/Municipality'] || '').trim().toLowerCase();
+                const rAssist = (r['Type of Assistance Provided'] || '').trim().toLowerCase();
+                const rCat = (r['TA Category'] || '').trim().toLowerCase();
+                const rPlanned = (r['Planned / Requested'] || '').trim().toLowerCase();
+                // Date Conducted may come as MM/DD/YYYY from Sheet – normalise
+                let rDate = (r['Date Conducted'] || '').trim();
+                if (typeof rDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(rDate)) {
+                    const parts = rDate.split('/');
+                    rDate = parts[2] + '-' + parts[0] + '-' + parts[1];
+                }
+                rDate = rDate.toLowerCase();
+                const rMonth = (r['Reporting Month'] || '').trim().toLowerCase();
+
+                return rProvince === province &&
+                       rCity === cityMun &&
+                       rAssist === assistance &&
+                       rCat === category &&
+                       rPlanned === planned &&
+                       rDate === dateConducted &&
+                       rMonth === reportingMonth;
+            });
+
+            return match || null;
+        } catch (error) {
+            console.error('Duplicate check error:', error);
+            return null;
+        }
+    }
+
+    // ============================================
+    // SHOW DUPLICATE MODAL
+    // ============================================
+    function showDuplicateModal(match, payload, type) {
+        pendingDuplicatePayload = payload;
+        pendingDuplicateType = type;
+
+        const detailDiv = document.getElementById('duplicateRecordDetail');
+        const r = match;
+        // Normalise date for display
+        let displayDate = r['Date Conducted'] || '-';
+        if (typeof displayDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(displayDate)) {
+            const parts = displayDate.split('-');
+            displayDate = parts[1] + '/' + parts[2] + '/' + parts[0];
+        }
+
+        detailDiv.innerHTML = `
+            <h4><i class="fas fa-file-alt" style="margin-right:6px;"></i> Existing Record (Row ${r.rowNumber || '—'})</h4>
+            <div class="detail-grid">
+                <div class="detail-item"><span class="detail-label">Province</span><span class="detail-value">${r.Province || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">City/Municipality</span><span class="detail-value">${r['City/Municipality'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Type of Assistance</span><span class="detail-value">${(r['Type of Assistance Provided'] || '-').substring(0, 60)}${(r['Type of Assistance Provided'] || '').length > 60 ? '…' : ''}</span></div>
+                <div class="detail-item"><span class="detail-label">TA Category</span><span class="detail-value">${r['TA Category'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Planned / Requested</span><span class="detail-value">${r['Planned / Requested'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Date Conducted</span><span class="detail-value">${displayDate}</span></div>
+                <div class="detail-item"><span class="detail-label">Reporting Month</span><span class="detail-value">${r['Reporting Month'] || '-'}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Query / TA Details</span><span class="detail-value">${(r['Query / TA Details'] || '-').substring(0, 120)}${(r['Query / TA Details'] || '').length > 120 ? '…' : ''}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Personnel In-Charge</span><span class="detail-value">${r['Personnel In-Charge'] || '-'}</span></div>
+            </div>
+        `;
+
+        document.getElementById('duplicateModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setStatus('⚠️ Possible duplicate detected — review the record.', 'warning');
+    }
+
+    function closeDuplicateModal() {
+        document.getElementById('duplicateModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        pendingDuplicatePayload = null;
+        pendingDuplicateType = null;
+    }
+
+    // Duplicate modal event listeners
+    document.getElementById('closeDuplicateBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('closeDuplicateFooterBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('cancelDuplicateBtn').addEventListener('click', function() {
+        closeDuplicateModal();
+        setStatus('🛑 Save cancelled — please review the existing record.', 'info');
+    });
+    document.getElementById('proceedDuplicateBtn').addEventListener('click', async function() {
+        if (pendingDuplicatePayload && pendingDuplicateType) {
+            closeDuplicateModal();
+            await submitRecord(pendingDuplicatePayload, pendingDuplicateType, true);
+        }
+    });
+    document.getElementById('duplicateModal').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('duplicateModal')) closeDuplicateModal();
+    });
+
+    // ============================================
+    // SUBMIT HANDLERS (with duplicate check)
     // ============================================
     clupForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const payload = getFormData('CLUP');
         if (!validateForm(payload, 'CLUP')) return;
-        await submitRecord(payload, 'CLUP');
+
+        setStatus('🔍 Checking for duplicates...', 'info');
+        const match = await checkDuplicate(payload, 'CLUP');
+        if (match) {
+            showDuplicateModal(match, payload, 'CLUP');
+            return;
+        }
+        await submitRecord(payload, 'CLUP', false);
     });
 
     pdpfpForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const payload = getFormData('PDPFP');
         if (!validateForm(payload, 'PDPFP')) return;
-        await submitRecord(payload, 'PDPFP');
+
+        setStatus('🔍 Checking for duplicates...', 'info');
+        const match = await checkDuplicate(payload, 'PDPFP');
+        if (match) {
+            showDuplicateModal(match, payload, 'PDPFP');
+            return;
+        }
+        await submitRecord(payload, 'PDPFP', false);
     });
 
-    async function submitRecord(payload, type) {
+    async function submitRecord(payload, type, forceSave = false) {
         setLoading(true);
         setStatus('⏳ Saving to Google Sheet (' + type + ')...', 'info');
         try {
@@ -1414,7 +1603,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            setStatus('✅ Record SAVED to Google Sheet (' + type + ')!', 'success');
+            setStatus('✅ Record SAVED to Google Sheet (' + type + ')!' + (forceSave ? ' (confirmed duplicate)' : ''), 'success');
             resetForm(type);
         } catch (error) {
             setStatus('❌ Error saving record: ' + error.message, 'error');
