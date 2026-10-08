@@ -81,7 +81,7 @@
             transform: translateY(-2px);
         }
 
-        /* ===== NAVIGATION BAR (centered) ===== */
+        /* ===== NAVIGATION BAR ===== */
         .nav-bottom {
             background: white;
             border-top: 1px solid #eef2ff;
@@ -99,8 +99,6 @@
             flex-wrap: wrap;
             padding: 0.2rem 0;
         }
-
-        /* ===== NAV ITEM BOXES ===== */
         .main-nav-links > a,
         .main-nav-links > .dropdown > .dropbtn {
             display: inline-flex;
@@ -122,8 +120,6 @@
             font-family: inherit;
             line-height: 1.2;
         }
-
-        /* Hover effect – box style */
         .main-nav-links > a:hover,
         .main-nav-links > .dropdown > .dropbtn:hover {
             background: #eff6ff;
@@ -132,8 +128,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
         }
-
-        /* Active / Highlighted state */
         .main-nav-links > a.active,
         .main-nav-links > .dropdown > .dropbtn.active {
             background: #2563eb;
@@ -148,12 +142,7 @@
             border-color: #1d4ed8;
             color: #ffffff;
         }
-
-        /* Dropdown arrow for active state */
-        .main-nav-links > .dropdown > .dropbtn.active::after {
-            opacity: 1;
-        }
-
+        .main-nav-links > .dropdown > .dropbtn.active::after { opacity: 1; }
         .dropbtn::after {
             content: " ▾";
             font-size: 0.65rem;
@@ -161,20 +150,14 @@
             margin-left: 4px;
             transition: opacity 0.2s;
         }
-        .dropdown:hover .dropbtn::after {
-            opacity: 1;
-        }
-
-        /* ===== DROPDOWN MENUS ===== */
+        .dropdown:hover .dropbtn::after { opacity: 1; }
         .dropdown {
             position: relative;
             display: inline-block;
+            padding-bottom: 6px;
+            margin-bottom: -6px;
         }
-        .dropbtn {
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
+        .dropbtn { background: none; border: none; font-family: inherit; }
         .dropdown-content {
             display: none;
             position: absolute;
@@ -189,7 +172,6 @@
             border: 1px solid #eef2ff;
             padding: 0.3rem 0;
             animation: dropFade 0.2s ease;
-            margin-top: 0;
         }
         .dropdown-content::before {
             content: "";
@@ -204,13 +186,7 @@
             from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown {
-            padding-bottom: 6px;
-            margin-bottom: -6px;
-        }
+        .dropdown:hover .dropdown-content { display: block; }
         .dropdown-content a {
             display: block;
             padding: 0.7rem 1.2rem;
@@ -219,21 +195,14 @@
             text-decoration: none;
             transition: background 0.15s ease, color 0.15s ease;
         }
-        .dropdown-content a:hover {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-
-        /* Submenus */
-        .dropdown-submenu {
-            position: relative;
-        }
+        .dropdown-content a:hover { background: #eff6ff; color: #2563eb; }
+        .dropdown-submenu { position: relative; padding-right: 6px; margin-right: -6px; }
         .submenu-trigger {
             background: none;
             border: none;
             width: 100%;
             text-align: left;
-            padding: 0.7rem 1.2rem;
+            padding: 0.7rem 2rem 0.7rem 1.2rem;
             font-size: 0.8rem;
             font-weight: 500;
             color: #1e293b;
@@ -244,18 +213,9 @@
             font-family: inherit;
             transition: background 0.15s ease, color 0.15s ease;
         }
-        .submenu-trigger:hover {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-        .arrow-right {
-            font-size: 0.7rem;
-            margin-left: 1rem;
-            transition: transform 0.2s ease;
-        }
-        .dropdown-submenu.open .arrow-right {
-            transform: rotate(90deg);
-        }
+        .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
+        .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
+        .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
         .submenu-content {
             display: none;
             position: absolute;
@@ -279,19 +239,8 @@
             background: transparent;
         }
         .dropdown-submenu:hover .submenu-content,
-        .dropdown-submenu.open .submenu-content {
-            display: block;
-        }
-        .submenu-trigger {
-            padding-right: 2rem;
-        }
-        .dropdown-submenu {
-            padding-right: 6px;
-            margin-right: -6px;
-        }
-        .submenu-content a {
-            padding: 0.7rem 1.2rem;
-        }
+        .dropdown-submenu.open .submenu-content { display: block; }
+        .submenu-content a { padding: 0.7rem 1.2rem; }
 
         /* ===== USER DROPDOWN ===== */
         .user-avatar {
@@ -306,10 +255,7 @@
             font-weight: 700;
             font-size: 0.75rem;
         }
-        .user-name {
-            font-size: 0.7rem;
-            font-weight: 500;
-        }
+        .user-name { font-size: 0.7rem; font-weight: 500; }
         .role-badge-header {
             background: #e2e8f0;
             padding: 0.15rem 0.5rem;
@@ -339,9 +285,7 @@
             cursor: pointer;
             font-size: 0.8rem;
         }
-        .user-dropdown-item:hover {
-            background: #f8fafc;
-        }
+        .user-dropdown-item:hover { background: #f8fafc; }
 
         /* ===== CARD ===== */
         .card {
@@ -366,11 +310,7 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
         .header-icon {
             width: 52px;
             height: 52px;
@@ -417,9 +357,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 1.2rem 1.8rem;
         }
-        .full-width {
-            grid-column: 1 / -1;
-        }
+        .full-width { grid-column: 1 / -1; }
         .field-group {
             display: flex;
             flex-direction: column;
@@ -435,20 +373,9 @@
             align-items: center;
             gap: 8px;
         }
-        .field-group label i {
-            color: #2563eb;
-            font-size: 0.75rem;
-            width: 16px;
-        }
-        .field-group label .required {
-            color: #dc2626;
-            font-size: 0.6rem;
-        }
-        .field-group input:read-only {
-            background: #f1f5f9;
-            cursor: not-allowed;
-            color: #475569;
-        }
+        .field-group label i { color: #2563eb; font-size: 0.75rem; width: 16px; }
+        .field-group label .required { color: #dc2626; font-size: 0.6rem; }
+        .field-group input:read-only { background: #f1f5f9; cursor: not-allowed; color: #475569; }
         .field-group input,
         .field-group select,
         .field-group textarea {
@@ -490,20 +417,9 @@
             min-height: 30px !important;
             height: auto !important;
         }
-        .field-group textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-        .pic-container {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .pic-container select {
-            flex: 1;
-            min-width: 200px;
-        }
+        .field-group textarea { resize: vertical; min-height: 60px; }
+        .pic-container { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .pic-container select { flex: 1; min-width: 200px; }
         .pic-btn {
             padding: 0.5rem 1rem;
             border: none;
@@ -518,25 +434,11 @@
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
             white-space: nowrap;
         }
-        .pic-btn-add {
-            background: #10b981;
-            color: white;
-        }
-        .pic-btn-add:hover {
-            background: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
+        .pic-btn-add { background: #10b981; color: white; }
+        .pic-btn-add:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
         .pic-btn-add:active { transform: scale(0.95); }
-        .pic-btn-delete {
-            background: #ef4444;
-            color: white;
-        }
-        .pic-btn-delete:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
+        .pic-btn-delete { background: #ef4444; color: white; }
+        .pic-btn-delete:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
         .pic-btn-delete:active { transform: scale(0.95); }
         .pic-btn i { font-size: 0.7rem; }
         .btn-submit {
@@ -572,16 +474,9 @@
             transition: left 0.6s ease;
         }
         .btn-submit:hover::before { left: 100%; }
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); }
         .btn-submit:active { transform: scale(0.97); }
-        .btn-submit:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
         .btn-test {
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
@@ -595,52 +490,16 @@
             flex: 1;
             font-family: "Inter", "Segoe UI", Roboto, sans-serif;
         }
-        .btn-test:hover {
-            background: #e2e8f0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
+        .btn-test:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
         .btn-test:active { transform: scale(0.97); }
         .btn-test i { margin-right: 4px; }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .btn-view-all {
-            background: #1e3a8a;
-            border: 1px solid #1e3a8a;
-            color: white;
-        }
-        .btn-view-all:hover {
-            background: #2563eb;
-            border-color: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-        }
-        .btn-chart {
-            background: #059669;
-            border: 1px solid #059669;
-            color: white;
-        }
-        .btn-chart:hover {
-            background: #047857;
-            border-color: #047857;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-        }
-        .btn-sheet {
-            background: #0f9d58;
-            border: 1px solid #0f9d58;
-            color: white;
-        }
-        .btn-sheet:hover {
-            background: #0b7e48;
-            border-color: #0b7e48;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3);
-        }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .btn-view-all { background: #1e3a8a; border: 1px solid #1e3a8a; color: white; }
+        .btn-view-all:hover { background: #2563eb; border-color: #2563eb; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3); }
+        .btn-chart { background: #059669; border: 1px solid #059669; color: white; }
+        .btn-chart:hover { background: #047857; border-color: #047857; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); }
+        .btn-sheet { background: #0f9d58; border: 1px solid #0f9d58; color: white; }
+        .btn-sheet:hover { background: #0b7e48; border-color: #0b7e48; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3); }
         .status-message {
             margin-top: 1.2rem;
             padding: 0.8rem 1.2rem;
@@ -655,23 +514,13 @@
             font-size: 0.85rem;
             min-height: 52px;
         }
-        .status-message i {
-            font-size: 1rem;
-            color: #2563eb;
-            flex-shrink: 0;
-        }
-        .status-message.success {
-            background: #f0fdf4;
-            border-color: #86efac;
-            color: #166534;
-        }
+        .status-message i { font-size: 1rem; color: #2563eb; flex-shrink: 0; }
+        .status-message.success { background: #f0fdf4; border-color: #86efac; color: #166534; }
         .status-message.success i { color: #10b981; }
-        .status-message.error {
-            background: #fef2f2;
-            border-color: #fca5a5;
-            color: #991b1b;
-        }
+        .status-message.error { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
         .status-message.error i { color: #dc2626; }
+        .status-message.warning { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .status-message.warning i { color: #f59e0b; }
         .footer-note {
             margin-top: 1.5rem;
             font-size: 0.65rem;
@@ -690,15 +539,8 @@
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .logo-image {
-            height: 50px;
-            width: auto;
-            display: block;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .logo-image { height: 50px; width: auto; display: block; }
         .header-icon, .header-logo { display: flex; align-items: center; }
 
         /* ===== BUTTON ANIMATIONS ===== */
@@ -737,10 +579,8 @@
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
             z-index: 99999;
@@ -786,8 +626,7 @@
         .modal-header .close-btn {
             background: #f1f5f9;
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border-radius: 50%;
             font-size: 1.1rem;
             cursor: pointer;
@@ -809,12 +648,7 @@
             background: #f8fafc;
             flex-shrink: 0;
         }
-        .modal-filters .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            flex-wrap: wrap;
-        }
+        .modal-filters .filter-group { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; }
         .modal-filters label {
             font-weight: 600;
             font-size: 0.65rem;
@@ -878,14 +712,9 @@
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
-        .modal-search .search-info {
-            font-size: 0.75rem;
-            color: #64748b;
-            white-space: nowrap;
-        }
+        .modal-search .search-info { font-size: 0.75rem; color: #64748b; white-space: nowrap; }
         .modal-search .search-info span { font-weight: 700; color: #1e3a8a; }
 
-        /* ===== SCROLLABLE TABLE WRAPPER ===== */
         .table-wrapper {
             overflow: auto;
             flex: 1;
@@ -894,22 +723,10 @@
             max-height: calc(92vh - 320px);
             min-height: 200px;
         }
-
-        .table-wrapper::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        .table-wrapper::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-        .table-wrapper::-webkit-scrollbar-thumb {
-            background: #94a3b8;
-            border-radius: 4px;
-        }
-        .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
+        .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
+        .table-wrapper::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
         .modal-body {
             padding: 0 1.5rem;
@@ -955,11 +772,7 @@
             color: #94a3b8;
             font-size: 0.9rem;
         }
-        .modal-body .action-cell {
-            display: flex;
-            gap: 3px;
-            flex-wrap: nowrap;
-        }
+        .modal-body .action-cell { display: flex; gap: 3px; flex-wrap: nowrap; }
         .modal-body .action-cell .btn-action {
             padding: 0.15rem 0.4rem;
             border: none;
@@ -993,8 +806,6 @@
             border-color: #2563eb;
             box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
         }
-
-        /* ===== FIX FOR DROPDOWNS IN EDIT MODE ===== */
         .modal-body table select {
             appearance: auto !important;
             -webkit-appearance: auto !important;
@@ -1012,7 +823,6 @@
             cursor: pointer !important;
             max-width: 130px !important;
         }
-
         .modal-body table select option {
             display: block !important;
             padding: 4px 8px !important;
@@ -1024,19 +834,16 @@
             color: #0f172a !important;
             font-size: 0.65rem !important;
         }
-
         .modal-body table td {
             overflow: visible !important;
             position: relative !important;
             z-index: 1 !important;
         }
-
         .modal-body table tr.editing-row td {
             overflow: visible !important;
             position: relative !important;
             z-index: 10 !important;
         }
-
         .modal-body table tr.editing-row td select {
             z-index: 1000 !important;
             position: relative !important;
@@ -1055,10 +862,7 @@
             border-radius: 0 0 24px 24px;
             flex-shrink: 0;
         }
-        .modal-footer .record-count {
-            font-size: 0.8rem;
-            color: #475569;
-        }
+        .modal-footer .record-count { font-size: 0.8rem; color: #475569; }
         .modal-footer .record-count span { font-weight: 700; color: #1e3a8a; }
         .modal-footer .btn-close-modal {
             background: #2563eb;
@@ -1086,12 +890,7 @@
             align-items: center;
             margin-bottom: 1rem;
         }
-        .chart-filters .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-        }
+        .chart-filters .filter-group { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
         .chart-filters label {
             font-weight: 600;
             font-size: 0.7rem;
@@ -1130,18 +929,8 @@
         .chart-filters .filter-btn:active { transform: scale(0.95); }
         .chart-filters .filter-btn.reset-btn { background: #64748b; }
         .chart-filters .filter-btn.reset-btn:hover { background: #475569; box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3); }
-        .chart-filters .filter-divider {
-            width: 1px;
-            height: 30px;
-            background: #e2e8f0;
-            margin: 0 0.2rem;
-        }
-        .chart-type-selector {
-            display: flex;
-            gap: 0.4rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .chart-filters .filter-divider { width: 1px; height: 30px; background: #e2e8f0; margin: 0 0.2rem; }
+        .chart-type-selector { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
         .chart-type-selector label {
             font-weight: 600;
             font-size: 0.7rem;
@@ -1161,15 +950,10 @@
             color: #475569;
             font-family: "Inter", sans-serif;
         }
-        .chart-type-selector button.active {
-            border-color: #2563eb;
-            background: #2563eb;
-            color: white;
-        }
+        .chart-type-selector button.active { border-color: #2563eb; background: #2563eb; color: white; }
         .chart-type-selector button:hover { border-color: #2563eb; transform: translateY(-1px); }
         .chart-type-selector button:active { transform: scale(0.95); }
 
-        /* ===== MAIN SCROLLABLE CHART MODAL BODY ===== */
         #chartModalBody {
             padding: 0.5rem 1.5rem 1rem 1.5rem;
             overflow-y: auto;
@@ -1180,37 +964,13 @@
             scrollbar-width: thin;
             scrollbar-color: #94a3b8 #f1f5f9;
         }
-        #chartModalBody::-webkit-scrollbar {
-            width: 10px;
-        }
-        #chartModalBody::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 6px;
-        }
-        #chartModalBody::-webkit-scrollbar-thumb {
-            background: #94a3b8;
-            border-radius: 6px;
-            border: 2px solid #f1f5f9;
-        }
-        #chartModalBody::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
+        #chartModalBody::-webkit-scrollbar { width: 10px; }
+        #chartModalBody::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 6px; }
+        #chartModalBody::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 6px; border: 2px solid #f1f5f9; }
+        #chartModalBody::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-        .chart-scroll-wrapper {
-            overflow: visible;
-            padding: 0;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            max-height: none;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
-            min-width: 100%;
-            margin-top: 0.5rem;
-        }
+        .chart-scroll-wrapper { overflow: visible; padding: 0; background: transparent; border: none; border-radius: 0; max-height: none; }
+        .chart-container { position: relative; height: 400px; min-width: 100%; margin-top: 0.5rem; }
         .chart-container canvas { width: 100% !important; height: 100% !important; }
         .chart-summary {
             display: grid;
@@ -1223,26 +983,10 @@
             border: 1px solid #e2e8f0;
         }
         .chart-summary .stat-item { text-align: center; }
-        .chart-summary .stat-item .stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1e3a8a;
-        }
-        .chart-summary .stat-item .stat-label {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            color: #64748b;
-            letter-spacing: 0.3px;
-        }
-        .chart-loading {
-            text-align: center;
-            padding: 2rem;
-            color: #94a3b8;
-        }
-        .chart-loading i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
+        .chart-summary .stat-item .stat-value { font-size: 1.3rem; font-weight: 700; color: #1e3a8a; }
+        .chart-summary .stat-item .stat-label { font-size: 0.6rem; text-transform: uppercase; color: #64748b; letter-spacing: 0.3px; }
+        .chart-loading { text-align: center; padding: 2rem; color: #94a3b8; }
+        .chart-loading i { font-size: 2rem; margin-bottom: 1rem; }
 
         /* ===== ADD PERSON MODAL ===== */
         .add-person-modal .modal-box { max-width: 500px; }
@@ -1264,13 +1008,82 @@
         .add-person-modal .btn-add-person:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
         .add-person-modal .btn-add-person:active { transform: scale(0.97); }
         .add-person-modal .btn-add-person:disabled { opacity: 0.6; cursor: not-allowed; }
-        .add-person-modal .error-msg {
-            color: #dc2626;
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
-            display: none;
-        }
+        .add-person-modal .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 0.3rem; display: none; }
         .add-person-modal .error-msg.show { display: block; }
+
+        /* ===== DUPLICATE MODAL ===== */
+        .duplicate-modal .modal-box { max-width: 720px; border-radius: 24px; }
+        .duplicate-modal .modal-header { background: #fef3c7; border-bottom: 2px solid #fcd34d; border-radius: 24px 24px 0 0; }
+        .duplicate-modal .modal-header h2 { color: #92400e; }
+        .duplicate-modal .modal-header h2 i { color: #f59e0b; }
+        .duplicate-modal .modal-body { padding: 1.5rem 2rem; }
+        .duplicate-modal .modal-footer { background: #fef3c7; border-top: 1px solid #fcd34d; border-radius: 0 0 24px 24px; }
+        .duplicate-modal .duplicate-warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: #fffbeb;
+            border: 1.5px solid #fcd34d;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .duplicate-modal .duplicate-warning .warning-icon { font-size: 2.5rem; color: #f59e0b; flex-shrink: 0; }
+        .duplicate-modal .duplicate-warning .warning-text h3 { font-size: 1.1rem; font-weight: 700; color: #92400e; margin-bottom: 0.3rem; }
+        .duplicate-modal .duplicate-warning .warning-text p { font-size: 0.85rem; color: #78350f; }
+        .duplicate-modal .duplicate-record-detail {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .duplicate-modal .duplicate-record-detail h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+        .duplicate-modal .duplicate-record-detail .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+        .duplicate-modal .duplicate-record-detail .detail-item { display: flex; flex-direction: column; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.3px;
+            font-weight: 600;
+        }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-value { font-size: 0.85rem; color: #0f172a; font-weight: 500; }
+        .duplicate-modal .duplicate-record-detail .detail-item.full-width { grid-column: 1 / -1; }
+        .duplicate-modal .duplicate-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+        .duplicate-modal .btn-dup-secondary {
+            background: #e2e8f0;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            color: #334155;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-family: "Inter", sans-serif;
+        }
+        .duplicate-modal .btn-dup-secondary:hover { background: #cbd5e1; }
+        .duplicate-modal .btn-dup-danger {
+            background: #dc2626;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-family: "Inter", sans-serif;
+        }
+        .duplicate-modal .btn-dup-danger:hover { background: #b91c1c; }
 
         .editing-row td { background: #fef3c7 !important; }
         .editing-row .action-cell .btn-action { display: none; }
@@ -1315,10 +1128,7 @@
             box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
             animation: fadeUp 0.3s ease;
         }
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(25px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
         .login-modal-brand {
             background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             padding: 2rem 1.5rem 1.8rem;
@@ -1338,18 +1148,8 @@
             transition: transform 0.2s;
         }
         .login-modal-brand img:hover { transform: scale(1.02); }
-        .login-modal-brand h3 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 0.2rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .login-modal-brand p {
-            font-size: 0.75rem;
-            opacity: 0.85;
-            margin: 0;
-        }
+        .login-modal-brand h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
         .login-modal-close {
             position: absolute;
             top: 16px;
@@ -1364,12 +1164,8 @@
             z-index: 10;
         }
         .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
-        .login-modal-body {
-            padding: 2rem 1.8rem 1.8rem;
-        }
-        .login-modal-body .input-group {
-            margin-bottom: 1.3rem;
-        }
+        .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
+        .login-modal-body .input-group { margin-bottom: 1.3rem; }
         .login-modal-body .input-group label {
             display: block;
             font-size: 0.7rem;
@@ -1407,15 +1203,8 @@
             margin-top: 0.3rem;
             font-family: 'Inter', sans-serif;
         }
-        .login-submit-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
-        }
-        .login-submit-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+        .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
         .login-modal-footer {
             text-align: center;
             font-size: 0.65rem;
@@ -1439,6 +1228,7 @@
         .toast-msg.success { background: #166534; }
         .toast-msg.error { background: #b91c1c; }
         .toast-msg.info { background: #1e3a8a; }
+        .toast-msg.warning { background: #b45309; }
 
         /* ===== FOOTER ===== */
         .footer-new {
@@ -1448,40 +1238,16 @@
             margin-top: 3rem;
             border-top: 1px solid #2d4f6e;
         }
-        .footer-grid {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-        .social-icons i {
-            font-size: 1.6rem;
-            margin-right: 1rem;
-            color: white;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-        .social-icons i:hover {
-            transform: translateY(-4px);
-            color: #3b82f6;
-        }
-        .footer-new .logo-image {
-            height: 40px;
-            width: auto;
-            filter: brightness(0) invert(1);
-            margin-bottom: 12px;
-        }
+        .footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+        .social-icons i { font-size: 1.6rem; margin-right: 1rem; color: white; transition: 0.2s; cursor: pointer; }
+        .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+        .footer-new .logo-image { height: 40px; width: auto; filter: brightness(0) invert(1); margin-bottom: 12px; }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
-            .main-nav-links {
-                gap: 0.35rem;
-            }
+            .main-nav-links { gap: 0.35rem; }
             .main-nav-links > a,
-            .main-nav-links > .dropdown > .dropbtn {
-                font-size: 0.75rem;
-                padding: 0.45rem 0.75rem;
-            }
+            .main-nav-links > .dropdown > .dropbtn { font-size: 0.75rem; padding: 0.45rem 0.75rem; }
         }
         @media (max-width: 800px) {
             .card { padding: 1.5rem; }
@@ -1514,56 +1280,18 @@
             .chart-summary { grid-template-columns: repeat(3, 1fr); }
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
-
-            /* Mobile nav: allow wrapping and scroll */
-            .nav-bottom .container {
-                justify-content: flex-start;
-                overflow-x: auto;
-                padding-bottom: 4px;
-                -webkit-overflow-scrolling: touch;
-            }
-            .main-nav-links {
-                justify-content: flex-start;
-                flex-wrap: nowrap;
-                gap: 0.25rem;
-                padding: 0.1rem 0;
-            }
+            .duplicate-modal .detail-grid { grid-template-columns: 1fr; }
+            .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+            .main-nav-links { justify-content: flex-start; flex-wrap: nowrap; gap: 0.25rem; padding: 0.1rem 0; }
             .main-nav-links > a,
-            .main-nav-links > .dropdown > .dropbtn {
-                font-size: 0.68rem;
-                padding: 0.4rem 0.6rem;
-                white-space: nowrap;
-            }
-            .dropdown-content {
-                position: fixed;
-                left: 50%;
-                transform: translateX(-50%);
-                top: auto;
-                bottom: 20px;
-                min-width: 260px;
-                max-width: 90vw;
-                z-index: 2000;
-            }
-            .submenu-content {
-                position: fixed;
-                left: 50%;
-                transform: translateX(-50%);
-                top: auto;
-                bottom: 20px;
-                min-width: 200px;
-                max-width: 85vw;
-                z-index: 2001;
-            }
-            .dropdown-submenu.open .submenu-content {
-                display: block;
-            }
+            .main-nav-links > .dropdown > .dropbtn { font-size: 0.68rem; padding: 0.4rem 0.6rem; white-space: nowrap; }
+            .dropdown-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 260px; max-width: 90vw; z-index: 2000; }
+            .submenu-content { position: fixed; left: 50%; transform: translateX(-50%); top: auto; bottom: 20px; min-width: 200px; max-width: 85vw; z-index: 2001; }
+            .dropdown-submenu.open .submenu-content { display: block; }
         }
         @media (max-width: 400px) {
             .card { padding: 1rem; }
-            .field-group input, .field-group select, .field-group textarea {
-                padding: 0.6rem 0.9rem;
-                font-size: 0.85rem;
-            }
+            .field-group input, .field-group select, .field-group textarea { padding: 0.6rem 0.9rem; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -1725,7 +1453,7 @@
                     </div>
                     <button type="submit" class="btn-submit" id="training_submitBtn">
                         <i class="fas fa-cloud-upload-alt"></i>
-                        <span>Save to Google Sheet (Training_CLUP/ZO)</span>
+                        <span>Save to Google Sheet (Training CLUP/ZO)</span>
                     </button>
                 </form>
             </div>
@@ -1774,29 +1502,31 @@
     </div>
 </footer>
 
-<!-- ===== LOGIN MODAL ===== -->
-<div id="loginModal" class="login-modal">
-    <div class="login-modal-content">
-        <div class="login-modal-brand">
-            <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
-            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
-            <h3>DHSUD Region VI</h3>
-            <p>ELUPDD · CLUP & ZO Platform</p>
+<!-- ===== DUPLICATE DETECTION MODAL ===== -->
+<div class="modal-overlay duplicate-modal" id="duplicateModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Possible Duplicate Record</h2>
+            <button class="close-btn" id="closeDuplicateBtn"><i class="fas fa-times"></i></button>
         </div>
-        <div class="login-modal-body">
-            <form id="modalLoginForm">
-                <div class="input-group">
-                    <label><i class="fas fa-envelope"></i> Email Address</label>
-                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+        <div class="modal-body">
+            <div class="duplicate-warning">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text">
+                    <h3>A matching record has been found in the database.</h3>
+                    <p>Please review the existing record below to avoid duplicate entries.</p>
                 </div>
-                <div class="input-group">
-                    <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
-                </div>
-                <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
-            </form>
+            </div>
+            <div class="duplicate-record-detail" id="duplicateRecordDetail"></div>
+            <div class="duplicate-actions">
+                <button class="btn-dup-secondary" id="cancelDuplicateBtn">Cancel &amp; Review</button>
+                <button class="btn-dup-danger" id="proceedDuplicateBtn">Yes, Save Anyway</button>
+            </div>
         </div>
-        <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+        <div class="modal-footer">
+            <span class="record-count">⚠️ Duplicate check triggered</span>
+            <button class="btn-close-modal" id="closeDuplicateFooterBtn">Close</button>
+        </div>
     </div>
 </div>
 
@@ -2006,6 +1736,32 @@
     </div>
 </div>
 
+<!-- ===== LOGIN MODAL ===== -->
+<div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+        <div class="login-modal-brand">
+            <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+            <img src="img/DHSUD_LOGO.png" alt="DHSUD Logo" />
+            <h3>DHSUD Region VI</h3>
+            <p>ELUPDD · CLUP & ZO Platform</p>
+        </div>
+        <div class="login-modal-body">
+            <form id="modalLoginForm">
+                <div class="input-group">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="modalLoginEmail" placeholder="name@dhsud.gov.ph" required />
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="modalLoginPassword" placeholder="Enter your password" required />
+                </div>
+                <button type="submit" class="login-submit-btn" id="loginModalBtn">→ Sign In</button>
+            </form>
+        </div>
+        <div class="login-modal-footer">🔐 Role-Based Access: Admin | Staff/Officer</div>
+    </div>
+</div>
+
 <script>
     // ============================================
     // TOAST NOTIFICATION SYSTEM
@@ -2021,7 +1777,7 @@
     // ============================================
     // CONFIG
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzlwKZg92vFXB6sx3wBNS68UNOxZNSh7-J5uUCqOLqmKwyOjkBGogNzo4m6enPeZZXo_g/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby-IpCU1_tHpzqPzzEK2nBBrE6bfeZcpfVL4ZFUxklG7ACrQPew895PemdHHN6QV-P6ZQ/exec';
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/16fN6OsGQtUno_KPCc2W1A1VktolQTN1oYnSFG4MybbQ/edit?usp=sharing';
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
 
@@ -2278,6 +2034,9 @@
     let editingRowNumber = null;
     const modalBodyContent = document.getElementById('modalBodyContent');
 
+    // Duplicate detection state
+    let pendingDuplicatePayload = null;
+
     const filterCategory = document.getElementById('filterCategory');
 
     function setStatus(message, type = 'info') {
@@ -2286,6 +2045,7 @@
         const icon = statusDiv.querySelector('i');
         if (type === 'success') { statusDiv.classList.add('success'); icon.className = 'fas fa-check-circle'; }
         else if (type === 'error') { statusDiv.classList.add('error'); icon.className = 'fas fa-exclamation-circle'; }
+        else if (type === 'warning') { statusDiv.classList.add('warning'); icon.className = 'fas fa-exclamation-triangle'; }
         else { icon.className = 'fas fa-info-circle'; }
     }
 
@@ -2355,7 +2115,92 @@
     }
 
     // ============================================
-    // VALIDATE & SUBMIT
+// DUPLICATE DETECTION
+// Fields: Province, City/Municipality, Training Category,
+//         Start Date, End Date, No. of Participants, Reporting Month
+// Dates are ALWAYS compared in YYYY-MM-DD internally.
+// ============================================
+async function checkDuplicate(payload) {
+    try {
+        const params = new URLSearchParams({
+            action: 'checkDuplicate',
+            province: payload.province || '',
+            cityMun: payload.cityMun || '',
+            trainingCategory: payload.trainingCategory || '',
+            startDate: payload.startDate || '',
+            endDate: payload.endDate || '',
+            participants: payload.participants || '',
+            reportingMonth: payload.reportingMonth || '',
+            _: Date.now()
+        });
+        const response = await fetch(WEB_APP_URL + '?' + params.toString());
+        const result = await response.json();
+        if (result.result === 'success' && result.duplicate) {
+            return result.duplicate;
+        }
+        return null;
+    } catch (error) {
+        console.error('Duplicate check error:', error);
+        return null;
+    }
+}
+
+    // ============================================
+    // SHOW DUPLICATE MODAL
+    // ============================================
+    function showDuplicateModal(match, payload) {
+        pendingDuplicatePayload = payload;
+
+        const detailDiv = document.getElementById('duplicateRecordDetail');
+        const r = match;
+
+        const displayStart = formatDate(r['Start Date of Training Conducted'] || '-');
+        const displayEnd = formatDate(r['End Date of Training Conducted'] || '-');
+
+        detailDiv.innerHTML = `
+            <h4><i class="fas fa-file-alt" style="margin-right:6px;"></i> Existing Training Record (Row ${r._rowNumber || '—'})</h4>
+            <div class="detail-grid">
+                <div class="detail-item"><span class="detail-label">Province</span><span class="detail-value">${r.Province || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">City/Municipality</span><span class="detail-value">${r['City/Municipality'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Training Category</span><span class="detail-value">${r['Training Category'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Start Date</span><span class="detail-value">${displayStart}</span></div>
+                <div class="detail-item"><span class="detail-label">End Date</span><span class="detail-value">${displayEnd}</span></div>
+                <div class="detail-item"><span class="detail-label">No. of Participants</span><span class="detail-value">${r['No. of Participants'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Reporting Month</span><span class="detail-value">${r['Reporting Month'] || '-'}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Training Title</span><span class="detail-value">${(r['Training Title'] || '-').substring(0, 100)}${(r['Training Title'] || '').length > 100 ? '…' : ''}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Personnel In-Charge</span><span class="detail-value">${r['Personnel In-Charge'] || '-'}</span></div>
+            </div>
+        `;
+
+        document.getElementById('duplicateModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        showToast('⚠️ Possible Duplicate', 'A matching record has been found. Review the existing record.', 'warning');
+    }
+
+    function closeDuplicateModal() {
+        document.getElementById('duplicateModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        pendingDuplicatePayload = null;
+    }
+
+    document.getElementById('closeDuplicateBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('closeDuplicateFooterBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('cancelDuplicateBtn').addEventListener('click', function() {
+        closeDuplicateModal();
+        showToast('🛑 Save cancelled', 'Please review the existing record before saving.', 'info');
+    });
+    document.getElementById('proceedDuplicateBtn').addEventListener('click', async function() {
+        if (pendingDuplicatePayload) {
+            closeDuplicateModal();
+            await submitRecord(pendingDuplicatePayload, true);
+        }
+    });
+    document.getElementById('duplicateModal').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('duplicateModal')) closeDuplicateModal();
+    });
+
+    // ============================================
+    // VALIDATE & SUBMIT (with duplicate check)
     // ============================================
     function validateForm(payload) {
         const required = ['region','province','cityMun','trainingTitle','trainingTopics','trainingCategory','startDate','endDate','participants','budget','partner','reportingMonth','personnelInCharge'];
@@ -2372,6 +2217,19 @@
         e.preventDefault();
         const payload = getFormData();
         if (!validateForm(payload)) return;
+
+        // Duplicate check
+        showToast('🔍 Checking for duplicates...', 'Please wait while we verify the record.', 'info', 2000);
+        const match = await checkDuplicate(payload);
+        if (match) {
+            showDuplicateModal(match, payload);
+            return;
+        }
+
+        await submitRecord(payload, false);
+    });
+
+    async function submitRecord(payload, forceSave = false) {
         const btn = document.getElementById('training_submitBtn');
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Saving...';
@@ -2382,7 +2240,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            showToast('✅ Success', 'Training record saved to Google Sheet!', 'success');
+            showToast('✅ Success', 'Training record saved to Google Sheet!' + (forceSave ? ' (confirmed duplicate)' : ''), 'success');
             trainingForm.reset();
             document.getElementById('training_startDate').value = new Date().toISOString().split('T')[0];
             document.getElementById('training_endDate').value = new Date().toISOString().split('T')[0];
@@ -2395,7 +2253,7 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet (Training_CLUP/ZO)</span>';
         }
-    });
+    }
 
     // ============================================
     // RECORDS MODAL
@@ -2422,7 +2280,7 @@
         const monthFilter = filterReportingMonth.value;
         const categoryFilter = filterCategory.value;
         const picFilter = filterPIC.value;
-        
+
         filteredRecords = allRecords.filter(record => {
             if (provinceFilter !== 'all' && (record.Province || '') !== provinceFilter) return false;
             if (monthFilter !== 'all' && (record['Reporting Month'] || '') !== monthFilter) return false;
@@ -2505,9 +2363,6 @@
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
-            // *** FIX: Use the actual row number from the sheet (stored in the record) ***
-            // If the record has a `_rowNumber` property (set by the backend), use it;
-            // otherwise fall back to index + 2 for backward compatibility.
             const actualRow = record._rowNumber || (index + 2);
             const isEditing = editingRowNumber === actualRow;
 
@@ -2574,7 +2429,6 @@
     window.startEditRow = function(rowNumber) { editingRowNumber = rowNumber; applyRecordFilters(); };
     window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
 
-    // *** FIX: saveEditRow now uses the actual row number from the record, not the filtered index ***
     window.saveEditRow = async function(rowNumber) {
         const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
         if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
@@ -2584,7 +2438,6 @@
         const updatedData = {};
         inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
 
-        // Find the original record by matching the row number
         const originalRecord = allRecords.find((rec, idx) => {
             const recRow = rec._rowNumber || (idx + 2);
             return recRow === rowNumber;
@@ -2626,7 +2479,6 @@
         finally { if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } }
     };
 
-    // *** FIX: deleteRecord uses the actual row number from the record ***
     window.deleteRecord = async function(rowNumber) {
         if (!confirm('Delete this record? This cannot be undone.')) return;
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
@@ -2911,7 +2763,7 @@
             const logoutBtn = document.getElementById("logoutDropdownBtn");
             if (logoutBtn) logoutBtn.addEventListener("click", () => {
                 localStorage.removeItem("dhsud_session");
-                showToast("Logged out successfully.", "success");
+                showToast('Logged out successfully.', "success");
                 setTimeout(() => { window.location.href = "training.html"; }, 700);
             });
         } else {
