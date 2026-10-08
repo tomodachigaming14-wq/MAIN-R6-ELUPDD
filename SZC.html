@@ -11,6 +11,8 @@
   <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
    * {
     margin: 0;
@@ -3905,6 +3907,34 @@ label[for="lguSelect"] {
             }
         }
 
+        /**
+         * ✅ NEW: Trigger the backend to sync the "Certification (SZC)" sheet
+         * from the "ZoningCertifications" sheet.
+         * Called after any save / update / delete.
+         */
+        async function syncSZCCertSheet() {
+            try {
+                console.log("🔄 Requesting backend to sync Certification (SZC) sheet...");
+                const resp = await fetch(BACKEND_URL, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ action: "sync_szc_certification" })
+                });
+                const res = await resp.json();
+                console.log("📥 SZC sync response:", res);
+                if (res.success) {
+                    console.log(`✅ Certification (SZC) synced: ${res.count || 0} records`);
+                } else {
+                    console.warn("⚠️ SZC sync failed:", res.error);
+                }
+                return res;
+            } catch (e) {
+                console.error("❌ SZC sync error:", e);
+                return { success: false, error: e.toString() };
+            }
+        }
+
         let isLoadingCertifications = false;
         let lastFetchTime = 0;
         const CACHE_DURATION = 60000;
@@ -4628,6 +4658,7 @@ label[for="lguSelect"] {
                 const res = await resp.json();
                 if (res.success) {
                     showToast(`✅ Synced status update to sheet`);
+                    await syncSZCCertSheet();   // ← Auto-sync SZC after status update
                 } else {
                     showToast(`⚠️ Local update only. Sheet error: ${res.error || "Unknown"}`, "error");
                 }
@@ -4716,6 +4747,7 @@ label[for="lguSelect"] {
             } else {
                 showToast(`⚠️ Deleted locally: ${certNo} (sheet sync failed: ${sheetError || "Unknown"})`, "error");
             }
+            await syncSZCCertSheet();   // ← Auto-sync SZC after delete
             await fetchCertifications();
         }
 
@@ -4846,6 +4878,7 @@ label[for="lguSelect"] {
                 id: recordIdForSync
             };
             await syncToSheet(syncRecord, wasEditing ? "update" : "add");
+            await syncSZCCertSheet();   // ← Auto-sync SZC after save
             await fetchCertifications();
             switchZoningView("status");
             return false;
@@ -5220,25 +5253,154 @@ label[for="lguSelect"] {
             document.getElementById("reportModal").classList.add("active");
         }
 
+        /**
+         * ✅ FIXED: Export Accomplishment to Excel
+         * Matches the "Certification (SZC)" sheet format exactly:
+         * Control No. | Requesting Party | Certification Issued | Date Issued (MM/DD/YYYY) |
+         * Report Month | Owner / Proponents | Location | No. of Parcel/s | Total Area (ha) |
+         * Longitude (X) | Latitude (Y) | No. of Days Processed | Remarks
+         */
         function exportAccomplishmentToExcel() {
-            let released = zoningCertifications.filter((r) => r.status === "Released");
+            // Get released records (same filter as the on-screen table)
+            let search = document.getElementById("accSearch")?.value.toLowerCase() || "";
+            let typeFilter = document.getElementById("accTypeFilter")?.value || "";
+            let dateFrom = document.getElementById("accDateFrom")?.value;
+            let dateTo = document.getElementById("accDateTo")?.value;
+
+            let released = zoningCertifications.filter((r) => {
+                if (r.status !== "Released") return false;
+                if (search &&
+                    !(r.certificationNo || "").toLowerCase().includes(search) &&
+                    !(r.location || "").toLowerCase().includes(search) &&
+                    !(r.requestedBy || "").toLowerCase().includes(search))
+                    return false;
+                if (typeFilter && r.certificationIssued !== typeFilter) return false;
+                if (dateFrom && r.dateIssued < dateFrom) return false;
+                if (dateTo && r.dateIssued > dateTo) return false;
+                return true;
+            });
+
             if (!released.length) {
-                alert("No released records");
+                showToast("No released records to export", "error");
                 return;
             }
-            let ws = XLSX.utils.json_to_sheet(
-                released.map((r) => ({
-                    "Cert No": r.certificationNo,
-                    "Requested By": r.requestedBy,
-                    Type: r.certificationIssued,
-                    "Date Issued": r.dateIssued,
-                    Location: r.location,
-                    Area: r.totalArea,
-                }))
-            );
-            let wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Released");
-            XLSX.writeFile(wb, `SZC_Released_${new Date().toISOString().slice(0, 10)}.xlsx`);
+
+            // Sort ascending by cert number (natural numeric order)
+            released.sort((a, b) => {
+                const extractNum = (s) => {
+                    const m = String(s || "").match(/(\d+)$/);
+                    return m ? parseInt(m[1], 10) : 0;
+                };
+                return extractNum(a.certificationNo) - extractNum(b.certificationNo);
+            });
+
+            // ----- Helpers -----
+            function formatDateMMDDYYYY(val) {
+                if (!val) return "";
+                try {
+                    let d = new Date(val);
+                    if (isNaN(d.getTime())) {
+                        const m = String(val).match(/^(\d{4})-(\d{2})-(\d{2})/);
+                        if (m) d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+                        else return String(val);
+                    }
+                    const mm = String(d.getMonth() + 1).padStart(2, "0");
+                    const dd = String(d.getDate()).padStart(2, "0");
+                    const yyyy = d.getFullYear();
+                    return `${mm}/${dd}/${yyyy}`;
+                } catch (e) { return String(val); }
+            }
+
+            function getMonthName(val) {
+                if (!val) return "";
+                try {
+                    let d = new Date(val);
+                    if (isNaN(d.getTime())) {
+                        const m = String(val).match(/^(\d{4})-(\d{2})-(\d{2})/);
+                        if (m) d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+                        else {
+                            const m2 = String(val).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                            if (m2) d = new Date(parseInt(m2[3]), parseInt(m2[1]) - 1, parseInt(m2[2]));
+                            else return String(val);
+                        }
+                    }
+                    return d.toLocaleString("en-US", { month: "long" });
+                } catch (e) { return String(val); }
+            }
+
+            function computeDaysProcessed(dateReceived, dateIssued) {
+                if (!dateReceived || !dateIssued) return "";
+                try {
+                    let d1 = new Date(dateReceived);
+                    let d2 = new Date(dateIssued);
+                    if (isNaN(d1.getTime())) {
+                        const m = String(dateReceived).match(/^(\d{4})-(\d{2})-(\d{2})/);
+                        if (m) d1 = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+                    }
+                    if (isNaN(d2.getTime())) {
+                        const m = String(dateIssued).match(/^(\d{4})-(\d{2})-(\d{2})/);
+                        if (m) d2 = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+                    }
+                    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) return "";
+                    const diffMs = d2.getTime() - d1.getTime();
+                    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 ? diffDays : 0;
+                } catch (e) { return ""; }
+            }
+
+            // ----- Build array-of-arrays -----
+            const headers = [
+                "Control No. (if available)",
+                "Requesting Party",
+                "Certification Issued",
+                "Date Issued (MM/DD/YYYY)",
+                "Report Month",
+                "Owner / Proponents",
+                "Location",
+                "No. of Parcel/s",
+                "Total Area (ha)",
+                "Longitude (X)",
+                "Latitude (Y)",
+                "No. of Days Processed",
+                "Remarks"
+            ];
+
+            const rows = released.map(r => [
+                r.certificationNo || "",
+                r.requestedBy || "",
+                r.certificationIssued || "",
+                formatDateMMDDYYYY(r.dateIssued),
+                getMonthName(r.dateReceived),
+                r.requestedBy || "",
+                r.location || "",
+                r.parcels || (r.landHoldings ? r.landHoldings.length : ""),
+                r.totalArea ? parseFloat(r.totalArea) : "",
+                r.longitude || "",
+                r.latitude || "",
+                computeDaysProcessed(r.dateReceived, r.dateIssued),
+                r.remarks || ""
+            ]);
+
+            // ----- Create worksheet -----
+            const wsData = [headers, ...rows];
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+            // Column widths
+            ws["!cols"] = [
+                { wch: 22 }, { wch: 24 }, { wch: 22 }, { wch: 18 },
+                { wch: 14 }, { wch: 24 }, { wch: 38 }, { wch: 12 },
+                { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 30 }
+            ];
+            ws["!rows"] = [{ hpt: 30 }];
+
+            // ----- Create workbook and download -----
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Accomplishment");
+
+            const filename = `SZC_Accomplishment_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            XLSX.writeFile(wb, filename);
+
+            showToast(`✅ Exported ${released.length} released records`, "success");
         }
 
         function switchZoningView(view) {
