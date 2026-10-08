@@ -166,6 +166,8 @@
         .ta-status-message.success i { color: #10b981; }
         .ta-status-message.error { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
         .ta-status-message.error i { color: #dc2626; }
+        .ta-status-message.warning { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .ta-status-message.warning i { color: #f59e0b; }
         .ta-footer-note { margin-top: 1.5rem; font-size: 0.65rem; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1.2rem; letter-spacing: 0.5px; }
 
         /* ===== MODALS ===== */
@@ -210,7 +212,7 @@
         .modal-footer .btn-close-modal { background: #2563eb; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; }
         .modal-footer .btn-close-modal:hover { background: #1d4ed8; }
 
-        /* ===== RECORDS FILTER BAR (based on image) ===== */
+        /* ===== RECORDS FILTER BAR ===== */
         .records-filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -315,6 +317,30 @@
         .add-person-modal .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 0.3rem; display: none; }
         .add-person-modal .error-msg.show { display: block; }
 
+        /* ===== DUPLICATE MODAL ===== */
+        .duplicate-modal .modal-box { max-width: 720px; border-radius: 24px; }
+        .duplicate-modal .modal-header { background: #fef3c7; border-bottom: 2px solid #fcd34d; border-radius: 24px 24px 0 0; }
+        .duplicate-modal .modal-header h2 { color: #92400e; }
+        .duplicate-modal .modal-header h2 i { color: #f59e0b; }
+        .duplicate-modal .modal-body { padding: 1.5rem 2rem; }
+        .duplicate-modal .modal-footer { background: #fef3c7; border-top: 1px solid #fcd34d; border-radius: 0 0 24px 24px; }
+        .duplicate-modal .duplicate-warning { display: flex; align-items: flex-start; gap: 16px; background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+        .duplicate-modal .duplicate-warning .warning-icon { font-size: 2.5rem; color: #f59e0b; flex-shrink: 0; }
+        .duplicate-modal .duplicate-warning .warning-text h3 { font-size: 1.1rem; font-weight: 700; color: #92400e; margin-bottom: 0.3rem; }
+        .duplicate-modal .duplicate-warning .warning-text p { font-size: 0.85rem; color: #78350f; }
+        .duplicate-modal .duplicate-record-detail { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+        .duplicate-modal .duplicate-record-detail h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 0.8rem; font-weight: 700; }
+        .duplicate-modal .duplicate-record-detail .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+        .duplicate-modal .duplicate-record-detail .detail-item { display: flex; flex-direction: column; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-label { font-size: 0.6rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.3px; font-weight: 600; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-value { font-size: 0.85rem; color: #0f172a; font-weight: 500; }
+        .duplicate-modal .duplicate-record-detail .detail-item.full-width { grid-column: 1 / -1; }
+        .duplicate-modal .duplicate-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+        .duplicate-modal .btn-dup-secondary { background: #e2e8f0; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; color: #334155; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-family: "Inter", sans-serif; }
+        .duplicate-modal .btn-dup-secondary:hover { background: #cbd5e1; }
+        .duplicate-modal .btn-dup-danger { background: #dc2626; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-family: "Inter", sans-serif; }
+        .duplicate-modal .btn-dup-danger:hover { background: #b91c1c; }
+
         /* ===== VIEW RECORD MODAL ===== */
         .view-record-modal .modal-box { max-width: 600px; }
         .view-record-modal .modal-body { padding: 1.5rem; }
@@ -362,6 +388,7 @@
             .records-filter-bar .filter-group { flex-wrap: wrap; }
             .records-filter-bar select, .records-filter-bar input { min-width: 100%; }
             .records-filter-bar .filter-btn { width: 100%; justify-content: center; }
+            .duplicate-modal .detail-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 700px) {
             .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
@@ -570,6 +597,36 @@
     </div>
 </footer>
 
+<!-- ===== DUPLICATE DETECTION MODAL ===== -->
+<div class="modal-overlay duplicate-modal" id="duplicateModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Possible Duplicate Record</h2>
+            <button class="close-btn" id="closeDuplicateBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="duplicate-warning">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text">
+                    <h3>A matching record has been found in the database.</h3>
+                    <p>Please review the existing record below to avoid duplicate entries.</p>
+                </div>
+            </div>
+            <div class="duplicate-record-detail" id="duplicateRecordDetail">
+                <!-- filled dynamically -->
+            </div>
+            <div class="duplicate-actions">
+                <button class="btn-dup-secondary" id="cancelDuplicateBtn">Cancel &amp; Review</button>
+                <button class="btn-dup-danger" id="proceedDuplicateBtn">Yes, Save Anyway</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="record-count">⚠️ Duplicate check triggered</span>
+            <button class="btn-close-modal" id="closeDuplicateFooterBtn">Close</button>
+        </div>
+    </div>
+</div>
+
 <!-- ===== RECORDS MODAL ===== -->
 <div class="modal-overlay" id="recordsModal">
     <div class="modal-box">
@@ -578,7 +635,7 @@
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" id="modalBody">
-            <!-- Filter Bar (based on the uploaded image) -->
+            <!-- Filter Bar -->
             <div class="records-filter-bar" id="recordsFilterBar">
                 <div class="filter-group">
                     <label for="filterPsgc">PSGC:</label>
@@ -850,13 +907,13 @@
                 picNames = result.names;
                 populatePicDropdown();
                 updatePICFilters();
-                populateRecordsFilterPIC(); // new
+                populateRecordsFilterPIC();
                 return picNames;
             } else {
                 picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
                 populatePicDropdown();
                 updatePICFilters();
-                populateRecordsFilterPIC(); // new
+                populateRecordsFilterPIC();
                 return picNames;
             }
         } catch (error) {
@@ -864,7 +921,7 @@
             picNames = ['Juan Dela Cruz', 'Maria Santos', 'Jose Rizal', 'Andres Bonifacio', 'Gabriela Silang'];
             populatePicDropdown();
             updatePICFilters();
-            populateRecordsFilterPIC(); // new
+            populateRecordsFilterPIC();
             return picNames;
         }
     }
@@ -916,7 +973,6 @@
         }
     }
 
-    // New: populate the records filter PIC dropdown
     function populateRecordsFilterPIC() {
         const filterPic = document.getElementById('filterPic');
         if (!filterPic) return;
@@ -969,7 +1025,7 @@
         picNames.push(name);
         populatePicDropdown();
         updatePICFilters();
-        populateRecordsFilterPIC(); // new
+        populateRecordsFilterPIC();
         await savePICNamesToSheet(picNames);
         document.getElementById('hs_pic').value = name;
         showToast('✅ Success', `"${name}" added to Personnel In-Charge list.`, 'success');
@@ -999,7 +1055,7 @@
             picNames.splice(index, 1);
             populatePicDropdown();
             updatePICFilters();
-            populateRecordsFilterPIC(); // new
+            populateRecordsFilterPIC();
             await savePICNamesToSheet(picNames);
             showToast('🗑️ Removed', `"${selectedName}" removed from Personnel In-Charge list.`, 'info');
         }
@@ -1129,6 +1185,9 @@
     let filteredRecords = [];
     let editingRowNumber = null;
 
+    // Duplicate detection state
+    let pendingDuplicatePayload = null;
+
     // ============================================
     // FORM LOGIC
     // ============================================
@@ -1183,7 +1242,110 @@
     }
 
     // ============================================
-    // FORM SUBMIT
+    // DUPLICATE DETECTION
+    // Fields: Province, City/Municipality, Type of Assistance, Planned/Requested, Date Conducted, Reporting Month
+    // ============================================
+    async function checkDuplicate(payload) {
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=records&type=HOUSING_SUB', { method: 'GET' });
+            const result = await response.json();
+            if (result.result !== 'success' || !result.records) return null;
+
+            const records = result.records;
+
+            const province = (payload.province || '').trim().toLowerCase();
+            const cityMun = (payload.cityMun || '').trim().toLowerCase();
+            const assistance = (payload.assistanceType || '').trim().toLowerCase();
+            const planned = (payload.plannedRequested || '').trim().toLowerCase();
+            const dateConducted = (payload.dateConducted || '').trim().toLowerCase();
+            const reportingMonth = (payload.reportingMonth || '').trim().toLowerCase();
+
+            const match = records.find(r => {
+                const rProvince = (r.Province || '').trim().toLowerCase();
+                const rCity = (r['City/Municipality'] || '').trim().toLowerCase();
+                const rAssist = (r['Type of Assistance Provided'] || '').trim().toLowerCase();
+                const rPlanned = (r['Planned / Requested'] || '').trim().toLowerCase();
+                // Date Conducted may come as MM/DD/YYYY from Sheet – normalise
+                let rDate = (r['Date Conducted'] || '').trim();
+                if (typeof rDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(rDate)) {
+                    const parts = rDate.split('/');
+                    rDate = parts[2] + '-' + parts[0] + '-' + parts[1];
+                }
+                rDate = rDate.toLowerCase();
+                const rMonth = (r['Reporting Month'] || '').trim().toLowerCase();
+
+                return rProvince === province &&
+                       rCity === cityMun &&
+                       rAssist === assistance &&
+                       rPlanned === planned &&
+                       rDate === dateConducted &&
+                       rMonth === reportingMonth;
+            });
+
+            return match || null;
+        } catch (error) {
+            console.error('Duplicate check error:', error);
+            return null;
+        }
+    }
+
+    // ============================================
+    // SHOW DUPLICATE MODAL
+    // ============================================
+    function showDuplicateModal(match, payload) {
+        pendingDuplicatePayload = payload;
+
+        const detailDiv = document.getElementById('duplicateRecordDetail');
+        const r = match;
+        let displayDate = r['Date Conducted'] || '-';
+        if (typeof displayDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(displayDate)) {
+            const parts = displayDate.split('-');
+            displayDate = parts[1] + '/' + parts[2] + '/' + parts[0];
+        }
+
+        detailDiv.innerHTML = `
+            <h4><i class="fas fa-file-alt" style="margin-right:6px;"></i> Existing T.A Housing Sub. Record (Row ${r.rowNumber || '—'})</h4>
+            <div class="detail-grid">
+                <div class="detail-item"><span class="detail-label">Province</span><span class="detail-value">${r.Province || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">City/Municipality</span><span class="detail-value">${r['City/Municipality'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Type of Assistance</span><span class="detail-value">${(r['Type of Assistance Provided'] || '-').substring(0, 60)}${(r['Type of Assistance Provided'] || '').length > 60 ? '…' : ''}</span></div>
+                <div class="detail-item"><span class="detail-label">Planned / Requested</span><span class="detail-value">${r['Planned / Requested'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Date Conducted</span><span class="detail-value">${displayDate}</span></div>
+                <div class="detail-item"><span class="detail-label">Reporting Month</span><span class="detail-value">${r['Reporting Month'] || '-'}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Query / TA Details</span><span class="detail-value">${(r['Query/TA Details'] || '-').substring(0, 120)}${(r['Query/TA Details'] || '').length > 120 ? '…' : ''}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Personnel In-Charge</span><span class="detail-value">${r['Personnel In-Charge'] || '-'}</span></div>
+            </div>
+        `;
+
+        document.getElementById('duplicateModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        showToast('⚠️ Possible Duplicate', 'A matching record has been found. Review the existing record.', 'warning');
+    }
+
+    function closeDuplicateModal() {
+        document.getElementById('duplicateModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        pendingDuplicatePayload = null;
+    }
+
+    document.getElementById('closeDuplicateBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('closeDuplicateFooterBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('cancelDuplicateBtn').addEventListener('click', function() {
+        closeDuplicateModal();
+        showToast('🛑 Save cancelled', 'Please review the existing record before saving.', 'info');
+    });
+    document.getElementById('proceedDuplicateBtn').addEventListener('click', async function() {
+        if (pendingDuplicatePayload) {
+            closeDuplicateModal();
+            await submitRecord(pendingDuplicatePayload, true);
+        }
+    });
+    document.getElementById('duplicateModal').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('duplicateModal')) closeDuplicateModal();
+    });
+
+    // ============================================
+    // FORM SUBMIT (with duplicate check)
     // ============================================
     document.getElementById('housingSubForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -1218,6 +1380,18 @@
             }
         }
 
+        // ===== DUPLICATE CHECK =====
+        showToast('🔍 Checking for duplicates...', 'Please wait while we verify the record.', 'info', 2000);
+        const match = await checkDuplicate(payload);
+        if (match) {
+            showDuplicateModal(match, payload);
+            return;
+        }
+
+        await submitRecord(payload, false);
+    });
+
+    async function submitRecord(payload, forceSave = false) {
         const btn = document.getElementById('hs_submitBtn');
         btn.disabled = true;
         btn.innerHTML = '<span class="ta-spinner"></span> Saving...';
@@ -1229,8 +1403,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            showToast('✅ Success', 'Record saved to Google Sheet (T.A Housing Sub.)!', 'success');
-            this.reset();
+            showToast('✅ Success', 'Record saved to Google Sheet (T.A Housing Sub.)!' + (forceSave ? ' (confirmed duplicate)' : ''), 'success');
+            document.getElementById('housingSubForm').reset();
             document.getElementById('hs_dateConducted').value = new Date().toISOString().split('T')[0];
             document.getElementById('hs_region').value = 'Region_06';
             document.getElementById('hs_province').value = '';
@@ -1243,7 +1417,7 @@
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet (T.A Housing Sub.)</span>';
         }
-    });
+    }
 
     // ============================================
     // RECORDS MODAL
@@ -1256,7 +1430,6 @@
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         document.getElementById('recordsModalTitle').textContent = 'T.A Housing Sub. Records';
-        // Reset filter UI to defaults before loading
         document.getElementById('filterPsgc').value = '';
         document.getElementById('filterProvince').value = 'all';
         document.getElementById('filterReportingMonth').value = 'all';
@@ -1295,7 +1468,6 @@
         }
     }
 
-    // ===== APPLY FILTERS (new) =====
     function applyRecordFilters() {
         const psgcFilter = document.getElementById('filterPsgc').value.trim().toLowerCase();
         const provinceFilter = document.getElementById('filterProvince').value;
@@ -1304,24 +1476,17 @@
 
         let filtered = [...allRecords];
 
-        // PSGC search (case-insensitive partial match)
         if (psgcFilter) {
             filtered = filtered.filter(r => 
                 (r['PSGC'] || '').toLowerCase().includes(psgcFilter)
             );
         }
-
-        // Province filter
         if (provinceFilter !== 'all') {
             filtered = filtered.filter(r => (r['Province'] || '') === provinceFilter);
         }
-
-        // Reporting Month filter
         if (monthFilter !== 'all') {
             filtered = filtered.filter(r => (r['Reporting Month'] || '') === monthFilter);
         }
-
-        // PIC filter
         if (picFilter !== 'all') {
             filtered = filtered.filter(r => (r['Personnel In-Charge'] || '') === picFilter);
         }
@@ -1332,7 +1497,6 @@
         editingRowNumber = null;
     }
 
-    // ===== RESET FILTERS (new) =====
     function resetRecordFilters() {
         document.getElementById('filterPsgc').value = '';
         document.getElementById('filterProvince').value = 'all';
@@ -1604,7 +1768,6 @@
             showToast('✅ Success', 'Record updated successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
-            // reapply filters if any are active after reload
             const hasActiveFilter = document.getElementById('filterPsgc').value.trim() !== '' ||
                                     document.getElementById('filterProvince').value !== 'all' ||
                                     document.getElementById('filterReportingMonth').value !== 'all' ||
@@ -1647,7 +1810,6 @@
             showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
-            // reapply filters if any are active after reload
             const hasActiveFilter = document.getElementById('filterPsgc').value.trim() !== '' ||
                                     document.getElementById('filterProvince').value !== 'all' ||
                                     document.getElementById('filterReportingMonth').value !== 'all' ||
@@ -1671,7 +1833,6 @@
     document.getElementById('applyFilterBtn').addEventListener('click', applyRecordFilters);
     document.getElementById('resetFilterBtn').addEventListener('click', resetRecordFilters);
 
-    // Allow pressing Enter in PSGC input to apply filter
     document.getElementById('filterPsgc').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
