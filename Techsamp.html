@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>DHSUD VI | TECHNICAL ASSISTANCE </title>
+    <title>DHSUD VI | TECHNICAL ASSISTANCE · Duplicate Check</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -755,7 +755,7 @@
             <button class="close-btn" id="closeModalBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-filters">
-            <div class="filter-group">
+            <div class="filter-group" id="filterPsgcGroup">
                 <label for="filterPSGC">PSGC:</label>
                 <input type="text" id="filterPSGC" placeholder="Search PSGC..." style="min-width: 120px;">
             </div>
@@ -1452,7 +1452,9 @@
     }
 
     // ============================================
-    // DUPLICATE DETECTION (7-FIELD CHECK)
+    // DUPLICATE DETECTION
+    // CLUP: Province, City/Municipality, Type of Assistance, TA Category, Planned/Requested, Date Conducted, Reporting Month
+    // PDPFP: Province, Type of Assistance, TA Category, Planned/Requested, Date Conducted, Reporting Month
     // ============================================
     async function checkDuplicate(payload, type) {
         try {
@@ -1462,7 +1464,7 @@
 
             const records = result.records;
 
-            // Fields to compare (case‑insensitive, trimmed)
+            // Normalise payload fields (case‑insensitive, trimmed)
             const province = (payload.province || '').trim().toLowerCase();
             const cityMun = (payload.cityMun || '').trim().toLowerCase();
             const assistance = (payload.assistanceType || '').trim().toLowerCase();
@@ -1486,8 +1488,11 @@
                 rDate = rDate.toLowerCase();
                 const rMonth = (r['Reporting Month'] || '').trim().toLowerCase();
 
+                // For CLUP include City/Municipality; for PDPFP skip it
+                const cityMatch = (type === 'CLUP') ? (rCity === cityMun) : true;
+
                 return rProvince === province &&
-                       rCity === cityMun &&
+                       cityMatch &&
                        rAssist === assistance &&
                        rCat === category &&
                        rPlanned === planned &&
@@ -1518,11 +1523,15 @@
             displayDate = parts[1] + '/' + parts[2] + '/' + parts[0];
         }
 
-        detailDiv.innerHTML = `
-            <h4><i class="fas fa-file-alt" style="margin-right:6px;"></i> Existing Record (Row ${r.rowNumber || '—'})</h4>
+        // Build detail grid – conditionally include City/Municipality for CLUP
+        let detailHtml = `
+            <h4><i class="fas fa-file-alt" style="margin-right:6px;"></i> Existing ${type} Record (Row ${r.rowNumber || '—'})</h4>
             <div class="detail-grid">
-                <div class="detail-item"><span class="detail-label">Province</span><span class="detail-value">${r.Province || '-'}</span></div>
-                <div class="detail-item"><span class="detail-label">City/Municipality</span><span class="detail-value">${r['City/Municipality'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Province</span><span class="detail-value">${r.Province || '-'}</span></div>`;
+        if (type === 'CLUP') {
+            detailHtml += `<div class="detail-item"><span class="detail-label">City/Municipality</span><span class="detail-value">${r['City/Municipality'] || '-'}</span></div>`;
+        }
+        detailHtml += `
                 <div class="detail-item"><span class="detail-label">Type of Assistance</span><span class="detail-value">${(r['Type of Assistance Provided'] || '-').substring(0, 60)}${(r['Type of Assistance Provided'] || '').length > 60 ? '…' : ''}</span></div>
                 <div class="detail-item"><span class="detail-label">TA Category</span><span class="detail-value">${r['TA Category'] || '-'}</span></div>
                 <div class="detail-item"><span class="detail-label">Planned / Requested</span><span class="detail-value">${r['Planned / Requested'] || '-'}</span></div>
@@ -1532,6 +1541,7 @@
                 <div class="detail-item full-width"><span class="detail-label">Personnel In-Charge</span><span class="detail-value">${r['Personnel In-Charge'] || '-'}</span></div>
             </div>
         `;
+        detailDiv.innerHTML = detailHtml;
 
         document.getElementById('duplicateModal').classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -1650,6 +1660,15 @@
         recordsModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         document.getElementById('recordsModalTitle').textContent = currentFormType + ' Technical Assistance';
+
+        // Toggle PSGC filter visibility based on form type
+        const filterPsgcGroup = document.getElementById('filterPsgcGroup');
+        if (currentFormType === 'PDPFP') {
+            filterPsgcGroup.style.display = 'none';
+        } else {
+            filterPsgcGroup.style.display = 'flex';
+        }
+
         updatePICFilters();
         loadRecords();
     }
@@ -1724,17 +1743,39 @@
     }
 
     function renderTable(records) {
+        // Determine if we are showing CLUP or PDPFP – hide PSGC & City/Municipality for PDPFP
+        const isCLUP = currentFormType === 'CLUP';
+
         if (!records || records.length === 0) {
-            modalBody.innerHTML = `<table><thead><tr><th>#</th><th>PSGC</th><th>Region</th><th>Province</th><th>City/Municipality</th><th>Query Details</th><th>Assistance Type</th><th>TA Category</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel In-Charge</th><th>Actions</th></tr></thead><tbody><tr class="no-records"><td colspan="13">📭 No records found for ${currentFormType}.</td></tr></tbody></table>`;
+            // Build header columns based on form type
+            let headerCols = `<th>#</th>`;
+            if (isCLUP) {
+                headerCols += `<th>PSGC</th>`;
+            }
+            headerCols += `<th>Region</th><th>Province</th>`;
+            if (isCLUP) {
+                headerCols += `<th>City/Municipality</th>`;
+            }
+            headerCols += `<th>Query Details</th><th>Assistance Type</th><th>TA Category</th><th>Planned/Requested</th><th>Date Conducted</th><th>Reporting Month</th><th>Personnel In-Charge</th><th>Actions</th>`;
+
+            const colCount = isCLUP ? 13 : 11; // # + 11 for CLUP (PSGC + City), # + 9 for PDPFP
+
+            modalBody.innerHTML = `<table><thead><tr>${headerCols}</tr></thead><tbody><tr class="no-records"><td colspan="${colCount}">📭 No records found for ${currentFormType}.</td></tr></tbody></table>`;
             displayCount.textContent = '0';
             return;
         }
 
-        const columns = [
-            { key: 'PSGC', label: 'PSGC' },
-            { key: 'Region', label: 'Region' },
-            { key: 'Province', label: 'Province' },
-            { key: 'City/Municipality', label: 'City/Municipality' },
+        // Define columns – exclude PSGC and City/Municipality for PDPFP
+        let columns = [];
+        if (isCLUP) {
+            columns.push({ key: 'PSGC', label: 'PSGC' });
+        }
+        columns.push({ key: 'Region', label: 'Region' });
+        columns.push({ key: 'Province', label: 'Province' });
+        if (isCLUP) {
+            columns.push({ key: 'City/Municipality', label: 'City/Municipality' });
+        }
+        columns.push(
             { key: 'Query / TA Details', label: 'Query Details' },
             { key: 'Type of Assistance Provided', label: 'Assistance Type' },
             { key: 'TA Category', label: 'TA Category' },
@@ -1742,7 +1783,7 @@
             { key: 'Date Conducted', label: 'Date Conducted' },
             { key: 'Reporting Month', label: 'Reporting Month' },
             { key: 'Personnel In-Charge', label: 'Personnel In-Charge' }
-        ];
+        );
 
         let html = `<table><thead><tr><th>#</th>`;
         columns.forEach(col => html += `<th>${col.label}</th>`);
