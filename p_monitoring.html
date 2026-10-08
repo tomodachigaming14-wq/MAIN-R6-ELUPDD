@@ -167,7 +167,33 @@
         .status-message.success i { color: #10b981; }
         .status-message.error { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
         .status-message.error i { color: #dc2626; }
+        .status-message.warning { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+        .status-message.warning i { color: #f59e0b; }
         .footer-note { margin-top: 1.5rem; font-size: 0.65rem; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 1.2rem; letter-spacing: 0.5px; }
+
+        /* ===== DUPLICATE MODAL ===== */
+        .duplicate-modal .modal-box { max-width: 720px; border-radius: 24px; }
+        .duplicate-modal .modal-header { background: #fef3c7; border-bottom: 2px solid #fcd34d; border-radius: 24px 24px 0 0; }
+        .duplicate-modal .modal-header h2 { color: #92400e; }
+        .duplicate-modal .modal-header h2 i { color: #f59e0b; }
+        .duplicate-modal .modal-body { padding: 1.5rem 2rem; }
+        .duplicate-modal .modal-footer { background: #fef3c7; border-top: 1px solid #fcd34d; border-radius: 0 0 24px 24px; }
+        .duplicate-modal .duplicate-warning { display: flex; align-items: flex-start; gap: 16px; background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+        .duplicate-modal .duplicate-warning .warning-icon { font-size: 2.5rem; color: #f59e0b; flex-shrink: 0; }
+        .duplicate-modal .duplicate-warning .warning-text h3 { font-size: 1.1rem; font-weight: 700; color: #92400e; margin-bottom: 0.3rem; }
+        .duplicate-modal .duplicate-warning .warning-text p { font-size: 0.85rem; color: #78350f; }
+        .duplicate-modal .duplicate-record-detail { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+        .duplicate-modal .duplicate-record-detail h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 0.8rem; font-weight: 700; }
+        .duplicate-modal .duplicate-record-detail .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; }
+        .duplicate-modal .duplicate-record-detail .detail-item { display: flex; flex-direction: column; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-label { font-size: 0.6rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.3px; font-weight: 600; }
+        .duplicate-modal .duplicate-record-detail .detail-item .detail-value { font-size: 0.85rem; color: #0f172a; font-weight: 500; }
+        .duplicate-modal .duplicate-record-detail .detail-item.full-width { grid-column: 1 / -1; }
+        .duplicate-modal .duplicate-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+        .duplicate-modal .btn-dup-secondary { background: #e2e8f0; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; color: #334155; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-family: "Inter", sans-serif; }
+        .duplicate-modal .btn-dup-secondary:hover { background: #cbd5e1; }
+        .duplicate-modal .btn-dup-danger { background: #dc2626; border: none; padding: 0.6rem 1.5rem; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; font-family: "Inter", sans-serif; }
+        .duplicate-modal .btn-dup-danger:hover { background: #b91c1c; }
 
         /* ===== MODALS ===== */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); z-index: 99999; justify-content: center; align-items: center; padding: 1rem; animation: fadeIn 0.3s ease; }
@@ -376,6 +402,7 @@
             .monthly-activity-section table { font-size: 0.6rem; }
             .detail-modal .detail-row { flex-direction: column; }
             .detail-modal .detail-label { min-width: auto; }
+            .duplicate-modal .detail-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 700px) {
             .nav-bottom .container { justify-content: flex-start; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
@@ -523,6 +550,34 @@
     </div>
 </div>
 
+<!-- ===== DUPLICATE DETECTION MODAL ===== -->
+<div class="modal-overlay duplicate-modal" id="duplicateModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Possible Duplicate Record</h2>
+            <button class="close-btn" id="closeDuplicateBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="duplicate-warning">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text">
+                    <h3>A matching record has been found in the database.</h3>
+                    <p>Please review the existing record below to avoid duplicate entries.</p>
+                </div>
+            </div>
+            <div class="duplicate-record-detail" id="duplicateRecordDetail"></div>
+            <div class="duplicate-actions">
+                <button class="btn-dup-secondary" id="cancelDuplicateBtn">Cancel &amp; Review</button>
+                <button class="btn-dup-danger" id="proceedDuplicateBtn">Yes, Save Anyway</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span class="record-count">⚠️ Duplicate check triggered</span>
+            <button class="btn-close-modal" id="closeDuplicateFooterBtn">Close</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay detail-modal" id="detailModal">
     <div class="modal-box">
         <div class="modal-header"><h2><i class="fas fa-info-circle"></i> Record Details</h2><button class="close-btn" id="closeDetailModalBtn"><i class="fas fa-times"></i></button></div>
@@ -594,6 +649,9 @@
     let currentUser = null;
     let activityLog = [], monthlyRecords = [];
 
+    // Duplicate detection state
+    let pendingDuplicatePayload = null;
+
     // ============================================
     // TOAST
     // ============================================
@@ -613,17 +671,17 @@
     // ============================================
     // SESSION / USER MENU
     // ============================================
-    function checkSession() { 
-        const raw = localStorage.getItem("dhsud_session"); 
-        if (raw) { 
-            try { 
-                const s = JSON.parse(raw); 
-                const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60); 
-                if (diff < 12 && s.email) { currentUser = s; return true; } 
-                else localStorage.removeItem("dhsud_session"); 
-            } catch(e) { localStorage.removeItem("dhsud_session"); } 
-        } 
-        currentUser = null; return false; 
+    function checkSession() {
+        const raw = localStorage.getItem("dhsud_session");
+        if (raw) {
+            try {
+                const s = JSON.parse(raw);
+                const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60);
+                if (diff < 12 && s.email) { currentUser = s; return true; }
+                else localStorage.removeItem("dhsud_session");
+            } catch(e) { localStorage.removeItem("dhsud_session"); }
+        }
+        currentUser = null; return false;
     }
     function getUserInitials(n) { if(!n) return "U"; let p = n.split(" "); if(p.length>=2) return (p[0][0]+p[1][0]).toUpperCase(); return n.substring(0,2).toUpperCase(); }
     function getRoleLabel(r) { if(r==="admin") return "👑 Admin"; if(r==="encoder"||r==="staff") return "📋 Staff/Officer"; return "👁️ Viewer"; }
@@ -784,6 +842,128 @@
     function getCitiesByProvince(province) { const cities = []; for (const [psgc, data] of Object.entries(psgcData)) { if (data.province === province) cities.push({ psgc, city: data.city }); } return cities.sort((a, b) => a.city.localeCompare(b.city)); }
 
     // ============================================
+    // DUPLICATE DETECTION
+    // Fields: Province, City/Municipality, Type of Monitoring,
+    //         Initial Status, Updated Status, Date of Monitoring Conducted, Reporting Month
+    // ============================================
+    async function checkDuplicate(payload) {
+        try {
+            const response = await fetch(WEB_APP_URL + '?action=records&type=Plan_Monitoring&_=' + Date.now(), { method: 'GET' });
+            const result = await response.json();
+            if (result.result !== 'success' || !result.records) return null;
+
+            const records = result.records;
+
+            // Normalize date to YYYY-MM-DD for comparison
+            function normalizeDate(d) {
+                if (d === null || d === undefined || d === '') return '';
+                if (d instanceof Date) {
+                    const y = d.getFullYear();
+                    const m = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    return `${y}-${m}-${day}`;
+                }
+                const s = String(d).trim();
+                if (!s) return '';
+                if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+                if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
+                    const p = s.split('/');
+                    return `${p[2]}-${p[0].padStart(2,'0')}-${p[1].padStart(2,'0')}`;
+                }
+                const parsed = new Date(s);
+                if (!isNaN(parsed.getTime())) {
+                    return `${parsed.getFullYear()}-${String(parsed.getMonth()+1).padStart(2,'0')}-${String(parsed.getDate()).padStart(2,'0')}`;
+                }
+                return s;
+            }
+
+            function norm(v) {
+                return String(v === null || v === undefined ? '' : v).trim().toLowerCase();
+            }
+
+            const province = norm(payload.province);
+            const cityMun = norm(payload.cityMun);
+            const typeMonitoring = norm(payload.typeMonitoring);
+            const initialStatus = norm(payload.initialStatus);
+            const updatedStatus = norm(payload.updatedStatus);
+            const dateConducted = normalizeDate(payload.dateConducted);
+            const reportingMonth = norm(payload.reportingMonth);
+
+            const match = records.find(r => {
+                const rProvince = norm(r.Province);
+                const rCity = norm(r['City/Municipality']);
+                const rType = norm(r['Type of Monitoring']);
+                const rInitial = norm(r['Initial Status']);
+                const rUpdated = norm(r['Updated Status']);
+                const rDate = normalizeDate(r['Date of Monitoring Conducted (MM/DD/YYYY)'] || r['Date of Monitoring Conducted']);
+                const rMonth = norm(r['Reporting Month']);
+
+                return rProvince === province &&
+                       rCity === cityMun &&
+                       rType === typeMonitoring &&
+                       rInitial === initialStatus &&
+                       rUpdated === updatedStatus &&
+                       rDate === dateConducted &&
+                       rMonth === reportingMonth;
+            });
+
+            return match || null;
+        } catch (error) {
+            console.error('Duplicate check error:', error);
+            return null;
+        }
+    }
+
+    function showDuplicateModal(match, payload) {
+        pendingDuplicatePayload = payload;
+
+        const detailDiv = document.getElementById('duplicateRecordDetail');
+        const r = match;
+
+        const displayDate = formatDate(r['Date of Monitoring Conducted (MM/DD/YYYY)'] || r['Date of Monitoring Conducted'] || '-');
+
+        detailDiv.innerHTML = `
+            <h4><i class="fas fa-file-alt" style="margin-right:6px;"></i> Existing Plan Monitoring Record (Row ${r._rowNumber || '—'})</h4>
+            <div class="detail-grid">
+                <div class="detail-item"><span class="detail-label">Province</span><span class="detail-value">${r.Province || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">City/Municipality</span><span class="detail-value">${r['City/Municipality'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Type of Monitoring</span><span class="detail-value">${r['Type of Monitoring'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Initial Status</span><span class="detail-value">${r['Initial Status'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Updated Status</span><span class="detail-value">${r['Updated Status'] || '-'}</span></div>
+                <div class="detail-item"><span class="detail-label">Date Conducted</span><span class="detail-value">${displayDate}</span></div>
+                <div class="detail-item"><span class="detail-label">Reporting Month</span><span class="detail-value">${r['Reporting Month'] || '-'}</span></div>
+                <div class="detail-item full-width"><span class="detail-label">Personnel In-Charge</span><span class="detail-value">${r['Personnel In-Charge'] || '-'}</span></div>
+            </div>
+        `;
+
+        document.getElementById('duplicateModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        showToast('⚠️ Possible Duplicate', 'A matching record has been found. Review the existing record.', 'warning');
+    }
+
+    function closeDuplicateModal() {
+        document.getElementById('duplicateModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        pendingDuplicatePayload = null;
+    }
+
+    document.getElementById('closeDuplicateBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('closeDuplicateFooterBtn').addEventListener('click', closeDuplicateModal);
+    document.getElementById('cancelDuplicateBtn').addEventListener('click', function() {
+        closeDuplicateModal();
+        showToast('🛑 Save cancelled', 'Please review the existing record before saving.', 'info');
+    });
+    document.getElementById('proceedDuplicateBtn').addEventListener('click', async function() {
+        if (pendingDuplicatePayload) {
+            closeDuplicateModal();
+            await submitRecord(pendingDuplicatePayload, true);
+        }
+    });
+    document.getElementById('duplicateModal').addEventListener('click', function(e) {
+        if (e.target === document.getElementById('duplicateModal')) closeDuplicateModal();
+    });
+
+    // ============================================
     // FORM HANDLING
     // ============================================
     const planForm = document.getElementById('planForm');
@@ -810,12 +990,24 @@
         const required = ['region','province','typeMonitoring','dateConducted','reportingMonth','personnelInCharge'];
         for (const f of required) { if (!payload[f]) { showToast('❌ Validation Error', 'Please fill in all required fields.', 'error'); return; } }
 
+        // Duplicate check
+        showToast('🔍 Checking for duplicates...', 'Please wait while we verify the record.', 'info', 2000);
+        const match = await checkDuplicate(payload);
+        if (match) {
+            showDuplicateModal(match, payload);
+            return;
+        }
+
+        await submitRecord(payload, false);
+    });
+
+    async function submitRecord(payload, forceSave = false) {
         const btn = document.getElementById('plan_submitBtn');
         btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving...';
         try {
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            showToast('✅ Success', 'Record saved to Google Sheet!', 'success');
-            const detailMsg = (payload.initialStatus ? 'Initial Status: ' + payload.initialStatus : '') + 
+            showToast('✅ Success', 'Record saved to Google Sheet!' + (forceSave ? ' (confirmed duplicate)' : ''), 'success');
+            const detailMsg = (payload.initialStatus ? 'Initial Status: ' + payload.initialStatus : '') +
                               (payload.updatedStatus ? (payload.initialStatus ? ' → ' : '') + payload.updatedStatus : '');
             await addActivityLog('Added', payload.province, payload.cityMun, detailMsg || 'New record added');
             planForm.reset();
@@ -826,7 +1018,7 @@
             if (recordsModal.classList.contains('active')) await loadRecords();
         } catch (err) { showToast('❌ Error', 'Failed to save. Please check your connection.', 'error'); }
         finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet</span>'; }
-    });
+    }
 
     // ============================================
     // ACTIVITY LOG
@@ -881,11 +1073,11 @@
         log.innerHTML = activityLog.slice(0, 20).map(e => {
             const action = normalizeAction(e.action);
             const badgeClass = action === 'Added' ? 'added' : action === 'Updated' ? 'updated' : 'deleted';
-            
+
             let displayText = '';
             if (e.province) displayText += e.province;
             if (e.city) displayText += (displayText ? ' · ' : '') + e.city;
-            
+
             if (action === 'Added') {
                 // Just province and city
             } else if (action === 'Deleted') {
@@ -893,9 +1085,9 @@
             } else if (action === 'Updated' && e.details) {
                 displayText += ' - ' + e.details;
             }
-            
+
             if (!displayText) displayText = e.details || 'Activity recorded';
-            
+
             let timeStr = '';
             try {
                 const d = new Date(e.time);
@@ -1045,7 +1237,6 @@
             const rowNum = index + 1;
             const actualRow = index + 2;
             const isEditing = editingRowNumber === actualRow;
-            // *** FIX: Store region in data attribute so it can be reused on save ***
             const recordRegion = record['Region'] || 'Region_06';
             html += `<tr class="${isEditing ? 'editing-row' : ''}" data-row="${actualRow}" data-record-index="${index}" data-region="${recordRegion}">`;
             html += `<td style="padding:0.3rem 0.3rem; border-bottom:1px solid #f1f5f9; color:#334155; font-size:0.65rem; text-align:center;">${rowNum}</td>`;
@@ -1139,7 +1330,6 @@
         if (isNaN(recordIndex) || recordIndex < 0 || recordIndex >= filteredRecords.length) { if (saveBtn) saveBtn.disabled = false; return; }
         const original = filteredRecords[recordIndex];
         const sheetRowNumber = recordIndex + 2;
-        // *** FIX: Preserve the original Region when editing ***
         const originalRegion = row.dataset.region || original['Region'] || 'Region_06';
         const newInitialStatus = updatedData['Initial Status'] !== undefined ? updatedData['Initial Status'] : (original['Initial Status'] || '');
         const newUpdatedStatus = updatedData['Updated Status'] !== undefined ? updatedData['Updated Status'] : (original['Updated Status'] || '');
@@ -1154,7 +1344,6 @@
         const payload = {
             action: 'updateRecord', rowNumber: sheetRowNumber, formType: 'Plan_Monitoring',
             data: {
-                // *** FIX: Include region so it is not wiped out on update ***
                 region: originalRegion,
                 province: updatedData['Province'] || original['Province'] || '',
                 cityMun: updatedData['City/Municipality'] !== undefined ? updatedData['City/Municipality'] : (original['City/Municipality'] || ''),
