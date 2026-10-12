@@ -5520,18 +5520,21 @@ label[for="lguSelect"] {
             return dateStr;
         }
     };
+    
+    // Helper function to format date with ordinal suffix (e.g., 28th day of September 2026)
     const formatOrdinalDateLong = (dateStr) => {
-        if (!dateStr) return "8th day of September 2026"; // Default fallback
+        if (!dateStr) return "";
         try {
             let d = new Date(dateStr);
-            if (isNaN(d.getTime())) return "8th day of September 2026";
+            if (isNaN(d.getTime())) return dateStr;
             let day = d.getDate();
             let suffix = ["th", "st", "nd", "rd"][day % 10 > 3 || Math.floor((day % 100) / 10) == 1 ? 0 : day % 10];
             return `${day}${suffix} day of ${d.toLocaleDateString("en-PH", { month: "long", year: "numeric" })}`;
         } catch (e) {
-            return "8th day of September 2026";
+            return dateStr;
         }
     };
+
     let printedByName = "ADMIN";
     let printedDate = new Date().toLocaleString('en-US', {
         month: '2-digit',
@@ -5559,6 +5562,7 @@ label[for="lguSelect"] {
     const amountPaid = rec.amountPaid ? formatCurrency(rec.amountPaid) : "0.00";
     const orNo = rec.orNo || "_________";
     const orDateRaw = rec.orDate || rec.dateIssued;
+    
     let landRowsHtml = "";
     let totalAreaSum = 0;
     const holdings = Array.isArray(rec.landHoldings) && rec.landHoldings.length ?
@@ -5584,6 +5588,7 @@ label[for="lguSelect"] {
             <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
             <td style="border:1px solid #000000; padding:8px; text-decoration:none;"></td>
           </tr>`;
+          
     let approvalDateFormatted = "_________";
     if (finalApprovalDate && finalApprovalDate !== "") {
         approvalDateFormatted = formatDateForDisplay(finalApprovalDate);
@@ -5596,6 +5601,7 @@ label[for="lguSelect"] {
     }
     console.log("📅 Final approval date for print:", approvalDateFormatted);
     console.log("📋 Final Circular No for print:", finalCircularNo);
+    
     const clupStatus = rec.clupStatus || "approved";
     const check1 = clupStatus === "approved" ? "[✓]" : "[ ]";
     const check2 = clupStatus === "pending" ? "[✓]" : "[ ]";
@@ -5606,10 +5612,12 @@ label[for="lguSelect"] {
     if (finalProvince && finalProvince !== "" && finalProvince !== "__________") {
         locationDisplay += `, ${escapeHtml(finalProvince)}`;
     }
+    
     const showConversionText = rec.purpose !== "Conversion" &&
         (rec.purpose && rec.purpose.toLowerCase().trim() !== "conversion");
     console.log("🔍 Purpose:", rec.purpose);
     console.log("🔍 showConversionText:", showConversionText);
+    
     const statusHtml = `
             <div style="margin-bottom: 35px;">
                 <p style="margin:0 0 8px 0; font-size:12pt; font-weight:bold;">1. ${check1} WITH APPROVED CLUP/ZO</p>
@@ -5685,9 +5693,17 @@ label[for="lguSelect"] {
             </div>
         `;
     
-    // FIX: Use September 8, 2026 as the certification date regardless of record date
-    const formattedDateIssued = "8th day of September 2026";
+    // ✅ FIXED: Dynamically format the date based on the actual record's dateIssued
+    let formattedDateIssued = "8th day of September 2026"; // Fallback
+    if (rec.dateIssued) {
+        formattedDateIssued = formatOrdinalDateLong(rec.dateIssued);
+    } else {
+        console.warn("⚠️ No dateIssued found in record. Using default.");
+    }
+    console.log("📅 Final dateIssued for print:", formattedDateIssued);
+
     const orDateFormatted = formatMonthDayYear(orDateRaw);
+    
     const printHtml = `<!DOCTYPE html>
                 <html>
                 <head>
