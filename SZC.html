@@ -2870,7 +2870,7 @@ label[for="lguSelect"] {
                             <span style="font-weight: 600; font-size: 0.8rem">📊 Sort By:</span>
                             <select id="statusSortOrder" class="form-control" style="width: auto; min-width: 120px" onchange="renderStatusTable()">
                                 <option value="asc">⬆️ Ascending (A-Z / 0-9)</option>
-                                <option value="desc">⬇️ Descending (Z-A / 9-0)</option>
+                                <option value="desc" selected>⬇️ Descending (Z-A / 9-0)</option>
                             </select>
                         </div>
                         <div class="sticky-table-container">
@@ -2911,7 +2911,7 @@ label[for="lguSelect"] {
                             <span style="font-weight: 600; font-size: 0.8rem">📊 Sort By:</span>
                             <select id="accSortOrder" class="form-control" style="width: auto; min-width: 120px" onchange="renderAccomplishmentTable()">
                                 <option value="asc">⬆️ Ascending (A-Z / 0-9)</option>
-                                <option value="desc">⬇️ Descending (Z-A / 9-0)</option>
+                                <option value="desc" selected>⬇️ Descending (Z-A / 9-0)</option>
                             </select>
                         </div>
                         <div class="summary-stats">
@@ -4080,7 +4080,6 @@ label[for="lguSelect"] {
                     } else {
                         console.log("📭 No CLUP records found anywhere, using fallback");
                         clupRecords = [
-                            // (full fallback data omitted for brevity - included in original)
                             { Province: "Aklan", LGU: "Altavas", Approved_By: "Sangguniang Panlalawigan", Latest_Plan_Res: "SP Resolution 2021-1544", Latest_Date_of_Approval: "2021-12-13" },
                             { Province: "Aklan", LGU: "Balete", Approved_By: "Sangguniang Panlalawigan", Latest_Plan_Res: "SP Resolution 05-118", Latest_Date_of_Approval: "2005-04-13" },
                             { Province: "Aklan", LGU: "Banga", Approved_By: "Sangguniang Panlalawigan", Latest_Plan_Res: "SP Resolution 2018-886", Latest_Date_of_Approval: "2018-06-25" },
@@ -4413,7 +4412,7 @@ label[for="lguSelect"] {
             let statusFilter = document.getElementById("statusFilter")?.value || "";
             let typeFilter = document.getElementById("typeFilter")?.value || "";
             const sortOrderSelect = document.getElementById("statusSortOrder");
-            let sortOrder = sortOrderSelect ? sortOrderSelect.value : "asc";
+            let sortOrder = sortOrderSelect ? sortOrderSelect.value : "desc";
             const allRecords = zoningCertifications || [];
             const pendingCount = allRecords.filter(r => r.status === "Pending" || !r.status).length;
             const forReviewCount = allRecords.filter(r => r.status === "For Review").length;
@@ -4494,6 +4493,8 @@ label[for="lguSelect"] {
             let typeFilter = document.getElementById("accTypeFilter")?.value || "";
             let dateFrom = document.getElementById("accDateFrom")?.value;
             let dateTo = document.getElementById("accDateTo")?.value;
+            const sortOrderSelect = document.getElementById("accSortOrder");
+            let sortOrder = sortOrderSelect ? sortOrderSelect.value : "desc";
             let filtered = zoningCertifications.filter((r) => {
                 if (r.status !== "Released") return false;
                 if (search &&
@@ -4506,7 +4507,16 @@ label[for="lguSelect"] {
                 if (dateTo && r.dateIssued > dateTo) return false;
                 return true;
             });
-            filtered.sort((a, b) => new Date(b.dateIssued) - new Date(a.dateIssued));
+            filtered.sort((a, b) => {
+                const extractNumber = (str) => {
+                    if (!str) return 0;
+                    const match = String(str).match(/(\d+)$/);
+                    return match ? parseInt(match[1]) : 0;
+                };
+                const numA = extractNumber(a.certificationNo);
+                const numB = extractNumber(b.certificationNo);
+                return sortOrder === "asc" ? numA - numB : numB - numA;
+            });
             currentFilteredData = filtered;
             const totalArea = filtered.reduce((sum, r) => sum + (parseFloat(r.totalArea) || 0), 0);
             const currentMonth = new Date().getMonth();
@@ -5914,9 +5924,9 @@ label[for="lguSelect"] {
         }
 
         let statusSortField = "certificationNo";
-        let statusSortOrder = "asc";
+        let statusSortOrder = "desc";
         let accSortField = "certificationNo";
-        let accSortOrder = "asc";
+        let accSortOrder = "desc";
 
         function naturalSortCertNumbers(a, b, field) {
             let valA = a[field] || "";
