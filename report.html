@@ -1151,7 +1151,23 @@
       const dateStr = now.toLocaleDateString("en-US", { year:'numeric', month:'2-digit', day:'2-digit' });
       const timeStr = now.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', hour12:true });
       
-      const getField = (obj, ...keys) => { for (const k of keys) { if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k]; } return ""; };
+      // Enhanced dynamic field extractor to handle different possible column names / spacing from the Google Sheet
+      const getField = (obj, ...keys) => {
+        for (const k of keys) {
+          if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") return obj[k];
+        }
+        const normKeys = keys.map(k => k.toLowerCase().replace(/[^a-z0-9]/g, ''));
+        for (const objKey in obj) {
+          const normObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+          if (normKeys.includes(normObjKey)) {
+            if (obj[objKey] !== undefined && obj[objKey] !== null && String(obj[objKey]).trim() !== "") {
+              return obj[objKey];
+            }
+          }
+        }
+        return "";
+      };
+
       const city = getField(lguData, "City/Municipality", "city", "City", "Municipality", "municipality");
       const province = getField(lguData, "Province", "province");
       const incomeClass = getField(lguData, "Income Class", "incomeClass", "Income Classification");
@@ -1179,7 +1195,18 @@
       
       const shelterPlan = getField(lguData, "LGU with Local Shelter Plan", "With Local Shelter Plan");
       const housingSubsector = getField(lguData, "LGU with Integrated Housing Subsector", "With Integrated Housing Subsector");
-      const commPlan = getField(lguData, "LGU with Integrated Communications Plan", "With Communication Plan", "With Communications Plan");
+      
+      // EXPANDED MATCHING FOR COMMUNICATION PLAN
+      const commPlan = getField(
+        lguData, 
+        "LGU with Communications Plan", 
+        "LGU with Integrated Communications Plan", 
+        "With Communication Plan", 
+        "With Communications Plan", 
+        "Communication Plan", 
+        "Communications Plan"
+      );
+      
       const riskInformed = getField(lguData, "Risk-Informed", "Risk Informed", "RiskInformed") || "Not Specified";
       const urbanDevTarget = getField(lguData, "Urban Development", "Urban Development Target", "Urban Dev't Target", "UrbanDevTarget");
       const targetYearUrbanDevt = getField(lguData, "Target Year_Urban Devt", "Target Year (Urban Dev't)", "Target Year Urban Devt", "TargetYearUrbanDevt", "Target Year_Urban_Devt");
@@ -1225,7 +1252,10 @@
       extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year (Urban Dev't) :</span><span class="value">${escapeHtml(targetYearUrbanDevt || '—')}</span></div>`;
       extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>`;
       extraStatusFieldsHtml += `<div class="info-item"><span class="label">PLANADO Target :</span><span class="value">${escapeHtml(planadoTarget)}</span></div>`;
+      
+      // This is the line that now correctly displays the Yes for Comm Plan
       extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>`;
+      
       extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year :</span><span class="value">${escapeHtml(targetYear || '—')}</span></div>`;
 
       const printHtml = `
