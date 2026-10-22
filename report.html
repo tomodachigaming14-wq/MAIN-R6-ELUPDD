@@ -1244,20 +1244,17 @@
         return html;
       }
 
-      let extraStatusFieldsHtml = '';
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Risk-Informed :</span><span class="value">${escapeHtml(riskInformed)}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText)}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Urban Development Target :</span><span class="value">${escapeHtml(urbanDevTarget || '—')}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || '—')}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year (Urban Dev't) :</span><span class="value">${escapeHtml(targetYearUrbanDevt || '—')}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Integrated Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || '—')}</span></div>`;
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">PLANADO Target :</span><span class="value">${escapeHtml(planadoTarget)}</span></div>`;
-      
-      // This is the line that now correctly displays the Yes for Comm Plan
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || '—')}</span></div>`;
-      
-      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year :</span><span class="value">${escapeHtml(targetYear || '—')}</span></div>`;
-
+                  let extraStatusFieldsHtml = '';
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Risk-Informed :</span><span class="value">${escapeHtml(riskInformed || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Specific Status :</span><span class="value">${escapeHtml(specificStatusText || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Urban Development Target :</span><span class="value">${escapeHtml(urbanDevTarget || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Local Shelter Plan :</span><span class="value">${escapeHtml(shelterPlan || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year (Urban Dev't) :</span><span class="value">${escapeHtml(targetYearUrbanDevt || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Enhanced Housing Subsector :</span><span class="value">${escapeHtml(housingSubsector || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">PLANADO Target :</span><span class="value">${escapeHtml(planadoTarget || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">With Communication Plan :</span><span class="value">${escapeHtml(commPlan || ' ')}</span></div>`;
+      extraStatusFieldsHtml += `<div class="info-item"><span class="label">Target Year :</span><span class="value">${escapeHtml(targetYear || ' ')}</span></div>`;
+	  
       const printHtml = `
         <html><head><style>
           * { color: #000000 !important; }
