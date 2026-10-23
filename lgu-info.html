@@ -486,13 +486,14 @@
         if (data && data.length > 0) {
           return data.map(record => {
             let clupStatus = record["PDPFP/CLUP Status"] || record["CLUP Status"] || record["clupStatus"] || record["Status"] || "";
+            // FIX: Added "City/Municipality" mapping to correctly read the updated column name
             return {
               id: record.id || record["id"] || generateId(),
               psgc: record.psgc || record["PSGC"] || "",
               incomeClass: record.incomeClass || record["Income Class"] || "",
               region: record.region || record["Region"] || "REGION VI (WESTERN VISAYAS)",
               province: record.province || record["Province"] || "",
-              municipality: record.municipality || record["Municipality"] || record["LGU Name"] || "",
+              municipality: record.municipality || record["Municipality"] || record["City/Municipality"] || record["LGU Name"] || "",
               mayor: record.mayor || record["Name of Local Chief Executive"] || "",
               viceMayor: record.viceMayor || record["Name of Vice Governor/Mayor"] || "",
               email: record.email || record["Official Email Address of LGU"] || "",
@@ -517,7 +518,7 @@
       try {
         const record = {
           "PSGC": lguData.psgc || "", "Income Class": lguData.incomeClass || "", "Region": "REGION VI (WESTERN VISAYAS)",
-          "Province": lguData.province || "", "Municipality": lguData.municipality || "",
+          "Province": lguData.province || "", "City/Municipality": lguData.municipality || "", // Updated key to match sheet
           "Name of Local Chief Executive": lguData.mayor || "", "Name of Vice Governor/Mayor": lguData.viceMayor || "",
           "Official Email Address of LGU": lguData.email || "", "Official Phone/Landline Number of LGU": lguData.landline || "",
           "Name of C/M/PPDC": lguData.mpdc || "", "C/M/PPDO Email Address": lguData.mpdcEmail || "",
@@ -539,7 +540,7 @@
       try {
         const record = {
           "PSGC": lguData.psgc || "", "Income Class": lguData.incomeClass || "", "Region": "REGION VI (WESTERN VISAYAS)",
-          "Province": lguData.province || "", "Municipality": lguData.municipality || "",
+          "Province": lguData.province || "", "City/Municipality": lguData.municipality || "", // Updated key to match sheet
           "Name of Local Chief Executive": lguData.mayor || "", "Name of Vice Governor/Mayor": lguData.viceMayor || "",
           "Official Email Address of LGU": lguData.email || "", "Official Phone/Landline Number of LGU": lguData.landline || "",
           "Name of C/M/PPDC": lguData.mpdc || "", "C/M/PPDO Email Address": lguData.mpdcEmail || "",
