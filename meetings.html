@@ -123,6 +123,7 @@
             line-height: 1.2;
         }
 
+        /* Hover effect – box style */
         .main-nav-links > a:hover,
         .main-nav-links > .dropdown > .dropbtn:hover {
             background: #eff6ff;
@@ -132,6 +133,7 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
         }
 
+        /* Active / Highlighted state */
         .main-nav-links > a.active,
         .main-nav-links > .dropdown > .dropbtn.active {
             background: #2563eb;
@@ -147,6 +149,7 @@
             color: #ffffff;
         }
 
+        /* Dropdown arrow for active state */
         .main-nav-links > .dropdown > .dropbtn.active::after {
             opacity: 1;
         }
@@ -173,41 +176,44 @@
             font-family: inherit;
         }
         .dropdown-content {
-            display: none;
-            position: absolute;
-            background: white;
-            min-width: 220px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            z-index: 1000;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 1px solid #eef2ff;
-            padding: 0.3rem 0;
-            animation: dropFade 0.2s ease;
-            margin-top: 0;
-        }
-        .dropdown-content::before {
-            content: "";
-            position: absolute;
-            top: -12px;
-            left: 0;
-            right: 0;
-            height: 12px;
-            background: transparent;
-        }
-        @keyframes dropFade {
-            from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .dropdown {
-            padding-bottom: 6px;
-            margin-bottom: -6px;
-        }
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 220px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    z-index: 1000;
+    top: 100%;              /* was calc(100% + 8px) — remove the gap */
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #eef2ff;
+    padding: 0.3rem 0;
+    animation: dropFade 0.2s ease;
+    /* Add extra invisible padding at top so mouse doesn't leave the hover zone */
+    margin-top: 0;
+}
+/* Invisible "bridge" that fills the gap between button and dropdown */
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -12px;             /* covers the visual gap */
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: transparent;
+}
+@keyframes dropFade {
+    from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+/* Slight delay on close so small mouse slips don't kill it */
+.dropdown {
+    padding-bottom: 6px;    /* extends the hover zone downward */
+    margin-bottom: -6px;    /* compensates visually */
+}
         .dropdown-content a {
             display: block;
             padding: 0.7rem 1.2rem;
@@ -221,7 +227,10 @@
             color: #2563eb;
         }
 
-        .dropdown-submenu { position: relative; }
+        /* Submenus */
+        .dropdown-submenu {
+            position: relative;
+        }
         .submenu-trigger {
             background: none;
             border: none;
@@ -238,36 +247,56 @@
             font-family: inherit;
             transition: background 0.15s ease, color 0.15s ease;
         }
-        .submenu-trigger:hover { background: #eff6ff; color: #2563eb; }
-        .arrow-right { font-size: 0.7rem; margin-left: 1rem; transition: transform 0.2s ease; }
-        .dropdown-submenu.open .arrow-right { transform: rotate(90deg); }
+        .submenu-trigger:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        .arrow-right {
+            font-size: 0.7rem;
+            margin-left: 1rem;
+            transition: transform 0.2s ease;
+        }
+        .dropdown-submenu.open .arrow-right {
+            transform: rotate(90deg);
+        }
         .submenu-content {
-            display: none;
-            position: absolute;
-            left: 100%;
-            top: 0;
-            background: white;
-            min-width: 180px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            border: 1px solid #eef2ff;
-            z-index: 1001;
-            padding: 0.3rem 0;
-        }
-        .submenu-content::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -10px;
-            bottom: 0;
-            width: 10px;
-            background: transparent;
-        }
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: white;
+    min-width: 180px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    border: 1px solid #eef2ff;
+    z-index: 1001;
+    padding: 0.3rem 0;
+}
+/* Invisible bridge on the left side of the submenu */
+.submenu-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -10px;
+    bottom: 0;
+    width: 10px;
+    background: transparent;
+}
         .dropdown-submenu:hover .submenu-content,
-        .dropdown-submenu.open .submenu-content { display: block; }
-        .submenu-trigger { padding-right: 2rem; }
-        .dropdown-submenu { padding-right: 6px; margin-right: -6px; }
-        .submenu-content a { padding: 0.7rem 1.2rem; }
+.dropdown-submenu.open .submenu-content {
+    display: block;
+}
+/* Extend hover zone for submenu trigger */
+.submenu-trigger {
+    padding-right: 2rem; /* larger clickable/hover area to the right */
+}
+.dropdown-submenu {
+    padding-right: 6px;  /* extend hover to the right */
+    margin-right: -6px;
+}
+        .submenu-content a {
+            padding: 0.7rem 1.2rem;
+        }
 
         /* ===== USER DROPDOWN ===== */
         .user-avatar {
@@ -282,7 +311,10 @@
             font-weight: 700;
             font-size: 0.75rem;
         }
-        .user-name { font-size: 0.7rem; font-weight: 500; }
+        .user-name {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
         .role-badge-header {
             background: #e2e8f0;
             padding: 0.15rem 0.5rem;
@@ -312,7 +344,9 @@
             cursor: pointer;
             font-size: 0.8rem;
         }
-        .user-dropdown-item:hover { background: #f8fafc; }
+        .user-dropdown-item:hover {
+            background: #f8fafc;
+        }
 
         /* ===== MEETINGS ATTENDED CARD ===== */
         .meetings-card {
@@ -337,14 +371,22 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .meetings-header-left { display: flex; align-items: center; gap: 15px; }
+        .meetings-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
         .meetings-header-icon {
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
-        .meetings-header-icon img { height: 52px; width: auto; display: block; }
+        .meetings-header-icon img {
+            height: 52px;
+            width: auto;
+            display: block;
+        }
         .meetings-header h1 {
             font-size: 1.6rem;
             font-weight: 700;
@@ -809,7 +851,10 @@
             transition: 0.2s;
             cursor: pointer;
         }
-        .social-icons i:hover { transform: translateY(-4px); color: #3b82f6; }
+        .social-icons i:hover {
+            transform: translateY(-4px);
+            color: #3b82f6;
+        }
         .footer-new .logo-image {
             height: 40px;
             width: auto;
@@ -828,7 +873,9 @@
             justify-content: center;
             z-index: 10000;
         }
-        .login-modal.active { display: flex; }
+        .login-modal.active {
+            display: flex;
+        }
         .login-modal-content {
             background: white;
             border-radius: 2.5rem;
@@ -860,7 +907,9 @@
             margin-bottom: 0.8rem;
             transition: transform 0.2s;
         }
-        .login-modal-brand img:hover { transform: scale(1.02); }
+        .login-modal-brand img:hover {
+            transform: scale(1.02);
+        }
         .login-modal-brand h3 {
             font-size: 1.6rem;
             font-weight: 800;
@@ -868,7 +917,11 @@
             margin-bottom: 0.2rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .login-modal-brand p { font-size: 0.75rem; opacity: 0.85; margin: 0; }
+        .login-modal-brand p {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            margin: 0;
+        }
         .login-modal-close {
             position: absolute;
             top: 16px;
@@ -882,9 +935,16 @@
             transition: 0.2s;
             z-index: 10;
         }
-        .login-modal-close:hover { opacity: 1; transform: scale(1.1); }
-        .login-modal-body { padding: 2rem 1.8rem 1.8rem; }
-        .login-modal-body .input-group { margin-bottom: 1.3rem; }
+        .login-modal-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .login-modal-body {
+            padding: 2rem 1.8rem 1.8rem;
+        }
+        .login-modal-body .input-group {
+            margin-bottom: 1.3rem;
+        }
         .login-modal-body .input-group label {
             display: block;
             font-size: 0.7rem;
@@ -922,8 +982,15 @@
             margin-top: 0.3rem;
             font-family: 'Inter', sans-serif;
         }
-        .login-submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-        .login-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .login-submit-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .login-submit-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
         .login-modal-footer {
             text-align: center;
             font-size: 0.65rem;
@@ -949,7 +1016,9 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
-            .main-nav-links { gap: 0.35rem; }
+            .main-nav-links {
+                gap: 0.35rem;
+            }
             .main-nav-links > a,
             .main-nav-links > .dropdown > .dropbtn {
                 font-size: 0.75rem;
@@ -995,6 +1064,8 @@
             .chart-filter-row .btn-apply-chart { width: 100%; justify-content: center; }
             .top-bar { flex-direction: column; align-items: stretch; }
             .header-logo-img span { white-space: normal; font-size: 0.7rem; }
+
+            /* Mobile nav: allow wrapping and scroll */
             .nav-bottom .container {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -1033,7 +1104,9 @@
                 max-width: 85vw;
                 z-index: 2001;
             }
-            .dropdown-submenu.open .submenu-content { display: block; }
+            .dropdown-submenu.open .submenu-content {
+                display: block;
+            }
         }
         @media (max-width: 400px) {
             .meetings-card { padding: 1rem; }
@@ -1381,7 +1454,7 @@
     // ============================================
     // CONFIGURATION
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyPwqSfbgQQFdI9S_7H2Ww2eUSvQeW-UHbZkQLF-N1wsWTcVLMlMnxGAtXRgLUXOze1/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzbfyX8R6EKi4BEU5Zem-BKrdchTSGJOqBL9-PU_I1XNLoFMEquW1AZvxht5rNyz9yn/exec';
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1asn7RHb2UTGhj1WZLH_fVulU9mxK4cu6C1kNy71PAsM/edit?usp=sharing';
 
     // ============================================
@@ -1595,41 +1668,6 @@
         }
     }
 
-function renderMainNavigation() {
-        const container = document.getElementById("mainNavContainer");
-        if (!container) return;
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
-
-        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
-        if (currentUser) {
-            const isCertActive = isActive('lc.html') || isActive('SZC.html');
-            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
-            const isTechServicesActive = isActive('Techsamp.html') || isActive('house_sub.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
-
-            navHtml += `
-                <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
-                <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
-                <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="house_sub.html">T.A Housing Sub.</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
-                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
-                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
-                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
-                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
-                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
-                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
-            `;
-        } else {
-            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
-        }
-        container.innerHTML = navHtml;
-        setTimeout(() => {
-            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
-                trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
-            });
-            document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
-        }, 10);
-    }
-    
     // ============================================
     // FORMAT DATE (always MM/DD/YYYY)
     // ============================================
@@ -1759,7 +1797,7 @@ function renderMainNavigation() {
     }
 
     // ============================================
-    // FORM SUBMIT (create new record)
+    // FORM SUBMIT
     // ============================================
     document.getElementById('meetingsForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -1769,12 +1807,7 @@ function renderMainNavigation() {
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Saving...';
         try {
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            });
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             showToast('✅ Success', 'Meeting record saved to Google Sheet!', 'success');
             setStatus('✅ Record saved successfully!', 'success');
             resetForm();
@@ -1817,11 +1850,7 @@ function renderMainNavigation() {
             const response = await fetch(WEB_APP_URL + '?action=records', { method: 'GET' });
             const result = await response.json();
             if (result.result === 'success') {
-                // Ensure every record has a _sheetRow (fallback if backend doesn't send it)
-                allRecords = (result.records || []).map((r, i) => ({
-                    ...r,
-                    _sheetRow: (typeof r._sheetRow === 'number') ? r._sheetRow : (i + 2)
-                }));
+                allRecords = result.records || [];
                 filteredRecords = [...allRecords];
                 totalCount.textContent = allRecords.length;
                 footerTotalCount.textContent = allRecords.length;
@@ -1862,8 +1891,7 @@ function renderMainNavigation() {
 
         records.forEach((record, index) => {
             const rowNum = index + 1;
-            // ✅ use the actual sheet row from backend; fall back to index+2
-            const actualRow = (typeof record._sheetRow === 'number') ? record._sheetRow : (index + 2);
+            const actualRow = index + 2;
             const isEditing = editingRowNumber === actualRow;
             const rowClass = isEditing ? 'editing-row' : 'clickable-row';
 
@@ -1925,11 +1953,10 @@ function renderMainNavigation() {
     const detailBodyContent = document.getElementById('detailBodyContent');
 
     function openDetailView(rowNumber) {
-        // ✅ Look up by _sheetRow, not by index
-        const record = allRecords.find(r => (r._sheetRow || 0) === rowNumber)
-                    || filteredRecords.find(r => (r._sheetRow || 0) === rowNumber);
-        if (!record) { showToast('❌ Error', 'Record not found.', 'error'); return; }
+        const recordIndex = rowNumber - 2;
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); return; }
 
+        const record = filteredRecords[recordIndex];
         const meeting = record['Meeting'] || 'Untitled Meeting';
         const reportingMonth = record['Reporting Month'] || '';
         const linkMov = record['Link to MOV'] || '';
@@ -1982,6 +2009,41 @@ function renderMainNavigation() {
         document.body.style.overflow = 'hidden';
     }
 
+function renderMainNavigation() {
+        const container = document.getElementById("mainNavContainer");
+        if (!container) return;
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+
+        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+        if (currentUser) {
+            const isCertActive = isActive('lc.html') || isActive('SZC.html');
+            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+            const isTechServicesActive = isActive('Techsamp.html') || isActive('house_sub.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+            navHtml += `
+                <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+                <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+                <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="house_sub.html">T.A Housing Sub.</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+            `;
+        } else {
+            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+        }
+        container.innerHTML = navHtml;
+        setTimeout(() => {
+            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+                trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
+            });
+            document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
+        }, 10);
+    }
+
     function closeDetailView() {
         detailModal.classList.remove('active');
         if (!recordsModal.classList.contains('active')) document.body.style.overflow = 'auto';
@@ -2008,53 +2070,38 @@ function renderMainNavigation() {
     window.saveEditRow = async function(rowNumber) {
         const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
         if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
-
         const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
-        if (!row) {
-            showToast('❌ Error', 'Row not found.', 'error');
-            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
-            return;
-        }
+        if (!row) { showToast('❌ Error', 'Row not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
 
         const inputs = row.querySelectorAll('input, select, textarea');
         const updatedData = {};
         inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
 
-        // ✅ Find original by _sheetRow, not by index
-        const originalRecord = allRecords.find(r => (r._sheetRow || 0) === rowNumber);
-        if (!originalRecord) {
-            showToast('❌ Error', 'Record not found.', 'error');
-            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
-            return;
-        }
+        const recordIndex = rowNumber - 2;
+        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
+        const originalRecord = filteredRecords[recordIndex];
 
         const payload = {
             action: 'updateRecord',
             rowNumber: rowNumber,
             formType: 'MEETINGS',
             data: {
-                meeting:            updatedData['Meeting']             ?? originalRecord['Meeting']             ?? '',
-                agenda:             updatedData['Agenda / Objectives'] ?? originalRecord['Agenda / Objectives'] ?? '',
-                dateOfMeeting:      updatedData['Date of Meeting']     ?? originalRecord['Date of Meeting']     ?? '',
-                proponents:         updatedData['Proponents']          ?? originalRecord['Proponents']          ?? '',
-                reportingMonth:     updatedData['Reporting Month']     ?? originalRecord['Reporting Month']     ?? '',
-                remarks:            updatedData['Remarks']             ?? originalRecord['Remarks']             ?? 'N/A',
-                linkMov:            updatedData['Link to MOV']         ?? originalRecord['Link to MOV']         ?? '',
-                personnelInCharge:  updatedData['Personnel In-Charge'] ?? originalRecord['Personnel In-Charge'] ?? ''
+                meeting: updatedData['Meeting'] || originalRecord['Meeting'] || '',
+                agenda: updatedData['Agenda / Objectives'] || originalRecord['Agenda / Objectives'] || '',
+                dateOfMeeting: updatedData['Date of Meeting'] || originalRecord['Date of Meeting'] || '',
+                proponents: updatedData['Proponents'] || originalRecord['Proponents'] || '',
+                reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
+                remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
+                linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
+                personnelInCharge: updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || ''
             }
         };
 
         try {
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            });
-            // Re-read the sheet to reflect actual backend state
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            showToast('✅ Success', 'Record updated successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
-            showToast('✅ Success', 'Record updated successfully!', 'success');
         } catch (error) {
             showToast('❌ Error', 'Failed to update record: ' + error.message, 'error');
         } finally {
@@ -2067,15 +2114,10 @@ function renderMainNavigation() {
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
         if (deleteBtn) { deleteBtn.classList.add('loading'); deleteBtn.disabled = true; }
         try {
-            await fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'MEETINGS' })
-            });
+            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'MEETINGS' }) });
+            showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
             editingRowNumber = null;
             await loadRecords();
-            showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
         } catch (error) {
             showToast('❌ Error', 'Failed to delete record: ' + error.message, 'error');
         } finally {
@@ -2097,8 +2139,7 @@ function renderMainNavigation() {
         renderTable(filteredRecords);
         displayCount.textContent = filteredRecords.length;
         footerTotalCount.textContent = filteredRecords.length;
-        // NOTE: don't clear editingRowNumber here — the row identifier is now
-        // the real sheet row, so an in-progress edit can survive a filter change.
+        editingRowNumber = null;
     }
 
     document.getElementById('applyRecordFilter').addEventListener('click', applyRecordFilters);
@@ -2119,6 +2160,7 @@ function renderMainNavigation() {
         });
         renderTable(filtered);
         displayCount.textContent = filtered.length;
+        editingRowNumber = null;
     });
 
     // ============================================
@@ -2281,84 +2323,273 @@ function renderMainNavigation() {
                     data: dataValues,
                     backgroundColor: [
                         'rgba(37, 99, 235, 0.85)', 'rgba(59, 130, 246, 0.85)', 'rgba(96, 165, 250, 0.85)',
-                        'rgba(147, 197, 253, 0.85)', 'rgba(16, 185, 129, 0.85)', 'rgba(5, 150, 105, 0.85)',
-                        'rgba(245, 158, 11, 0.85)', 'rgba(217, 119, 6, 0.85)', 'rgba(239, 68, 68, 0.85)',
-                        'rgba(220, 38, 38, 0.85)', 'rgba(139, 92, 246, 0.85)', 'rgba(124, 58, 237, 0.85)'
+                        'rgba(16, 185, 129, 0.85)', 'rgba(52, 211, 153, 0.85)', 'rgba(251, 191, 36, 0.85)',
+                        'rgba(245, 158, 11, 0.85)', 'rgba(239, 68, 68, 0.85)', 'rgba(248, 113, 113, 0.85)',
+                        'rgba(139, 92, 246, 0.85)', 'rgba(167, 139, 250, 0.85)', 'rgba(236, 72, 153, 0.85)'
                     ],
                     borderColor: [
                         'rgba(37, 99, 235, 1)', 'rgba(59, 130, 246, 1)', 'rgba(96, 165, 250, 1)',
-                        'rgba(147, 197, 253, 1)', 'rgba(16, 185, 129, 1)', 'rgba(5, 150, 105, 1)',
-                        'rgba(245, 158, 11, 1)', 'rgba(217, 119, 6, 1)', 'rgba(239, 68, 68, 1)',
-                        'rgba(220, 38, 38, 1)', 'rgba(139, 92, 246, 1)', 'rgba(124, 58, 237, 1)'
+                        'rgba(16, 185, 129, 1)', 'rgba(52, 211, 153, 1)', 'rgba(251, 191, 36, 1)',
+                        'rgba(245, 158, 11, 1)', 'rgba(239, 68, 68, 1)', 'rgba(248, 113, 113, 1)',
+                        'rgba(139, 92, 246, 1)', 'rgba(167, 139, 250, 1)', 'rgba(236, 72, 153, 1)'
                     ],
                     borderWidth: 2,
                     borderRadius: 8,
+                    borderSkipped: false,
                     barPercentage: 0.7,
-                    categoryPercentage: 0.8
+                    categoryPercentage: 0.85
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: { padding: { top: 25 } },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#1e293b',
-                        titleFont: { size: 12, weight: 'bold', family: 'Inter' },
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleFont: { size: 13, weight: '700', family: 'Inter' },
                         bodyFont: { size: 12, family: 'Inter' },
                         padding: 12,
-                        cornerRadius: 12,
+                        cornerRadius: 10,
                         displayColors: false,
                         callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + ' meeting(s)';
-                            }
+                            title: function(context) { return context[0].label; },
+                            label: function(context) { return `Total Meetings: ${context.parsed.y}`; }
                         }
                     }
                 },
                 scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: {
-                            font: { size: 11, family: 'Inter', weight: '600' },
-                            color: '#475569',
-                            maxRotation: 45,
-                            minRotation: 45
-                        }
-                    },
                     y: {
                         beginAtZero: true,
                         max: yMax,
-                        grid: { color: '#e2e8f0', drawBorder: false },
-                        ticks: {
-                            stepSize: Math.max(1, Math.ceil(yMax / 5)),
-                            font: { size: 11, family: 'Inter', weight: '500' },
-                            color: '#64748b'
-                        }
+                        ticks: { font: { size: 11, family: 'Inter', weight: '500' }, color: '#64748b', padding: 8 },
+                        grid: { color: 'rgba(0, 0, 0, 0.04)', drawBorder: false, drawTicks: false }
+                    },
+                    x: {
+                        ticks: { font: { size: 11, family: 'Inter', weight: '600' }, color: '#334155', maxRotation: 45, minRotation: 45, padding: 8 },
+                        grid: { display: false }
                     }
-                }
+                },
+                animation: { duration: 1000, easing: 'easeOutQuart' }
             }
         });
     }
 
+    document.getElementById('viewChartBtn').addEventListener('click', openChartModal);
     applyChartFilter.addEventListener('click', renderChart);
 
     // ============================================
-    // BUTTON WIRING & INIT
+    // VIEW BUTTONS
     // ============================================
     document.getElementById('viewAllBtn').addEventListener('click', openRecordsModal);
-    document.getElementById('viewChartBtn').addEventListener('click', openChartModal);
     document.getElementById('sheetBtn').addEventListener('click', function() {
         window.open(GOOGLE_SHEET_URL, '_blank');
+        showToast('📊 Info', 'Opening Google Sheet in new tab...', 'info');
     });
+
+    // ============================================
+    // PERSONNEL IN-CHARGE BUTTON EVENTS
+    // ============================================
     document.getElementById('addPic').addEventListener('click', openAddPersonModal);
     document.getElementById('deletePic').addEventListener('click', deleteSelectedPerson);
 
-    (async function init() {
+    // ============================================
+    // NAVIGATION & USER MENU (from Techsamp)
+    // ============================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCYiLHesLAvoh6wV_gTQyTGYBwRqiBwDpiKiLsYHOntGVF2gW5NjWUS50YzoHaJmk/exec";
+    let currentUser = null;
+
+    function checkSession() {
+        const raw = localStorage.getItem("dhsud_session");
+        if (raw) {
+            try {
+                const s = JSON.parse(raw);
+                const diff = (new Date() - new Date(s.loggedInAt)) / (1000 * 60 * 60);
+                if (diff < 12 && s.email) { currentUser = s; return true; }
+                else localStorage.removeItem("dhsud_session");
+            } catch(e) { localStorage.removeItem("dhsud_session"); }
+        }
+        currentUser = null;
+        return false;
+    }
+
+    function getUserInitials(n) {
+        if (!n) return "U";
+        let p = n.split(" ");
+        if (p.length >= 2) return (p[0][0] + p[1][0]).toUpperCase();
+        return n.substring(0,2).toUpperCase();
+    }
+
+    function getRoleLabel(r) {
+        if (r === "admin") return "👑 Admin";
+        if (r === "encoder" || r === "staff") return "📋 Staff/Officer";
+        return "👁️ Viewer";
+    }
+
+    function getRoleClass(r) {
+        if (r === "admin") return "admin";
+        if (r === "encoder" || r === "staff") return "staff";
+        return "viewer";
+    }
+
+    // ============================================
+    // NAVIGATION RENDERING — WITH ACTIVE HIGHLIGHT
+    // ============================================
+    function renderMainNavigation() {
+        const container = document.getElementById("mainNavContainer");
+        if (!container) return;
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        function isActive(page) { return currentPage === page || (currentPage === '' && page === 'index.html'); }
+
+        let navHtml = `<a href="index.html" class="${isActive('index.html') ? 'active' : ''}">Home</a>`;
+        if (currentUser) {
+            const isCertActive = isActive('lc.html') || isActive('SZC.html');
+            const isLandUseActive = isActive('status.html') || isActive('inventory.html') || isActive('status_pdpfp.html') || isActive('inventory_pdpfp.html');
+            const isTechServicesActive = isActive('Techsamp.html') || isActive('house_sub.html') || isActive('training.html') || isActive('p_monitoring.html') || isActive('meetings.html');
+
+            navHtml += `
+                <div class="dropdown" id="certDropdown"><button class="dropbtn ${isCertActive ? 'active' : ''}">Certification</button><div class="dropdown-content"><a href="lc.html">Locational Clearance</a><a href="SZC.html">Site Zoning Certification</a></div></div>
+                <div class="dropdown" id="landUseDropdown"><button class="dropbtn ${isLandUseActive ? 'active' : ''}">Land Use Plans</button><div class="dropdown-content"><div class="dropdown-submenu" id="clupSubmenu"><button class="submenu-trigger">CLUP & ZO <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status.html">Status</a><a href="inventory.html">Inventory</a></div></div><div class="dropdown-submenu" id="pdpfpSubmenu"><button class="submenu-trigger">PDPFP <span class="arrow-right">▸</span></button><div class="submenu-content"><a href="status_pdpfp.html">Status</a><a href="inventory_pdpfp.html">Inventory</a></div></div></div></div>
+                <div class="dropdown" id="techServicesDropdown"><button class="dropbtn ${isTechServicesActive ? 'active' : ''}">Technical Services</button><div class="dropdown-content"><a href="Techsamp.html">Technical Assistance</a><a href="house_sub.html">T.A Housing Sub.</a><a href="training.html">CLUP/ZO Trainings</a><a href="p_monitoring.html">Plan Monitoring</a><a href="meetings.html">Meetings Attended</a></div></div>
+                <a href="lgu-info.html" class="${isActive('lgu-info.html') ? 'active' : ''}">LGU Information</a>
+                <a href="report.html" class="${isActive('report.html') ? 'active' : ''}">Reports</a>
+                <a href="calendar.html" class="${isActive('calendar.html') ? 'active' : ''}">Calendar of Activities</a>
+                <a href="issuance.html" class="${isActive('issuance.html') ? 'active' : ''}">Issuances</a>
+                <a href="about.html" class="${isActive('about.html') ? 'active' : ''}">About</a>
+                <a href="contact.html" class="${isActive('contact.html') ? 'active' : ''}">Contact</a>
+            `;
+        } else {
+            navHtml += `<a href="#about">About</a><a href="#contact">Contact</a>`;
+        }
+        container.innerHTML = navHtml;
+        setTimeout(() => {
+            document.querySelectorAll(".dropdown-submenu .submenu-trigger").forEach((trigger) => {
+                trigger.addEventListener("click", (e) => { e.stopPropagation(); const submenu = trigger.closest(".dropdown-submenu"); if (submenu) submenu.classList.toggle("open"); });
+            });
+            document.addEventListener("click", function (e) { if (!e.target.closest(".dropdown-submenu")) { document.querySelectorAll(".dropdown-submenu.open").forEach((s) => s.classList.remove("open")); } });
+        }, 10);
+    }
+
+    function renderUserMenu() {
+        const container = document.getElementById("userMenuContainer");
+        if (!container) return;
+        if (currentUser) {
+            const initials = getUserInitials(currentUser.fullName);
+            const firstName = currentUser.fullName?.split(" ")[0] || "User";
+            const isAdmin = currentUser.role === "admin";
+            const roleLabel = getRoleLabel(currentUser.role);
+            const roleClass = getRoleClass(currentUser.role);
+            container.innerHTML = `<div class="user-menu" id="userMenuDropdown" style="position:relative;"><div class="user-avatar">${initials}</div><span class="user-name">${escapeHtml(firstName)}</span><span class="role-badge-header ${roleClass}">${roleLabel}</span><span style="font-size:0.7rem;">▼</span><div class="user-dropdown-menu"><div class="user-dropdown-item">👤 ${escapeHtml(currentUser.email)}</div><div class="user-dropdown-item">🏢 ${escapeHtml(currentUser.office || "ELUPDD")}</div>${isAdmin ? `<div class="user-dropdown-item" id="adminConsoleLink">⚙️ Manage Users</div>` : ""}<div class="user-dropdown-item" id="logoutDropdownBtn" style="color:#dc2626;">🚪 Sign Out</div></div></div>`;
+            const userDiv = document.getElementById("userMenuDropdown");
+            if (userDiv) {
+                userDiv.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const menu = userDiv.querySelector(".user-dropdown-menu");
+                    if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
+                });
+                document.addEventListener("click", () => {
+                    const menu = userDiv?.querySelector(".user-dropdown-menu");
+                    if (menu) menu.style.display = "none";
+                });
+            }
+            if (isAdmin) {
+                const adminBtn = document.getElementById("adminConsoleLink");
+                if (adminBtn) adminBtn.addEventListener("click", () => (window.location.href = "admin.html"));
+            }
+            const logoutBtn = document.getElementById("logoutDropdownBtn");
+            if (logoutBtn) logoutBtn.addEventListener("click", () => {
+                localStorage.removeItem("dhsud_session");
+                showToastMessage("Logged out successfully.", "success");
+                setTimeout(() => { window.location.href = "Techsamp.html"; }, 700);
+            });
+        } else {
+            container.innerHTML = `<div class="login-prompt" onclick="openLoginModal()">🔐 Sign In</div>`;
+        }
+    }
+
+    function escapeHtml(s) {
+        if (!s) return "";
+        return String(s).replace(/[&<>]/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;" })[m]);
+    }
+
+    function showToastMessage(msg, type = "info") {
+        let t = document.querySelector(".toast-msg");
+        if (t) t.remove();
+        let toast = document.createElement("div");
+        toast.className = "toast-msg" + (type === "error" ? " error" : type === "success" ? " success" : "");
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function openLoginModal() {
+        document.getElementById("loginModal").classList.add("active");
+    }
+
+    function closeLoginModal() {
+        document.getElementById("loginModal").classList.remove("active");
+    }
+
+    async function handleModalLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById("modalLoginEmail").value.trim().toLowerCase();
+        const password = document.getElementById("modalLoginPassword").value;
+        const btn = document.getElementById("loginModalBtn");
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = "⏳ Authenticating...";
+        try {
+            const resp = await fetch(`${GOOGLE_SCRIPT_URL}?action=get&data_type=users&_=${Date.now()}`);
+            const users = await resp.json();
+            const user = users.find((u) => u.email?.toLowerCase() === email);
+            if (!user) {
+                showToastMessage("Account not found.", "error");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return false;
+            }
+            if (user.password === btoa(password)) {
+                const session = { userId: user.id, email: user.email, fullName: user.fullName, office: user.office || "ELUPDD", role: user.role, loggedInAt: new Date().toISOString() };
+                localStorage.setItem("dhsud_session", JSON.stringify(session));
+                showToastMessage(`Welcome ${user.fullName?.split(" ")[0] || ""}!`, "success");
+                closeLoginModal();
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showToastMessage("Invalid password.", "error");
+            }
+        } catch (error) {
+            showToastMessage("Connection error.", "error");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+        return false;
+    }
+
+    // ============================================
+    // INIT
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
         resetDateEntries();
         attachAddDateButtonListener();
-        await loadPICNamesFromSheet();
-    })();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const currentMonth = monthNames[new Date().getMonth()];
+        document.getElementById('reportingMonth').value = currentMonth;
+
+        checkSession();
+        renderMainNavigation();
+        renderUserMenu();
+
+        const form = document.getElementById("modalLoginForm");
+        if (form) form.addEventListener("submit", handleModalLogin);
+
+        loadPICNamesFromSheet();
+        setStatus('Ready · fill in all required fields', 'info');
+    });
+
+    window.openLoginModal = openLoginModal;
+    window.closeLoginModal = closeLoginModal;
 </script>
 </body>
 </html>
