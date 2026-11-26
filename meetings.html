@@ -1454,7 +1454,7 @@
     // ============================================
     // CONFIGURATION
     // ============================================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxhOwdYtdwqkhE4y8KnjfBPgPlCpLOvw3L0PDpsOTrZ5CcdrQZBUtwNwYW18UU4x_Rl/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxLsKvxduzPLNYe0rNZsTrFhCGh3NWayDWxkRJtEwdYyJx6W9asm-IA4LztaQWWIMCa/exec';
     const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1asn7RHb2UTGhj1WZLH_fVulU9mxK4cu6C1kNy71PAsM/edit?usp=sharing';
 
     // ============================================
@@ -1807,17 +1807,26 @@
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> Saving...';
         try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            showToast('✅ Success', 'Meeting record saved to Google Sheet!', 'success');
-            setStatus('✅ Record saved successfully!', 'success');
-            resetForm();
-        } catch (error) {
-            showToast('❌ Error', 'Failed to save record: ' + error.message, 'error');
-            setStatus('❌ Failed to save record.', 'error');
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet</span>';
-        }
+    const res = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if (result.result !== 'success') {
+        showToast('❌ Error', result.message || 'Save failed', 'error');
+        setStatus('❌ ' + (result.message || 'Save failed'), 'error');
+        return;
+    }
+    showToast('✅ Success', 'Meeting record saved to Google Sheet!', 'success');
+    setStatus('✅ Record saved successfully!', 'success');
+    resetForm();
+} catch (error) {
+    showToast('❌ Error', 'Failed to save record: ' + error.message, 'error');
+    setStatus('❌ Failed to save record.', 'error');
+} finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> <span>Save to Google Sheet</span>';
+}
     });
 
     // ============================================
@@ -2032,62 +2041,89 @@
 
     window.cancelEditRow = function() { editingRowNumber = null; applyRecordFilters(); };
 
-    window.saveEditRow = async function(rowNumber) {
-        const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
-        if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
-        const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
-        if (!row) { showToast('❌ Error', 'Row not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
+window.saveEditRow = async function(rowNumber) {
+    const saveBtn = document.getElementById(`saveBtn_${rowNumber}`);
+    if (saveBtn) { saveBtn.classList.add('loading'); saveBtn.disabled = true; }
 
-        const inputs = row.querySelectorAll('input, select, textarea');
-        const updatedData = {};
-        inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
+    const row = document.querySelector(`tr[data-row="${rowNumber}"]`);
+    if (!row) {
+        showToast('❌ Error', 'Row not found.', 'error');
+        if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+        return;
+    }
 
-        const recordIndex = rowNumber - 2;
-        if (recordIndex < 0 || recordIndex >= filteredRecords.length) { showToast('❌ Error', 'Record not found.', 'error'); if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; } return; }
-        const originalRecord = filteredRecords[recordIndex];
+    const inputs = row.querySelectorAll('input, select, textarea');
+    const updatedData = {};
+    inputs.forEach(input => { const key = input.dataset.key; if (key) updatedData[key] = input.value; });
 
-        const payload = {
-            action: 'updateRecord',
-            rowNumber: rowNumber,
-            formType: 'MEETINGS',
-            data: {
-                meeting: updatedData['Meeting'] || originalRecord['Meeting'] || '',
-                agenda: updatedData['Agenda / Objectives'] || originalRecord['Agenda / Objectives'] || '',
-                dateOfMeeting: updatedData['Date of Meeting'] || originalRecord['Date of Meeting'] || '',
-                proponents: updatedData['Proponents'] || originalRecord['Proponents'] || '',
-                reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
-                remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
-                linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
-                personnelInCharge: updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || ''
-            }
-        };
+    const recordIndex = rowNumber - 2;
+    if (recordIndex < 0 || recordIndex >= filteredRecords.length) {
+        showToast('❌ Error', 'Record not found.', 'error');
+        if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+        return;
+    }
+    const originalRecord = filteredRecords[recordIndex];
 
-        try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            showToast('✅ Success', 'Record updated successfully!', 'success');
-            editingRowNumber = null;
-            await loadRecords();
-        } catch (error) {
-            showToast('❌ Error', 'Failed to update record: ' + error.message, 'error');
-        } finally {
-            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+    const payload = {
+        action: 'updateRecord',
+        rowNumber: rowNumber,
+        formType: 'MEETINGS',
+        data: {
+            meeting: updatedData['Meeting'] || originalRecord['Meeting'] || '',
+            agenda: updatedData['Agenda / Objectives'] || originalRecord['Agenda / Objectives'] || '',
+            dateOfMeeting: updatedData['Date of Meeting'] || originalRecord['Date of Meeting'] || '',
+            proponents: updatedData['Proponents'] || originalRecord['Proponents'] || '',
+            reportingMonth: updatedData['Reporting Month'] || originalRecord['Reporting Month'] || '',
+            remarks: updatedData['Remarks'] || originalRecord['Remarks'] || 'N/A',
+            linkMov: updatedData['Link to MOV'] || originalRecord['Link to MOV'] || '',
+            personnelInCharge: updatedData['Personnel In-Charge'] || originalRecord['Personnel In-Charge'] || ''
         }
     };
+
+    try {
+        const res = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.result !== 'success') {
+            showToast('❌ Error', result.message || 'Update failed', 'error');
+            if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+            return;
+        }
+        showToast('✅ Success', 'Record updated successfully!', 'success');
+        editingRowNumber = null;
+        await loadRecords();
+    } catch (error) {
+        showToast('❌ Error', 'Failed to update record: ' + error.message, 'error');
+    } finally {
+        if (saveBtn) { saveBtn.classList.remove('loading'); saveBtn.disabled = false; }
+    }
+};
 
     window.deleteRecord = async function(rowNumber) {
         if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) return;
         const deleteBtn = document.getElementById(`deleteBtn_${rowNumber}`);
         if (deleteBtn) { deleteBtn.classList.add('loading'); deleteBtn.disabled = true; }
         try {
-            await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'MEETINGS' }) });
-            showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
-            editingRowNumber = null;
-            await loadRecords();
-        } catch (error) {
-            showToast('❌ Error', 'Failed to delete record: ' + error.message, 'error');
-        } finally {
-            if (deleteBtn) { deleteBtn.classList.remove('loading'); deleteBtn.disabled = false; }
-        }
+    const res = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'deleteRecord', rowNumber: rowNumber, formType: 'MEETINGS' })
+    });
+    const result = await res.json();
+    if (result.result !== 'success') {
+        showToast('❌ Error', result.message || 'Delete failed', 'error');
+        if (deleteBtn) { deleteBtn.classList.remove('loading'); deleteBtn.disabled = false; }
+        return;
+    }
+    showToast('🗑️ Deleted', 'Record deleted successfully!', 'success');
+    editingRowNumber = null;
+    await loadRecords();
+} catch (error) {
+    showToast('❌ Error', 'Failed to delete record: ' + error.message, 'error');
+} finally {
+    if (deleteBtn) { deleteBtn.classList.remove('loading'); deleteBtn.disabled = false; }
+}
     };
 
     // ============================================
